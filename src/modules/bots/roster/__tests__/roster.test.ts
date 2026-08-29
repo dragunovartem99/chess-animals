@@ -39,10 +39,10 @@ describe("the roster", () => {
 	});
 });
 
-describe("Mouse", () => {
+describe("Donkey", () => {
 	it("spreads over the whole legal move list, needing no random-mover special case", () => {
 		const position = positionFromFen(INITIAL_FEN);
-		const bot = compileBot(ROSTER_BY_ID.get("mouse")!.definition);
+		const bot = compileBot(ROSTER_BY_ID.get("donkey")!.definition);
 		const picks = new Set(
 			Array.from({ length: 200 }, (_, seed) =>
 				makeUci(
@@ -61,20 +61,20 @@ describe("Mouse", () => {
 	});
 });
 
-describe("the animals against the Mouse", () => {
+describe("the animals against the Donkey", () => {
 	// The paper's own finding: strategies with any idea at all beat uniform random play. If an
 	// animal cannot manage that, its weights say something other than what its name claims.
-	it.each(["swarm-wolf", "huddle-turtle"])(
+	it.each(["wolf", "turtle"])(
 		"%s outscores it over paired games",
 		(id) => {
 			const animal = compileBot(ROSTER_BY_ID.get(id)!.definition);
-			const mouse = compileBot(ROSTER_BY_ID.get("mouse")!.definition);
+			const donkey = compileBot(ROSTER_BY_ID.get("donkey")!.definition);
 
 			let score = 0;
 			for (const seed of [1, 2, 3]) {
 				score += playPair({
 					one: playable(animal),
-					two: playable(mouse),
+					two: playable(donkey),
 					plyLimit: 120,
 					seed,
 				});

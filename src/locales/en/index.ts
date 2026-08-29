@@ -21,17 +21,17 @@ export default {
 		piece: { queen: "Queen", rook: "Rook", bishop: "Bishop", knight: "Knight" },
 	},
 	bot: {
-		"mouse": {
-			name: "Mouse",
+		"donkey": {
+			name: "Donkey",
 			description:
 				"Picks a legal move at random. The reference point every rating is measured from.",
 		},
-		"swarm-wolf": {
-			name: "Swarm Wolf",
+		"wolf": {
+			name: "Wolf",
 			description: "Throws every piece at the enemy king and thinks no further.",
 		},
-		"huddle-turtle": {
-			name: "Huddle Turtle",
+		"turtle": {
+			name: "Turtle",
 			description: "Builds a wall around its own king and waits.",
 		},
 	},

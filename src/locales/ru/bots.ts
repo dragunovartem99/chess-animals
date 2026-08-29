@@ -1,13 +1,13 @@
 export default {
-	"mouse": {
-		name: "Мышь",
+	donkey: {
+		name: "Осёл",
 		description: "Выбирает случайный ход. Точка отсчёта для всех рейтингов.",
 	},
-	"swarm-wolf": {
+	wolf: {
 		name: "Волк",
 		description: "Бросает все фигуры на короля соперника и ни о чём больше не думает.",
 	},
-	"huddle-turtle": {
+	turtle: {
 		name: "Черепаха",
 		description: "Строит стену вокруг своего короля и ждёт.",
 	},

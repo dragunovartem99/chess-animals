@@ -11,7 +11,7 @@ import { extractFeatures, featureId } from "@/shared/eval";
 
 import { ROSTER_BY_ID } from "../index";
 
-const turtle = compileBot(ROSTER_BY_ID.get("huddle-turtle")!.definition);
+const turtle = compileBot(ROSTER_BY_ID.get("turtle")!.definition);
 
 function reply(sanMoves: string[]): string {
 	let position = positionFromFen(INITIAL_FEN);

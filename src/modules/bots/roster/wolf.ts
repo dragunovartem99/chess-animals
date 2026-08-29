@@ -8,10 +8,10 @@ import type { Animal } from "./types";
 // less distance, more score. It reads in king-moves per piece, which is why the weight is around
 // fifteen times a material weight — one king-move closer with the whole army is a lot. A little
 // material keeps it from throwing everything away for one square of proximity.
-export const SWARM_WOLF: Animal = {
+export const WOLF: Animal = {
 	emoji: "🐺",
 	definition: {
-		id: "swarm-wolf",
+		id: "wolf",
 		search: { depth: 1 },
 		temperature: 0,
 		weights: {

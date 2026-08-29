@@ -5,10 +5,10 @@ import type { Animal } from "./types";
 //
 // It needs no special case in the engine. With every weight at zero, every move scores zero, and
 // the argmax tie-break picks uniformly among all of them.
-export const MOUSE: Animal = {
-	emoji: "🐭",
+export const DONKEY: Animal = {
+	emoji: "🐴",
 	definition: {
-		id: "mouse",
+		id: "donkey",
 		search: { depth: 1 },
 		temperature: 0,
 		weights: { middlegame: {} },

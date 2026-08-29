@@ -9,10 +9,10 @@ import type { Animal } from "./types";
 // for attacking the enemy king, which it cannot buy separately. A turtle given one marched its
 // knight out to d4 on move two to hit the squares beside White's king, which is the opposite of
 // its whole character.
-export const HUDDLE_TURTLE: Animal = {
+export const TURTLE: Animal = {
 	emoji: "🐢",
 	definition: {
-		id: "huddle-turtle",
+		id: "turtle",
 		search: { depth: 1 },
 		temperature: 0,
 		weights: {

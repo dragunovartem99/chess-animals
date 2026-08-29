@@ -20,7 +20,7 @@ const HUMAN = "human";
 const game = useGame();
 const engines = useBotEngines();
 
-const players = ref<Record<Color, string>>({ white: HUMAN, black: "swarm-wolf" });
+const players = ref<Record<Color, string>>({ white: HUMAN, black: "wolf" });
 const score = ref<number>();
 
 const humanColours = computed(() =>
