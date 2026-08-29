@@ -26,11 +26,11 @@ const messages: Messages = {
 	game: {
 		breakdown: {
 			title: "Что видит {name}",
-			absolute: "плюс — лучше у белых, как в движках",
+			absolute: "плюс — перевес белых; сколько × вес = очки",
 			total: "Итого",
 			phase: "эндшпиль на {phase}%",
 			feature: "Эвристика",
-			value: "Позиция",
+			amount: "Сколько",
 			weight: "Вес",
 			points: "Очки",
 		},

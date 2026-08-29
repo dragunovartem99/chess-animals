@@ -40,7 +40,7 @@ const format = (value: number) => (Number.isInteger(value) ? String(value) : val
 			<thead>
 				<tr>
 					<th scope="col">{{ $t("game.breakdown.feature") }}</th>
-					<th scope="col">{{ $t("game.breakdown.value") }}</th>
+					<th scope="col">{{ $t("game.breakdown.amount") }}</th>
 					<th scope="col">{{ $t("game.breakdown.weight") }}</th>
 					<th scope="col">{{ $t("game.breakdown.points") }}</th>
 				</tr>
@@ -109,8 +109,11 @@ tbody tr:nth-child(odd) {
 	background: var(--color-stripe);
 }
 
-.number {
-	text-align: right;
+/* The name is the only thing worth scanning down the left edge; the two number columns read
+   better centred under their headings than ragged against the panel's right edge. */
+.number,
+th ~ th {
+	text-align: center;
 	font-variant-numeric: tabular-nums;
 }
 

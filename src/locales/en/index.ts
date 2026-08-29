@@ -21,16 +21,16 @@ export default {
 		piece: { queen: "Queen", rook: "Rook", bishop: "Bishop", knight: "Knight" },
 	},
 	bot: {
-		"donkey": {
+		donkey: {
 			name: "Donkey",
 			description:
 				"Picks a legal move at random. The reference point every rating is measured from.",
 		},
-		"wolf": {
+		wolf: {
 			name: "Wolf",
 			description: "Throws every piece at the enemy king and thinks no further.",
 		},
-		"turtle": {
+		turtle: {
 			name: "Turtle",
 			description: "Builds a wall around its own king and waits.",
 		},
@@ -38,11 +38,11 @@ export default {
 	game: {
 		breakdown: {
 			title: "What {name} sees",
-			absolute: "positive favours White, as an engine reports it",
+			absolute: "a plus means White is better; amount × weight = points",
 			total: "Total",
 			phase: "{phase}% endgame",
 			feature: "Heuristic",
-			value: "Position",
+			amount: "Amount",
 			weight: "Weight",
 			points: "Points",
 		},
