@@ -23,12 +23,31 @@ export function scoreMoves({
 	return searchRoot({ position, weights, options: search });
 }
 
-// The move a bot plays from this position, or `undefined` when the game is already over.
+// The sampling half of the policy, over scores someone else has already searched. It is split out
+// so a caller that needs both the move and the scores behind it — the UCI layer reports the score
+// it played on — pays for one search rather than two.
 //
 // `temperature` is in the same units as the scores: at zero this is a plain argmax with the tie
 // broken by the rng, and above zero the bot samples, which is how the paper's weighted-sampling
 // players work — and what stops two deterministic bots replaying one identical game every time
 // the arena pairs them.
+export function pickMove({
+	scored,
+	temperature,
+	rng,
+}: {
+	scored: ScoredMove[];
+	temperature: number;
+	rng: Rng;
+}): NormalMove | undefined {
+	if (scored.length === 0) return undefined;
+
+	const index = softmaxSample({ scores: scored.map((entry) => entry.score), temperature, rng });
+
+	return scored[index].move;
+}
+
+// The move a bot plays from this position, or `undefined` when the game is already over.
 export function chooseMove({
 	position,
 	weights,
@@ -42,10 +61,5 @@ export function chooseMove({
 	temperature: number;
 	rng: Rng;
 }): NormalMove | undefined {
-	const scored = scoreMoves({ position, weights, search });
-	if (scored.length === 0) return undefined;
-
-	const index = softmaxSample({ scores: scored.map((entry) => entry.score), temperature, rng });
-
-	return scored[index].move;
+	return pickMove({ scored: scoreMoves({ position, weights, search }), temperature, rng });
 }

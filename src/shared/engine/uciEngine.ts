@@ -53,7 +53,7 @@ export function createUciEngine({ config, name }: UciEngineState) {
 					position = replay(command);
 					return [];
 				case "go":
-					return findBestMove({ position, config: current, rng });
+					return findBestMove({ position, config: current, limits: command.limits, rng });
 				default:
 					return [];
 			}

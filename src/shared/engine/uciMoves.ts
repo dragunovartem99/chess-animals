@@ -3,10 +3,11 @@ import { INITIAL_FEN } from "chessops/fen";
 
 import type { BotConfig } from "../bots";
 import { afterMove, positionFromFen } from "../chess";
-import { chooseMove, scoreMoves } from "./policy";
+import { pickMove, scoreMoves } from "./policy";
 import type { Rng } from "./rng";
+import type { SearchOptions } from "./search";
 import { fromUci, toUci } from "./uci/moves";
-import type { UciResponse } from "./uci/types";
+import type { GoLimits, UciResponse } from "./uci/types";
 
 // Rebuilds the position a `position` command describes. A move the position rejects means the
 // caller and the engine no longer agree about the game; stopping there leaves the engine on the
@@ -24,24 +25,49 @@ export function replay({ fen, moves }: { fen?: string; moves: string[] }): Chess
 	return position;
 }
 
+// What one `go` searches: the bot's own settings, with the limits on this particular `go`
+// overriding them. UCI puts the per-move budget on the command and the standing configuration in
+// `setoption`, and a caller that names neither gets what the bot was built with.
+//
+// `movetime` is parsed and deliberately not honoured: the search has no clock, and silently
+// treating a millisecond budget as anything else would be worse than ignoring it.
+function withLimits({
+	search,
+	limits,
+}: {
+	search: SearchOptions;
+	limits: GoLimits;
+}): SearchOptions {
+	const depth =
+		limits.depth !== undefined && limits.depth >= 1 ? Math.floor(limits.depth) : undefined;
+	const nodes =
+		limits.nodes !== undefined && limits.nodes > 0 ? Math.floor(limits.nodes) : undefined;
+
+	return {
+		...search,
+		depth: depth ?? search.depth,
+		nodeLimit: nodes ?? search.nodeLimit,
+	};
+}
+
 // The answer to `go`: the move, and the score that went with it.
 export function findBestMove({
 	position,
 	config,
+	limits = {},
 	rng,
 }: {
 	position: Chess;
 	config: BotConfig;
+	limits?: GoLimits;
 	rng: Rng;
 }): UciResponse[] {
-	const scored = scoreMoves({ position, weights: config.weights, search: config.search });
-	const move = chooseMove({
-		position,
-		weights: config.weights,
-		search: config.search,
-		temperature: config.temperature,
-		rng,
-	});
+	const search = withLimits({ search: config.search, limits });
+
+	// One search, then sample from it. Scoring the moves and then asking the policy to score them
+	// again would double the cost of every move the engine plays.
+	const scored = scoreMoves({ position, weights: config.weights, search });
+	const move = pickMove({ scored, temperature: config.temperature, rng });
 
 	// `0000` is UCI's null move, which is what an engine says when it has nothing to play. Better
 	// than silence: a caller waiting on `bestmove` would otherwise wait forever.
@@ -53,7 +79,7 @@ export function findBestMove({
 	return [
 		{
 			type: "info",
-			depth: config.search.depth,
+			depth: search.depth,
 			score: { kind: "cp", value: Math.round(best) },
 			pv: [uci],
 		},
