@@ -17,6 +17,9 @@ const messages: Messages = {
 		en: "English",
 		ru: "Русский",
 	},
+	feature: {
+		tempo: "Темп",
+	},
 	placeholder: {
 		notBuiltYet: "Ещё не готово.",
 	},

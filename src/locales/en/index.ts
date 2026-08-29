@@ -15,6 +15,10 @@ export default {
 		en: "English",
 		ru: "Русский",
 	},
+	// Keyed by `Feature.i18nKey` — every entry in the eval registry has a label here and in ru.
+	feature: {
+		tempo: "Tempo",
+	},
 	placeholder: {
 		notBuiltYet: "Not built yet.",
 	},
