@@ -1,5 +1,4 @@
 import type { Chess } from "chessops/chess";
-import type { Move } from "chessops/types";
 
 import { extractAggression } from "./families/aggression";
 import { createContext } from "./families/context";
@@ -7,6 +6,7 @@ import { extractControl } from "./families/control";
 import { extractKing } from "./families/king";
 import { extractMaterial } from "./families/material";
 import { extractMobility } from "./families/mobility";
+import { extractMoveFeatures, type PlayedMove } from "./families/move";
 import { extractPawns } from "./families/pawns";
 import { extractPieces } from "./families/pieces";
 import { extractPlacement } from "./families/placement";
@@ -21,11 +21,17 @@ const TEMPO = featureId("tempo");
 // side to move — so no evaluation code is ever colour-specific and a bot plays the same way with
 // either colour.
 //
-// `move` is the move that produced `position`, which the move-level family needs (a capture, a
-// check, a promotion); at the root of a search there is none.
-export function extractFeatures(options: { position: Chess; move?: Move }): FeatureVector {
+// `played` is the move that produced `position` and the position it came from, which the
+// move-level family needs. At the root of a search there is none, and those features read zero.
+export function extractFeatures({
+	position,
+	played,
+}: {
+	position: Chess;
+	played?: PlayedMove;
+}): FeatureVector {
 	const features = createFeatureVector();
-	const context = createContext(options.position);
+	const context = createContext(position);
 
 	features[TEMPO] = 1;
 	extractMaterial({ context, features });
@@ -33,11 +39,12 @@ export function extractFeatures(options: { position: Chess; move?: Move }): Feat
 	extractPieces({ context, features });
 	extractPawns({ context, features });
 	extractKing({ context, features });
+	extractMobility({ context, features });
+	extractControl({ context, features });
 	extractProximity({ context, features });
 	extractSymmetry({ context, features });
 	extractAggression({ context, features });
-	extractMobility({ context, features });
-	extractControl({ context, features });
+	extractMoveFeatures({ position, played, features });
 
 	return features;
 }

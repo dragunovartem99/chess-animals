@@ -104,6 +104,21 @@ export const FEATURES = defineFeatures([
 	{ key: "pushDepth", family: "behavioural", group: "pressure", defaultWeight: 0 },
 	{ key: "offeredMaterial", family: "behavioural", group: "pressure", defaultWeight: 0 },
 
+	// Properties of the move that produced the position. They are what let `cccp` and `pacifist`
+	// be weights rather than special-cased players. See `families/move.ts` for the sign
+	// convention: a positive weight always means "the mover wants this".
+	{ key: "givesMate", family: "move", group: "forcing", defaultWeight: 0 },
+	{ key: "givesCheck", family: "move", group: "forcing", defaultWeight: 0 },
+	{ key: "captureValue", family: "move", group: "forcing", defaultWeight: 0 },
+	{ key: "isPromotion", family: "move", group: "forcing", defaultWeight: 0 },
+	{ key: "isCastle", family: "move", group: "quiet", defaultWeight: 0 },
+	{ key: "movedPawn", family: "move", group: "quiet", defaultWeight: 0 },
+	{ key: "movedKnight", family: "move", group: "quiet", defaultWeight: 0 },
+	{ key: "movedBishop", family: "move", group: "quiet", defaultWeight: 0 },
+	{ key: "movedRook", family: "move", group: "quiet", defaultWeight: 0 },
+	{ key: "movedQueen", family: "move", group: "quiet", defaultWeight: 0 },
+	{ key: "movedKing", family: "move", group: "quiet", defaultWeight: 0 },
+
 	{ key: "centerControl", family: "positional", group: "control", defaultWeight: 8 },
 	{ key: "space", family: "positional", group: "control", defaultWeight: 2 },
 	{ key: "hanging", family: "positional", group: "control", defaultWeight: -15 },

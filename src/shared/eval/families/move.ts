@@ -1,0 +1,76 @@
+import { castlingSide, type Chess } from "chessops/chess";
+import { isNormal, type Move, type Role, ROLES } from "chessops/types";
+
+import { featureId } from "../features";
+import type { FeatureVector } from "../vector";
+
+// The position a move was played from, alongside the move itself. The move-level family is the
+// only one that needs to look backwards.
+export type PlayedMove = { parent: Chess; move: Move };
+
+const GIVES_MATE = featureId("givesMate");
+const GIVES_CHECK = featureId("givesCheck");
+const CAPTURE_VALUE = featureId("captureValue");
+const IS_PROMOTION = featureId("isPromotion");
+const IS_CASTLE = featureId("isCastle");
+
+const MOVED_SLOTS = Object.fromEntries(
+	ROLES.map((role) => [role, featureId(`moved${role[0].toUpperCase()}${role.slice(1)}`)])
+) as Record<Role, number>;
+
+// What a captured piece is worth here. Fixed rather than read from the tunable material weights,
+// so retuning piece values does not quietly move every capture-loving bot with them.
+const CAPTURE_VALUES: Record<Role, number> = {
+	pawn: 1,
+	knight: 3,
+	bishop: 3,
+	rook: 5,
+	queen: 9,
+	king: 0,
+};
+
+function capturedRole({ parent, move }: PlayedMove): Role | undefined {
+	if (!isNormal(move)) return undefined;
+
+	const target = parent.board.getRole(move.to);
+	if (target) return target;
+
+	// En passant leaves the captured pawn on a square the move never names.
+	const movedPawn = parent.board.getRole(move.from) === "pawn";
+	return movedPawn && move.to === parent.epSquare ? "pawn" : undefined;
+}
+
+// Everything the move itself did, written into the vector *negated*.
+//
+// The rest of the evaluation reads the position after the move, whose side to move is the
+// opponent of whoever played it, and every feature is from that side's point of view. Negating
+// here puts the move-level family in the same frame — and, because a negamax search maximises the
+// negation of the child's score, it makes a positive weight mean "the mover wants this". So
+// `captureValue: 100` is greedy, `givesCheck: -50` is `pacifist`, and neither needs its own
+// player class.
+export function extractMoveFeatures({
+	position,
+	played,
+	features,
+}: {
+	position: Chess;
+	played?: PlayedMove;
+	features: FeatureVector;
+}): void {
+	if (!played) return;
+
+	if (position.isCheckmate()) features[GIVES_MATE] = -1;
+	else if (position.isCheck()) features[GIVES_CHECK] = -1;
+
+	const captured = capturedRole(played);
+	if (captured) features[CAPTURE_VALUE] = -CAPTURE_VALUES[captured];
+
+	const { parent, move } = played;
+	if (!isNormal(move)) return;
+
+	if (move.promotion) features[IS_PROMOTION] = -1;
+	if (castlingSide(parent, move) !== undefined) features[IS_CASTLE] = -1;
+
+	const moved = parent.board.getRole(move.from);
+	if (moved) features[MOVED_SLOTS[moved]] = -1;
+}

@@ -1,4 +1,5 @@
 export { extractFeatures } from "./extract";
+export type { PlayedMove } from "./families/move";
 export {
 	defineFeatures,
 	type Feature,
