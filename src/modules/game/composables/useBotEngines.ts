@@ -53,8 +53,16 @@ export function useBotEngines() {
 		}
 	}
 
+	// A fresh seed per game, because the engine's default is the bot's own id: without this every
+	// game starts from the same rng state and a bot answers a given opponent identically forever.
+	// The seed only breaks ties while `temperature` is zero, but it is the game's seed either way.
 	async function startNewGame(): Promise<void> {
-		await Promise.all([...engines.values()].map((engine) => engine.newGame()));
+		await Promise.all(
+			[...engines.values()].map((engine) => {
+				engine.setOption({ name: "Seed", value: crypto.randomUUID() });
+				return engine.newGame();
+			})
+		);
 	}
 
 	onBeforeUnmount(() => {
