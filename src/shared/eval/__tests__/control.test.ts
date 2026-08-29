@@ -41,12 +41,12 @@ describe("hanging", () => {
 		expect(read({ fen: INITIAL_FEN, key: "hanging" })).toBe(0);
 	});
 
-	it("counts the opponent's loose pieces as good news", () => {
-		expect(read({ fen: "4k3/8/8/3n4/8/3R4/8/4K3 w - - 0 1", key: "hanging" })).toBe(1);
+	it("counts our own loose pieces, which a negative weight then punishes", () => {
+		expect(read({ fen: "4k3/8/8/3n4/8/3R4/8/4K3 b - - 0 1", key: "hanging" })).toBe(1);
 	});
 
-	it("counts our own loose pieces against us", () => {
-		expect(read({ fen: "4k3/8/8/3n4/8/3R4/8/4K3 b - - 0 1", key: "hanging" })).toBe(-1);
+	it("reads the opponent's loose pieces as the mirror image", () => {
+		expect(read({ fen: "4k3/8/8/3n4/8/3R4/8/4K3 w - - 0 1", key: "hanging" })).toBe(-1);
 	});
 
 	it("does not count a piece its own side defends", () => {

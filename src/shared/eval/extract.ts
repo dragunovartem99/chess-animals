@@ -5,6 +5,7 @@ import { createContext } from "./families/context";
 import { extractControl } from "./families/control";
 import { extractMaterial } from "./families/material";
 import { extractMobility } from "./families/mobility";
+import { extractPawns } from "./families/pawns";
 import { extractPieces } from "./families/pieces";
 import { extractPlacement } from "./families/placement";
 import { featureId } from "./features";
@@ -26,6 +27,7 @@ export function extractFeatures(options: { position: Chess; move?: Move }): Feat
 	extractMaterial({ context, features });
 	extractPlacement({ context, features });
 	extractPieces({ context, features });
+	extractPawns({ context, features });
 	extractMobility({ context, features });
 	extractControl({ context, features });
 

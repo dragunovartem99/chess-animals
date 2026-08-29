@@ -1,17 +1,15 @@
-import { SquareSet } from "chessops/squareSet";
 import type { Color } from "chessops/types";
 import { opposite, squareFile, squareRank } from "chessops/util";
 
 import { featureId } from "../features";
 import type { FeatureVector } from "../vector";
 import type { EvalContext } from "./context";
+import { FILES } from "./masks";
 
 const BISHOP_PAIR = featureId("bishopPair");
 const ROOK_OPEN_FILE = featureId("rookOpenFile");
 const ROOK_SEVENTH = featureId("rookSeventh");
 const KNIGHT_OUTPOST = featureId("knightOutpost");
-
-const FILES = Array.from({ length: 8 }, (_, file) => SquareSet.fromFile(file));
 
 // The rank a rook wants, counted from its own side: 6 for White, 1 for Black.
 function seventhRank(color: Color): number {

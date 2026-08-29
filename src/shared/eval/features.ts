@@ -71,9 +71,20 @@ export const FEATURES = defineFeatures([
 	{ key: "rookSeventh", family: "positional", group: "pieces", defaultWeight: 20 },
 	{ key: "knightOutpost", family: "positional", group: "pieces", defaultWeight: 25 },
 
+	// Pawn structure is the one part of the position that outlives every piece trade, so each
+	// trait is its own weight rather than one lumped "structure" score.
+	{ key: "pawnDoubled", family: "pawns", group: "weaknesses", defaultWeight: -12 },
+	{ key: "pawnIsolated", family: "pawns", group: "weaknesses", defaultWeight: -15 },
+	{ key: "pawnBackward", family: "pawns", group: "weaknesses", defaultWeight: -10 },
+	{ key: "pawnIslands", family: "pawns", group: "weaknesses", defaultWeight: -8 },
+	{ key: "pawnConnected", family: "pawns", group: "strengths", defaultWeight: 8 },
+	{ key: "pawnPassed", family: "pawns", group: "strengths", defaultWeight: 25 },
+	{ key: "pawnPassedAdvancement", family: "pawns", group: "strengths", defaultWeight: 8 },
+	{ key: "pawnShield", family: "pawns", group: "strengths", defaultWeight: 10 },
+
 	{ key: "centerControl", family: "positional", group: "control", defaultWeight: 8 },
 	{ key: "space", family: "positional", group: "control", defaultWeight: 2 },
-	{ key: "hanging", family: "positional", group: "control", defaultWeight: 15 },
+	{ key: "hanging", family: "positional", group: "control", defaultWeight: -15 },
 
 	{ key: "mobility", family: "positional", group: "activity", defaultWeight: 4 },
 	{ key: "safeMobility", family: "positional", group: "activity", defaultWeight: 3 },

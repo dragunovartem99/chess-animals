@@ -37,9 +37,9 @@ function countHanging({ context, color }: { context: EvalContext; color: Color }
 	return exposed.size();
 }
 
-// Who holds the middle, who has room, and who has left something en prise. `hanging` is counted
-// so that the opponent's loose pieces are the good news, keeping every feature in the same
-// higher-is-better direction.
+// Who holds the middle, who has room, and who has left something en prise. Like every feature,
+// each is ours minus theirs; whether more of it is good is the weight's business, which is why
+// `hanging` defaults to a negative one.
 export function extractControl({
 	context,
 	features,
@@ -57,5 +57,5 @@ export function extractControl({
 		attacksBy[them].intersect(ENEMY_HALF[them]).size();
 
 	features[HANGING] =
-		countHanging({ context, color: them }) - countHanging({ context, color: us });
+		countHanging({ context, color: us }) - countHanging({ context, color: them });
 }
