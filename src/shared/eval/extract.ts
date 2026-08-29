@@ -1,6 +1,7 @@
 import type { Chess } from "chessops/chess";
 import type { Move } from "chessops/types";
 
+import { extractAggression } from "./families/aggression";
 import { createContext } from "./families/context";
 import { extractControl } from "./families/control";
 import { extractKing } from "./families/king";
@@ -9,6 +10,8 @@ import { extractMobility } from "./families/mobility";
 import { extractPawns } from "./families/pawns";
 import { extractPieces } from "./families/pieces";
 import { extractPlacement } from "./families/placement";
+import { extractProximity } from "./families/proximity";
+import { extractSymmetry } from "./families/symmetry";
 import { featureId } from "./features";
 import { createFeatureVector, type FeatureVector } from "./vector";
 
@@ -30,6 +33,9 @@ export function extractFeatures(options: { position: Chess; move?: Move }): Feat
 	extractPieces({ context, features });
 	extractPawns({ context, features });
 	extractKing({ context, features });
+	extractProximity({ context, features });
+	extractSymmetry({ context, features });
+	extractAggression({ context, features });
 	extractMobility({ context, features });
 	extractControl({ context, features });
 

@@ -90,6 +90,20 @@ export const FEATURES = defineFeatures([
 	// Endgame business: the king is a piece, and it wants to be near the pawns.
 	{ key: "kingPawnDistance", family: "king", group: "endgame", defaultWeight: -4 },
 
+	// The animals. Every Elo World strategy is a weight here rather than a separate player class,
+	// so a bot can be one part swarm, one part material, and rated on the same scale as the rest.
+	{ key: "swarm", family: "behavioural", group: "distance", defaultWeight: 0 },
+	{ key: "huddle", family: "behavioural", group: "distance", defaultWeight: 0 },
+	{ key: "kingProximity", family: "behavioural", group: "distance", defaultWeight: 0 },
+	{ key: "reverseStarting", family: "behavioural", group: "distance", defaultWeight: 0 },
+	{ key: "sameColorSquares", family: "behavioural", group: "shape", defaultWeight: 0 },
+	{ key: "symmetryMirrorX", family: "behavioural", group: "shape", defaultWeight: 0 },
+	{ key: "symmetryMirrorY", family: "behavioural", group: "shape", defaultWeight: 0 },
+	{ key: "symmetryRot180", family: "behavioural", group: "shape", defaultWeight: 0 },
+	{ key: "opponentMobility", family: "behavioural", group: "pressure", defaultWeight: 0 },
+	{ key: "pushDepth", family: "behavioural", group: "pressure", defaultWeight: 0 },
+	{ key: "offeredMaterial", family: "behavioural", group: "pressure", defaultWeight: 0 },
+
 	{ key: "centerControl", family: "positional", group: "control", defaultWeight: 8 },
 	{ key: "space", family: "positional", group: "control", defaultWeight: 2 },
 	{ key: "hanging", family: "positional", group: "control", defaultWeight: -15 },
