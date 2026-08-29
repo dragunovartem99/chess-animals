@@ -24,6 +24,15 @@ const messages: Messages = {
 	},
 	bot: bots,
 	game: {
+		breakdown: {
+			title: "Что видит {name}",
+			total: "Итого",
+			phase: "эндшпиль на {phase}%",
+			feature: "Эвристика",
+			value: "Позиция",
+			weight: "Вес",
+			points: "Очки",
+		},
 		human: "Вы",
 		restart: "Новая партия",
 		thinking: "Думает…",

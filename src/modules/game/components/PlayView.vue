@@ -5,11 +5,13 @@ import { computed, ref, watch } from "vue";
 
 import { ChessBoard } from "@/modules/board";
 import { ROSTER, ROSTER_BY_ID } from "@/modules/bots/roster";
+import { compileBot } from "@/shared/bots";
 import { fromUci } from "@/shared/engine/uci/moves";
 
 import { useBotEngines } from "../composables/useBotEngines";
 import { useGame } from "../composables/useGame";
 import EvalBar from "./EvalBar.vue";
+import FeatureBreakdown from "./FeatureBreakdown.vue";
 import MoveList from "./MoveList.vue";
 import PlayerPicker from "./PlayerPicker.vue";
 
@@ -85,6 +87,21 @@ watch(
 	{ immediate: true }
 );
 
+// The breakdown follows whoever is on move; while a human is thinking it shows their opponent,
+// so the panel is never blank in a human-versus-bot game.
+const lens = computed(() => {
+	const onMove = ROSTER_BY_ID.get(players.value[game.position.value.turn]);
+	if (onMove) return onMove;
+
+	const other = game.position.value.turn === "white" ? "black" : "white";
+
+	return ROSTER_BY_ID.get(players.value[other]);
+});
+
+const lensWeights = computed(() =>
+	lens.value ? compileBot(lens.value.definition).weights : undefined
+);
+
 async function restart() {
 	game.reset();
 	score.value = undefined;
@@ -132,6 +149,13 @@ async function restart() {
 			</button>
 
 			<MoveList :turns="game.turns.value" />
+
+			<FeatureBreakdown
+				v-if="lens && lensWeights"
+				:position="game.position.value"
+				:weights="lensWeights"
+				:name="$t(`bot.${lens.definition.id}.name`)"
+			/>
 		</aside>
 	</section>
 </template>

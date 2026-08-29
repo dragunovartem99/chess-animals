@@ -36,6 +36,15 @@ export default {
 		},
 	},
 	game: {
+		breakdown: {
+			title: "What {name} sees",
+			total: "Total",
+			phase: "{phase}% endgame",
+			feature: "Heuristic",
+			value: "Position",
+			weight: "Weight",
+			points: "Points",
+		},
 		human: "You",
 		restart: "New game",
 		thinking: "Thinking…",
