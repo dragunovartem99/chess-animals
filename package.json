@@ -17,6 +17,7 @@
 	},
 	"type": "module",
 	"scripts": {
+		"bench": "vitest bench --run",
 		"build": "vue-tsc -b --noEmit && vite build",
 		"dev": "vite",
 		"format": "oxfmt --write",

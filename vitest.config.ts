@@ -19,6 +19,7 @@ export default defineConfig({
 			include: ["src/modules/*/{utils,composables}/**/*.ts", "src/shared/*/**/*.ts"],
 			exclude: [
 				"**/__tests__/**",
+				"**/__benchmarks__/**",
 				"**/index.ts",
 				"**/types/**",
 				"src/shared/test-support/**",
