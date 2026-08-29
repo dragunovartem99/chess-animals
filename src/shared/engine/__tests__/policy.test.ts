@@ -77,7 +77,10 @@ describe("chooseMove", () => {
 
 	it("closes on the enemy king when it is a swarm bot", () => {
 		const weights = onlyWeights({ swarm: -10 });
-		const position = positionFromFen("7k/8/8/8/8/8/8/R3K3 w - - 0 1");
+		// A queen rather than a rook: from a1 every rook move is the same Chebyshev distance from
+		// h8, so that position is a plateau the paper describes — nothing to close, and the bot
+		// shuffles along the local maximum. The queen has the long diagonal.
+		const position = positionFromFen("8/7k/8/8/8/8/8/Q3K3 w - - 0 1");
 		const move = chooseMove({
 			position,
 			weights,

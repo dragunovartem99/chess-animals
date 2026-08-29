@@ -4,9 +4,10 @@ import type { Animal } from "./types";
 // better simple strategies — from the bloodbaths it creates it even beats strong opponents now
 // and then.
 //
-// `swarm` is the summed distance from our pieces to the enemy king, so the weight is negative:
-// less distance, more score. A little material keeps it from throwing everything away for one
-// square of proximity.
+// `swarm` is the *mean* distance from our pieces to the enemy king, so the weight is negative:
+// less distance, more score. It reads in king-moves per piece, which is why the weight is around
+// fifteen times a material weight — one king-move closer with the whole army is a lot. A little
+// material keeps it from throwing everything away for one square of proximity.
 export const SWARM_WOLF: Animal = {
 	emoji: "🐺",
 	definition: {
@@ -15,7 +16,7 @@ export const SWARM_WOLF: Animal = {
 		temperature: 0,
 		weights: {
 			middlegame: {
-				swarm: -12,
+				swarm: -180,
 				givesMate: 100000,
 				materialPawn: 20,
 				materialKnight: 60,

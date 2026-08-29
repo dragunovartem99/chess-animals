@@ -36,7 +36,13 @@ const HOME_SQUARES = Object.fromEntries(
 	])
 ) as Record<Color, Record<Role, number[]>>;
 
-function sumDistance({
+// The *mean* distance, not the total. Summing made the term a measure of material with the sign
+// inverted: every extra piece adds its own distance to your own side of the subtraction, so a
+// side that is ahead reads as the worse swarmer. In a Scholar's mate — White's queen sitting on
+// f7 beside the black king — the totals gave Black the better swarm score, purely because Black
+// had one fewer piece left to count. Dividing by the piece count cancels that out and leaves the
+// thing the feature is named for.
+function meanDistance({
 	context,
 	color,
 	target,
@@ -48,6 +54,7 @@ function sumDistance({
 	const targetFile = target & 7;
 	const targetRank = target >> 3;
 	let total = 0;
+	let count = 0;
 
 	// Chebyshev distance, inlined: this runs for every piece of both sides, four times per
 	// position, and the call's argument object was costing more than the arithmetic.
@@ -56,15 +63,18 @@ function sumDistance({
 		const rank = Math.abs((square >> 3) - targetRank);
 
 		total += file > rank ? file : rank;
+		count += 1;
 	}
 
-	return total;
+	return count === 0 ? 0 : total / count;
 }
 
-// How far a side's pieces are from where they would stand if the board were upside down.
+// How far a side's pieces are, on average, from where they would stand if the board were upside
+// down. A mean for the same reason as `meanDistance`.
 function reverseDistance({ context, color }: { context: EvalContext; color: Color }): number {
 	const homes = HOME_SQUARES[color];
 	let total = 0;
+	let count = 0;
 
 	for (const { square, piece } of context.reach) {
 		if (piece.color !== color) continue;
@@ -82,10 +92,13 @@ function reverseDistance({ context, color }: { context: EvalContext; color: Colo
 			if (distance < nearest) nearest = distance;
 		}
 
-		if (nearest !== Infinity) total += nearest;
+		if (nearest === Infinity) continue;
+
+		total += nearest;
+		count += 1;
 	}
 
-	return total;
+	return count === 0 ? 0 : total / count;
 }
 
 // The distance strategies, all measured in king moves. `swarm` charges the enemy king with
@@ -104,12 +117,12 @@ export function extractProximity({
 	if (ourKing === undefined || theirKing === undefined) return;
 
 	features[SWARM] =
-		sumDistance({ context, color: context.us, target: theirKing }) -
-		sumDistance({ context, color: context.them, target: ourKing });
+		meanDistance({ context, color: context.us, target: theirKing }) -
+		meanDistance({ context, color: context.them, target: ourKing });
 
 	features[HUDDLE] =
-		sumDistance({ context, color: context.us, target: ourKing }) -
-		sumDistance({ context, color: context.them, target: theirKing });
+		meanDistance({ context, color: context.us, target: ourKing }) -
+		meanDistance({ context, color: context.them, target: theirKing });
 
 	// The two kings are the same distance apart from either side's point of view, so this one is
 	// a raw value rather than a difference — there is nothing to subtract.
