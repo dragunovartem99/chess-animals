@@ -100,7 +100,7 @@ Three feature families are concatenated into one vector:
 
 Every feature is declared once in `shared/eval/features.ts` as `{ id, key, group, family, defaultWeight, i18nKey }`. That single registry drives: the extractor, the slider UI, the SPSA parameter space, the JSON schema for bot configs, and the locale files. **Adding a heuristic = adding one entry + one extractor line.** This is the scalability mechanism.
 
-Extraction runs in one pass over a 64-entry board array with precomputed distance/attack tables; target **< 5 µs per position**.
+Extraction makes **one walk of the board**, in `createContext`, which hands every family the piece list with its attack set already computed; the families then do bitboard and index arithmetic only. Measured at **~18 µs per position** (`npm run bench`), with a 60 µs regression guard in the test suite. The first working version cost 77 µs; the difference was almost entirely allocation — `Array.from` in inner loops, per-call argument objects for two-number helpers, and `SquareSet`s built to answer questions that index arithmetic answers.
 
 ---
 
@@ -296,5 +296,5 @@ Stockfish-as-`UciEngine` and the Polyglot book reader are the natural commits 36
 - **Golden games**: fixed bot pair + fixed seed + fixed opening → fixed PGN, committed as a fixture. Any eval change that shifts a game shows up as a diff, which is the cheapest possible regression net for a heuristic engine.
 - **Determinism**: run the same tournament seed twice, assert identical rating tables.
 - **Behavioural sanity**: `Swarm Wolf` beats `Mouse` (random) well over 90% of paired games; `Pacifist Sloth` draws far more than it wins — matching the paper's ordering is the strongest signal the features are right.
-- **Performance**: benchmark script asserts feature extraction < 5 µs/position and a full 12-bot ranking under the 30 s budget.
+- **Performance**: `npm run bench` reports extraction cost; the suite asserts it stays under the 60 µs regression guard, and a full 12-bot ranking under the 30 s budget.
 - **Manual**: `npm run dev`, play a bot at `/play` and confirm the feature breakdown explains its moves; run `/arena` and confirm the cross-table matches the rating order; run `/tuner` and confirm the gauntlet score trends up; switch RU↔EN on every route.

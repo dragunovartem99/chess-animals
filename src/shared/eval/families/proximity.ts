@@ -1,4 +1,4 @@
-import type { Color, Role } from "chessops/types";
+import { COLORS, type Color, type Role, ROLES } from "chessops/types";
 
 import { featureId } from "../features";
 import type { FeatureVector } from "../vector";
@@ -10,23 +10,31 @@ const HUDDLE = featureId("huddle");
 const KING_PROXIMITY = featureId("kingProximity");
 const REVERSE_STARTING = featureId("reverseStarting");
 
-// Where a side's pieces stand in the *opponent's* opening position — the squares `reverseStarting`
-// is trying to reach. Files are the standard back rank; pawns want the enemy's second rank.
-function homeSquares({ role, color }: { role: Role; color: Color }): number[] {
-	const backRank = color === "white" ? 7 : 0;
-	const pawnRank = color === "white" ? 6 : 1;
-	const files: Partial<Record<Role, number[]>> = {
-		rook: [0, 7],
-		knight: [1, 6],
-		bishop: [2, 5],
-		queen: [3],
-		king: [4],
-	};
+const BACK_RANK_FILES: Partial<Record<Role, number[]>> = {
+	rook: [0, 7],
+	knight: [1, 6],
+	bishop: [2, 5],
+	queen: [3],
+	king: [4],
+};
 
-	if (role === "pawn") return Array.from({ length: 8 }, (_, file) => pawnRank * 8 + file);
+// Where a side's pieces stand in the *opponent's* opening position — the squares
+// `reverseStarting` walks towards. Built once at module load rather than per piece per node.
+const HOME_SQUARES = Object.fromEntries(
+	COLORS.map((color) => [
+		color,
+		Object.fromEntries(
+			ROLES.map((role) => {
+				const backRank = color === "white" ? 7 : 6;
+				if (role === "pawn")
+					return [role, Array.from({ length: 8 }, (_, file) => backRank * 8 + file)];
 
-	return (files[role] ?? []).map((file) => backRank * 8 + file);
-}
+				const rank = color === "white" ? 7 : 0;
+				return [role, (BACK_RANK_FILES[role] ?? []).map((file) => rank * 8 + file)];
+			})
+		) as Record<Role, number[]>,
+	])
+) as Record<Color, Record<Role, number[]>>;
 
 function sumDistance({
 	context,
@@ -37,25 +45,44 @@ function sumDistance({
 	color: Color;
 	target: number;
 }): number {
+	const targetFile = target & 7;
+	const targetRank = target >> 3;
 	let total = 0;
 
-	for (const square of context.position.board[color])
-		total += chebyshev({ from: square, to: target });
+	// Chebyshev distance, inlined: this runs for every piece of both sides, four times per
+	// position, and the call's argument object was costing more than the arithmetic.
+	for (const square of context.position.board[color]) {
+		const file = Math.abs((square & 7) - targetFile);
+		const rank = Math.abs((square >> 3) - targetRank);
+
+		total += file > rank ? file : rank;
+	}
 
 	return total;
 }
 
 // How far a side's pieces are from where they would stand if the board were upside down.
 function reverseDistance({ context, color }: { context: EvalContext; color: Color }): number {
+	const homes = HOME_SQUARES[color];
 	let total = 0;
 
-	for (const [square, piece] of context.position.board) {
+	for (const { square, piece } of context.reach) {
 		if (piece.color !== color) continue;
 
-		const targets = homeSquares({ role: piece.role, color });
-		if (targets.length === 0) continue;
+		const targets = homes[piece.role];
+		const file = square & 7;
+		const rank = square >> 3;
+		let nearest = Infinity;
 
-		total += Math.min(...targets.map((target) => chebyshev({ from: square, to: target })));
+		for (const target of targets) {
+			const fileGap = Math.abs(file - (target & 7));
+			const rankGap = Math.abs(rank - (target >> 3));
+			const distance = fileGap > rankGap ? fileGap : rankGap;
+
+			if (distance < nearest) nearest = distance;
+		}
+
+		if (nearest !== Infinity) total += nearest;
 	}
 
 	return total;

@@ -1,4 +1,4 @@
-import type { Color, Role } from "chessops/types";
+import type { Role } from "chessops/types";
 import { ROLES } from "chessops/types";
 import { squareFile, squareRank } from "chessops/util";
 
@@ -25,13 +25,6 @@ function centrality(square: number): number {
 	return Math.min(file, 7 - file) + Math.min(rank, 7 - rank);
 }
 
-// Ranks from the piece's own back rank, so the same weight means the same thing to both colours.
-function advancement({ square, color }: { square: number; color: Color }): number {
-	const rank = squareRank(square);
-
-	return color === "white" ? rank : 7 - rank;
-}
-
 // Two numbers per role — how central its pieces stand, and how far up the board — in place of a
 // piece-square table's sixty-four. A knight that wants the centre and a rook that wants the
 // seventh come out of the same two sliders.
@@ -50,10 +43,13 @@ export function extractPlacement({
 
 		for (const color of [context.us, context.them]) {
 			const sign = color === context.us ? 1 : -1;
+			const white = color === "white";
 
 			for (const square of board.pieces(color, slot.role)) {
 				central += sign * centrality(square);
-				advanced += sign * advancement({ square, color });
+				// `advancement` inlined for the same reason as in `proximity`: it runs once per
+				// piece per role, and the argument object outweighed the subtraction.
+				advanced += sign * (white ? square >> 3 : 7 - (square >> 3));
 			}
 		}
 

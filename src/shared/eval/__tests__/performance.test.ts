@@ -8,7 +8,7 @@ import { extractFeatures } from "../extract";
 // ceiling on how fast a ranking can be. This is a regression guard, not the target: it is set
 // with enough headroom to survive a loaded or slower machine without flaking. `npm run bench`
 // prints the real number, and PLAN.md carries the target the tuner needs.
-const BUDGET_MICROSECONDS = 200;
+const BUDGET_MICROSECONDS = 60;
 
 const WARMUP = 20_000;
 const RUNS = 100_000;

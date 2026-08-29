@@ -1,4 +1,4 @@
-import { attacks, kingAttacks } from "chessops/attacks";
+import { kingAttacks } from "chessops/attacks";
 import { SquareSet } from "chessops/squareSet";
 import type { Color, Role } from "chessops/types";
 import { opposite, squareFile } from "chessops/util";
@@ -33,11 +33,8 @@ function countFor({ context, color }: { context: EvalContext; color: Color }): K
 	let attackers = 0;
 	let defenders = 0;
 
-	for (const [square, piece] of board) {
-		if (piece.role === "king") continue;
-
-		const reach = attacks(piece, square, board.occupied);
-		if (!reach.intersects(ring)) continue;
+	for (const { piece, reach } of context.reach) {
+		if (piece.role === "king" || !reach.intersects(ring)) continue;
 
 		if (piece.color === enemy) attackers += ATTACK_VALUE[piece.role] ?? 0;
 		else defenders += 1;

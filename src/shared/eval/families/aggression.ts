@@ -1,4 +1,3 @@
-import { attacks } from "chessops/attacks";
 import type { Color, Role } from "chessops/types";
 import { opposite } from "chessops/util";
 
@@ -26,13 +25,11 @@ const OFFER_VALUE: Record<Role, number> = {
 // flipping the side to move, which is not even a legal position when the other king is in check,
 // so this counts attacked squares instead — the same approximation mobility makes.
 function reachable({ context, color }: { context: EvalContext; color: Color }): number {
-	const { board } = context.position;
+	const own = context.position.board[color];
 	let total = 0;
 
-	for (const [square, piece] of board) {
-		if (piece.color !== color) continue;
-
-		total += attacks(piece, square, board.occupied).diff(board[color]).size();
+	for (const { piece, reach } of context.reach) {
+		if (piece.color === color) total += reach.diff(own).size();
 	}
 
 	return total;
@@ -55,12 +52,13 @@ function depth({ context, color }: { context: EvalContext; color: Color }): numb
 // pieces attack is offered three times over. `generous` wants this high, everything else low.
 function offered({ context, color }: { context: EvalContext; color: Color }): number {
 	const { board } = context.position;
+	const enemy = opposite(color);
 	let total = 0;
 
-	for (const [square, piece] of board) {
-		if (piece.color !== opposite(color)) continue;
+	for (const { piece, reach } of context.reach) {
+		if (piece.color !== enemy) continue;
 
-		for (const target of attacks(piece, square, board.occupied).intersect(board[color])) {
+		for (const target of reach.intersect(board[color])) {
 			total += OFFER_VALUE[board.getRole(target) ?? "king"];
 		}
 	}

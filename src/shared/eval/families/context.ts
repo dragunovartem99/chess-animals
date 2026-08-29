@@ -1,8 +1,11 @@
-import { attacks, pawnAttacks } from "chessops/attacks";
+import { attacks } from "chessops/attacks";
 import type { Chess } from "chessops/chess";
 import { SquareSet } from "chessops/squareSet";
-import type { ByColor, Color } from "chessops/types";
+import type { ByColor, Color, Piece } from "chessops/types";
 import { opposite } from "chessops/util";
+
+// One piece on the board, with the squares it attacks already worked out.
+export type PieceReach = { square: number; piece: Piece; reach: SquareSet };
 
 // Everything more than one family needs, computed once per position rather than once per family.
 // `us` is always the side to move: the whole evaluation is written from that perspective, so no
@@ -11,6 +14,9 @@ export type EvalContext = {
 	position: Chess;
 	us: Color;
 	them: Color;
+	// Every piece and what it attacks, from a single walk of the board. Five families used to
+	// walk it themselves and call `attacks` again on every piece; this is the one call site.
+	reach: PieceReach[];
 	// Squares each side's pawns attack — what makes a destination unsafe, and what holds an
 	// outpost.
 	pawnAttacks: ByColor<SquareSet>;
@@ -19,40 +25,24 @@ export type EvalContext = {
 	attacksBy: ByColor<SquareSet>;
 };
 
-function attackedBy({ position, color }: { position: Chess; color: Color }): SquareSet {
-	let attacked = SquareSet.empty();
-
-	for (const [square, piece] of position.board) {
-		if (piece.color === color)
-			attacked = attacked.union(attacks(piece, square, position.board.occupied));
-	}
-
-	return attacked;
-}
-
-function attackedByPawns({ position, color }: { position: Chess; color: Color }): SquareSet {
-	const pawns = position.board.pieces(color, "pawn");
-	let attacked = SquareSet.empty();
-
-	for (const square of pawns) attacked = attacked.union(pawnAttacks(color, square));
-
-	return attacked;
-}
-
 export function createContext(position: Chess): EvalContext {
 	const us = position.turn;
+	const { board } = position;
 
-	return {
-		position,
-		us,
-		them: opposite(us),
-		pawnAttacks: {
-			white: attackedByPawns({ position, color: "white" }),
-			black: attackedByPawns({ position, color: "black" }),
-		},
-		attacksBy: {
-			white: attackedBy({ position, color: "white" }),
-			black: attackedBy({ position, color: "black" }),
-		},
-	};
+	const reach: PieceReach[] = [];
+	const attacksBy = { white: SquareSet.empty(), black: SquareSet.empty() };
+	const byPawns = { white: SquareSet.empty(), black: SquareSet.empty() };
+
+	for (const [square, piece] of board) {
+		const squares = attacks(piece, square, board.occupied);
+
+		reach.push({ square, piece, reach: squares });
+		attacksBy[piece.color] = attacksBy[piece.color].union(squares);
+
+		// `attacks` for a pawn is exactly its capture squares, so the pawn map falls out of the
+		// same call rather than needing a second one.
+		if (piece.role === "pawn") byPawns[piece.color] = byPawns[piece.color].union(squares);
+	}
+
+	return { position, us, them: opposite(us), reach, pawnAttacks: byPawns, attacksBy };
 }

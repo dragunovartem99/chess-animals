@@ -1,4 +1,3 @@
-import { attacks } from "chessops/attacks";
 import type { Color, Role } from "chessops/types";
 import { opposite } from "chessops/util";
 
@@ -12,27 +11,26 @@ const SAFE_MOBILITY = featureId("safeMobility");
 // Pawns and the king are left out: a pawn's moves are structure, not activity, and counting the
 // king's would reward walking it into the open — which is a personality, not an evaluation, and
 // `kingProximity` offers it deliberately.
-const MOBILE_ROLES: Role[] = ["knight", "bishop", "rook", "queen"];
+const MOBILE_ROLES = new Set<Role>(["knight", "bishop", "rook", "queen"]);
 
 type Counts = { total: number; safe: number };
 
-// Destination squares, not legal moves: pins are not resolved here. Counting attacks costs one
-// bitboard operation per piece, and the search sees a pinned move disappear anyway.
+// Destination squares, not legal moves: pins are not resolved here. The attack sets come from the
+// context's single board walk, so this costs a couple of bitboard operations per piece.
 function countMoves({ context, color }: { context: EvalContext; color: Color }): Counts {
-	const { board } = context.position;
-	const own = board[color];
+	const own = context.position.board[color];
 	const attackedByTheirPawns = context.pawnAttacks[opposite(color)];
 
 	let total = 0;
 	let safe = 0;
 
-	for (const role of MOBILE_ROLES) {
-		for (const square of board.pieces(color, role)) {
-			const reachable = attacks({ color, role }, square, board.occupied).diff(own);
+	for (const { piece, reach } of context.reach) {
+		if (piece.color !== color || !MOBILE_ROLES.has(piece.role)) continue;
 
-			total += reachable.size();
-			safe += reachable.diff(attackedByTheirPawns).size();
-		}
+		const reachable = reach.diff(own);
+
+		total += reachable.size();
+		safe += reachable.diff(attackedByTheirPawns).size();
 	}
 
 	return { total, safe };

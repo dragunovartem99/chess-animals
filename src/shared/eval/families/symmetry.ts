@@ -1,6 +1,5 @@
 import type { Board } from "chessops/board";
 import { SquareSet } from "chessops/squareSet";
-import { flipHorizontal, flipVertical, rotate180 } from "chessops/transform";
 import type { Color } from "chessops/types";
 
 import { featureId } from "../features";
@@ -15,34 +14,38 @@ const SYMMETRY_ROT180 = featureId("symmetryRot180");
 const LIGHT = SquareSet.lightSquares();
 const DARK = SquareSet.darkSquares();
 
+// A square's mirror is one exclusive-or away: flipping the ranks inverts the high three bits, the
+// files the low three, and a half-turn both. None of the three has a fixed point, so a square is
+// never paired with itself.
+const FLIP_RANKS = 56;
+const FLIP_FILES = 7;
+const HALF_TURN = 63;
+
 // The paper's scoring: facing a piece with its opposite number costs nothing, facing the wrong
-// piece of the right colour costs a little, and anything else costs more. Summed over all 64
-// squares and halved, since every pair is met twice.
-function asymmetry({
-	board,
-	flip,
-}: {
-	board: Board;
-	flip: (squares: SquareSet) => SquareSet;
-}): number {
+// piece of the right colour costs a little, and an empty square opposite a piece costs more.
+//
+// Only occupied squares are walked, and a pair of two occupied squares is scored from the lower
+// of the two, so an empty board is free and a bare endgame nearly so.
+function asymmetry({ board, axis }: { board: Board; axis: number }): number {
 	let penalty = 0;
 
-	for (let square = 0; square < 64; square += 1) {
-		const [mirror] = flip(SquareSet.fromSquare(square));
-		const here = board.get(square);
+	for (const square of board.occupied) {
+		const mirror = square ^ axis;
 		const there = board.get(mirror);
 
-		if (!here && !there) continue;
-		if (!here || !there) {
+		if (!there) {
 			penalty += 2;
 			continue;
 		}
 
+		if (mirror < square) continue;
+
+		const here = board.get(square)!;
 		if (here.color === there.color) penalty += 2;
 		else penalty += here.role === there.role ? 0 : 1;
 	}
 
-	return penalty / 2;
+	return penalty;
 }
 
 // Pieces standing on squares of their own colour — White on light, Black on dark. The childhood
@@ -66,7 +69,7 @@ export function extractSymmetry({
 	features[SAME_COLOR_SQUARES] =
 		onOwnColour({ board, color: context.us }) - onOwnColour({ board, color: context.them });
 
-	features[SYMMETRY_MIRROR_X] = -asymmetry({ board, flip: flipHorizontal });
-	features[SYMMETRY_MIRROR_Y] = -asymmetry({ board, flip: flipVertical });
-	features[SYMMETRY_ROT180] = -asymmetry({ board, flip: rotate180 });
+	features[SYMMETRY_MIRROR_X] = -asymmetry({ board, axis: FLIP_FILES });
+	features[SYMMETRY_MIRROR_Y] = -asymmetry({ board, axis: FLIP_RANKS });
+	features[SYMMETRY_ROT180] = -asymmetry({ board, axis: HALF_TURN });
 }
