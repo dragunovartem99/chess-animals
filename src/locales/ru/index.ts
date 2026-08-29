@@ -23,6 +23,21 @@ const messages: Messages = {
 		piece: { queen: "Ферзь", rook: "Ладья", bishop: "Слон", knight: "Конь" },
 	},
 	bot: bots,
+	game: {
+		human: "Вы",
+		restart: "Новая партия",
+		thinking: "Думает…",
+		evaluation: "Оценка",
+		turn: { white: "Белые", black: "Чёрные" },
+		reason: {
+			"checkmate": "Мат",
+			"stalemate": "Пат",
+			"insufficient-material": "Ничья — недостаточно материала",
+			"fifty-move": "Ничья — правило пятидесяти ходов",
+			"repetition": "Ничья — троекратное повторение",
+			"ply-limit": "Ничья по регламенту — исчерпан лимит ходов",
+		},
+	},
 	feature: {
 		materialPawn: "Ценность пешки",
 		materialKnight: "Ценность коня",

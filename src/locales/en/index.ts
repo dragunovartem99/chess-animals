@@ -35,6 +35,21 @@ export default {
 			description: "Builds a wall around its own king and waits.",
 		},
 	},
+	game: {
+		human: "You",
+		restart: "New game",
+		thinking: "Thinking…",
+		evaluation: "Evaluation",
+		turn: { white: "White", black: "Black" },
+		reason: {
+			"checkmate": "Checkmate",
+			"stalemate": "Stalemate",
+			"insufficient-material": "Draw — not enough material",
+			"fifty-move": "Draw — fifty-move rule",
+			"repetition": "Draw — threefold repetition",
+			"ply-limit": "Adjudicated a draw — move limit reached",
+		},
+	},
 	feature: {
 		materialPawn: "Pawn value",
 		materialKnight: "Knight value",
