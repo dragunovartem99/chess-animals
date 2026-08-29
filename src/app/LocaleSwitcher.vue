@@ -16,7 +16,10 @@ const links = computed(() =>
 </script>
 
 <template>
-	<nav :aria-label="$t('locale.label')">
+	<nav
+		class="switch"
+		:aria-label="$t('locale.label')"
+	>
 		<RouterLink
 			v-for="link in links"
 			:key="link.locale"
@@ -26,3 +29,34 @@ const links = computed(() =>
 		</RouterLink>
 	</nav>
 </template>
+
+<style scoped>
+.switch {
+	display: inline-flex;
+	gap: 0.25rem;
+	padding: 0.25rem;
+	border-radius: var(--radius-full);
+	background: var(--color-neutral-dark);
+}
+
+a {
+	padding: 0.25rem 0.9rem;
+	border-radius: var(--radius-full);
+	color: var(--color-neutral-lighter);
+	font-size: 0.8rem;
+	font-weight: 700;
+	text-decoration: none;
+	transition:
+		background 0.15s ease,
+		color 0.15s ease;
+}
+
+a:hover {
+	color: var(--color-neutral-lightest);
+}
+
+a.router-link-exact-active {
+	background: var(--color-accent);
+	color: var(--color-black);
+}
+</style>

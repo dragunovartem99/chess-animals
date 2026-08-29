@@ -117,7 +117,7 @@ async function restart() {
 
 <template>
 	<section class="play">
-		<div class="board">
+		<div class="board card">
 			<EvalBar :score="score" />
 			<ChessBoard
 				:fen="game.fen.value"
@@ -128,7 +128,7 @@ async function restart() {
 			/>
 		</div>
 
-		<aside class="panel">
+		<aside class="panel card">
 			<PlayerPicker
 				v-model="players"
 				:roster="ROSTER"
@@ -169,7 +169,6 @@ async function restart() {
 	flex-wrap: wrap;
 	gap: 1.5rem;
 	align-items: flex-start;
-	padding: 1rem;
 }
 
 .board {
@@ -177,19 +176,21 @@ async function restart() {
 	gap: 0.75rem;
 	align-items: stretch;
 	flex: 1 1 24rem;
-	max-width: 34rem;
+	max-width: 36rem;
 }
 
 .panel {
 	display: flex;
 	flex-direction: column;
 	gap: 0.75rem;
-	flex: 1 1 16rem;
-	min-width: 14rem;
+	flex: 1 1 18rem;
+	min-width: 16rem;
 }
 
 .status {
 	margin: 0;
 	min-height: 1.5rem;
+	font-weight: 600;
+	color: var(--color-ink-muted);
 }
 </style>

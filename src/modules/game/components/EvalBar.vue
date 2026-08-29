@@ -17,7 +17,7 @@ const share = computed(() => {
 
 <template>
 	<div
-		class="bar"
+		class="eval-bar"
 		:aria-label="$t('game.evaluation')"
 	>
 		<div
@@ -28,13 +28,14 @@ const share = computed(() => {
 </template>
 
 <style scoped>
-.bar {
+.eval-bar {
 	position: relative;
 	width: 1.25rem;
-	height: 100%;
+	/* No height of its own: as a flex item it stretches to whatever the board next to it is. */
 	min-height: 12rem;
-	border-radius: 0.25rem;
-	background: #333;
+	border: 1px solid var(--color-neutral-darkest);
+	border-radius: var(--radius-sm);
+	background: var(--color-neutral-darkest);
 	overflow: hidden;
 }
 
@@ -42,7 +43,7 @@ const share = computed(() => {
 	position: absolute;
 	bottom: 0;
 	width: 100%;
-	background: #eee;
+	background: var(--color-white);
 	transition: height 200ms;
 }
 </style>

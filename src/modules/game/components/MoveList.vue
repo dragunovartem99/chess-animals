@@ -54,10 +54,10 @@ li {
 }
 
 li:nth-child(odd) {
-	background: var(--stripe, #f5f5f5);
+	background: var(--color-stripe);
 }
 
 .number {
-	color: var(--muted, #888);
+	color: var(--color-ink-muted);
 }
 </style>

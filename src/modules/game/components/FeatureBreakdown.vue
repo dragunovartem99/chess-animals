@@ -81,12 +81,12 @@ h2 {
 
 .perspective {
 	margin: 0 0 0.5rem;
-	color: var(--muted, #888);
+	color: var(--color-ink-muted);
 }
 
 .phase {
 	margin-left: 0.5rem;
-	color: var(--muted, #888);
+	color: var(--color-ink-muted);
 }
 
 table {
@@ -97,7 +97,7 @@ table {
 th {
 	text-align: left;
 	font-weight: 500;
-	color: var(--muted, #888);
+	color: var(--color-ink-muted);
 }
 
 td,
@@ -106,7 +106,7 @@ th {
 }
 
 tbody tr:nth-child(odd) {
-	background: var(--stripe, #f5f5f5);
+	background: var(--color-stripe);
 }
 
 .number {
@@ -115,10 +115,10 @@ tbody tr:nth-child(odd) {
 }
 
 .good {
-	color: #2c7a3f;
+	color: var(--color-good);
 }
 
 .bad {
-	color: #b03030;
+	color: var(--color-bad);
 }
 </style>

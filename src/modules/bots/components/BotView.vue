@@ -1,4 +1,19 @@
 <template>
-	<h1>{{ $t("nav.roster") }}</h1>
-	<p>{{ $t("placeholder.notBuiltYet") }}</p>
+	<section class="card placeholder">
+		<h1>{{ $t("nav.roster") }}</h1>
+		<p>{{ $t("placeholder.notBuiltYet") }}</p>
+	</section>
 </template>
+
+<style scoped>
+.placeholder {
+	display: grid;
+	gap: 0.5rem;
+	max-width: 40rem;
+}
+
+p {
+	margin: 0;
+	color: var(--color-ink-muted);
+}
+</style>
