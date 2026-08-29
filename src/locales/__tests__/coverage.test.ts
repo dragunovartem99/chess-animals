@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
-import { ROSTER } from "../../modules/bots/roster";
-import { FEATURES } from "../../shared/eval";
+import { ROSTER } from "@/modules/bots/roster";
+import { FEATURES } from "@/shared/eval";
 import { locales, messages } from "../index";
 
 // The registry is the source of truth for what a bot can be tuned on, and the weight editor puts
