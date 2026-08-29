@@ -10,7 +10,7 @@ import LocaleSwitcher from "./LocaleSwitcher.vue";
 					class="brand title"
 					:to="{ name: 'roster' }"
 				>
-					<span class="emoji logo">🐴</span>
+					<span class="emoji logo">🦊</span>
 					{{ $t("app.title") }}
 				</RouterLink>
 				<LocaleSwitcher />
