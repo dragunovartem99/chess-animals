@@ -1,3 +1,7 @@
+export { type BestMove, createUciClient, type UciEngineClient, type UciTransport } from "./client";
+export { applyOption, describeOptions } from "./options";
+export { createLocalTransport, createWorkerTransport } from "./transports";
+export { createUciEngine } from "./uciEngine";
 export { evaluatePosition } from "./evaluate";
 export { orderMoves } from "./ordering";
 export { createQuiescence } from "./quiescence";
