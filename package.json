@@ -26,7 +26,7 @@
 		"lint:check": "oxlint",
 		"preview": "vite preview",
 		"test": "vitest",
-		"test:coverage": "vitest run --coverage",
+		"test:coverage": "COVERAGE=1 vitest run --coverage",
 		"types:check": "vue-tsc -b --noEmit"
 	},
 	"dependencies": {

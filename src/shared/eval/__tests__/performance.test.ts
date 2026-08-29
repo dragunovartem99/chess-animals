@@ -10,6 +10,11 @@ import { extractFeatures } from "../extract";
 // prints the real number, and PLAN.md carries the target the tuner needs.
 const BUDGET_MICROSECONDS = 60;
 
+// v8's coverage instrumentation costs more per position than the budget itself, so under
+// `npm run test:coverage` the number measures the instrumentation rather than the extractor.
+// There the guard only keeps extraction exercised; `npm test` holds it to the real budget.
+const BUDGET = process.env.COVERAGE ? BUDGET_MICROSECONDS * 5 : BUDGET_MICROSECONDS;
+
 const WARMUP = 20_000;
 const RUNS = 100_000;
 
@@ -32,6 +37,6 @@ describe("extractFeatures", () => {
 	it("stays inside its per-position budget", { timeout: 120_000 }, () => {
 		const measured = microsecondsPerPosition();
 
-		expect(measured).toBeLessThan(BUDGET_MICROSECONDS);
+		expect(measured).toBeLessThan(BUDGET);
 	});
 });
