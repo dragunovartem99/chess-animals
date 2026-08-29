@@ -32,6 +32,12 @@ export type Breakdown = { total: number; phase: number; rows: Contribution[] };
 // zero, and a checkmate renders as an ordinary quiet position with a mildly bad score — the one
 // term that decided the game missing from the one panel meant to explain it.
 //
+// Everything comes out **White-relative**, the way an engine reports a score: positive means
+// White stands better, whoever happens to be on move. Internally the evaluation is written from
+// the side to move's point of view — that is what negamax needs — so the whole thing is flipped
+// once here when Black is to move. Without that flip the same position reads with opposite signs
+// depending on whose turn it is, which is exactly as confusing as it sounds.
+//
 // Features whose weight is zero are left out, since a roster of animals switches most of them off.
 export function explainPosition({
 	position,
@@ -45,14 +51,15 @@ export function explainPosition({
 	const phase = gamePhase(position);
 	const blended = interpolateWeights({ weights, phase });
 	const features = extractFeatures({ position, played });
+	const sign = position.turn === "white" ? 1 : -1;
 
 	const rows = FEATURES.map((feature) => ({
 		key: feature.key,
 		i18nKey: feature.i18nKey,
 		family: feature.family,
-		value: features[feature.id],
+		value: sign * features[feature.id],
 		weight: blended[feature.id],
-		points: features[feature.id] * blended[feature.id],
+		points: sign * features[feature.id] * blended[feature.id],
 	}))
 		.filter((row) => row.weight !== 0)
 		.toSorted((left, right) => Math.abs(right.points) - Math.abs(left.points));

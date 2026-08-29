@@ -11,7 +11,7 @@ import { explainPosition } from "../utils/breakdown";
 const MATERIAL = onlyWeights({ materialQueen: 900, materialRook: 500, materialPawn: 100 });
 
 describe("explainPosition", () => {
-	it("sums to exactly what the search would score the position at", () => {
+	it("sums to what the search would score the position at, for White", () => {
 		for (const fen of [
 			INITIAL_FEN,
 			"4k3/8/8/3q4/8/8/8/3RK3 w - - 0 1",
@@ -76,8 +76,9 @@ describe("the move that produced the position", () => {
 		const withMove = explainPosition({ position, weights, played: { parent, move } });
 		const without = explainPosition({ position, weights });
 
-		expect(withMove.rows.find((row) => row.key === "givesMate")?.points).toBe(-100000);
-		expect(without.rows.find((row) => row.key === "givesMate")?.points).toBe(0);
+		// White delivered the mate, so White-relative it is a large positive.
+		expect(withMove.rows.find((row) => row.key === "givesMate")?.points).toBe(100000);
+		expect(without.rows.find((row) => row.key === "givesMate")?.points).toBeCloseTo(0);
 	});
 
 	it("still sums to what the search would score", () => {
@@ -88,9 +89,53 @@ describe("the move that produced the position", () => {
 		const position = afterMove({ position: parent, move });
 		const played = { parent, move };
 
+		// `evaluatePosition` scores from the side to move — Black, who has just been mated — so the
+		// White-relative total the panel shows is its negation.
 		expect(explainPosition({ position, weights, played }).total).toBeCloseTo(
-			evaluatePosition({ position, played, weights }),
+			-evaluatePosition({ position, played, weights }),
 			3
 		);
+	});
+});
+
+describe("the sign convention", () => {
+	// The one thing the panel must never do is report the same position differently depending on
+	// whose turn it happens to be.
+	const board = "4k3/8/8/3q4/8/8/8/3RK3";
+
+	it("reads the same for a position whoever is to move", () => {
+		const white = explainPosition({
+			position: positionFromFen(`${board} w - - 0 1`),
+			weights: MATERIAL,
+		});
+		const black = explainPosition({
+			position: positionFromFen(`${board} b - - 0 1`),
+			weights: MATERIAL,
+		});
+
+		expect(black.total).toBeCloseTo(white.total, 3);
+	});
+
+	it("is negative when Black is the one who is better", () => {
+		// Black is a queen up for a rook.
+		expect(
+			explainPosition({ position: positionFromFen(`${board} w - - 0 1`), weights: MATERIAL })
+				.total
+		).toBeLessThan(0);
+	});
+
+	it("is positive when White is better", () => {
+		const position = positionFromFen("3qk3/8/8/8/8/8/8/3RK3 b - - 0 1");
+
+		expect(
+			explainPosition({ position, weights: onlyWeights({ materialRook: 500 }) }).total
+		).toBe(500);
+	});
+
+	it("flips the feature readings too, so value times weight still gives points", () => {
+		const position = positionFromFen(`${board} b - - 0 1`);
+		const [row] = explainPosition({ position, weights: MATERIAL }).rows;
+
+		expect(row.value * row.weight).toBeCloseTo(row.points, 3);
 	});
 });

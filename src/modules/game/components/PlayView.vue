@@ -22,7 +22,6 @@ const engines = useBotEngines();
 
 const players = ref<Record<Color, string>>({ white: HUMAN, black: "swarm-wolf" });
 const score = ref<number>();
-const mover = ref<Color>("white");
 
 const humanColours = computed(() =>
 	(["white", "black"] as Color[]).filter((colour) => players.value[colour] === HUMAN)
@@ -80,8 +79,14 @@ watch(
 		const move = fromUci({ position: game.position.value, uci: answer.move });
 		if (!move) return;
 
-		mover.value = colour;
-		score.value = answer.score;
+		// UCI reports a score from the side to move's point of view; the bar shows White-relative
+		// numbers, so a black bot's opinion is flipped on the way in.
+		score.value =
+			answer.score === undefined
+				? undefined
+				: colour === "white"
+					? answer.score
+					: -answer.score;
 		game.play(move);
 	},
 	{ immediate: true }
@@ -113,10 +118,7 @@ async function restart() {
 <template>
 	<section class="play">
 		<div class="board">
-			<EvalBar
-				:score="score"
-				:perspective="mover"
-			/>
+			<EvalBar :score="score" />
 			<ChessBoard
 				:fen="game.fen.value"
 				:orientation="orientation"

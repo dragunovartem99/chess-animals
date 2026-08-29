@@ -13,11 +13,11 @@ const props = defineProps<{
 	played?: PlayedMove;
 }>();
 
-// Every feature is measured from the side to move's point of view, and the animal being named is
-// not always that side — in a human-versus-bot game the panel shows the bot's weights while the
-// human is on move. Saying whose side the numbers are from is the difference between a debugging
-// tool and a misleading one.
-const perspective = computed(() => props.position.turn);
+// Pawns, signed, the way an engine reports a score: `+1.20` means White is a pawn and a bit
+// better. The weights are in centipawns by convention — a pawn is worth 100 — so this is only a
+// change of unit, not of meaning.
+const pawns = (points: number) =>
+	`${points > 0 ? "+" : points < 0 ? "\u2212" : ""}${(Math.abs(points) / 100).toFixed(2)}`;
 
 const breakdown = computed(() =>
 	explainPosition({ position: props.position, weights: props.weights, played: props.played })
@@ -28,11 +28,9 @@ const format = (value: number) => (Number.isInteger(value) ? String(value) : val
 <template>
 	<section class="breakdown">
 		<h2>{{ $t("game.breakdown.title", { name }) }}</h2>
-		<p class="perspective">
-			{{ $t("game.breakdown.perspective", { colour: $t(`game.turn.${perspective}`) }) }}
-		</p>
+		<p class="perspective">{{ $t("game.breakdown.absolute") }}</p>
 		<p class="total">
-			{{ $t("game.breakdown.total") }}: <strong>{{ format(breakdown.total) }}</strong>
+			{{ $t("game.breakdown.total") }}: <strong>{{ pawns(breakdown.total) }}</strong>
 			<span class="phase">{{
 				$t("game.breakdown.phase", { phase: (breakdown.phase * 100).toFixed(0) })
 			}}</span>

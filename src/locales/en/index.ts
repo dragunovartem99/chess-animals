@@ -38,7 +38,7 @@ export default {
 	game: {
 		breakdown: {
 			title: "What {name} sees",
-			perspective: "scored from {colour}'s side",
+			absolute: "positive favours White, as an engine reports it",
 			total: "Total",
 			phase: "{phase}% endgame",
 			feature: "Heuristic",

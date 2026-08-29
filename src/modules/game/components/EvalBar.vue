@@ -1,19 +1,17 @@
 <script setup lang="ts">
 import { computed } from "vue";
 
-const props = defineProps<{ score?: number; perspective: "white" | "black" }>();
+// `score` is White-relative, the way an engine reports one: positive means White stands better.
+// It is still a *bot's* opinion, in whatever units that bot's weights are written in — which is
+// the interesting thing about a roster of animals, not a defect.
+const props = defineProps<{ score?: number }>();
 
-// The bar shows what the bot that just moved thought of the position, in its own units. Those
-// units are whatever its weights are written in, so this is a bot's opinion rather than an
-// objective evaluation — which is exactly the interesting thing about a roster of animals.
 const share = computed(() => {
 	if (props.score === undefined) return 50;
 
-	const white = props.perspective === "white" ? props.score : -props.score;
-
 	// A logistic squash: the difference between +1 and +3 pawns should be visible, the difference
 	// between +20 and +40 should not.
-	return 100 / (1 + Math.exp(-white / 400));
+	return 100 / (1 + Math.exp(-props.score / 400));
 });
 </script>
 
