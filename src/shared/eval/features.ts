@@ -43,6 +43,16 @@ export function defineFeatures(definitions: readonly FeatureDefinition[]): Featu
 // The vocabulary every bot is described in. Entries are appended as their extraction lands; the
 // order is the vector layout, so entries are never reordered or removed.
 export const FEATURES = defineFeatures([
+	// Piece values are features rather than constants, so a bot can be given its own — and can
+	// value a rook differently in the opening than in the endgame.
+	{ key: "materialPawn", family: "material", group: "pieces", defaultWeight: 100 },
+	{ key: "materialKnight", family: "material", group: "pieces", defaultWeight: 320 },
+	{ key: "materialBishop", family: "material", group: "pieces", defaultWeight: 330 },
+	{ key: "materialRook", family: "material", group: "pieces", defaultWeight: 500 },
+	{ key: "materialQueen", family: "material", group: "pieces", defaultWeight: 900 },
+
+	{ key: "mobility", family: "positional", group: "activity", defaultWeight: 4 },
+	{ key: "safeMobility", family: "positional", group: "activity", defaultWeight: 3 },
 	// Having the move is worth something in itself. It is also the one feature that needs no
 	// board walk at all, which makes it the registry's worked example.
 	{ key: "tempo", family: "positional", group: "initiative", defaultWeight: 10 },
@@ -51,3 +61,12 @@ export const FEATURES = defineFeatures([
 export const FEATURE_COUNT = FEATURES.length;
 
 export const FEATURES_BY_KEY = new Map(FEATURES.map((feature) => [feature.key, feature]));
+
+// Resolves a key to its vector slot once, at module load, so the extractor never looks anything
+// up per node. A typo is a startup crash rather than a feature that silently reads zero.
+export function featureId(key: string): number {
+	const feature = FEATURES_BY_KEY.get(key);
+	if (!feature) throw new Error(`unknown feature key "${key}"`);
+
+	return feature.id;
+}

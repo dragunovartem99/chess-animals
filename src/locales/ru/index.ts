@@ -18,6 +18,13 @@ const messages: Messages = {
 		ru: "Русский",
 	},
 	feature: {
+		materialPawn: "Ценность пешки",
+		materialKnight: "Ценность коня",
+		materialBishop: "Ценность слона",
+		materialRook: "Ценность ладьи",
+		materialQueen: "Ценность ферзя",
+		mobility: "Подвижность",
+		safeMobility: "Безопасная подвижность",
 		tempo: "Темп",
 	},
 	placeholder: {

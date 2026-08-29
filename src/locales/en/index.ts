@@ -17,6 +17,13 @@ export default {
 	},
 	// Keyed by `Feature.i18nKey` — every entry in the eval registry has a label here and in ru.
 	feature: {
+		materialPawn: "Pawn value",
+		materialKnight: "Knight value",
+		materialBishop: "Bishop value",
+		materialRook: "Rook value",
+		materialQueen: "Queen value",
+		mobility: "Mobility",
+		safeMobility: "Safe mobility",
 		tempo: "Tempo",
 	},
 	placeholder: {
