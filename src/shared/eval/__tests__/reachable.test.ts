@@ -19,6 +19,8 @@ const CORPUS = [
 	"r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R w KQkq - 0 1",
 	"4k3/8/8/8/8/8/8/2B1KB2 w - - 0 1",
 	"4k3/8/8/8/P7/P7/8/4K3 w - - 0 1",
+	// Qf7 is stalemate, which is the only way `givesStalemate` ever fires.
+	"7k/8/6K1/8/8/8/8/5Q2 w - - 0 1",
 ];
 
 function everyVectorInCorpus(): number[][] {

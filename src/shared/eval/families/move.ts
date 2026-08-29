@@ -10,6 +10,7 @@ export type PlayedMove = { parent: Chess; move: Move };
 
 const GIVES_MATE = featureId("givesMate");
 const GIVES_CHECK = featureId("givesCheck");
+const GIVES_STALEMATE = featureId("givesStalemate");
 const CAPTURE_VALUE = featureId("captureValue");
 const IS_PROMOTION = featureId("isPromotion");
 const IS_CASTLE = featureId("isCastle");
@@ -60,6 +61,7 @@ export function extractMoveFeatures({
 	if (!played) return;
 
 	if (position.isCheckmate()) features[GIVES_MATE] = -1;
+	else if (position.isStalemate()) features[GIVES_STALEMATE] = -1;
 	else if (position.isCheck()) features[GIVES_CHECK] = -1;
 
 	const captured = capturedRole(played);

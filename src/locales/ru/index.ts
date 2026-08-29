@@ -64,6 +64,7 @@ const messages: Messages = {
 		offeredMaterial: "Материал под боем",
 		givesMate: "Ставит мат",
 		givesCheck: "Даёт шах",
+		givesStalemate: "Ставит пат",
 		captureValue: "Ценность взятия",
 		isPromotion: "Превращение",
 		isCastle: "Рокировка",

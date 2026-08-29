@@ -109,6 +109,10 @@ export const FEATURES = defineFeatures([
 	// convention: a positive weight always means "the mover wants this".
 	{ key: "givesMate", family: "move", group: "forcing", defaultWeight: 0 },
 	{ key: "givesCheck", family: "move", group: "forcing", defaultWeight: 0 },
+	// The paper calls out `min_oppt_moves` for not telling mate from stalemate "despite these
+	// having very different results". Making it a feature is what lets a bot tell them apart —
+	// and lets one that would rather draw say so.
+	{ key: "givesStalemate", family: "move", group: "forcing", defaultWeight: 0 },
 	{ key: "captureValue", family: "move", group: "forcing", defaultWeight: 0 },
 	{ key: "isPromotion", family: "move", group: "forcing", defaultWeight: 0 },
 	{ key: "isCastle", family: "move", group: "quiet", defaultWeight: 0 },

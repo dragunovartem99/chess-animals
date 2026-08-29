@@ -63,6 +63,7 @@ export default {
 		offeredMaterial: "Material on offer",
 		givesMate: "Delivers mate",
 		givesCheck: "Gives check",
+		givesStalemate: "Forces stalemate",
 		captureValue: "Capture value",
 		isPromotion: "Promotes",
 		isCastle: "Castles",

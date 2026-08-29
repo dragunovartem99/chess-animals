@@ -8,6 +8,7 @@ export {
 	FEATURE_COUNT,
 	FEATURES,
 	FEATURES_BY_KEY,
+	featureId,
 } from "./features";
 export {
 	createFeatureVector,
