@@ -90,8 +90,8 @@ import LocaleSwitcher from "./LocaleSwitcher.vue";
 /* Exact, not `router-link-active`: the roster sits at the locale root, which is a prefix of
    every other route, so the plain active class lights it up on every page. */
 .nav a.router-link-exact-active {
-	background: var(--color-accent);
-	color: var(--color-black);
+	background: var(--color-accent-veil);
+	color: var(--color-accent-light);
 }
 
 .main {

@@ -8,10 +8,13 @@
 	font-family: "Noto Sans", system-ui, sans-serif;
 	line-height: 1.4;
 
-	/* zinc neutrals + amber accent, the chesscraft palette the previous version used */
+	/* Zinc neutrals with amber used sparingly: amber marks state — the page you are on, the
+	   move just played — and never fills a large surface. */
 	--color-accent-light: #fcd34d;
 	--color-accent: #f59e0b;
 	--color-accent-dark: #b45309;
+	/* Amber at a whisper, for chips sitting on the dark bars. */
+	--color-accent-veil: rgb(245 158 11 / 16%);
 
 	--color-neutral-lightest: #e4e4e7;
 	--color-neutral-light: #d4d4d8;
@@ -108,7 +111,7 @@ button {
 	padding: 0.5em 1.5em;
 	border: none;
 	border-radius: var(--radius-sm);
-	background: var(--color-accent-dark);
+	background: var(--color-neutral-darkest);
 	color: var(--color-white);
 	cursor: pointer;
 	box-shadow: var(--shadow-button);
@@ -116,7 +119,7 @@ button {
 }
 
 button:hover {
-	background: var(--color-accent);
+	background: var(--color-neutral-dark);
 }
 
 button:active {
@@ -146,7 +149,7 @@ cg-board {
 /* Amber for the last move; selection and destinations stay grey, so the one thing that stands
    out on the board is what the opponent just did. */
 cg-board square.last-move {
-	background-color: rgb(245 158 11 / 45%);
+	background-color: rgb(245 158 11 / 32%);
 }
 
 cg-board square.selected {

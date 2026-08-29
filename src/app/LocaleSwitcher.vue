@@ -56,7 +56,7 @@ a:hover {
 }
 
 a.router-link-exact-active {
-	background: var(--color-accent);
-	color: var(--color-black);
+	background: var(--color-accent-veil);
+	color: var(--color-accent-light);
 }
 </style>

@@ -234,9 +234,12 @@ async function restart() {
 	background: var(--color-neutral-light);
 }
 
+/* On a white card an amber chip would shout; the selected tab is simply lifted out of the
+   track, which is all the signal two tabs need. */
 .tabs button.active {
-	background: var(--color-accent);
-	color: var(--color-black);
+	background: var(--color-surface);
+	color: var(--color-ink);
+	box-shadow: 0 1px 2px rgb(24 24 27 / 20%);
 }
 
 .status {
