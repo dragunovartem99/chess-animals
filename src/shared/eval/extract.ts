@@ -2,8 +2,11 @@ import type { Chess } from "chessops/chess";
 import type { Move } from "chessops/types";
 
 import { createContext } from "./families/context";
+import { extractControl } from "./families/control";
 import { extractMaterial } from "./families/material";
 import { extractMobility } from "./families/mobility";
+import { extractPieces } from "./families/pieces";
+import { extractPlacement } from "./families/placement";
 import { featureId } from "./features";
 import { createFeatureVector, type FeatureVector } from "./vector";
 
@@ -21,7 +24,10 @@ export function extractFeatures(options: { position: Chess; move?: Move }): Feat
 
 	features[TEMPO] = 1;
 	extractMaterial({ context, features });
+	extractPlacement({ context, features });
+	extractPieces({ context, features });
 	extractMobility({ context, features });
+	extractControl({ context, features });
 
 	return features;
 }

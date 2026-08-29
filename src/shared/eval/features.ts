@@ -51,6 +51,30 @@ export const FEATURES = defineFeatures([
 	{ key: "materialRook", family: "material", group: "pieces", defaultWeight: 500 },
 	{ key: "materialQueen", family: "material", group: "pieces", defaultWeight: 900 },
 
+	// A parametrised stand-in for piece-square tables: two numbers per role instead of sixty-four,
+	// which is what keeps the tuner's search space small enough to move in seconds.
+	{ key: "centralizationPawn", family: "positional", group: "placement", defaultWeight: 0 },
+	{ key: "centralizationKnight", family: "positional", group: "placement", defaultWeight: 0 },
+	{ key: "centralizationBishop", family: "positional", group: "placement", defaultWeight: 0 },
+	{ key: "centralizationRook", family: "positional", group: "placement", defaultWeight: 0 },
+	{ key: "centralizationQueen", family: "positional", group: "placement", defaultWeight: 0 },
+	{ key: "centralizationKing", family: "positional", group: "placement", defaultWeight: 0 },
+	{ key: "advancementPawn", family: "positional", group: "placement", defaultWeight: 0 },
+	{ key: "advancementKnight", family: "positional", group: "placement", defaultWeight: 0 },
+	{ key: "advancementBishop", family: "positional", group: "placement", defaultWeight: 0 },
+	{ key: "advancementRook", family: "positional", group: "placement", defaultWeight: 0 },
+	{ key: "advancementQueen", family: "positional", group: "placement", defaultWeight: 0 },
+	{ key: "advancementKing", family: "positional", group: "placement", defaultWeight: 0 },
+
+	{ key: "bishopPair", family: "positional", group: "pieces", defaultWeight: 30 },
+	{ key: "rookOpenFile", family: "positional", group: "pieces", defaultWeight: 20 },
+	{ key: "rookSeventh", family: "positional", group: "pieces", defaultWeight: 20 },
+	{ key: "knightOutpost", family: "positional", group: "pieces", defaultWeight: 25 },
+
+	{ key: "centerControl", family: "positional", group: "control", defaultWeight: 8 },
+	{ key: "space", family: "positional", group: "control", defaultWeight: 2 },
+	{ key: "hanging", family: "positional", group: "control", defaultWeight: 15 },
+
 	{ key: "mobility", family: "positional", group: "activity", defaultWeight: 4 },
 	{ key: "safeMobility", family: "positional", group: "activity", defaultWeight: 3 },
 	// Having the move is worth something in itself. It is also the one feature that needs no

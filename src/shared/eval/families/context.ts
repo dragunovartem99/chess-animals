@@ -1,4 +1,4 @@
-import { pawnAttacks } from "chessops/attacks";
+import { attacks, pawnAttacks } from "chessops/attacks";
 import type { Chess } from "chessops/chess";
 import { SquareSet } from "chessops/squareSet";
 import type { ByColor, Color } from "chessops/types";
@@ -11,10 +11,24 @@ export type EvalContext = {
 	position: Chess;
 	us: Color;
 	them: Color;
-	// Squares each side's pawns attack — what makes a destination unsafe, and what a piece must
-	// avoid to hold an outpost.
+	// Squares each side's pawns attack — what makes a destination unsafe, and what holds an
+	// outpost.
 	pawnAttacks: ByColor<SquareSet>;
+	// Squares each side attacks with anything at all, pawns and king included. Defence is
+	// membership in your own set, so this is what tells a hanging piece from a defended one.
+	attacksBy: ByColor<SquareSet>;
 };
+
+function attackedBy({ position, color }: { position: Chess; color: Color }): SquareSet {
+	let attacked = SquareSet.empty();
+
+	for (const [square, piece] of position.board) {
+		if (piece.color === color)
+			attacked = attacked.union(attacks(piece, square, position.board.occupied));
+	}
+
+	return attacked;
+}
 
 function attackedByPawns({ position, color }: { position: Chess; color: Color }): SquareSet {
 	const pawns = position.board.pieces(color, "pawn");
@@ -35,6 +49,10 @@ export function createContext(position: Chess): EvalContext {
 		pawnAttacks: {
 			white: attackedByPawns({ position, color: "white" }),
 			black: attackedByPawns({ position, color: "black" }),
+		},
+		attacksBy: {
+			white: attackedBy({ position, color: "white" }),
+			black: attackedBy({ position, color: "black" }),
 		},
 	};
 }
