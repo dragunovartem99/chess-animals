@@ -3,6 +3,30 @@ import { onBeforeUnmount, ref } from "vue";
 import type { Animal } from "@/modules/bots/roster";
 import { createUciClient, createWorkerTransport, type UciEngineClient } from "@/shared/engine";
 
+function spawnEngine(animal: Animal): UciEngineClient {
+	const worker = new Worker(new URL("../../../workers/uciEngine.worker.ts", import.meta.url), {
+		type: "module",
+	});
+	// The definition goes first, before any UCI line: the worker has no bot until it arrives.
+	// Bound rather than called as a method — see `createWorkerTransport` for why.
+	const post = worker.postMessage.bind(worker);
+	post({ definition: animal.definition, name: animal.definition.id });
+
+	return createUciClient({ transport: createWorkerTransport({ worker }) });
+}
+
+// A fresh seed per game, because the engine's default is the bot's own id: without this every
+// game starts from the same rng state and a bot answers a given opponent identically forever.
+// The seed only breaks ties while `temperature` is zero, but it is the game's seed either way.
+async function reseed(engines: Map<string, UciEngineClient>): Promise<void> {
+	await Promise.all(
+		[...engines.values()].map((engine) => {
+			engine.setOption({ name: "Seed", value: crypto.randomUUID() });
+			return engine.newGame();
+		})
+	);
+}
+
 // One worker per animal, kept for as long as the view is open. Starting a worker costs a few
 // milliseconds and a bot is asked for hundreds of moves, so they are made once and reused; a
 // `ucinewgame` is what separates one game from the next.
@@ -14,18 +38,7 @@ export function useBotEngines() {
 		const existing = engines.get(animal.definition.id);
 		if (existing) return existing;
 
-		const worker = new Worker(
-			new URL("../../../workers/uciEngine.worker.ts", import.meta.url),
-			{
-				type: "module",
-			}
-		);
-		// The definition goes first, before any UCI line: the worker has no bot until it arrives.
-		// Bound rather than called as a method — see `createWorkerTransport` for why.
-		const post = worker.postMessage.bind(worker);
-		post({ definition: animal.definition, name: animal.definition.id });
-
-		const client = createUciClient({ transport: createWorkerTransport({ worker }) });
+		const client = spawnEngine(animal);
 		engines.set(animal.definition.id, client);
 
 		return client;
@@ -53,17 +66,7 @@ export function useBotEngines() {
 		}
 	}
 
-	// A fresh seed per game, because the engine's default is the bot's own id: without this every
-	// game starts from the same rng state and a bot answers a given opponent identically forever.
-	// The seed only breaks ties while `temperature` is zero, but it is the game's seed either way.
-	async function startNewGame(): Promise<void> {
-		await Promise.all(
-			[...engines.values()].map((engine) => {
-				engine.setOption({ name: "Seed", value: crypto.randomUUID() });
-				return engine.newGame();
-			})
-		);
-	}
+	const startNewGame = (): Promise<void> => reseed(engines);
 
 	onBeforeUnmount(() => {
 		for (const engine of engines.values()) engine.dispose();
