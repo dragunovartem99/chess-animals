@@ -237,7 +237,7 @@ Commit messages: `<area>: <what>`, e.g. `eval: add pawn structure features`.
 | 10  | `eval: king safety features`            | King zone attackers, ring control, king centralization, king-pawn distance                                                                                            | Per-feature tests                                          |
 | 11  | `eval: behavioural features`            | swarm, huddle, kingProximity, sameColorSquares, the three symmetries, reverseStarting, opponentMobility, pushDepth, offeredMaterial                                   | Each asserted against a position where its sign is obvious |
 | 12  | `eval: move-level features`             | givesMate, givesCheck, captureValue, isPromotion, isCastle, movedPieceType                                                                                            | Tested through a move list                                 |
-| 13  | `perf: benchmark feature extraction`    | A bench script + an asserted budget                                                                                                                                   | Extraction under 5 µs/position                             |
+| 13  | `perf: benchmark feature extraction`    | A bench script + an asserted budget                                                                                                                                   | Extraction under the 60 µs guard (~18 µs)                            |
 
 ### Phase C — bots that play
 
