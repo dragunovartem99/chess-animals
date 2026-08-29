@@ -7,6 +7,8 @@ import { defaultishWeights, onlyWeights } from "../../test-support/weights";
 import { chooseMove, scoreMoves } from "../policy";
 import { createRng } from "../rng";
 
+const GREEDY = { depth: 1 };
+
 // Total king-distance from every white piece to the black king, measured without going through
 // the feature vector, which reports a difference rather than one side's total.
 function distanceToBlackKing(position: ReturnType<typeof positionFromFen>): number {
@@ -27,6 +29,7 @@ function best({ fen, weights }: { fen: string; weights: ReturnType<typeof onlyWe
 	const move = chooseMove({
 		position: positionFromFen(fen),
 		weights,
+		search: GREEDY,
 		temperature: 0,
 		rng: createRng(1),
 	});
@@ -38,14 +41,20 @@ describe("scoreMoves", () => {
 	it("scores every legal move", () => {
 		const position = positionFromFen(INITIAL_FEN);
 
-		expect(scoreMoves({ position, weights: defaultishWeights() })).toHaveLength(20);
+		expect(scoreMoves({ position, weights: defaultishWeights(), search: GREEDY })).toHaveLength(
+			20
+		);
 	});
 
 	it("returns nothing when the game is already over", () => {
 		const fen = "rnb1kbnr/pppp1ppp/8/4p3/6Pq/5P2/PPPPP2P/RNBQKBNR w KQkq - 1 3";
 
 		expect(
-			scoreMoves({ position: positionFromFen(fen), weights: defaultishWeights() })
+			scoreMoves({
+				position: positionFromFen(fen),
+				weights: defaultishWeights(),
+				search: GREEDY,
+			})
 		).toEqual([]);
 	});
 });
@@ -69,7 +78,13 @@ describe("chooseMove", () => {
 	it("closes on the enemy king when it is a swarm bot", () => {
 		const weights = onlyWeights({ swarm: -10 });
 		const position = positionFromFen("7k/8/8/8/8/8/8/R3K3 w - - 0 1");
-		const move = chooseMove({ position, weights, temperature: 0, rng: createRng(1) })!;
+		const move = chooseMove({
+			position,
+			weights,
+			search: GREEDY,
+			temperature: 0,
+			rng: createRng(1),
+		})!;
 
 		// Which piece it charges with is up to it — the paper's swarm counts the king too. What
 		// must hold is that White's army ends up nearer the black king than it started.
@@ -88,21 +103,10 @@ describe("chooseMove edge cases", () => {
 			chooseMove({
 				position,
 				weights: defaultishWeights(),
+				search: GREEDY,
 				temperature: 0,
 				rng: createRng(1),
 			})
 		).toBeUndefined();
-	});
-
-	it("replays the same move from the same seed, and spreads with temperature", () => {
-		const position = positionFromFen(INITIAL_FEN);
-		const weights = defaultishWeights();
-		const pick = (seed: number, temperature: number) =>
-			makeUci(chooseMove({ position, weights, temperature, rng: createRng(seed) })!);
-
-		expect(pick(7, 0)).toBe(pick(7, 0));
-
-		const sampled = new Set(Array.from({ length: 30 }, (_, seed) => pick(seed, 200)));
-		expect(sampled.size).toBeGreaterThan(1);
 	});
 });

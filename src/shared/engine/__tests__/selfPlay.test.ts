@@ -7,6 +7,8 @@ import { defaultishWeights } from "../../test-support/weights";
 import { chooseMove } from "../policy";
 import { createRng } from "../rng";
 
+const GREEDY = { depth: 1 };
+
 describe("a bot playing itself", () => {
 	it("plays a legal game through to a finish", () => {
 		const weights = defaultishWeights({ givesMate: 100000 });
@@ -17,7 +19,7 @@ describe("a bot playing itself", () => {
 		let ply = 0;
 
 		while (!gameStatus({ position, keys, plyLimit: 300, ply }).over) {
-			const move = chooseMove({ position, weights, temperature: 30, rng });
+			const move = chooseMove({ position, weights, search: GREEDY, temperature: 30, rng });
 			expect(move).toBeDefined();
 			expect(legalMoves(position).some((legal) => makeUci(legal) === makeUci(move!))).toBe(
 				true
