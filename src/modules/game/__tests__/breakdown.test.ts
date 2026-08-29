@@ -1,8 +1,9 @@
 import { INITIAL_FEN } from "chessops/fen";
 import { describe, expect, it } from "vitest";
 
-import { positionFromFen } from "@/shared/chess";
+import { afterMove, legalMoves, positionFromFen } from "@/shared/chess";
 import { evaluatePosition } from "@/shared/engine";
+import { toUci } from "@/shared/engine/uci/moves";
 import { onlyWeights } from "@/shared/test-support/weights";
 
 import { explainPosition } from "../utils/breakdown";
@@ -57,5 +58,39 @@ describe("explainPosition", () => {
 
 		expect(explainPosition({ position: endgame, weights }).phase).toBe(1);
 		expect(row.weight).toBe(200);
+	});
+});
+
+describe("the move that produced the position", () => {
+	const weights = onlyWeights({ givesMate: 100000, materialRook: 500 });
+
+	it("shows the mate, rather than scoring a mated position as merely quiet", () => {
+		// Ra1-a8 is checkmate. Without the move, every move-level feature reads zero and the panel
+		// explains a finished game as an ordinary position — which is what made it confusing.
+		const parent = positionFromFen("6k1/5ppp/8/8/8/8/8/R5K1 w - - 0 1");
+		const move = legalMoves(parent).find(
+			(candidate) => toUci({ position: parent, move: candidate }) === "a1a8"
+		)!;
+		const position = afterMove({ position: parent, move });
+
+		const withMove = explainPosition({ position, weights, played: { parent, move } });
+		const without = explainPosition({ position, weights });
+
+		expect(withMove.rows.find((row) => row.key === "givesMate")?.points).toBe(-100000);
+		expect(without.rows.find((row) => row.key === "givesMate")?.points).toBe(0);
+	});
+
+	it("still sums to what the search would score", () => {
+		const parent = positionFromFen("6k1/5ppp/8/8/8/8/8/R5K1 w - - 0 1");
+		const move = legalMoves(parent).find(
+			(candidate) => toUci({ position: parent, move: candidate }) === "a1a8"
+		)!;
+		const position = afterMove({ position: parent, move });
+		const played = { parent, move };
+
+		expect(explainPosition({ position, weights, played }).total).toBeCloseTo(
+			evaluatePosition({ position, played, weights }),
+			3
+		);
 	});
 });

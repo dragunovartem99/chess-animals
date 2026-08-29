@@ -154,6 +154,7 @@ async function restart() {
 				v-if="lens && lensWeights"
 				:position="game.position.value"
 				:weights="lensWeights"
+				:played="game.played.value"
 				:name="$t(`bot.${lens.definition.id}.name`)"
 			/>
 		</aside>

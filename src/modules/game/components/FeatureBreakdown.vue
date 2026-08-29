@@ -2,14 +2,25 @@
 import type { Chess } from "chessops/chess";
 import { computed } from "vue";
 
-import type { PhaseWeights } from "@/shared/eval";
+import type { PhaseWeights, PlayedMove } from "@/shared/eval";
 
 import { explainPosition } from "../utils/breakdown";
 
-const props = defineProps<{ position: Chess; weights: PhaseWeights; name: string }>();
+const props = defineProps<{
+	position: Chess;
+	weights: PhaseWeights;
+	name: string;
+	played?: PlayedMove;
+}>();
+
+// Every feature is measured from the side to move's point of view, and the animal being named is
+// not always that side — in a human-versus-bot game the panel shows the bot's weights while the
+// human is on move. Saying whose side the numbers are from is the difference between a debugging
+// tool and a misleading one.
+const perspective = computed(() => props.position.turn);
 
 const breakdown = computed(() =>
-	explainPosition({ position: props.position, weights: props.weights })
+	explainPosition({ position: props.position, weights: props.weights, played: props.played })
 );
 const format = (value: number) => (Number.isInteger(value) ? String(value) : value.toFixed(1));
 </script>
@@ -17,6 +28,9 @@ const format = (value: number) => (Number.isInteger(value) ? String(value) : val
 <template>
 	<section class="breakdown">
 		<h2>{{ $t("game.breakdown.title", { name }) }}</h2>
+		<p class="perspective">
+			{{ $t("game.breakdown.perspective", { colour: $t(`game.turn.${perspective}`) }) }}
+		</p>
 		<p class="total">
 			{{ $t("game.breakdown.total") }}: <strong>{{ format(breakdown.total) }}</strong>
 			<span class="phase">{{
@@ -65,6 +79,11 @@ h2 {
 
 .total {
 	margin: 0 0 0.5rem;
+}
+
+.perspective {
+	margin: 0 0 0.5rem;
+	color: var(--muted, #888);
 }
 
 .phase {

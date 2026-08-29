@@ -26,6 +26,7 @@ const messages: Messages = {
 	game: {
 		breakdown: {
 			title: "Что видит {name}",
+			perspective: "оценка со стороны: {colour}",
 			total: "Итого",
 			phase: "эндшпиль на {phase}%",
 			feature: "Эвристика",

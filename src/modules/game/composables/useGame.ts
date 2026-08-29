@@ -13,6 +13,7 @@ import {
 	repetitionKey,
 } from "@/shared/chess";
 import { toUci } from "@/shared/engine/uci/moves";
+import type { PlayedMove } from "@/shared/eval";
 
 export type PlayedTurn = { ply: number; san: string; uci: string };
 
@@ -24,6 +25,10 @@ export function useGame({ plyLimit = 300 }: { plyLimit?: number } = {}) {
 	const keys = ref<string[]>([]);
 	const turns = ref<PlayedTurn[]>([]);
 	const lastMove = ref<[string, string]>();
+	// The move that produced the current position, and the position it came from. The move-level
+	// features are the only ones that need to look backwards, and without this they read zero —
+	// which makes a checkmate look like an ordinary quiet position.
+	const played = shallowRef<PlayedMove>();
 
 	const fen = computed(() => fenFromPosition(position.value));
 	const ply = computed(() => turns.value.length);
@@ -42,6 +47,7 @@ export function useGame({ plyLimit = 300 }: { plyLimit?: number } = {}) {
 		keys.value = [...keys.value, repetitionKey(position.value)];
 		turns.value = [...turns.value, { ply: ply.value + 1, san, uci }];
 		lastMove.value = [uci.slice(0, 2), uci.slice(2, 4)];
+		played.value = { parent: position.value, move };
 		position.value = afterMove({ position: position.value, move });
 	}
 
@@ -50,7 +56,8 @@ export function useGame({ plyLimit = 300 }: { plyLimit?: number } = {}) {
 		keys.value = [];
 		turns.value = [];
 		lastMove.value = undefined;
+		played.value = undefined;
 	}
 
-	return { position, fen, turns, lastMove, status, ply, play, reset };
+	return { position, fen, turns, lastMove, played, status, ply, play, reset };
 }

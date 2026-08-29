@@ -7,6 +7,7 @@ import {
 	FEATURES,
 	interpolateWeights,
 	type PhaseWeights,
+	type PlayedMove,
 } from "@/shared/eval";
 
 export type Contribution = {
@@ -27,19 +28,23 @@ export type Breakdown = { total: number; phase: number; rows: Contribution[] };
 // score this position at, which is what makes this a debugging tool rather than an illustration:
 // if the bot plays a move this panel cannot explain, the panel is wrong, not the bot.
 //
-// Move-level features read zero here — nothing has been played *to* reach the position being
-// looked at — and features whose weight is zero are left out, since a roster of animals switches
-// most of them off.
+// `played` is the move that produced the position. Without it every move-level feature reads
+// zero, and a checkmate renders as an ordinary quiet position with a mildly bad score — the one
+// term that decided the game missing from the one panel meant to explain it.
+//
+// Features whose weight is zero are left out, since a roster of animals switches most of them off.
 export function explainPosition({
 	position,
 	weights,
+	played,
 }: {
 	position: Chess;
 	weights: PhaseWeights;
+	played?: PlayedMove;
 }): Breakdown {
 	const phase = gamePhase(position);
 	const blended = interpolateWeights({ weights, phase });
-	const features = extractFeatures({ position });
+	const features = extractFeatures({ position, played });
 
 	const rows = FEATURES.map((feature) => ({
 		key: feature.key,

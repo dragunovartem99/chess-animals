@@ -38,6 +38,7 @@ export default {
 	game: {
 		breakdown: {
 			title: "What {name} sees",
+			perspective: "scored from {colour}'s side",
 			total: "Total",
 			phase: "{phase}% endgame",
 			feature: "Heuristic",
