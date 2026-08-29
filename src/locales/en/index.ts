@@ -46,6 +46,7 @@ export default {
 			weight: "Weight",
 			points: "Points",
 		},
+		tab: { moves: "Moves", breakdown: "Breakdown" },
 		human: "You",
 		restart: "New game",
 		thinking: "Thinking…",

@@ -34,6 +34,7 @@ const messages: Messages = {
 			weight: "Вес",
 			points: "Очки",
 		},
+		tab: { moves: "Ходы", breakdown: "Разбор" },
 		human: "Вы",
 		restart: "Новая партия",
 		thinking: "Думает…",

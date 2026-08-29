@@ -21,6 +21,9 @@ const game = useGame();
 const engines = useBotEngines();
 
 const players = ref<Record<Color, string>>({ white: HUMAN, black: "wolf" });
+
+const TABS = ["moves", "breakdown"] as const;
+const tab = ref<(typeof TABS)[number]>("moves");
 const score = ref<number>();
 
 const humanColours = computed(() =>
@@ -150,10 +153,30 @@ async function restart() {
 				{{ $t("game.restart") }}
 			</button>
 
-			<MoveList :turns="game.turns.value" />
+			<div
+				class="tabs"
+				role="tablist"
+			>
+				<button
+					v-for="name in TABS"
+					:key="name"
+					type="button"
+					role="tab"
+					:aria-selected="tab === name"
+					:class="{ active: tab === name }"
+					@click="tab = name"
+				>
+					{{ $t(`game.tab.${name}`) }}
+				</button>
+			</div>
+
+			<MoveList
+				v-if="tab === 'moves'"
+				:turns="game.turns.value"
+			/>
 
 			<FeatureBreakdown
-				v-if="lens && lensWeights"
+				v-else-if="lens && lensWeights"
 				:position="game.position.value"
 				:weights="lensWeights"
 				:played="game.played.value"
@@ -185,6 +208,35 @@ async function restart() {
 	gap: 0.75rem;
 	flex: 1 1 18rem;
 	min-width: 16rem;
+}
+
+/* A segmented control rather than two buttons: the panel is one thing showing one of two
+   views of the same game, and the accent marks which. */
+.tabs {
+	display: flex;
+	gap: 0.25rem;
+	padding: 0.25rem;
+	border-radius: var(--radius-full);
+	background: var(--color-neutral-lightest);
+}
+
+.tabs button {
+	flex: 1;
+	padding: 0.35rem 0.75rem;
+	border-radius: var(--radius-full);
+	background: none;
+	color: var(--color-neutral-darker);
+	font-size: 0.9rem;
+	box-shadow: none;
+}
+
+.tabs button:hover {
+	background: var(--color-neutral-light);
+}
+
+.tabs button.active {
+	background: var(--color-accent);
+	color: var(--color-black);
 }
 
 .status {
