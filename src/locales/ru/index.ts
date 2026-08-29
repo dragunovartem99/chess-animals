@@ -18,6 +18,10 @@ const messages: Messages = {
 		en: "English",
 		ru: "Русский",
 	},
+	board: {
+		promotion: "Выберите фигуру",
+		piece: { queen: "Ферзь", rook: "Ладья", bishop: "Слон", knight: "Конь" },
+	},
 	bot: bots,
 	feature: {
 		materialPawn: "Ценность пешки",

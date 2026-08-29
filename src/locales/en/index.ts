@@ -16,6 +16,10 @@ export default {
 		ru: "Русский",
 	},
 	// Keyed by `Feature.i18nKey` — every entry in the eval registry has a label here and in ru.
+	board: {
+		promotion: "Choose a piece",
+		piece: { queen: "Queen", rook: "Rook", bishop: "Bishop", knight: "Knight" },
+	},
 	bot: {
 		"mouse": {
 			name: "Mouse",
