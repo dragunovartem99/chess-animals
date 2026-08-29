@@ -38,7 +38,7 @@ export default {
 	game: {
 		breakdown: {
 			title: "What {name} sees",
-			absolute: "a plus means White is better; amount × weight = points",
+			absolute: "a plus means White is better; points = amount × weight",
 			total: "Total",
 			phase: "{phase}% endgame",
 			feature: "Heuristic",
