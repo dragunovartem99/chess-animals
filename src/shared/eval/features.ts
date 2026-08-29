@@ -82,6 +82,14 @@ export const FEATURES = defineFeatures([
 	{ key: "pawnPassedAdvancement", family: "pawns", group: "strengths", defaultWeight: 8 },
 	{ key: "pawnShield", family: "pawns", group: "strengths", defaultWeight: 10 },
 
+	// King safety is counted around the king rather than on it: what attacks the squares he stands
+	// among, what defends them, and how exposed he is once the pawns in front of him are gone.
+	{ key: "kingAttackers", family: "king", group: "safety", defaultWeight: -12 },
+	{ key: "kingRingDefenders", family: "king", group: "safety", defaultWeight: 6 },
+	{ key: "kingOpenFile", family: "king", group: "safety", defaultWeight: -20 },
+	// Endgame business: the king is a piece, and it wants to be near the pawns.
+	{ key: "kingPawnDistance", family: "king", group: "endgame", defaultWeight: -4 },
+
 	{ key: "centerControl", family: "positional", group: "control", defaultWeight: 8 },
 	{ key: "space", family: "positional", group: "control", defaultWeight: 2 },
 	{ key: "hanging", family: "positional", group: "control", defaultWeight: -15 },

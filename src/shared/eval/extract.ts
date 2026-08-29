@@ -3,6 +3,7 @@ import type { Move } from "chessops/types";
 
 import { createContext } from "./families/context";
 import { extractControl } from "./families/control";
+import { extractKing } from "./families/king";
 import { extractMaterial } from "./families/material";
 import { extractMobility } from "./families/mobility";
 import { extractPawns } from "./families/pawns";
@@ -28,6 +29,7 @@ export function extractFeatures(options: { position: Chess; move?: Move }): Feat
 	extractPlacement({ context, features });
 	extractPieces({ context, features });
 	extractPawns({ context, features });
+	extractKing({ context, features });
 	extractMobility({ context, features });
 	extractControl({ context, features });
 

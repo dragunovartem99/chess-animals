@@ -49,3 +49,12 @@ export function relativeRank({ color, square }: { color: Color; square: number }
 
 	return color === "white" ? rank : 7 - rank;
 }
+
+// King-move distance: the number of steps a king needs between two squares. It is the metric the
+// Elo World strategies are written in, and the one an endgame king is judged by.
+export function chebyshev({ from, to }: { from: number; to: number }): number {
+	return Math.max(
+		Math.abs(squareFile(from) - squareFile(to)),
+		Math.abs(squareRank(from) - squareRank(to))
+	);
+}
