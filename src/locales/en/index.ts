@@ -16,6 +16,21 @@ export default {
 		ru: "Русский",
 	},
 	// Keyed by `Feature.i18nKey` — every entry in the eval registry has a label here and in ru.
+	bot: {
+		"mouse": {
+			name: "Mouse",
+			description:
+				"Picks a legal move at random. The reference point every rating is measured from.",
+		},
+		"swarm-wolf": {
+			name: "Swarm Wolf",
+			description: "Throws every piece at the enemy king and thinks no further.",
+		},
+		"huddle-turtle": {
+			name: "Huddle Turtle",
+			description: "Builds a wall around its own king and waits.",
+		},
+	},
 	feature: {
 		materialPawn: "Pawn value",
 		materialKnight: "Knight value",

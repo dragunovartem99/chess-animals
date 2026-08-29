@@ -22,8 +22,8 @@ describe("createFeatureVector", () => {
 });
 
 describe("weightsFromRecord", () => {
-	it("fills unnamed features with their defaults", () => {
-		expect([...weightsFromRecord({})]).toEqual([...defaultWeights()]);
+	it("leaves unnamed features at zero, so appending a feature cannot rewrite a saved bot", () => {
+		expect([...weightsFromRecord({})].every((weight) => weight === 0)).toBe(true);
 	});
 
 	it("overrides only the features it names", () => {
@@ -38,8 +38,12 @@ describe("weightsFromRecord", () => {
 });
 
 describe("recordFromWeights", () => {
-	it("omits everything left at its default", () => {
-		expect(recordFromWeights(defaultWeights())).toEqual({});
+	it("omits everything that does nothing", () => {
+		expect(recordFromWeights(weightsFromRecord({}))).toEqual({});
+	});
+
+	it("keeps a registry default, which is a weight like any other once a bot is saved", () => {
+		expect(recordFromWeights(defaultWeights()).tempo).toBe(10);
 	});
 
 	it("round-trips the values it does keep", () => {

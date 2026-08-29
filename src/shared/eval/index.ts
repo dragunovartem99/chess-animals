@@ -12,6 +12,7 @@ export {
 } from "./features";
 export {
 	createFeatureVector,
+	defaultRecord,
 	defaultWeights,
 	dot,
 	type FeatureVector,

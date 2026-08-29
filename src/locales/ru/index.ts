@@ -1,4 +1,5 @@
 import type { Messages } from "../types";
+import bots from "./bots";
 
 const messages: Messages = {
 	app: {
@@ -17,6 +18,7 @@ const messages: Messages = {
 		en: "English",
 		ru: "Русский",
 	},
+	bot: bots,
 	feature: {
 		materialPawn: "Ценность пешки",
 		materialKnight: "Ценность коня",
