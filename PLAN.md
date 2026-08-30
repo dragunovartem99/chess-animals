@@ -86,6 +86,7 @@ unpicking the next. Checked = landed on `main`.
 ## Landed outside the ladder
 
 - ✅ `perf: speed up feature extraction` — 77 µs → ~18 µs against a 60 µs guard (5 µs proved unachievable; the target above was corrected to match)
+- ✅ `perf: benchmark engine search` — `search.bench.ts` over depth 1/2/3 ± quiescence on a position spread, with a depth-2 budget guard in the suite mirroring the extraction guard
 - ✅ `game: explain the move that produced the position`
 - ✅ `game: report evaluations White-relative, in pawns`
 - ✅ `eval: measure proximity per piece, not per army`
