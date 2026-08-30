@@ -6,6 +6,7 @@ import { computed, ref, watch } from "vue";
 import { ChessBoard } from "@/modules/board";
 import { ROSTER, ROSTER_BY_ID } from "@/modules/bots/roster";
 import { compileBot } from "@/shared/bots";
+import { evaluatePosition } from "@/shared/engine";
 import { fromUci } from "@/shared/engine/uci/moves";
 
 import { useBotEngines } from "../composables/useBotEngines";
@@ -24,7 +25,6 @@ const players = ref<Record<Color, string>>({ white: HUMAN, black: "wolf" });
 
 const TABS = ["moves", "breakdown"] as const;
 const tab = ref<(typeof TABS)[number]>("moves");
-const score = ref<number>();
 
 const humanColours = computed(() =>
 	(["white", "black"] as Color[]).filter((colour) => players.value[colour] === HUMAN)
@@ -82,14 +82,6 @@ watch(
 		const move = fromUci({ position: game.position.value, uci: answer.move });
 		if (!move) return;
 
-		// UCI reports a score from the side to move's point of view; the bar shows White-relative
-		// numbers, so a black bot's opinion is flipped on the way in.
-		score.value =
-			answer.score === undefined
-				? undefined
-				: colour === "white"
-					? answer.score
-					: -answer.score;
 		game.play(move);
 	},
 	{ immediate: true }
@@ -110,9 +102,25 @@ const lensWeights = computed(() =>
 	lens.value ? compileBot(lens.value.definition).weights : undefined
 );
 
+// The bar is recomputed from the live position every ply, not stashed from the last engine
+// reply — otherwise a human move (or the move that ends the game) leaves it showing the
+// position before. `evaluatePosition` is side-to-move-relative; the bar is White-relative.
+const score = computed(() => {
+	const weights = lensWeights.value;
+	const cp =
+		weights === undefined
+			? undefined
+			: evaluatePosition({
+					position: game.position.value,
+					played: game.played.value,
+					weights,
+				});
+
+	return cp === undefined || game.position.value.turn === "white" ? cp : -cp;
+});
+
 async function restart() {
 	game.reset();
-	score.value = undefined;
 	generation.value += 1;
 	await engines.startNewGame();
 }
