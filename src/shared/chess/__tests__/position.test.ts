@@ -5,6 +5,7 @@ import { describe, expect, it } from "vitest";
 import {
 	afterMove,
 	fenFromPosition,
+	hasLegalMove,
 	legalCaptures,
 	legalMoves,
 	positionFromFen,
@@ -47,6 +48,24 @@ describe("legalMoves", () => {
 function captureUcis(fen: string): string[] {
 	return legalCaptures(positionFromFen(fen)).map((move) => makeUci(move));
 }
+
+describe("hasLegalMove", () => {
+	it("agrees with legalMoves across a spread of positions", () => {
+		const fens = [
+			INITIAL_FEN,
+			"r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
+			// Checkmate — Black to move, no reply.
+			"rnb1kbnr/pppp1ppp/8/4p3/6Pq/5P2/PPPPP2P/RNBQKBNR w KQkq - 1 3",
+			// Stalemate — Black to move, not in check, no move.
+			"7k/5Q2/6K1/8/8/8/8/8 b - - 0 1",
+		];
+
+		for (const fen of fens) {
+			const position = positionFromFen(fen);
+			expect(hasLegalMove(position)).toBe(legalMoves(position).length > 0);
+		}
+	});
+});
 
 describe("legalCaptures", () => {
 	it("is empty when nothing can be taken", () => {

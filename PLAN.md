@@ -90,6 +90,7 @@ unpicking the next. Checked = landed on `main`.
 - ✅ `perf: prune the root when the bot only takes the argmax` — `temperature <= 0` searches root moves best-first with a narrowing window; ~14× at depth 2, ~10× at depth 3 + quiescence, and the scores a sampling bot reads stay exact
 - ✅ `perf: reuse the blend and feature buffers across a search` — `createEvaluator` caches the phase-blended weights (≤25 distinct phases a game) and reuses one feature vector per search instead of allocating both per node
 - ✅ `perf: generate only captures in quiescence` — `legalCaptures` builds the capture list straight from each piece's legal destinations rather than generating every move and filtering; quiescence no longer materialises the quiet moves it would only discard
+- ✅ `perf: do not generate moves at a search leaf` — negamax checks depth before building the move list; a leaf just evaluates, and only quiescence still asks `hasLegalMove` (which short-circuits) to tell a mate from a quiet position. Cumulative over the five: depth 2 ~15×, depth 3 + quiescence ~11× on the spread
 - ✅ `game: explain the move that produced the position`
 - ✅ `game: report evaluations White-relative, in pawns`
 - ✅ `eval: measure proximity per piece, not per army`

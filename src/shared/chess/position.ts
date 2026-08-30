@@ -42,6 +42,20 @@ function isPromotionMove({
 	return position.turn === "white" ? rank === 7 : rank === 0;
 }
 
+// Whether the side to move has any legal move at all, short-circuiting on the first piece that
+// has one — almost always the first piece looked at. `legalMoves(position).length === 0` answers
+// the same question but builds the whole list first; at a search leaf, where all that matters is
+// telling a mate or stalemate from a playable position, that list is never used.
+export function hasLegalMove(position: Chess): boolean {
+	const context = position.ctx();
+
+	for (const from of position.board[position.turn]) {
+		if (position.dests(from, context).nonEmpty()) return true;
+	}
+
+	return false;
+}
+
 // Every legal move, promotions expanded into one move per role.
 export function legalMoves(position: Chess): NormalMove[] {
 	const moves: NormalMove[] = [];

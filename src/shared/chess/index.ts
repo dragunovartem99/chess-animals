@@ -3,6 +3,7 @@ export { gamePhase } from "./phase";
 export {
 	afterMove,
 	fenFromPosition,
+	hasLegalMove,
 	legalCaptures,
 	legalMoves,
 	positionFromFen,

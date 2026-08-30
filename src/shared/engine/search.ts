@@ -1,7 +1,7 @@
 import type { Chess } from "chessops/chess";
 import type { NormalMove } from "chessops/types";
 
-import { afterMove, legalMoves } from "../chess";
+import { afterMove, hasLegalMove, legalMoves } from "../chess";
 import type { PhaseWeights, PlayedMove } from "../eval";
 import { createEvaluator } from "./evaluate";
 import { orderMoves } from "./ordering";
@@ -36,18 +36,19 @@ function createSearch({ weights, options }: { weights: PhaseWeights; options: Se
 	const quiesce = createQuiescence({ evaluate, exhausted: () => nodes >= limit });
 
 	function negamax({ position, played, depth, alpha, beta }: Frame): number {
-		const moves = legalMoves(position);
-
-		// No moves means mate or stalemate. Both are scored by the evaluation rather than by a
-		// hardcoded win, because `givesMate` and `givesStalemate` are weights a bot may set
-		// however it likes — including negative.
-		if (moves.length === 0) return evaluate({ position, played });
-
+		// At a leaf the move list is never walked, so it is not built. Mate and stalemate are still
+		// scored by the evaluation rather than a hardcoded win — `givesMate` and `givesStalemate`
+		// are weights a bot may set however it likes — which for a plain leaf is what `evaluate`
+		// already returns; quiescence needs the check because a mated side has no stand-pat.
 		if (depth <= 0 || nodes >= limit) {
-			return options.quiescence
-				? quiesce({ position, played, alpha, beta })
-				: evaluate({ position, played });
+			if (!options.quiescence || !hasLegalMove(position)) {
+				return evaluate({ position, played });
+			}
+			return quiesce({ position, played, alpha, beta });
 		}
+
+		const moves = legalMoves(position);
+		if (moves.length === 0) return evaluate({ position, played });
 
 		let best = -INFINITY;
 
