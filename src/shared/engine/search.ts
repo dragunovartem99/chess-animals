@@ -3,7 +3,7 @@ import type { NormalMove } from "chessops/types";
 
 import { afterMove, legalMoves } from "../chess";
 import type { PhaseWeights, PlayedMove } from "../eval";
-import { evaluatePosition } from "./evaluate";
+import { createEvaluator } from "./evaluate";
 import { orderMoves } from "./ordering";
 import { createQuiescence } from "./quiescence";
 
@@ -27,9 +27,10 @@ function createSearch({ weights, options }: { weights: PhaseWeights; options: Se
 	const limit = options.nodeLimit ?? INFINITY;
 	let nodes = 0;
 
+	const scorePosition = createEvaluator({ weights });
 	const evaluate = ({ position, played }: { position: Chess; played?: PlayedMove }) => {
 		nodes += 1;
-		return evaluatePosition({ position, played, weights });
+		return scorePosition({ position, played });
 	};
 
 	const quiesce = createQuiescence({ evaluate, exhausted: () => nodes >= limit });

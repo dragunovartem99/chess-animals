@@ -26,11 +26,18 @@ const TEMPO = featureId("tempo");
 export function extractFeatures({
 	position,
 	played,
+	into,
 }: {
 	position: Chess;
 	played?: PlayedMove;
+	// A caller that discards the vector as soon as it has dotted it — the search, once per node —
+	// passes a buffer to reuse rather than allocating a fresh one every call. It is zeroed here;
+	// every other caller keeps the fresh-array default so two extractions never alias.
+	into?: FeatureVector;
 }): FeatureVector {
-	const features = createFeatureVector();
+	const features = into ?? createFeatureVector();
+	if (into) into.fill(0);
+
 	const context = createContext(position);
 
 	features[TEMPO] = 1;

@@ -2,7 +2,7 @@ export { type BestMove, createUciClient, type UciEngineClient, type UciTransport
 export { applyOption, describeOptions } from "./options";
 export { createLocalTransport, createWorkerTransport } from "./transports";
 export { createUciEngine } from "./uciEngine";
-export { evaluatePosition } from "./evaluate";
+export { createEvaluator, evaluatePosition, type PositionEvaluator } from "./evaluate";
 export { orderMoves } from "./ordering";
 export { createQuiescence } from "./quiescence";
 export { chooseMove, pickMove, scoreMoves } from "./policy";
