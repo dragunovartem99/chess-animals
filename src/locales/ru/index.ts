@@ -27,7 +27,7 @@ const messages: Messages = {
 	game: {
 		breakdown: {
 			title: "Что видит {name}",
-			absolute: "плюс — перевес белых; очки = значение × вес",
+			absolute: "Положительные числа — в пользу белых. Очки = Значение × Вес.",
 			total: "Итого",
 			phase: "эндшпиль: {phase}%",
 			feature: "Параметр",
