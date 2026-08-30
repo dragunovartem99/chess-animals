@@ -72,29 +72,45 @@ function createSearch({ weights, options }: { weights: PhaseWeights; options: Se
 
 // Every legal move with what it is worth to the mover, searched to the requested depth.
 //
-// Each root move is searched with a full window rather than the narrowing one a normal engine
-// would use. An engine only needs the best move, so it can afford scores that are merely bounds;
-// the policy here samples across the scores at non-zero temperature, and a bound would distort
-// the distribution it samples from.
+// `prune` narrows the window as the best root score rises, the way a normal engine always would.
+// It is off by default because a non-best move then comes back as a bound rather than a value,
+// and the policy samples across those scores at non-zero temperature — a bound would distort the
+// distribution. When the caller will only take the argmax (`temperature <= 0`) the bounds are
+// harmless: a move that truly ties the best still comes back equal to it, so the seeded
+// tie-break is unaffected, and only strictly worse moves are left as bounds.
 export function searchRoot({
 	position,
 	weights,
 	options,
+	prune = false,
 }: {
 	position: Chess;
 	weights: PhaseWeights;
 	options: SearchOptions;
+	prune?: boolean;
 }): ScoredMove[] {
 	const { negamax } = createSearch({ weights, options });
+	const moves = legalMoves(position);
 
-	return legalMoves(position).map((move) => ({
-		move,
-		score: -negamax({
+	// Search best-capture-first so the narrowing window bites sooner, but report the moves in
+	// generated order regardless: the policy's tie-break picks by index, so a caller must see the
+	// same order whether or not the search pruned.
+	const order = prune ? orderMoves({ position, moves }) : moves;
+	const scoreByMove = new Map<NormalMove, number>();
+	let best = -INFINITY;
+
+	for (const move of order) {
+		const score = -negamax({
 			position: afterMove({ position, move }),
 			played: { parent: position, move },
 			depth: options.depth - 1,
 			alpha: -INFINITY,
-			beta: INFINITY,
-		}),
-	}));
+			beta: prune ? -best : INFINITY,
+		});
+
+		scoreByMove.set(move, score);
+		if (score > best) best = score;
+	}
+
+	return moves.map((move) => ({ move, score: scoreByMove.get(move)! }));
 }

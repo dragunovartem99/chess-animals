@@ -11,8 +11,11 @@ import { searchRoot } from "../search";
 // numbers, and PLAN.md carries the arena budget the whole thing has to fit inside.
 //
 // Depth 2 is the shallowest depth that actually exercises alpha-beta, move ordering and the
-// child-node blend, so a regression in any of those shows up here.
-const BUDGET_MILLISECONDS = 420;
+// child-node blend, so a regression in any of those shows up here. `prune` is the path an argmax
+// bot takes — the whole roster — so it is what the guard should watch. The real number is ~13 ms
+// (`npm run bench`); the budget carries wide headroom because the suite's other files run in
+// parallel and contend for the same cores while this measures wall time.
+const BUDGET_MILLISECONDS = 150;
 
 // v8's coverage instrumentation multiplies per-node cost, so under `npm run test:coverage` the
 // number measures the instrumentation rather than the search. There the guard only keeps the
@@ -27,14 +30,14 @@ const WEIGHTS = onlyWeights({
 	materialQueen: 900,
 });
 
-const WARMUP_PASSES = 2;
-const MEASURED_PASSES = 8;
+const WARMUP_PASSES = 3;
+const MEASURED_PASSES = 20;
 
 function millisecondsPerPass(): number {
 	const positions = SEARCH_POSITIONS.map((fen) => positionFromFen(fen));
 	const pass = () => {
 		for (const position of positions) {
-			searchRoot({ position, weights: WEIGHTS, options: { depth: 2 } });
+			searchRoot({ position, weights: WEIGHTS, options: { depth: 2 }, prune: true });
 		}
 	};
 

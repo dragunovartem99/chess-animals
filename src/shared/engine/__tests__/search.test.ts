@@ -83,6 +83,45 @@ describe("alpha-beta", () => {
 	});
 });
 
+function topScore(scored: readonly { score: number }[]): number {
+	return Math.max(...scored.map((entry) => entry.score));
+}
+
+describe("root pruning", () => {
+	// The pruned search may leave a worse move as a bound, but the best move's score and every
+	// genuine tie for it must survive — that is what the argmax and its seeded tie-break stand on.
+	const FENS = [
+		INITIAL_FEN,
+		"r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
+		"4k3/8/8/3q4/8/8/8/3RK3 w - - 0 1",
+		"r3k3/p7/8/8/8/8/8/R3K3 w - - 0 1",
+	];
+
+	for (const fen of FENS) {
+		it(`agrees with the full-window search on the best score from ${fen}`, () => {
+			const position = positionFromFen(fen);
+			const options = { depth: 3 };
+
+			const full = searchRoot({ position, weights: MATERIAL, options });
+			const pruned = searchRoot({ position, weights: MATERIAL, options, prune: true });
+
+			expect(topScore(pruned)).toBeCloseTo(topScore(full), 5);
+
+			// The pruned search reports moves in generated order, same as the full one.
+			expect(pruned.map((entry) => makeUci(entry.move))).toEqual(
+				full.map((entry) => makeUci(entry.move))
+			);
+
+			// Every move at the top score in the full search is still at the top in the pruned one.
+			const top = topScore(full);
+			for (const [index, entry] of full.entries()) {
+				if (entry.score < top - 1e-6) continue;
+				expect(pruned[index].score).toBeCloseTo(entry.score, 5);
+			}
+		});
+	}
+});
+
 describe("nodeLimit", () => {
 	it("still returns a score for every move when the budget runs out", () => {
 		const position = positionFromFen(INITIAL_FEN);

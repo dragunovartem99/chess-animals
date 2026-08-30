@@ -66,7 +66,12 @@ export function findBestMove({
 
 	// One search, then sample from it. Scoring the moves and then asking the policy to score them
 	// again would double the cost of every move the engine plays.
-	const scored = scoreMoves({ position, weights: config.weights, search });
+	const scored = scoreMoves({
+		position,
+		weights: config.weights,
+		search,
+		temperature: config.temperature,
+	});
 	const move = pickMove({ scored, temperature: config.temperature, rng });
 
 	// `0000` is UCI's null move, which is what an engine says when it has nothing to play. Better

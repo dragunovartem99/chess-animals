@@ -17,14 +17,22 @@ const weights = onlyWeights({
 	materialQueen: 900,
 });
 
-for (const depth of [1, 2, 3]) {
-	bench(`searchRoot depth ${depth} across a spread of positions`, () => {
-		for (const position of positions) searchRoot({ position, weights, options: { depth } });
+// `prune` is what an argmax bot (`temperature: 0`, the whole roster) actually runs; the
+// unpruned pass is what a sampling bot pays and the contrast worth watching.
+for (const prune of [true, false]) {
+	const label = prune ? "argmax" : "sampling";
+
+	for (const depth of [1, 2, 3]) {
+		bench(`searchRoot depth ${depth} (${label}) across a spread of positions`, () => {
+			for (const position of positions) {
+				searchRoot({ position, weights, options: { depth }, prune });
+			}
+		});
+	}
+
+	bench(`searchRoot depth 3 + quiescence (${label}) across a spread of positions`, () => {
+		for (const position of positions) {
+			searchRoot({ position, weights, options: { depth: 3, quiescence: true }, prune });
+		}
 	});
 }
-
-bench("searchRoot depth 3 with quiescence across a spread of positions", () => {
-	for (const position of positions) {
-		searchRoot({ position, weights, options: { depth: 3, quiescence: true } });
-	}
-});

@@ -15,12 +15,16 @@ export function scoreMoves({
 	position,
 	weights,
 	search,
+	temperature = 0,
 }: {
 	position: Chess;
 	weights: PhaseWeights;
 	search: SearchOptions;
+	// A bot that only takes the argmax lets the search narrow its window on the non-best moves;
+	// one that samples needs their scores exact. Defaults to the argmax case.
+	temperature?: number;
 }): ScoredMove[] {
-	return searchRoot({ position, weights, options: search });
+	return searchRoot({ position, weights, options: search, prune: temperature <= 0 });
 }
 
 // The sampling half of the policy, over scores someone else has already searched. It is split out
@@ -61,5 +65,9 @@ export function chooseMove({
 	temperature: number;
 	rng: Rng;
 }): NormalMove | undefined {
-	return pickMove({ scored: scoreMoves({ position, weights, search }), temperature, rng });
+	return pickMove({
+		scored: scoreMoves({ position, weights, search, temperature }),
+		temperature,
+		rng,
+	});
 }
