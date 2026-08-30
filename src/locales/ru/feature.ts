@@ -33,7 +33,7 @@ export default {
 	kingOpenFile: "Открытые линии у короля",
 	kingPawnDistance: "Расстояние короля до пешек",
 	swarm: "Толпой на чужого короля",
-	huddle: "Толпой у своего короля",
+	huddle: "Толпиться у своего короля",
 	kingProximity: "Расстояние между королями",
 	reverseStarting: "Марш в перевёрнутую расстановку",
 	sameColorSquares: "Фигуры на своём цвете",
