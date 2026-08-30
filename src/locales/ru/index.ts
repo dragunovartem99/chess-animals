@@ -30,7 +30,7 @@ const messages: Messages = {
 			absolute: "плюс — перевес белых; очки = значение × вес",
 			total: "Итого",
 			phase: "эндшпиль: {phase}%",
-			feature: "Эвристика",
+			feature: "Параметр",
 			amount: "Значение",
 			weight: "Вес",
 			points: "Очки",

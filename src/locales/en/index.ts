@@ -42,7 +42,7 @@ export default {
 			absolute: "a plus means White is better; points = amount × weight",
 			total: "Total",
 			phase: "{phase}% endgame",
-			feature: "Heuristic",
+			feature: "Parameter",
 			amount: "Amount",
 			weight: "Weight",
 			points: "Points",
