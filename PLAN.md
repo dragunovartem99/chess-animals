@@ -89,6 +89,7 @@ unpicking the next. Checked = landed on `main`.
 - ✅ `perf: benchmark engine search` — `search.bench.ts` over depth 1/2/3 ± quiescence on a position spread, with a depth-2 budget guard in the suite mirroring the extraction guard
 - ✅ `perf: prune the root when the bot only takes the argmax` — `temperature <= 0` searches root moves best-first with a narrowing window; ~14× at depth 2, ~10× at depth 3 + quiescence, and the scores a sampling bot reads stay exact
 - ✅ `perf: reuse the blend and feature buffers across a search` — `createEvaluator` caches the phase-blended weights (≤25 distinct phases a game) and reuses one feature vector per search instead of allocating both per node
+- ✅ `perf: generate only captures in quiescence` — `legalCaptures` builds the capture list straight from each piece's legal destinations rather than generating every move and filtering; quiescence no longer materialises the quiet moves it would only discard
 - ✅ `game: explain the move that produced the position`
 - ✅ `game: report evaluations White-relative, in pawns`
 - ✅ `eval: measure proximity per piece, not per army`

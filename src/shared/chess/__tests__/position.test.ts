@@ -5,6 +5,7 @@ import { describe, expect, it } from "vitest";
 import {
 	afterMove,
 	fenFromPosition,
+	legalCaptures,
 	legalMoves,
 	positionFromFen,
 	repetitionKey,
@@ -40,6 +41,44 @@ describe("legalMoves", () => {
 				positionFromFen("rnb1kbnr/pppp1ppp/8/4p3/6Pq/5P2/PPPPP2P/RNBQKBNR w KQkq - 1 3")
 			)
 		).toHaveLength(0);
+	});
+});
+
+function captureUcis(fen: string): string[] {
+	return legalCaptures(positionFromFen(fen)).map((move) => makeUci(move));
+}
+
+describe("legalCaptures", () => {
+	it("is empty when nothing can be taken", () => {
+		expect(legalCaptures(positionFromFen(INITIAL_FEN))).toHaveLength(0);
+	});
+
+	it("agrees with the legal moves that land on an enemy piece", () => {
+		const fen = "r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4";
+		const position = positionFromFen(fen);
+		const onto = legalMoves(position)
+			.filter((move) =>
+				position.board[position.turn === "white" ? "black" : "white"].has(move.to)
+			)
+			.map((move) => makeUci(move))
+			.toSorted();
+
+		expect(captureUcis(fen).toSorted()).toEqual(onto);
+	});
+
+	it("expands a capture that promotes", () => {
+		expect(captureUcis("r6k/1P6/8/8/8/8/8/K7 w - - 0 1").toSorted()).toEqual([
+			"b7a8b",
+			"b7a8n",
+			"b7a8q",
+			"b7a8r",
+		]);
+	});
+
+	it("leaves out a pinned piece's capture", () => {
+		// The bishop on e2 is pinned to the king on e1 by the rook on e8, so bxc4-style ideas and
+		// its capture of the knight on d3 are both illegal.
+		expect(captureUcis("4r2k/8/8/8/8/3n4/4B3/4K3 w - - 0 1")).toHaveLength(0);
 	});
 });
 

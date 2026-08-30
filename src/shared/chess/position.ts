@@ -1,7 +1,7 @@
 import { Chess } from "chessops/chess";
 import { makeFen, parseFen } from "chessops/fen";
 import { type Move, type NormalMove, type Role, type Square } from "chessops/types";
-import { squareRank } from "chessops/util";
+import { opposite, squareRank } from "chessops/util";
 
 // Every role a pawn may become. Ordered best-first, so move ordering gets queens early.
 export const PROMOTION_ROLES: Role[] = ["queen", "knight", "rook", "bishop"];
@@ -48,6 +48,29 @@ export function legalMoves(position: Chess): NormalMove[] {
 
 	for (const [from, dests] of position.allDests()) {
 		for (const to of dests) {
+			if (isPromotionMove({ position, from, to })) {
+				for (const promotion of PROMOTION_ROLES) moves.push({ from, to, promotion });
+			} else {
+				moves.push({ from, to });
+			}
+		}
+	}
+
+	return moves;
+}
+
+// Legal captures only — the moves quiescence searches. Generated straight from each of our
+// pieces' legal destinations intersected with the enemy's men, so the quiet moves that make up
+// the bulk of a position are never built at all. Promotions on a capture are expanded the same
+// way `legalMoves` expands them; en passant is left out, which quiescence has always done since
+// it filtered on the target square being occupied.
+export function legalCaptures(position: Chess): NormalMove[] {
+	const context = position.ctx();
+	const enemies = position.board[opposite(position.turn)];
+	const moves: NormalMove[] = [];
+
+	for (const from of position.board[position.turn]) {
+		for (const to of position.dests(from, context).intersect(enemies)) {
 			if (isPromotionMove({ position, from, to })) {
 				for (const promotion of PROMOTION_ROLES) moves.push({ from, to, promotion });
 			} else {

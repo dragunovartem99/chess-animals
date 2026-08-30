@@ -1,6 +1,6 @@
 import type { Chess } from "chessops/chess";
 
-import { afterMove, legalMoves } from "../chess";
+import { afterMove, legalCaptures } from "../chess";
 import type { PlayedMove } from "../eval";
 import { orderMoves } from "./ordering";
 
@@ -28,9 +28,7 @@ export function createQuiescence({
 
 		let best = Math.max(standPat, alpha);
 
-		for (const move of orderMoves({ position, moves: legalMoves(position) })) {
-			if (!position.board.occupied.has(move.to)) continue;
-
+		for (const move of orderMoves({ position, moves: legalCaptures(position) })) {
 			const score = -quiesce({
 				position: afterMove({ position, move }),
 				played: { parent: position, move },
