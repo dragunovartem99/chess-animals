@@ -38,6 +38,9 @@ const emit = defineEmits<{ pick: [Role]; cancel: [] }>();
 .backdrop {
 	position: absolute;
 	inset: 0;
+	/* Chessground gives its pieces a positive z-index (up to 11 while dragging), so the
+	   picker has to clear that to land on top of the board rather than behind the pieces. */
+	z-index: 20;
 	display: grid;
 	place-items: center;
 	background: rgb(24 24 27 / 55%);
