@@ -16,6 +16,9 @@ export type GameSpec = {
 	white: BotDefinition;
 	black: BotDefinition;
 	openingFen: string;
+	// The curated opening's id, when it has one — the cache keys on it so an edit to one opening
+	// line invalidates only its games. Falls back to hashing the FEN.
+	openingId?: string;
 	seed: number;
 	plyLimit: number;
 	adjudication?: Adjudication;
