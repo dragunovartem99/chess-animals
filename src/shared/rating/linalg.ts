@@ -35,3 +35,14 @@ export function solve(matrix: readonly number[][], rhs: readonly number[]): numb
 	const inverse = invert(matrix);
 	return inverse.map((row) => row.reduce((sum, value, j) => sum + value * rhs[j], 0));
 }
+
+// The variances of `xᵢ − mean(x)` from the covariance of `x`, i.e. the diagonal of `P C Pᵀ` with
+// `P = I − 11ᵀ/n`. Ratings are identified only up to a shared offset, so the covariance carries a
+// near-flat gauge direction that the weak prior barely pins; centering removes it, leaving the
+// standard error of each rating relative to the field.
+export function centeredDiagonal(covariance: readonly number[][], n: number): number[] {
+	const block = covariance.slice(0, n).map((row) => row.slice(0, n));
+	const rowMeans = block.map((row) => row.reduce((sum, value) => sum + value, 0) / n);
+	const grandMean = rowMeans.reduce((sum, value) => sum + value, 0) / n;
+	return block.map((row, i) => row[i] - 2 * rowMeans[i] + grandMean);
+}

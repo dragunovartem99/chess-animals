@@ -1,4 +1,4 @@
-import { invert } from "./linalg";
+import { centeredDiagonal, invert } from "./linalg";
 import { buildObjective, ELO_PER_LOG } from "./model";
 import { maximize } from "./newton";
 import type { Matchup, RatingOptions, RatingResult } from "./types";
@@ -44,10 +44,11 @@ export function fitBradleyTerry({
 	});
 
 	const covariance = invert(hessian.map((row) => row.map((value) => -value)));
+	const variance = centeredDiagonal(covariance, ids.length);
 	const players = ids.map((id, i) => ({
 		id,
 		rating: anchor + ELO_PER_LOG * x[i],
-		stderr: ELO_PER_LOG * Math.sqrt(Math.max(covariance[i][i], 0)),
+		stderr: ELO_PER_LOG * Math.sqrt(Math.max(variance[i], 0)),
 	}));
 
 	return {
