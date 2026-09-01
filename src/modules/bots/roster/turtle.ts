@@ -25,8 +25,6 @@ export const TURTLE: Animal = {
 				materialRook: 200,
 				materialQueen: 360,
 			},
-			// A turtle with nothing left to hide behind has to come out.
-			endgame: { huddle: -30, givesMate: 100000, materialPawn: 100, materialQueen: 900 },
 		},
 	},
 };
