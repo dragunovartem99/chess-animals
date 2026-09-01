@@ -45,16 +45,17 @@ own lazy chunk.
 One flat area per folder, each with its own `index.ts`, and deliberately **no root barrel**.
 `shared/` depends on nothing else in the repo.
 
-| Area           | What it holds                                                                                                                   |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| `chess`        | chessops wrappers — FEN in/out, legal moves, `afterMove`, repetition keys, game-over detection, and the tapered `gamePhase`     |
-| `eval`         | the feature registry, the extractor and its families, feature/weight vectors, phase interpolation — the heart of the project    |
-| `engine`       | negamax search, move ordering, quiescence, the move policy, the seeded RNG, the UCI codec, the engine client and its transports |
-| `bots`         | `BotDefinition` (JSON on disk) and `BotConfig` (compiled), the guard that validates one, and `compileBot` between them          |
-| `openings`     | the curated paired opening set (JSON), `probe(fen)`, and the colour-swapped schedule                                            |
-| `rating`       | Bradley–Terry MLE with a white advantage and Rao–Kupper draw term, CIs from the Hessian, and the Markov champion iteration      |
-| `scheduler`    | the pure `runGame`, a `worker_threads` pool, the result cache, adaptive pairing, and `runTournament` over all of it             |
-| `test-support` | fixtures and helpers shared by specs — component mounting, played games, weight vectors, a fake worker                          |
+| Area           | What it holds                                                                                                                    |
+| -------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `chess`        | chessops wrappers — FEN in/out, legal moves, `afterMove`, repetition keys, game-over detection, and the tapered `gamePhase`      |
+| `eval`         | the feature registry, the extractor and its families, feature/weight vectors, phase interpolation — the heart of the project     |
+| `engine`       | negamax search, move ordering, quiescence, the move policy, the seeded RNG, the UCI codec, the engine client and its transports  |
+| `bots`         | `BotDefinition` (JSON on disk) and `BotConfig` (compiled), the guard that validates one, and `compileBot` between them           |
+| `openings`     | the curated paired opening set (JSON), `probe(fen)`, and the colour-swapped schedule                                             |
+| `rating`       | Bradley–Terry MLE with a white advantage and Rao–Kupper draw term, CIs from the Hessian, and the Markov champion iteration       |
+| `scheduler`    | the pure `runGame`, a `worker_threads` pool, the result cache, adaptive pairing, and `runTournament` over all of it              |
+| `tuner`        | SPSA — the decaying gain sequences, the Rademacher perturbation, the ascent loop, and the bot-weights ↔ parameter-vector mapping |
+| `test-support` | fixtures and helpers shared by specs — component mounting, played games, weight vectors, a fake worker                           |
 
 `shared/bots` sits below both `eval` and `engine` in the dependency order rather than beside the
 roster, because the worker and the cache key need to read a bot definition without pulling a Vue
