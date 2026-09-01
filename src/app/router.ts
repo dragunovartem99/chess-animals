@@ -26,16 +26,6 @@ const routes: RouteRecordRaw[] = [
 				component: () => import("../modules/game").then((m) => m.PlayView),
 			},
 			{
-				path: "arena",
-				name: "arena",
-				component: () => import("../modules/arena").then((m) => m.ArenaView),
-			},
-			{
-				path: "tuner",
-				name: "tuner",
-				component: () => import("../modules/tuner").then((m) => m.TunerView),
-			},
-			{
 				path: "about",
 				name: "about",
 				component: () => import("../modules/about").then((m) => m.AboutView),

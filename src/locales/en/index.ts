@@ -8,8 +8,6 @@ export default {
 	nav: {
 		roster: "Roster",
 		play: "Play",
-		arena: "Arena",
-		tuner: "Tuner",
 		about: "About",
 	},
 	locale: {

@@ -10,8 +10,6 @@ const messages: Messages = {
 	nav: {
 		roster: "Зверинец",
 		play: "Игра",
-		arena: "Арена",
-		tuner: "Настройка",
 		about: "О проекте",
 	},
 	locale: {
