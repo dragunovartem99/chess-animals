@@ -77,7 +77,7 @@ and rewrites a bot's weights file.
 | --- | ------------------------ | ------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------- |
 | 30  | ⬜ `bots: weight editor` | `/bots/:id`, three phase columns, sliders by family, live eval, diff against another bot               | Edits change play immediately                               |
 | 31  | ✅ `tuner: SPSA core`    | `shared/tuner` — Rademacher perturbation, paired gauntlet with common random numbers, decaying `a`/`c` | Measurably improves a deliberately detuned bot              |
-| 32  | ⬜ `cli: tuner runner`   | `npm run tune -- <botId>` — SPSA against a gauntlet, live score to stdout, write the weights JSON      | A run completes in 1–2 minutes and lowers the gauntlet loss |
+| 32  | ✅ `cli: tuner runner`   | `npm run tune -- <botId>` — SPSA against a gauntlet, live score to stdout, write the weights JSON      | A run completes in 1–2 minutes and lowers the gauntlet loss |
 
 ## Phase G — finishing
 

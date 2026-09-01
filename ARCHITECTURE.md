@@ -32,7 +32,9 @@ lives in `shared/rating`, `shared/scheduler` and `shared/tuner` as pure function
 thin Node shell (run with `tsx`) over a `worker_threads` pool. `npm run arena` rates the whole
 roster over the paired opening set, printing the rating table and cross-table and writing
 `arena-results.json`; the same `--seed=` reproduces it exactly, and the result cache means a new
-bot only replays its own games.
+bot only replays its own games. `npm run tune -- <botId>` runs SPSA on one bot's weights against
+the rest of the roster as a gauntlet, printing the score each iteration and writing
+`<botId>-tuned.json` if the run improved it.
 
 Every `modules/<name>` is self-contained: `components/`, `composables/`, `utils/`, and an
 `index.ts` exporting only the public surface. Internals are never imported from outside the

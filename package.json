@@ -29,6 +29,7 @@
 		"preview": "vite preview",
 		"test": "vitest",
 		"test:coverage": "COVERAGE=1 vitest run --coverage",
+		"tune": "tsx cli/tune.ts",
 		"types:check": "vue-tsc -b --noEmit"
 	},
 	"dependencies": {
