@@ -24,9 +24,12 @@ paper.pdf       Elo World, the design's source
 | `bots`  | the animal roster (`roster/*.ts`, plain data) and the per-bot page         |
 | `game`  | `/play` — human vs bot, bot vs bot, move list, eval bar, feature breakdown |
 | `board` | the chessground wrapper, orientation, legal dests, the promotion picker    |
-| `arena` | tournament runner — placeholder, Phase E                                   |
-| `tuner` | SPSA run UI — placeholder, Phase F                                         |
 | `about` | the method and credit to the paper — placeholder, Phase G                  |
+
+The tournament runner and the SPSA tuner are **dev CLIs under `cli/`**, not modules — they need
+every core and have no place in the shipped app. The rating, scheduler and tuner math they drive
+lives in `shared/rating`, `shared/scheduler` and `shared/tuner` as pure functions; the CLI is a
+thin Node shell (run with `tsx`) over a `worker_threads` pool.
 
 Every `modules/<name>` is self-contained: `components/`, `composables/`, `utils/`, and an
 `index.ts` exporting only the public surface. Internals are never imported from outside the
@@ -104,7 +107,7 @@ the worker.
 ## App shell
 
 `vue-router` with the locale in the path, `/:locale(ru|en)/…` over roster, `/bots/:id`, `/play`,
-`/arena`, `/tuner`, `/about`. Anything without a known locale prefix is re-entered under the
+`/about`. Anything without a known locale prefix is re-entered under the
 reader's own locale rather than 404ing; a path that still matches nothing falls back to that
 locale's root, which keeps a typo like `/xx/play` from redirecting onto itself forever.
 

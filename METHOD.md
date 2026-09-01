@@ -99,15 +99,15 @@ disagree in interesting places (`same_color`).
 The target is a 12-bot pool ranked to ±40 Elo in **under 30 seconds** on 8 cores. Four choices
 get there:
 
-1. **Whole games run inside a worker.** A worker takes `{ white, black, openingFen, seed, plyLimit }`
-   and returns a result — no per-move round trip to the main thread. Pool size is
-   `hardwareConcurrency`.
+1. **Whole games run inside a worker.** The runner is a dev CLI: a Node `worker_threads` worker
+   takes `{ white, black, openingFen, seed, plyLimit }` and returns a result — no per-move round
+   trip. Pool size is `availableParallelism()`.
 2. **Paired openings.** Every opening is played twice with colours swapped, from ~50 curated
    balanced positions. A bot that only wins as White scores what it deserves.
 3. **Common random numbers.** Two candidates are compared over the same openings with the same
    seeds, so the paired difference has a fraction of the variance of two independent
    measurements.
-4. **A content-addressed cache** in IndexedDB, keyed by `hash(white, black, openingId, seed)`.
+4. **A content-addressed cache** on the filesystem, keyed by `hash(white, black, openingId, seed)`.
    Adding a bot replays only that bot's games; editing one weight invalidates only that bot's
    rows.
 

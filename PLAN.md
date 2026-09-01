@@ -49,34 +49,44 @@ unpicking the next. Checked = landed on `main`.
 | 20  | ✅ `game: play view`               | `/play` — human vs bot, bot vs bot, move list, eval bar         | A game is playable end to end in the browser |
 | 21  | ✅ `game: feature breakdown panel` | Per-feature contribution table for the current position         | The numbers sum to the reported eval         |
 
-## Phase E — the arena
+## Phase E — the arena (dev CLI)
 
-| #   | Commit                                    | Contents                                                                                   | Green when                                                                       |
-| --- | ----------------------------------------- | ------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------- |
-| 22  | ⬜ `openings: paired opening set`         | ~50 balanced FENs as JSON behind `probe(fen)`; colour-swapped pairing                      | The set loads; pairing tested                                                    |
-| 23  | ⬜ `rating: bradley-terry MLE`            | MM fit with white-advantage, draw parameter, prior anchor, CIs from the Hessian            | Recovers known ratings from a synthetic matrix; stable when pairs are imbalanced |
-| 24  | ⬜ `rating: markov champion`              | Trophy transition matrix, power iteration                                                  | A known stationary distribution is recovered                                     |
-| 25  | ⬜ `scheduler: worker pool + game runner` | Whole games in-worker, pool = `hardwareConcurrency`, ply cap, adjudication                 | 1000 games run in parallel and reproduce from seed                               |
-| 26  | ⬜ `scheduler: result cache`              | Content-addressed IndexedDB, `hash(white, black, openingId, seed)`                         | Adding a bot replays only that bot's games                                       |
-| 27  | ⬜ `scheduler: adaptive pairing`          | Pick the pair that most reduces rating uncertainty; stop on a CI threshold or stable order | 12 bots to ±40 Elo in under 30 s                                                 |
-| 28  | ⬜ `arena: tournament view`               | `/arena` run control, cross-table heat map, rating table with CIs                          | The cross-table matches the rating order                                         |
+The tournament runner is a **development tool, not a shipped feature**: it needs every core and
+runs for tens of seconds, and the app has nothing to do with rating bots. It lives in `cli/`, run
+under Node with `tsx`; there is no `/arena` route. The rating and scheduling math stays in
+`shared/` as pure, unit-tested functions — the CLI is a thin shell over it.
+
+| #   | Commit                                          | Contents                                                                                                        | Green when                                                                         |
+| --- | ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| 22  | ⬜ `chore: drop the arena and tuner view stubs` | Delete `modules/arena` and `modules/tuner`, their routes, nav entries and locale keys                           | App builds; router and nav have no dead entries                                    |
+| 23  | ⬜ `openings: paired opening set`               | ~50 balanced FENs as JSON behind `probe(fen)`; colour-swapped pairing                                           | The set loads; pairing tested                                                      |
+| 24  | ⬜ `rating: bradley-terry MLE`                  | `shared/rating` — MM fit with white-advantage, draw parameter, prior anchor, CIs from the Hessian               | Recovers known ratings from a synthetic matrix; stable when pairs are imbalanced   |
+| 25  | ⬜ `rating: markov champion`                    | `shared/rating` — trophy transition matrix, power iteration                                                     | A known stationary distribution is recovered                                       |
+| 26  | ⬜ `scheduler: worker pool + game runner`       | `shared/scheduler` game runner + a Node `worker_threads` pool = `availableParallelism()`, ply cap, adjudication | 1000 games run across the pool and reproduce from seed                             |
+| 27  | ⬜ `scheduler: result cache`                    | Content-addressed cache on the filesystem, `hash(white, black, openingId, seed)`                                | Adding a bot replays only that bot's games                                         |
+| 28  | ⬜ `scheduler: adaptive pairing`                | Pick the pair that most reduces rating uncertainty; stop on a CI threshold or stable order                      | 12 bots to ±40 Elo in under 30 s                                                   |
+| 29  | ⬜ `cli: tournament runner`                     | `npm run arena` — drive the pool, print the cross-table + rating table with CIs, write results JSON             | The cross-table matches the rating order; a re-run from the same seed is identical |
 
 ## Phase F — tuning
 
-| #   | Commit                   | Contents                                                                                 | Green when                                     |
-| --- | ------------------------ | ---------------------------------------------------------------------------------------- | ---------------------------------------------- |
-| 29  | ⬜ `bots: weight editor` | `/bots/:id`, three phase columns, sliders by family, live eval, diff against another bot | Edits change play immediately                  |
-| 30  | ⬜ `tuner: SPSA core`    | Rademacher perturbation, paired gauntlet with common random numbers, decaying `a`/`c`    | Measurably improves a deliberately detuned bot |
-| 31  | ⬜ `tuner: run UI`       | `/tuner` live score chart, stop/resume, JSON export                                      | A run completes in 1–2 minutes                 |
+The weight **editor** stays in the app — sliders, live eval and session-only edits are a good way
+to explore a personality. The **tuner** is a dev CLI like the arena: it burns cores for minutes
+and rewrites a bot's weights file.
+
+| #   | Commit                   | Contents                                                                                               | Green when                                                  |
+| --- | ------------------------ | ------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------- |
+| 30  | ⬜ `bots: weight editor` | `/bots/:id`, three phase columns, sliders by family, live eval, diff against another bot               | Edits change play immediately                               |
+| 31  | ⬜ `tuner: SPSA core`    | `shared/tuner` — Rademacher perturbation, paired gauntlet with common random numbers, decaying `a`/`c` | Measurably improves a deliberately detuned bot              |
+| 32  | ⬜ `cli: tuner runner`   | `npm run tune -- <botId>` — SPSA against a gauntlet, live score to stdout, write the weights JSON      | A run completes in 1–2 minutes and lowers the gauntlet loss |
 
 ## Phase G — finishing
 
 | #   | Commit                          | Contents                                                                        | Green when                                          |
 | --- | ------------------------------- | ------------------------------------------------------------------------------- | --------------------------------------------------- |
-| 32  | ⬜ `bots: full animal roster`   | ~12 animals spanning the range, RU/EN names and descriptions                    | The ordering matches the paper's intuition          |
-| 33  | ⬜ `test: golden games`         | Fixed pair + seed + opening → committed PGN fixtures                            | Any eval change surfaces as a diff                  |
-| 34  | ⬜ `docs: about page`           | `/about` explaining the method and crediting the paper                          | Both locales complete                               |
-| 35  | ⬜ `tablebase: probe interface` | `probe(fen) → { wdl, dtz, moves }` stub, `bot.useTablebase` honoured as a no-op | The interface compiles and is tested against a fake |
+| 33  | ⬜ `bots: full animal roster`   | ~12 animals spanning the range, RU/EN names and descriptions                    | The ordering matches the paper's intuition          |
+| 34  | ⬜ `test: golden games`         | Fixed pair + seed + opening → committed PGN fixtures                            | Any eval change surfaces as a diff                  |
+| 35  | ⬜ `docs: about page`           | `/about` explaining the method and crediting the paper                          | Both locales complete                               |
+| 36  | ⬜ `tablebase: probe interface` | `probe(fen) → { wdl, dtz, moves }` stub, `bot.useTablebase` honoured as a no-op | The interface compiles and is tested against a fake |
 
 ## Outside v1
 
