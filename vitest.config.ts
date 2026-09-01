@@ -22,6 +22,9 @@ export default defineConfig({
 				"**/__benchmarks__/**",
 				"**/index.ts",
 				"**/types/**",
+				// Worker entry points are a pipe and a delegation call — no logic a test reaches
+				// without spawning a thread, the same reasoning as the barrels above.
+				"**/*.worker.ts",
 				"src/shared/test-support/**",
 			],
 			thresholds: { statements: 90, branches: 90, functions: 90, lines: 90 },
