@@ -61,7 +61,7 @@ export async function runAdaptiveRating({
 	maxRounds?: number;
 	stableRounds?: number;
 	onRound?: (round: Round) => void;
-}): Promise<{ rating: RatingResult; rounds: number; games: number }> {
+}): Promise<{ rating: RatingResult; rounds: number; games: number; matchups: Matchup[] }> {
 	if (ids.length < 2) throw new Error("need at least two bots to rate");
 
 	const matchups = new Map<string, Matchup>();
@@ -82,10 +82,10 @@ export async function runAdaptiveRating({
 		if (
 			ratingsSettled({ standings: rating.players, targetStderr, orderHistory, stableRounds })
 		) {
-			return { rating, rounds: round + 1, games };
+			return { rating, rounds: round + 1, games, matchups: [...matchups.values()] };
 		}
 		pairs = nextPairings({ standings: rating.players, playCounts, batchSize });
 	}
 
-	return { rating, rounds: maxRounds, games };
+	return { rating, rounds: maxRounds, games, matchups: [...matchups.values()] };
 }

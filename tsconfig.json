@@ -1,6 +1,6 @@
 {
 	"extends": "@vue/tsconfig/tsconfig.dom.json",
-	"include": ["env.d.ts", "src/**/*", "vite.config.ts", "vitest.config.ts"],
+	"include": ["env.d.ts", "src/**/*", "cli/**/*", "vite.config.ts", "vitest.config.ts"],
 	"compilerOptions": {
 		"types": ["node", "vite/client"],
 		"lib": ["ES2023", "DOM", "DOM.Iterable"],

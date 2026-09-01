@@ -65,7 +65,7 @@ under Node with `tsx`; there is no `/arena` route. The rating and scheduling mat
 | 26  | ✅ `scheduler: worker pool + game runner`       | `shared/scheduler` game runner + a Node `worker_threads` pool = `availableParallelism()`, ply cap, adjudication | 1000 games run across the pool and reproduce from seed                             |
 | 27  | ✅ `scheduler: result cache`                    | Content-addressed cache on the filesystem, `hash(white, black, openingId, seed)`                                | Adding a bot replays only that bot's games                                         |
 | 28  | ✅ `scheduler: adaptive pairing`                | Pick the pair that most reduces rating uncertainty; stop on a CI threshold or stable order                      | 12 bots to ±40 Elo in under 30 s                                                   |
-| 29  | ⬜ `cli: tournament runner`                     | `npm run arena` — drive the pool, print the cross-table + rating table with CIs, write results JSON             | The cross-table matches the rating order; a re-run from the same seed is identical |
+| 29  | ✅ `cli: tournament runner`                     | `npm run arena` — drive the pool, print the cross-table + rating table with CIs, write results JSON             | The cross-table matches the rating order; a re-run from the same seed is identical |
 
 ## Phase F — tuning
 

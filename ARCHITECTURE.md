@@ -29,7 +29,10 @@ paper.pdf       Elo World, the design's source
 The tournament runner and the SPSA tuner are **dev CLIs under `cli/`**, not modules — they need
 every core and have no place in the shipped app. The rating, scheduler and tuner math they drive
 lives in `shared/rating`, `shared/scheduler` and `shared/tuner` as pure functions; the CLI is a
-thin Node shell (run with `tsx`) over a `worker_threads` pool.
+thin Node shell (run with `tsx`) over a `worker_threads` pool. `npm run arena` rates the whole
+roster over the paired opening set, printing the rating table and cross-table and writing
+`arena-results.json`; the same `--seed=` reproduces it exactly, and the result cache means a new
+bot only replays its own games.
 
 Every `modules/<name>` is self-contained: `components/`, `composables/`, `utils/`, and an
 `index.ts` exporting only the public surface. Internals are never imported from outside the
@@ -48,6 +51,9 @@ One flat area per folder, each with its own `index.ts`, and deliberately **no ro
 | `eval`         | the feature registry, the extractor and its families, feature/weight vectors, phase interpolation — the heart of the project    |
 | `engine`       | negamax search, move ordering, quiescence, the move policy, the seeded RNG, the UCI codec, the engine client and its transports |
 | `bots`         | `BotDefinition` (JSON on disk) and `BotConfig` (compiled), the guard that validates one, and `compileBot` between them          |
+| `openings`     | the curated paired opening set (JSON), `probe(fen)`, and the colour-swapped schedule                                            |
+| `rating`       | Bradley–Terry MLE with a white advantage and Rao–Kupper draw term, CIs from the Hessian, and the Markov champion iteration      |
+| `scheduler`    | the pure `runGame`, a `worker_threads` pool, the result cache, adaptive pairing, and `runTournament` over all of it             |
 | `test-support` | fixtures and helpers shared by specs — component mounting, played games, weight vectors, a fake worker                          |
 
 `shared/bots` sits below both `eval` and `engine` in the dependency order rather than beside the
