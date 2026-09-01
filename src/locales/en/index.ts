@@ -4,7 +4,7 @@ import feature from "./feature";
 export default {
 	app: {
 		title: "Chess Animals",
-		tagline: "Chess bots with animal personalities, ranked in seconds",
+		tagline: "Every bot here is sure of one wrong thing about chess. Prove it wrong.",
 	},
 	nav: {
 		roster: "Roster",
@@ -22,12 +22,12 @@ export default {
 	},
 	bot: bots,
 	roster: {
-		lead: "Each animal plays with one stubborn idea. Tap one to take it on.",
+		lead: "Every animal here has exactly one trick. Tap one and take it on.",
 	},
 	game: {
 		breakdown: {
 			title: "What {name} sees",
-			absolute: "Positive numbers favour White. Points = Amount × Weight.",
+			absolute: "Plus is good for White, minus is good for Black. Points = Amount × Weight.",
 			total: "Total",
 			phase: "{phase}% endgame",
 			feature: "Parameter",
@@ -52,6 +52,6 @@ export default {
 	},
 	feature,
 	placeholder: {
-		notBuiltYet: "Not built yet.",
+		notBuiltYet: "Still building this one.",
 	},
 };

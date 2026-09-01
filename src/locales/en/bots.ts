@@ -2,10 +2,10 @@ export default {
 	donkey: {
 		name: "Donkey",
 		description:
-			"Shuts its eyes and plays any move at all. Pure chaos — but sometimes it wins!",
+			"Doesn't think. Moves whatever, wherever — and sometimes that's enough to win.",
 	},
 	wolf: {
 		name: "Wolf",
-		description: "Sends the whole howling pack after your king. No plan, all teeth.",
+		description: "Every piece walks toward your king. Nothing else matters to it.",
 	},
 };
