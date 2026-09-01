@@ -4,13 +4,13 @@ import { Worker } from "node:worker_threads";
 import { runGame } from "./runGame";
 import type { GameReport, GameSpec } from "./types";
 
-const WORKER_URL = new URL("./game.worker.ts", import.meta.url);
+export const WORKER_URL = new URL("./game.worker.ts", import.meta.url);
 
 // The worker entry is TypeScript; `tsx` is what compiles it, and a spawned worker does not
 // inherit its parent's loader automatically the way a `tsx`-run process does. Passing it through
 // `execArgv` covers the one case that needs it — a worker started from a plain `node`/vitest
 // process — and is harmless when `tsx` is already active.
-const WORKER_EXEC_ARGV = ["--import", "tsx"];
+export const WORKER_EXEC_ARGV = ["--import", "tsx"];
 
 // Runs every spec and returns the reports in spec order — the order is what makes a run
 // reproducible regardless of how the games were spread across threads. One worker per core by

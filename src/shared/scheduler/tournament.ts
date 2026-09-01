@@ -26,6 +26,7 @@ export async function runTournament({
 	plyLimit = 160,
 	targetStderr = 40,
 	run = (specs) => runGames({ specs }),
+	onRound,
 }: {
 	bots: readonly TournamentBot[];
 	openings: readonly TournamentOpening[];
@@ -33,6 +34,7 @@ export async function runTournament({
 	plyLimit?: number;
 	targetStderr?: number;
 	run?: (specs: GameSpec[]) => Promise<GameReport[]>;
+	onRound?: (progress: { round: number; games: number }) => void;
 }): Promise<TournamentResult> {
 	const context = {
 		definition: new Map(bots.map((bot) => [bot.id, bot.definition])),
@@ -53,6 +55,7 @@ export async function runTournament({
 		ids: bots.map((bot) => bot.id),
 		playPair,
 		targetStderr,
+		onRound: onRound && ((r) => onRound({ round: r.round, games: r.games })),
 	});
 
 	return {

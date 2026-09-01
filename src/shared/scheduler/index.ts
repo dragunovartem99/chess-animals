@@ -5,6 +5,7 @@ export { ratingsSettled, standingOrder } from "./settled";
 export { createGameCache, gameKey } from "./cache";
 export { runGamesCached } from "./cached";
 export { type CrossRow, crossTable, type CrossTable } from "./crossTable";
+export { type GamePool, createGamePool } from "./gamePool";
 export { runGames, runGamesSerially } from "./pool";
 export {
 	type TournamentBot,
