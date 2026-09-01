@@ -1,3 +1,4 @@
+import bots from "./bots";
 import feature from "./feature";
 
 export default {
@@ -19,20 +20,9 @@ export default {
 		promotion: "Choose a piece",
 		piece: { queen: "Queen", rook: "Rook", bishop: "Bishop", knight: "Knight" },
 	},
-	bot: {
-		donkey: {
-			name: "Donkey",
-			description:
-				"Picks a legal move at random. The reference point every rating is measured from.",
-		},
-		wolf: {
-			name: "Wolf",
-			description: "Throws every piece at the enemy king and thinks no further.",
-		},
-		turtle: {
-			name: "Turtle",
-			description: "Builds a wall around its own king and waits.",
-		},
+	bot: bots,
+	roster: {
+		lead: "Each animal plays with one stubborn idea. Tap one to take it on.",
 	},
 	game: {
 		breakdown: {

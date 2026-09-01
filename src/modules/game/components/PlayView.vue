@@ -2,6 +2,7 @@
 import type { Key } from "chessground/types";
 import type { Color, Role } from "chessops/types";
 import { computed, ref, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
 
 import { ChessBoard } from "@/modules/board";
 import { ROSTER, ROSTER_BY_ID } from "@/modules/bots/roster";
@@ -21,7 +22,16 @@ const HUMAN = "human";
 const game = useGame();
 const engines = useBotEngines();
 
-const players = ref<Record<Color, string>>({ white: HUMAN, black: "wolf" });
+// The roster page links here with `?black=<id>` so a card opens straight into a game against
+// that animal. An unknown or missing id just leaves the default opponent in place.
+const route = useRoute();
+const router = useRouter();
+const queryOpponent = computed(() => {
+	const id = route.query.black;
+	return typeof id === "string" && ROSTER_BY_ID.has(id) ? id : undefined;
+});
+
+const players = ref<Record<Color, string>>({ white: HUMAN, black: queryOpponent.value ?? "wolf" });
 
 const TABS = ["moves", "breakdown"] as const;
 const tab = ref<(typeof TABS)[number]>("moves");
@@ -124,6 +134,24 @@ async function restart() {
 	generation.value += 1;
 	await engines.startNewGame();
 }
+
+// The URL and the Black picker stay in sync both ways: a roster card (or a pasted link) sets
+// the picker and starts fresh, and choosing another animal in the picker rewrites `?black=`.
+// Each watch checks the value already matches before acting, so they don't ping-pong.
+watch(queryOpponent, (id) => {
+	if (!id || id === players.value.black) return;
+	players.value = { ...players.value, black: id };
+	void restart();
+});
+
+watch(
+	() => players.value.black,
+	(black) => {
+		const next = ROSTER_BY_ID.has(black) ? black : undefined;
+		if (next === queryOpponent.value) return;
+		void router.replace({ query: { ...route.query, black: next } });
+	}
+);
 </script>
 
 <template>

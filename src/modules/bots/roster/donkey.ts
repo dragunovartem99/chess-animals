@@ -7,6 +7,7 @@ import type { Animal } from "./types";
 // the argmax tie-break picks uniformly among all of them.
 export const DONKEY: Animal = {
 	emoji: "🐴",
+	tint: "#8b5cf6",
 	definition: {
 		id: "donkey",
 		search: { depth: 1 },

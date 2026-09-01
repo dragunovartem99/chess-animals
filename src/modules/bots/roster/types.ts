@@ -6,4 +6,7 @@ import type { BotDefinition } from "@/shared/bots";
 export type Animal = {
 	definition: BotDefinition;
 	emoji: string;
+	// A single hue that is this animal's identity on the roster — the badge behind its portrait,
+	// its name, the card's hover edge. Not amber: amber is reserved for page/move state.
+	tint: string;
 };

@@ -64,7 +64,9 @@ describe("Donkey", () => {
 describe("the animals against the Donkey", () => {
 	// The paper's own finding: strategies with any idea at all beat uniform random play. If an
 	// animal cannot manage that, its weights say something other than what its name claims.
-	it.each(["wolf", "turtle"])(
+	it.each(
+		ROSTER.filter((animal) => animal.definition.id !== "donkey").map((a) => a.definition.id)
+	)(
 		"%s outscores it over paired games",
 		(id) => {
 			const animal = compileBot(ROSTER_BY_ID.get(id)!.definition);

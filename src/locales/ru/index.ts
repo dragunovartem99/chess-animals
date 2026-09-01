@@ -22,6 +22,9 @@ const messages: Messages = {
 		piece: { queen: "Ферзь", rook: "Ладья", bishop: "Слон", knight: "Конь" },
 	},
 	bot: bots,
+	roster: {
+		lead: "У каждого зверя — одна упрямая идея игры. Нажми и сразись.",
+	},
 	game: {
 		breakdown: {
 			title: "Что видит {name}",

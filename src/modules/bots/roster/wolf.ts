@@ -10,9 +10,10 @@ import type { Animal } from "./types";
 // material keeps it from throwing everything away for one square of proximity.
 export const WOLF: Animal = {
 	emoji: "🐺",
+	tint: "#0ea5e9",
 	definition: {
 		id: "wolf",
-		search: { depth: 1 },
+		search: { depth: 3 },
 		temperature: 0,
 		weights: {
 			middlegame: {
