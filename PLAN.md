@@ -109,3 +109,8 @@ and rewrites a bot's weights file.
 - ✅ `ui: use amber sparingly, for state only`
 - ✅ `ci: check every push and deploy main to Pages`
 - ✅ `test: cover the bot engines, the worker transport and the mask helpers`
+- ✅ `arena: shared worker pool, job cap, per-round progress`
+- ✅ `bots: two-animal roster with a landing page` — the Donkey and the Wolf as data, `RosterView` as `/`
+- ✅ `copy: skill for writing player-facing text`
+- ✅ `copy: rewrite taglines, roster lead and bot blurbs`
+- ✅ `game: remove the eval bar; unbreak the mobile roster lead`

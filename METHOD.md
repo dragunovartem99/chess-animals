@@ -79,7 +79,7 @@ informative.
 
 Everything random comes from one seeded xorshift128, per game. A tournament replays exactly.
 
-## Rating (Phase E)
+## Rating
 
 Pure functions over a win/loss/draw matrix, unit-tested against synthetic data with known ground
 truth.
@@ -115,7 +115,7 @@ On top of that, **adaptive pairing** rather than a full round robin: play the pa
 most reduces rating uncertainty — close ratings, wide intervals — and stop when every interval is
 under threshold or the ordering has been stable for _k_ games.
 
-## Tuning (Phase F)
+## Tuning
 
 SPSA over one phase's weights or all three jointly: draw a Rademacher perturbation δ, play `w+cδ`
 and `w−cδ` over the same gauntlet with the same seeds, then step
@@ -141,7 +141,7 @@ a noisy signal usable. Target: a useful run in 1–2 minutes.
 ## Designed for, not built
 
 - **Opening book** — the curated JSON set sits behind a `probe(fen)` interface a Polyglot `.bin`
-  reader can implement later. `bot.useBook` exists from day one.
+  reader can implement later. `probe(fen)` is in place; the `bot.useBook` flag is not wired yet.
 - **Endgame tablebase** — `probe(fen) → { wdl, dtz, moves }`, simplest backing being lichess's
   free 7-man HTTP API with an IndexedDB cache.
 - **Real Stockfish** — a second implementation of `UciEngine`, which unlocks the paper's

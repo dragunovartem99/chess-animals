@@ -2,9 +2,9 @@
 
 Chess bots with animal personalities, benchmarked against each other in seconds.
 
-Every animal — the random 🐴 Donkey, the all-in 🐺 Wolf, the shut-in 🐢 Turtle — runs the same
-code. A personality is nothing but a set of tunable heuristic weights, and a move is a dot product
-between those weights and one feature vector describing the position.
+Every animal — the random 🐴 Donkey, the all-in 🐺 Wolf — runs the same code. A personality is
+nothing but a set of tunable heuristic weights, and a move is a dot product between those weights
+and one feature vector describing the position.
 
 Live at [dragunovartem99.github.io/chess-animals](https://dragunovartem99.github.io/chess-animals/),
 in English and Russian.
@@ -27,6 +27,8 @@ npm run dev
 | `npm run dev` / `build` / `preview` | Vite dev server / type-checked production build / preview of it |
 | `npm test` / `test:coverage`        | Vitest unit tests / with v8 coverage against a 90% threshold    |
 | `npm run bench`                     | feature-extraction cost, held under a 60 µs guard by the suite  |
+| `npm run arena`                     | dev CLI: rate the roster over the paired opening set            |
+| `npm run tune -- <botId>`           | dev CLI: SPSA-tune one bot's weights against the roster         |
 | `npm run lint` / `format`           | oxlint / oxfmt (`:check` variants don't write)                  |
 | `npm run types:check`               | `vue-tsc` type-check                                            |
 
@@ -46,12 +48,14 @@ Linting and formatting via [oxlint](https://oxc.rs)/[oxfmt](https://oxc.rs), typ
 
 ## Where it stands
 
-Built: the 62-feature evaluation, negamax search, the UCI codec and worker client, the board, and
-`/play` with a per-feature breakdown of what the bot sees.
+Built: the 62-feature evaluation, negamax search, the UCI codec and worker client, the board,
+`/play` with a per-feature breakdown of what the bot sees, and the dev CLIs — `npm run arena`
+(paired openings, Bradley-Terry ratings with confidence intervals, a worker pool running whole
+games, adaptive pairing) and `npm run tune` (SPSA against a gauntlet). The roster is two animals
+so far, the Donkey and the Wolf.
 
-Next, per [PLAN.md](./PLAN.md): the arena — paired openings, Bradley-Terry ratings with confidence
-intervals, a worker pool running whole games, adaptive pairing — then the SPSA tuner and the full
-twelve-animal roster.
+Next, per [PLAN.md](./PLAN.md): the in-app weight editor, the full twelve-animal roster, the
+about page, and golden-game fixtures.
 
 ## Credit
 

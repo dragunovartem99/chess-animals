@@ -13,18 +13,19 @@ src/
   shared/       primitives more than one module needs; depends on nothing above it
   locales/      ru/ en/ — UI strings, bot names, feature labels
   workers/      uciEngine.worker.ts
+cli/            dev CLIs — the tournament runner and the SPSA tuner (run with tsx)
 public/         favicon
 paper.pdf       Elo World, the design's source
 ```
 
 ### Modules
 
-| Module  | What it does                                                            |
-| ------- | ----------------------------------------------------------------------- |
-| `bots`  | the animal roster (`roster/*.ts`, plain data) and the per-bot page      |
-| `game`  | `/play` — human vs bot, bot vs bot, move list, feature breakdown        |
-| `board` | the chessground wrapper, orientation, legal dests, the promotion picker |
-| `about` | the method and credit to the paper — placeholder, Phase G               |
+| Module  | What it does                                                                                                                        |
+| ------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `bots`  | the animal roster (`roster/*.ts`, plain data) and its landing page; the per-bot page is a placeholder until the weight editor lands |
+| `game`  | `/play` — human vs bot, bot vs bot, move list, feature breakdown                                                                    |
+| `board` | the chessground wrapper, orientation, legal dests, the promotion picker                                                             |
+| `about` | the method and credit to the paper — placeholder, Phase G                                                                           |
 
 The tournament runner and the SPSA tuner are **dev CLIs under `cli/`**, not modules — they need
 every core and have no place in the shipped app. The rating, scheduler and tuner math they drive
