@@ -39,7 +39,6 @@ export default {
 		human: "You",
 		restart: "New game",
 		thinking: "Thinking…",
-		evaluation: "Evaluation",
 		turn: { white: "White", black: "Black" },
 		reason: {
 			"checkmate": "Checkmate",

@@ -19,12 +19,12 @@ paper.pdf       Elo World, the design's source
 
 ### Modules
 
-| Module  | What it does                                                               |
-| ------- | -------------------------------------------------------------------------- |
-| `bots`  | the animal roster (`roster/*.ts`, plain data) and the per-bot page         |
-| `game`  | `/play` — human vs bot, bot vs bot, move list, eval bar, feature breakdown |
-| `board` | the chessground wrapper, orientation, legal dests, the promotion picker    |
-| `about` | the method and credit to the paper — placeholder, Phase G                  |
+| Module  | What it does                                                            |
+| ------- | ----------------------------------------------------------------------- |
+| `bots`  | the animal roster (`roster/*.ts`, plain data) and the per-bot page      |
+| `game`  | `/play` — human vs bot, bot vs bot, move list, feature breakdown        |
+| `board` | the chessground wrapper, orientation, legal dests, the promotion picker |
+| `about` | the method and credit to the paper — placeholder, Phase G               |
 
 The tournament runner and the SPSA tuner are **dev CLIs under `cli/`**, not modules — they need
 every core and have no place in the shipped app. The rating, scheduler and tuner math they drive

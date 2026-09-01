@@ -40,7 +40,6 @@ const messages: Messages = {
 		human: "Вы",
 		restart: "Новая партия",
 		thinking: "Думает…",
-		evaluation: "Оценка",
 		turn: { white: "Белые", black: "Чёрные" },
 		reason: {
 			"checkmate": "Мат",

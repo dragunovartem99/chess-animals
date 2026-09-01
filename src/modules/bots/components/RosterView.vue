@@ -48,11 +48,9 @@ h1 {
 
 .lead {
 	margin: 0.25rem 0 0;
+	max-width: 34rem;
 	color: var(--color-neutral-lightest);
 	font-size: 1.05rem;
-	/* One line, never broken mid-sentence; scrolls rather than wraps if the viewport is too narrow. */
-	overflow-x: auto;
-	white-space: nowrap;
 }
 
 .grid {

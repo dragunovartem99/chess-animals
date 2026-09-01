@@ -46,7 +46,7 @@ unpicking the next. Checked = landed on `main`.
 | #   | Commit                             | Contents                                                        | Green when                                   |
 | --- | ---------------------------------- | --------------------------------------------------------------- | -------------------------------------------- |
 | 19  | ✅ `board: chessground wrapper`    | Board component, orientation, legal dests, the promotion picker | The board renders and accepts a human move   |
-| 20  | ✅ `game: play view`               | `/play` — human vs bot, bot vs bot, move list, eval bar         | A game is playable end to end in the browser |
+| 20  | ✅ `game: play view`               | `/play` — human vs bot, bot vs bot, move list                   | A game is playable end to end in the browser |
 | 21  | ✅ `game: feature breakdown panel` | Per-feature contribution table for the current position         | The numbers sum to the reported eval         |
 
 ## Phase E — the arena (dev CLI)

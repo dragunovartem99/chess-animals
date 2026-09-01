@@ -7,12 +7,10 @@ import { useRoute, useRouter } from "vue-router";
 import { ChessBoard } from "@/modules/board";
 import { ROSTER, ROSTER_BY_ID } from "@/modules/bots/roster";
 import { compileBot } from "@/shared/bots";
-import { evaluatePosition } from "@/shared/engine";
 import { fromUci } from "@/shared/engine/uci/moves";
 
 import { useBotEngines } from "../composables/useBotEngines";
 import { useGame } from "../composables/useGame";
-import EvalBar from "./EvalBar.vue";
 import FeatureBreakdown from "./FeatureBreakdown.vue";
 import MoveList from "./MoveList.vue";
 import PlayerPicker from "./PlayerPicker.vue";
@@ -112,23 +110,6 @@ const lensWeights = computed(() =>
 	lens.value ? compileBot(lens.value.definition).weights : undefined
 );
 
-// The bar is recomputed from the live position every ply, not stashed from the last engine
-// reply — otherwise a human move (or the move that ends the game) leaves it showing the
-// position before. `evaluatePosition` is side-to-move-relative; the bar is White-relative.
-const score = computed(() => {
-	const weights = lensWeights.value;
-	const cp =
-		weights === undefined
-			? undefined
-			: evaluatePosition({
-					position: game.position.value,
-					played: game.played.value,
-					weights,
-				});
-
-	return cp === undefined || game.position.value.turn === "white" ? cp : -cp;
-});
-
 async function restart() {
 	game.reset();
 	generation.value += 1;
@@ -157,7 +138,6 @@ watch(
 <template>
 	<section class="play">
 		<div class="board card">
-			<EvalBar :score="score" />
 			<ChessBoard
 				:fen="game.fen.value"
 				:orientation="orientation"
@@ -231,9 +211,6 @@ watch(
 }
 
 .board {
-	display: flex;
-	gap: 0.75rem;
-	align-items: stretch;
 	flex: 1 1 24rem;
 	max-width: 36rem;
 }
