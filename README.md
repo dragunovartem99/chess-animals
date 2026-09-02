@@ -51,8 +51,9 @@ Linting and formatting via [oxlint](https://oxc.rs)/[oxfmt](https://oxc.rs), typ
 Built: the 62-feature evaluation, negamax search, the UCI codec and worker client, the board,
 `/play` with a per-feature breakdown of what the bot sees, and the dev CLIs — `npm run arena`
 (paired openings, Bradley-Terry ratings with confidence intervals, a worker pool running whole
-games, adaptive pairing) and `npm run tune` (SPSA against a gauntlet). The roster is two animals
-so far, the Donkey and the Wolf.
+games, adaptive pairing) and `npm run tune` (SPSA against a gauntlet). The roster is five animals
+so far — Donkey, Shark, Snake, Turtle, Wolf — listed weakest first, in the order the arena rated
+them.
 
 Next, per [PLAN.md](./PLAN.md): the in-app weight editor, the full twelve-animal roster, the
 about page, and golden-game fixtures.

@@ -110,6 +110,7 @@ and rewrites a bot's weights file.
 - ✅ `ci: check every push and deploy main to Pages`
 - ✅ `test: cover the bot engines, the worker transport and the mask helpers`
 - ✅ `arena: shared worker pool, job cap, per-round progress`
+- ✅ `bots: three more simple animals` — the Turtle, the Snake and the Shark; the roster listed weakest first, in arena order
 - ✅ `bots: two-animal roster with a landing page` — the Donkey and the Wolf as data, `RosterView` as `/`
 - ✅ `copy: skill for writing player-facing text`
 - ✅ `copy: rewrite taglines, roster lead and bot blurbs`

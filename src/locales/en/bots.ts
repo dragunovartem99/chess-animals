@@ -8,4 +8,16 @@ export default {
 		name: "Wolf",
 		description: "Every piece walks toward your king. Nothing else matters to it.",
 	},
+	turtle: {
+		name: "Turtle",
+		description: "Hides behind its own shell. Every piece stays home, guarding the king.",
+	},
+	snake: {
+		name: "Snake",
+		description: "Coils around you and squeezes. Soon you have nowhere left to go.",
+	},
+	shark: {
+		name: "Shark",
+		description: "Bites whatever it can reach. It never asks what the bite costs.",
+	},
 };
