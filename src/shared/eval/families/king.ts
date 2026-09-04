@@ -6,6 +6,8 @@ import { opposite, squareFile } from "chessops/util";
 import type { FeatureVector } from "../vector";
 import type { EvalContext } from "./context";
 import { KING_SLOTS, type KingCounts } from "./kingSlots";
+
+export const SLOTS = KING_SLOTS.map(([, slot]) => slot);
 import { chebyshev, FILES } from "./masks";
 
 // What a piece is worth as an attacker near the king — not what it is worth on the board. A queen

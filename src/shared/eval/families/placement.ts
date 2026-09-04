@@ -10,11 +10,13 @@ function capitalise(role: Role): string {
 	return role[0].toUpperCase() + role.slice(1);
 }
 
-const SLOTS = ROLES.map((role) => ({
+const ROLE_SLOTS = ROLES.map((role) => ({
 	role,
 	centralization: featureId(`centralization${capitalise(role)}`),
 	advancement: featureId(`advancement${capitalise(role)}`),
 }));
+
+export const SLOTS = ROLE_SLOTS.flatMap((slot) => [slot.centralization, slot.advancement]);
 
 // 0 in a corner, 6 on one of the four central squares. Cheaper than a table and, unlike one,
 // tunable with a single number per role.
@@ -37,7 +39,7 @@ export function extractPlacement({
 }): void {
 	const { board } = context.position;
 
-	for (const slot of SLOTS) {
+	for (const slot of ROLE_SLOTS) {
 		let central = 0;
 		let advanced = 0;
 

@@ -10,6 +10,8 @@ const OPPONENT_MOBILITY = featureId("opponentMobility");
 const PUSH_DEPTH = featureId("pushDepth");
 const OFFERED_MATERIAL = featureId("offeredMaterial");
 
+export const SLOTS = [OPPONENT_MOBILITY, PUSH_DEPTH, OFFERED_MATERIAL];
+
 // The paper's own values, used only to price what is being offered — the tunable piece values
 // live in the material family and would make this feature move when they did.
 const OFFER_VALUE: Record<Role, number> = {

@@ -67,10 +67,18 @@ component in with it.
 
 ## The evaluation
 
-`shared/eval/extract.ts` reads every feature off one position in a single walk of the board, in
+`shared/eval/extract.ts` reads the features off one position in a single walk of the board, in
 `createContext`, which hands each family the piece list with its attack sets already computed;
-the families then do index and bitboard arithmetic only. Measured at **~18 µs**, with a 60 µs
-regression guard asserted in the suite.
+the families then do index and bitboard arithmetic only. Reading all sixty-odd measures
+**~18 µs**, with a 60 µs regression guard asserted in the suite.
+
+A search does not read all sixty-odd. A weight of zero cannot change a score, so `liveSlots`
+takes the union of the bot's three phase vectors once per `go` and `createExtractor` runs only
+the families that union touches — the dot product then walks the same list instead of multiplying
+fifty-odd zeros. An animal names a handful of features, which is **~6 µs** a node and a 3–4×
+faster search; `cccp` reads only the move and never builds the context at all; the random mover
+extracts nothing. Each family declares the slots it writes next to its extractor, and the suite
+holds every family to writing exactly those.
 
 Everything is from the **side to move's** perspective, so no evaluation code is colour-specific
 and a bot plays the same way with either colour.

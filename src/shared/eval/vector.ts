@@ -52,16 +52,22 @@ export function recordFromWeights(weights: WeightVector): Record<string, number>
 	return record;
 }
 
-export function dot(features: FeatureVector, weights: WeightVector): number {
-	if (features.length !== weights.length) {
-		throw new Error(
-			`vector length mismatch: ${features.length} features, ${weights.length} weights`
-		);
-	}
-
+// What a position is worth: the features times the weights on them.
+//
+// `slots` is the sparse index list from `liveSlots`. Everything outside it is weighted zero and
+// contributes nothing, so it is not walked — which for a bot that names four features is the
+// difference between four multiplications a node and sixty-two.
+export function dot({
+	features,
+	weights,
+	slots,
+}: {
+	features: FeatureVector;
+	weights: WeightVector;
+	slots: readonly number[];
+}): number {
 	let total = 0;
-	for (let index = 0; index < features.length; index += 1)
-		total += features[index] * weights[index];
+	for (const slot of slots) total += features[slot] * weights[slot];
 
 	return total;
 }

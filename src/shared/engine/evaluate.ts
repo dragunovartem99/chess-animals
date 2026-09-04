@@ -2,10 +2,11 @@ import type { Chess } from "chessops/chess";
 
 import { gamePhase } from "../chess";
 import {
+	createExtractor,
 	createFeatureVector,
 	dot,
-	extractFeatures,
 	interpolateWeights,
+	liveSlots,
 	type PhaseWeights,
 	type PlayedMove,
 	terminalScore,
@@ -20,17 +21,21 @@ export type PositionEvaluator = (frame: {
 	ply?: number;
 }) => number;
 
-// A scorer bound to one bot's weights, holding the scratch it reuses between calls. The search
-// makes one of these per `go` and calls it once per node, so the two allocations a naive
-// `evaluate` would make every node — the blended weight vector and the feature vector — become
-// one each per phase and one for the whole search.
+// A scorer bound to one bot's weights, holding everything it can work out from them up front:
+// which features this particular bot is scored on, an extractor that reads only those, and the
+// scratch vector it reads them into. The search makes one of these per `go` and calls it once per
+// node, so the two allocations a naive `evaluate` would make every node — the blended weight
+// vector and the feature vector — become one each per phase and one for the whole search.
 //
 // `gamePhase` is `1 - m / 24` for integer non-pawn material `m`, so it takes at most 25 distinct
 // values across a whole game: the blend cache is exact, not an approximation, and it is discarded
-// with the evaluator when the search ends, so a `setoption` that retunes the bot is never stale.
+// with the evaluator when the search ends, so a `setoption` that retunes the bot is never stale —
+// and neither is `slots`, which is the same weights read the same once.
 export function createEvaluator({ weights }: { weights: PhaseWeights }): PositionEvaluator {
 	const blendByPhase = new Map<number, WeightVector>();
 	const scratch = createFeatureVector();
+	const slots = liveSlots(weights);
+	const extract = createExtractor({ slots });
 
 	return function evaluate({ position, played, ply = 0 }): number {
 		const phase = gamePhase(position);
@@ -45,7 +50,11 @@ export function createEvaluator({ weights }: { weights: PhaseWeights }): Positio
 		const terminal = terminalScore({ position, weights: blended, ply });
 		if (terminal !== undefined) return terminal;
 
-		return dot(extractFeatures({ position, played, into: scratch }), blended);
+		return dot({
+			features: extract({ position, played, into: scratch }),
+			weights: blended,
+			slots,
+		});
 	};
 }
 

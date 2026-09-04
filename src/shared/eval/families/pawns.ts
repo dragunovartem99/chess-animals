@@ -5,6 +5,8 @@ import type { FeatureVector } from "../vector";
 import type { EvalContext } from "./context";
 import { summariseAgainst, summariseFiles } from "./pawnFiles";
 import { PAWN_SLOTS, type PawnCounts } from "./pawnSlots";
+
+export const SLOTS = PAWN_SLOTS.map(([, slot]) => slot);
 import { isBackward, isConnected, isPassed } from "./pawnTests";
 import { countShield } from "./pawnTraits";
 

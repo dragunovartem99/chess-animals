@@ -10,6 +10,8 @@ const HUDDLE = featureId("huddle");
 const KING_PROXIMITY = featureId("kingProximity");
 const REVERSE_STARTING = featureId("reverseStarting");
 
+export const SLOTS = [SWARM, HUDDLE, KING_PROXIMITY, REVERSE_STARTING];
+
 const BACK_RANK_FILES: Partial<Record<Role, number[]>> = {
 	rook: [0, 7],
 	knight: [1, 6],

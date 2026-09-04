@@ -10,6 +10,8 @@ const CENTER_CONTROL = featureId("centerControl");
 const SPACE = featureId("space");
 const HANGING = featureId("hanging");
 
+export const SLOTS = [CENTER_CONTROL, SPACE, HANGING];
+
 const CENTER = SquareSet.center();
 
 // The four ranks on the far side of the board, from `color`'s point of view.

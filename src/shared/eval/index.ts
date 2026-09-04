@@ -1,4 +1,4 @@
-export { extractFeatures } from "./extract";
+export { createExtractor, type ExtractFrame, extractFeatures } from "./extract";
 export type { PlayedMove } from "./families/move";
 export {
 	defineFeatures,
@@ -21,4 +21,4 @@ export {
 	weightsFromRecord,
 } from "./vector";
 export { MATE_SCORE, type TerminalTerm, terminalScore, terminalTerm } from "./terminal";
-export { interpolateWeights, type PhaseWeights } from "./weights";
+export { interpolateWeights, liveSlots, type PhaseWeights } from "./weights";

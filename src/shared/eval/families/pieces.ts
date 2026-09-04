@@ -70,7 +70,7 @@ function countFor({ context, color }: { context: EvalContext; color: Color }): n
 	return [bishops.size() >= 2 ? 1 : 0, openFiles, seventh, outposts];
 }
 
-const SLOTS = [BISHOP_PAIR, ROOK_OPEN_FILE, ROOK_SEVENTH, KNIGHT_OUTPOST];
+export const SLOTS = [BISHOP_PAIR, ROOK_OPEN_FILE, ROOK_SEVENTH, KNIGHT_OUTPOST];
 
 export function extractPieces({
 	context,

@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 
 import { positionFromFen } from "../../chess";
 import { extractFeatures } from "../extract";
-import { FEATURE_COUNT, FEATURES_BY_KEY } from "../features";
+import { FEATURE_COUNT, FEATURES_BY_KEY, featureId } from "../features";
 import {
 	createFeatureVector,
 	defaultWeights,
@@ -54,19 +54,26 @@ describe("recordFromWeights", () => {
 });
 
 describe("dot", () => {
-	it("sums the products", () => {
-		expect(dot(Float32Array.from([1, 2, 3]), Float32Array.from([10, 20, 30]))).toBe(140);
+	it("sums the products over the slots it is given", () => {
+		const features = Float32Array.from([1, 2, 3]);
+		const weights = Float32Array.from([10, 20, 30]);
+
+		expect(dot({ features, weights, slots: [0, 1, 2] })).toBe(140);
 	});
 
-	it("throws on a length mismatch instead of scoring half a position", () => {
-		expect(() => dot(Float32Array.from([1]), Float32Array.from([1, 2]))).toThrow(
-			"length mismatch"
-		);
+	// The slot list is what a bot weighs, so anything outside it is weighted zero by definition
+	// and adds nothing — skipping it is an optimisation, never a change of score.
+	it("ignores everything outside them, which is weighted zero anyway", () => {
+		const features = Float32Array.from([1, 2, 3]);
+		const weights = Float32Array.from([10, 0, 30]);
+
+		expect(dot({ features, weights, slots: [0, 2] })).toBe(100);
 	});
 
 	it("scores a real position against real weights", () => {
+		const weights = weightsFromRecord({ tempo: 10 });
 		const features = extractFeatures({ position: positionFromFen(INITIAL_FEN) });
 
-		expect(dot(features, weightsFromRecord({ tempo: 10 }))).toBe(10);
+		expect(dot({ features, weights, slots: [featureId("tempo")] })).toBe(10);
 	});
 });

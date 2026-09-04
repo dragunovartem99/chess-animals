@@ -96,6 +96,7 @@ arena: it burns cores for minutes and rewrites a bot's weights file.
 
 ## Landed outside the ladder
 
+- ✅ `perf: extract only the features a bot weighs` — `liveSlots` + `createExtractor` skip every family a bot leaves at zero, and `dot` walks the same sparse list. An animal's node goes 18 µs → ~6 µs and the whole search 3–4× faster; the random mover extracts nothing at all
 - ✅ `eval: score mate in the search, not as a weight` — `terminalScore` replaces a finished game's evaluation with `MATE_SCORE - ply`, scaled by a `givesMate` preference in [-1, 1]. The old `givesMate: 100000` tied every mate regardless of distance and let a slow mate's leaf outbid a fast one on positional bonuses; every animal in the roster walked past a mate in one, and now none do
 - ✅ `perf: speed up feature extraction` — 77 µs → ~18 µs against a 60 µs guard (5 µs proved unachievable; the target above was corrected to match)
 - ✅ `perf: benchmark engine search` — `search.bench.ts` over depth 1/2/3 ± quiescence on a position spread, with a depth-2 budget guard in the suite mirroring the extraction guard

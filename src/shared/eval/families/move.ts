@@ -17,6 +17,14 @@ const MOVED_SLOTS = Object.fromEntries(
 	ROLES.map((role) => [role, featureId(`moved${role[0].toUpperCase()}${role.slice(1)}`)])
 ) as Record<Role, number>;
 
+export const SLOTS = [
+	GIVES_CHECK,
+	CAPTURE_VALUE,
+	IS_PROMOTION,
+	IS_CASTLE,
+	...Object.values(MOVED_SLOTS),
+];
+
 // What a captured piece is worth here. Fixed rather than read from the tunable material weights,
 // so retuning piece values does not quietly move every capture-loving bot with them.
 const CAPTURE_VALUES: Record<Role, number> = {

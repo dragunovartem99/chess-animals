@@ -2,8 +2,20 @@ import { INITIAL_FEN } from "chessops/fen";
 import { describe, expect, it } from "vitest";
 
 import { afterMove, legalMoves, positionFromFen } from "../../chess";
+import { createExtractor, type Extractor, type ExtractFrame } from "../extract";
 import { extractFeatures } from "../extract";
-import { FEATURES } from "../features";
+import { SLOTS as AGGRESSION } from "../families/aggression";
+import { SLOTS as CONTROL } from "../families/control";
+import { SLOTS as KING } from "../families/king";
+import { SLOTS as MATERIAL } from "../families/material";
+import { SLOTS as MOBILITY } from "../families/mobility";
+import { SLOTS as MOVE } from "../families/move";
+import { SLOTS as PAWNS } from "../families/pawns";
+import { SLOTS as PIECES } from "../families/pieces";
+import { SLOTS as PLACEMENT } from "../families/placement";
+import { SLOTS as PROXIMITY } from "../families/proximity";
+import { SLOTS as SYMMETRY } from "../families/symmetry";
+import { FEATURES, featureId } from "../features";
 
 // A spread wide enough that every feature has somewhere to fire: a middlegame, a broken pawn
 // structure, an exposed king, a promotion, a mate in one, and a position where castling is legal.
@@ -26,20 +38,48 @@ const CORPUS = [
 // `terminal.test.ts` is what holds them to firing.
 const NOT_EXTRACTED = new Set(["givesMate", "givesStalemate"]);
 
-function everyVectorInCorpus(): number[][] {
-	const vectors: number[][] = [];
+// Every family's declared slots, by the name the extractor knows it under. `tempo` is its own
+// one-line family, written by the extractor itself rather than by a `families/` module.
+const DECLARED = {
+	material: MATERIAL,
+	placement: PLACEMENT,
+	pieces: PIECES,
+	pawns: PAWNS,
+	king: KING,
+	mobility: MOBILITY,
+	control: CONTROL,
+	proximity: PROXIMITY,
+	symmetry: SYMMETRY,
+	aggression: AGGRESSION,
+	move: MOVE,
+	tempo: [featureId("tempo")],
+};
+
+// Every frame in the corpus: each position, and each position a legal move from it produces.
+function everyFrame(): ExtractFrame[] {
+	const frames: ExtractFrame[] = [];
 
 	for (const fen of CORPUS) {
 		const position = positionFromFen(fen);
-		vectors.push([...extractFeatures({ position })]);
+		frames.push({ position });
 
 		for (const move of legalMoves(position)) {
-			const played = { parent: position, move };
-			vectors.push([...extractFeatures({ position: afterMove({ position, move }), played })]);
+			frames.push({
+				position: afterMove({ position, move }),
+				played: { parent: position, move },
+			});
 		}
 	}
 
-	return vectors;
+	return frames;
+}
+
+function everyVectorFrom(extract: Extractor): number[][] {
+	return everyFrame().map((frame) => Array.from(extract(frame)));
+}
+
+function everyVectorInCorpus(): number[][] {
+	return everyVectorFrom(extractFeatures);
 }
 
 describe("the feature registry", () => {
@@ -55,5 +95,40 @@ describe("the feature registry", () => {
 		);
 
 		expect(dead.map((feature) => feature.key)).toEqual([]);
+	});
+
+	// `createExtractor` skips a family whose slots a bot leaves at zero, which is only sound if
+	// the slots a family declares are exactly the ones it writes. A feature added to an extractor
+	// but not to its `SLOTS` would read zero for every bot that weighs it and nothing else — the
+	// quietest possible bug, and this is what makes it loud.
+	it("has every family writing exactly the slots it declares", () => {
+		for (const [family, slots] of Object.entries(DECLARED)) {
+			const declared = new Set(slots);
+			const written = new Set<number>();
+
+			for (const vector of everyVectorFrom(createExtractor({ slots }))) {
+				vector.forEach((value, id) => {
+					if (value !== 0) written.add(id);
+				});
+			}
+
+			const stray = [...written].filter((id) => !declared.has(id));
+
+			expect({ family, stray: stray.map((id) => FEATURES[id].key) }).toEqual({
+				family,
+				stray: [],
+			});
+		}
+	});
+
+	// The two extractors are written out separately — one straight-line for the everything case,
+	// one table-driven for the sparse case — because the indirection the table costs is worth
+	// paying only when it saves whole families. That is a duplication, so it is pinned.
+	it("reads the same vector whichever extractor asks for every feature", () => {
+		const everything = createExtractor({ slots: FEATURES.map((feature) => feature.id) });
+		const sparse = everyVectorFrom(everything);
+		const full = everyVectorInCorpus();
+
+		expect(sparse).toEqual(full);
 	});
 });

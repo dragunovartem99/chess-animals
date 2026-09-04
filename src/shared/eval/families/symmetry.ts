@@ -11,6 +11,8 @@ const SYMMETRY_MIRROR_X = featureId("symmetryMirrorX");
 const SYMMETRY_MIRROR_Y = featureId("symmetryMirrorY");
 const SYMMETRY_ROT180 = featureId("symmetryRot180");
 
+export const SLOTS = [SAME_COLOR_SQUARES, SYMMETRY_MIRROR_X, SYMMETRY_MIRROR_Y, SYMMETRY_ROT180];
+
 const LIGHT = SquareSet.lightSquares();
 const DARK = SquareSet.darkSquares();
 

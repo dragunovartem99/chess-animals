@@ -8,6 +8,8 @@ import type { EvalContext } from "./context";
 const MOBILITY = featureId("mobility");
 const SAFE_MOBILITY = featureId("safeMobility");
 
+export const SLOTS = [MOBILITY, SAFE_MOBILITY];
+
 // Pawns and the king are left out: a pawn's moves are structure, not activity, and counting the
 // king's would reward walking it into the open — which is a personality, not an evaluation, and
 // `kingProximity` offers it deliberately.
