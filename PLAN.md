@@ -69,15 +69,16 @@ under Node with `tsx`; there is no `/arena` route. The rating and scheduling mat
 
 ## Phase F — tuning
 
-The weight **editor** stays in the app — sliders, live eval and session-only edits are a good way
-to explore a personality. The **tuner** is a dev CLI like the arena: it burns cores for minutes
-and rewrites a bot's weights file.
+The weight **sandbox** stays in the app — sliders, live eval and session-only edits are a good way
+to explore a personality. There is no per-animal editor: one route, one weight vector, seedable
+from any roster animal but not tied to its saved identity. The **tuner** is a dev CLI like the
+arena: it burns cores for minutes and rewrites a bot's weights file.
 
-| #   | Commit                   | Contents                                                                                               | Green when                                                  |
-| --- | ------------------------ | ------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------- |
-| 30  | ⬜ `bots: weight editor` | `/bots/:id`, three phase columns, sliders by family, live eval, diff against another bot               | Edits change play immediately                               |
-| 31  | ✅ `tuner: SPSA core`    | `shared/tuner` — Rademacher perturbation, paired gauntlet with common random numbers, decaying `a`/`c` | Measurably improves a deliberately detuned bot              |
-| 32  | ✅ `cli: tuner runner`   | `npm run tune -- <botId>` — SPSA against a gauntlet, live score to stdout, write the weights JSON      | A run completes in 1–2 minutes and lowers the gauntlet loss |
+| #   | Commit                                           | Contents                                                                                                                                                                          | Green when                                                  |
+| --- | ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| 30  | ✅ `frankenstein: live weight and depth sandbox` | `/frankenstein` — board, depth control, sliders by family (numeric input for out-of-band values), autoplay, seed from an animal or the registry defaults, live `FeatureBreakdown` | Sliders and depth change play immediately, no restart       |
+| 31  | ✅ `tuner: SPSA core`                            | `shared/tuner` — Rademacher perturbation, paired gauntlet with common random numbers, decaying `a`/`c`                                                                            | Measurably improves a deliberately detuned bot              |
+| 32  | ✅ `cli: tuner runner`                           | `npm run tune -- <botId>` — SPSA against a gauntlet, live score to stdout, write the weights JSON                                                                                 | A run completes in 1–2 minutes and lowers the gauntlet loss |
 
 ## Phase G — finishing
 

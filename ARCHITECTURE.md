@@ -20,12 +20,13 @@ paper.pdf       Elo World, the design's source
 
 ### Modules
 
-| Module  | What it does                                                                                                                        |
-| ------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| `bots`  | the animal roster (`roster/*.ts`, plain data) and its landing page; the per-bot page is a placeholder until the weight editor lands |
-| `game`  | `/play` — human vs bot, bot vs bot, move list, feature breakdown                                                                    |
-| `board` | the chessground wrapper, orientation, legal dests, the promotion picker                                                             |
-| `about` | the method and credit to the paper — placeholder, Phase G                                                                           |
+| Module         | What it does                                                                                                                                                                                                                |
+| -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `bots`         | the animal roster (`roster/*.ts`, plain data) and its landing page                                                                                                                                                          |
+| `game`         | `/play` — human vs bot, bot vs bot, move list, feature breakdown                                                                                                                                                            |
+| `board`        | the chessground wrapper, orientation, legal dests, the promotion picker                                                                                                                                                     |
+| `frankenstein` | `/frankenstein` — a live weight/depth sandbox: one weight vector across all features and phases, an in-thread UCI engine tuned by `setOption` (no restart), autoplay, seeding from a roster animal or the registry defaults |
+| `about`        | the method and credit to the paper — placeholder, Phase G                                                                                                                                                                   |
 
 The tournament runner and the SPSA tuner are **dev CLIs under `cli/`**, not modules — they need
 every core and have no place in the shipped app. The rating, scheduler and tuner math they drive

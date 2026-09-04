@@ -30,6 +30,11 @@ const routes: RouteRecordRaw[] = [
 				name: "about",
 				component: () => import("../modules/about").then((m) => m.AboutView),
 			},
+			{
+				path: "frankenstein",
+				name: "frankenstein",
+				component: () => import("../modules/frankenstein").then((m) => m.FrankensteinView),
+			},
 		],
 	},
 	// Anything without a known locale prefix — `/`, `/play`, a stale link — is re-entered under

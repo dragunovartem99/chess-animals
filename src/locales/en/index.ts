@@ -10,6 +10,7 @@ export default {
 		roster: "Roster",
 		play: "Play",
 		about: "About",
+		frankenstein: "Frankenstein",
 	},
 	locale: {
 		label: "Language",
@@ -40,6 +41,7 @@ export default {
 		restart: "New game",
 		thinking: "Thinking…",
 		turn: { white: "White", black: "Black" },
+		toMove: { white: "White to move", black: "Black to move" },
 		reason: {
 			"checkmate": "Checkmate",
 			"stalemate": "Stalemate",
@@ -50,6 +52,26 @@ export default {
 		},
 	},
 	feature,
+	frankenstein: {
+		title: "Frankenstein",
+		depth: "Depth",
+		quiescence: "Quiescence search",
+		seed: { blank: "Default" },
+		autoplay: "Autoplay",
+		pause: "Pause",
+		step: "Step",
+		reset: "Reset",
+		copy: "Copy weights",
+		tab: { weights: "Weights", breakdown: "Breakdown" },
+		family: {
+			material: "Material",
+			positional: "Positional",
+			pawns: "Pawns",
+			king: "King safety",
+			behavioural: "Behavioural",
+			move: "Move",
+		},
+	},
 	placeholder: {
 		notBuiltYet: "Still building this one.",
 	},

@@ -11,6 +11,7 @@ const messages: Messages = {
 		roster: "Зверинец",
 		play: "Игра",
 		about: "О проекте",
+		frankenstein: "Франкенштейн",
 	},
 	locale: {
 		label: "Язык",
@@ -41,6 +42,7 @@ const messages: Messages = {
 		restart: "Новая партия",
 		thinking: "Думает…",
 		turn: { white: "Белые", black: "Чёрные" },
+		toMove: { white: "Ход белых", black: "Ход чёрных" },
 		reason: {
 			"checkmate": "Мат",
 			"stalemate": "Пат",
@@ -51,6 +53,26 @@ const messages: Messages = {
 		},
 	},
 	feature,
+	frankenstein: {
+		title: "Франкенштейн",
+		depth: "Глубина",
+		quiescence: "Тихий поиск",
+		seed: { blank: "По умолчанию" },
+		autoplay: "Автоигра",
+		pause: "Пауза",
+		step: "Шаг",
+		reset: "Сброс",
+		copy: "Скопировать веса",
+		tab: { weights: "Веса", breakdown: "Разбор" },
+		family: {
+			material: "Материал",
+			positional: "Позиционные",
+			pawns: "Пешки",
+			king: "Безопасность короля",
+			behavioural: "Поведенческие",
+			move: "Ход",
+		},
+	},
 	placeholder: {
 		notBuiltYet: "Эту страницу еще строим.",
 	},

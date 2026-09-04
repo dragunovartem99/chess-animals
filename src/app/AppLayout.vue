@@ -22,6 +22,7 @@ import LocaleSwitcher from "./LocaleSwitcher.vue";
 				<RouterLink :to="{ name: 'roster' }">{{ $t("nav.roster") }}</RouterLink>
 				<RouterLink :to="{ name: 'play' }">{{ $t("nav.play") }}</RouterLink>
 				<RouterLink :to="{ name: 'about' }">{{ $t("nav.about") }}</RouterLink>
+				<RouterLink :to="{ name: 'frankenstein' }">{{ $t("nav.frankenstein") }}</RouterLink>
 			</nav>
 		</div>
 	</header>
