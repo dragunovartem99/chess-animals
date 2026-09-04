@@ -96,6 +96,7 @@ arena: it burns cores for minutes and rewrites a bot's weights file.
 
 ## Landed outside the ladder
 
+- ✅ `bots: price every animal in centipawns` — the roster valued a pawn at 20 so a behavioural weight could outweigh it, which left every animal's numbers comparable to nothing. Each vector is scaled so material reads at classical values instead; multiplying a whole vector by a constant changes no move an argmax bot plays, and all twenty roster pairings replay move for move
 - ✅ `bots: one weight vector, not three phases` — no animal ever used the phase axis: every definition wrote `middlegame` and inherited the rest, and the sandbox applied one vector to all three. `PhaseWeights`, `interpolateWeights`, the evaluator's blend cache, `gamePhase`, the `Phase` type, the `all.`/`<phase>.` UCI scoping and the tuner's phase axis all go with it; a `setoption` now names a feature key and nothing else
 - ✅ `perf: extract only the features a bot weighs` — `liveSlots` + `createExtractor` skip every family a bot leaves at zero, and `dot` walks the same sparse list. An animal's node goes 18 µs → ~6 µs and the whole search 3–4× faster; the random mover extracts nothing at all
 - ✅ `eval: score mate in the search, not as a weight` — `terminalScore` replaces a finished game's evaluation with `MATE_SCORE - ply`, scaled by a `givesMate` preference in [-1, 1]. The old `givesMate: 100000` tied every mate regardless of distance and let a slow mate's leaf outbid a fast one on positional bonuses; every animal in the roster walked past a mate in one, and now none do

@@ -26,7 +26,7 @@ describe("presetFromBot", () => {
 		const preset = presetFromBot("wolf");
 
 		expect(preset).toMatchObject({ depth: 3, quiescence: false });
-		expect(preset?.weights.swarm).toBe(-180);
+		expect(preset?.weights.swarm).toBe(-900);
 		expect(preset?.weights.givesMate).toBe(1);
 	});
 

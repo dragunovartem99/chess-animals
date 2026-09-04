@@ -82,7 +82,7 @@ describe("useSandbox", () => {
 
 		result.seedFrom("wolf");
 
-		expect(result.weights.value.swarm).toBe(-180);
+		expect(result.weights.value.swarm).toBe(-900);
 		expect(result.depth.value).toBe(3);
 	});
 

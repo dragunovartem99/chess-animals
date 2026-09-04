@@ -57,6 +57,19 @@ in seconds.
 The `move` family is why `cccp` and `pacifist` need no special casing — "prefer checks", "never
 capture" are weights like any other.
 
+## Everything in centipawns
+
+A weight is centipawns per unit of its feature, and a pawn is 100 — the currency a chess player
+already thinks in. `mobility: 4` is four hundredths of a pawn per square of activity;
+`swarm: -900` is a queen per king-move the army closes. A bot that wants one idea to dominate
+says so with a big number on that idea, never by shrinking everything else: the roster used to
+price a pawn at 20 so `huddle` could outweigh it, and the result was five animals whose numbers
+could not be compared with each other or with anything a player knows. Multiplying a whole vector
+by a constant changes no move an argmax bot plays, so this cost nothing to fix.
+
+The two game-enders are the only exception, and are preferences in [-1, 1]: what they price is
+not worth a number of pawns.
+
 ## One vector, not three
 
 A bot is a single weight vector. It used to carry three — opening, middlegame and endgame,

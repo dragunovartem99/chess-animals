@@ -42,9 +42,19 @@ export function defineFeatures(definitions: readonly FeatureDefinition[]): Featu
 
 // The vocabulary every bot is described in. Entries are appended as their extraction lands; the
 // order is the vector layout, so entries are never reordered or removed.
+//
+// **Every weight is in centipawns**, and a pawn is 100. That is the whole convention, and it is
+// what makes a weight readable: `mobility: 4` says a square of activity is worth four hundredths
+// of a pawn, and `swarm: -900` says walking the army a king-move closer is worth a queen. A bot
+// that wants a feature to dominate says so with a big number, not by shrinking everything else —
+// the roster used to price a pawn at 20 so that `huddle` could outweigh it, which made every
+// animal's numbers unreadable and comparable to nothing.
+//
+// The two game-enders are the only exception: they are preferences in [-1, 1], because what they
+// price is not worth a number of pawns. See `terminal.ts`.
 export const FEATURES = defineFeatures([
-	// Piece values are features rather than constants, so a bot can be given its own — and can
-	// value a rook differently in the opening than in the endgame.
+	// Piece values are features rather than constants, so a bot can be given its own — a Snake
+	// that thinks a rook is worth two knights is one number away.
 	{ key: "materialPawn", family: "material", group: "pieces", defaultWeight: 100 },
 	{ key: "materialKnight", family: "material", group: "pieces", defaultWeight: 320 },
 	{ key: "materialBishop", family: "material", group: "pieces", defaultWeight: 330 },
