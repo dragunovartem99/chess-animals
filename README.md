@@ -22,15 +22,15 @@ npm install
 npm run dev
 ```
 
-| Command                             | What it does                                                    |
-| ----------------------------------- | --------------------------------------------------------------- |
-| `npm run dev` / `build` / `preview` | Vite dev server / type-checked production build / preview of it |
-| `npm test` / `test:coverage`        | Vitest unit tests / with v8 coverage against a 90% threshold    |
-| `npm run bench`                     | feature-extraction cost, held under a 60 µs guard by the suite  |
-| `npm run arena`                     | dev CLI: rate the roster over the paired opening set            |
-| `npm run tune -- <botId>`           | dev CLI: SPSA-tune one bot's weights against the roster         |
-| `npm run lint` / `format`           | oxlint / oxfmt (`:check` variants don't write)                  |
-| `npm run types:check`               | `vue-tsc` type-check                                            |
+| Command                             | What it does                                                       |
+| ----------------------------------- | ------------------------------------------------------------------ |
+| `npm run dev` / `build` / `preview` | Vite dev server / type-checked production build / preview of it    |
+| `npm test` / `test:coverage`        | Vitest unit tests / with v8 coverage against a 90% threshold       |
+| `npm run bench`                     | feature-extraction and search cost, held under guards by the suite |
+| `npm run arena`                     | dev CLI: rate the roster over the paired opening set               |
+| `npm run tune -- <botId>`           | dev CLI: SPSA-tune one bot's weights against the roster            |
+| `npm run lint` / `format`           | oxlint / oxfmt (`:check` variants don't write)                     |
+| `npm run types:check`               | `vue-tsc` type-check                                               |
 
 Linting and formatting via [oxlint](https://oxc.rs)/[oxfmt](https://oxc.rs), type-checking via
 `vue-tsc`, tests via Vitest. CI runs all of them plus the build on every push and pull request;
@@ -48,15 +48,15 @@ Linting and formatting via [oxlint](https://oxc.rs)/[oxfmt](https://oxc.rs), typ
 
 ## Where it stands
 
-Built: the 62-feature evaluation, negamax search, the UCI codec and worker client, the board,
-`/play` with a per-feature breakdown of what the bot sees, and the dev CLIs — `npm run arena`
-(paired openings, Bradley-Terry ratings with confidence intervals, a worker pool running whole
-games, adaptive pairing) and `npm run tune` (SPSA against a gauntlet). The roster is five animals
-so far — Donkey, Shark, Snake, Turtle, Wolf — listed weakest first, in the order the arena rated
-them.
+Built: the feature evaluation, negamax search with quiescence, the UCI codec and worker client,
+the board, `/play` with a per-feature breakdown of what the bot sees, `/frankenstein` as a live
+weight-and-depth sandbox, and the dev CLIs — `npm run arena` (paired openings, Bradley-Terry
+ratings with confidence intervals, a worker pool running whole games, adaptive pairing) and
+`npm run tune` (SPSA against a gauntlet). The roster is five animals so far — Donkey, Shark,
+Snake, Turtle, Wolf — listed weakest first, in the order the arena rated them.
 
-Next, per [PLAN.md](./PLAN.md): the in-app weight editor, the full twelve-animal roster, the
-about page, and golden-game fixtures.
+Next, per [PLAN.md](./PLAN.md): the full twelve-animal roster, golden-game fixtures, the about
+page, and a tablebase probe interface.
 
 ## Credit
 
