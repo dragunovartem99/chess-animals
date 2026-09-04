@@ -16,28 +16,32 @@ import MoveList from "./MoveList.vue";
 import PlayerPicker from "./PlayerPicker.vue";
 
 const HUMAN = "human";
+const COLORS: Color[] = ["white", "black"];
 
 const game = useGame();
 const engines = useBotEngines();
 
 // The roster page links here with `?black=<id>` so a card opens straight into a game against
-// that animal. An unknown or missing id just leaves the default opponent in place.
+// that animal. `?white=<id>` works the same way, and the two combine with `&` for a bot-vs-bot
+// game. An unknown or missing id just leaves the default player in place for that color.
 const route = useRoute();
 const router = useRouter();
-const queryOpponent = computed(() => {
-	const id = route.query.black;
+function queryPlayer(color: Color) {
+	const id = route.query[color];
 	return typeof id === "string" && ROSTER_BY_ID.has(id) ? id : undefined;
-});
+}
+const queryPlayers = computed(() => ({ white: queryPlayer("white"), black: queryPlayer("black") }));
 
-const players = ref<Record<Color, string>>({ white: HUMAN, black: queryOpponent.value ?? "wolf" });
+const players = ref<Record<Color, string>>({
+	white: queryPlayers.value.white ?? HUMAN,
+	black: queryPlayers.value.black ?? "donkey",
+});
 
 const TABS = ["moves", "breakdown"] as const;
 const tab = ref<(typeof TABS)[number]>("moves");
 
-const humanColours = computed(() =>
-	(["white", "black"] as Color[]).filter((colour) => players.value[colour] === HUMAN)
-);
-const orientation = computed(() => humanColours.value[0] ?? "white");
+const humanColors = computed(() => COLORS.filter((color) => players.value[color] === HUMAN));
+const orientation = computed(() => humanColors.value[0] ?? "white");
 
 function playHumanMove({ from, to, promotion }: { from: Key; to: Key; promotion?: Role }) {
 	const move = fromUci({
@@ -77,14 +81,14 @@ watch(
 	async (key) => {
 		if (game.status.value.over) return;
 
-		const colour = game.position.value.turn;
-		const animal = ROSTER_BY_ID.get(players.value[colour]);
+		const color = game.position.value.turn;
+		const animal = ROSTER_BY_ID.get(players.value[color]);
 		if (!animal) return;
 
 		const answer = await engines.askForMove({ animal, fen: game.fen.value });
 
 		// The board may have moved on while the worker was thinking — a restart, or the player
-		// switching who plays which colour. Applying a stale answer would corrupt the game.
+		// switching who plays which color. Applying a stale answer would corrupt the game.
 		if (turn.value !== key) return;
 
 		const move = fromUci({ position: game.position.value, uci: answer.move });
@@ -116,21 +120,27 @@ async function restart() {
 	await engines.startNewGame();
 }
 
-// The URL and the Black picker stay in sync both ways: a roster card (or a pasted link) sets
-// the picker and starts fresh, and choosing another animal in the picker rewrites `?black=`.
-// Each watch checks the value already matches before acting, so they don't ping-pong.
-watch(queryOpponent, (id) => {
-	if (!id || id === players.value.black) return;
-	players.value = { ...players.value, black: id };
+// The URL and the picker stay in sync both ways, per color: a roster card (or a pasted link)
+// sets the picker and starts fresh, and choosing another animal in the picker rewrites the
+// matching query param. Each watch checks the value already matches before acting, so they
+// don't ping-pong.
+watch(queryPlayers, (ids) => {
+	if (!COLORS.some((c) => ids[c] && ids[c] !== players.value[c])) return;
+	players.value = {
+		white: ids.white ?? players.value.white,
+		black: ids.black ?? players.value.black,
+	};
 	void restart();
 });
 
 watch(
-	() => players.value.black,
-	(black) => {
-		const next = ROSTER_BY_ID.has(black) ? black : undefined;
-		if (next === queryOpponent.value) return;
-		void router.replace({ query: { ...route.query, black: next } });
+	() => ({ ...players.value }),
+	(current) => {
+		const next = Object.fromEntries(
+			COLORS.map((c) => [c, ROSTER_BY_ID.has(current[c]) ? current[c] : undefined])
+		);
+		if (COLORS.every((c) => next[c] === queryPlayers.value[c])) return;
+		void router.replace({ query: { ...route.query, ...next } });
 	}
 );
 </script>
@@ -141,7 +151,7 @@ watch(
 			<ChessBoard
 				:fen="game.fen.value"
 				:orientation="orientation"
-				:playable="humanColours"
+				:playable="humanColors"
 				:last-move="game.lastMove.value as [Key, Key] | undefined"
 				@move="playHumanMove"
 			/>
