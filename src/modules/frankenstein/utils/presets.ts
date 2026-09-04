@@ -1,6 +1,6 @@
 import { ROSTER_BY_ID } from "@/modules/bots/roster";
 import { compileBot } from "@/shared/bots";
-import { FEATURES } from "@/shared/eval";
+import { type Feature, FEATURES } from "@/shared/eval";
 
 export const DEFAULT_DEPTH = 3;
 // The sandbox runs its search in a worker, but a worker is still one thread: depth 4+ turns a
@@ -9,16 +9,25 @@ export const MAX_DEPTH = 3;
 
 export type Preset = { weights: Record<string, number>; depth: number; quiescence: boolean };
 
-// Material only, at the registry's suggested values — every other feature at zero. A full record
-// (every feature key present, including zeros) rather than a sparse one: seeding must overwrite
-// whatever the sandbox had before, and a sparse record would leave a previously non-zero weight
-// standing wherever the new seed leaves it at zero.
+// The weight every roster animal that names it at all gives `givesMate` — large enough that a
+// mating move always outscores anything else on offer, the standard way this codebase spells
+// "always take the mate" (see `shark`/`snake`/`turtle`/`wolf`).
+const MATE_WEIGHT = 100000;
+
+function startingWeight(feature: Feature): number {
+	if (feature.family === "material") return feature.defaultWeight;
+	if (feature.key === "givesMate") return MATE_WEIGHT;
+
+	return 0;
+}
+
+// Material, plus knowing a checkmate when it sees one — every other feature at zero. A full
+// record (every feature key present, including zeros) rather than a sparse one: seeding must
+// overwrite whatever the sandbox had before, and a sparse record would leave a previously
+// non-zero weight standing wherever the new seed leaves it at zero.
 export function blankPreset(): Preset {
 	const weights = Object.fromEntries(
-		FEATURES.map((feature) => [
-			feature.key,
-			feature.family === "material" ? feature.defaultWeight : 0,
-		])
+		FEATURES.map((feature) => [feature.key, startingWeight(feature)])
 	);
 
 	return { weights, depth: DEFAULT_DEPTH, quiescence: true };

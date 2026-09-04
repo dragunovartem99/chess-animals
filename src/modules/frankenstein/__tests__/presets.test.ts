@@ -5,12 +5,15 @@ import { FEATURES } from "@/shared/eval";
 import { blankPreset, DEFAULT_DEPTH, presetFromBot } from "../utils/presets";
 
 describe("blankPreset", () => {
-	it("starts material-only, at the registry defaults, everything else at zero", () => {
+	it("starts material-only plus mate-awareness, everything else at zero", () => {
 		const preset = blankPreset();
 
 		expect(preset.depth).toBe(DEFAULT_DEPTH);
 		expect(preset.quiescence).toBe(true);
+		expect(preset.weights.givesMate).toBe(100000);
 		for (const feature of FEATURES) {
+			if (feature.key === "givesMate") continue;
+
 			expect(preset.weights[feature.key]).toBe(
 				feature.family === "material" ? feature.defaultWeight : 0
 			);
