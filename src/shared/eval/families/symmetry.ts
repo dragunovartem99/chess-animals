@@ -24,7 +24,7 @@ const FLIP_FILES = 7;
 const HALF_TURN = 63;
 
 // The paper's scoring: facing a piece with its opposite number costs nothing, facing the wrong
-// piece of the right colour costs a little, and an empty square opposite a piece costs more.
+// piece of the right color costs a little, and an empty square opposite a piece costs more.
 //
 // Only occupied squares are walked, and a pair of two occupied squares is scored from the lower
 // of the two, so an empty board is free and a bare endgame nearly so.
@@ -50,13 +50,13 @@ function asymmetry({ board, axis }: { board: Board; axis: number }): number {
 	return penalty;
 }
 
-// Pieces standing on squares of their own colour — White on light, Black on dark. The childhood
+// Pieces standing on squares of their own color — White on light, Black on dark. The childhood
 // strategy, and one of the few that reliably reaches a plateau and then shuffles along it.
-function onOwnColour({ board, color }: { board: Board; color: Color }): number {
+function onOwnColor({ board, color }: { board: Board; color: Color }): number {
 	return board[color].intersect(color === "white" ? LIGHT : DARK).size();
 }
 
-// Shape rather than strength: how much a side's pieces sit on their own colour, and how close the
+// Shape rather than strength: how much a side's pieces sit on their own color, and how close the
 // whole board is to being a mirror of itself. The three symmetries are whole-board properties, so
 // like `kingProximity` they are raw values with nothing to subtract.
 export function extractSymmetry({
@@ -69,7 +69,7 @@ export function extractSymmetry({
 	const { board } = context.position;
 
 	features[SAME_COLOR_SQUARES] =
-		onOwnColour({ board, color: context.us }) - onOwnColour({ board, color: context.them });
+		onOwnColor({ board, color: context.us }) - onOwnColor({ board, color: context.them });
 
 	features[SYMMETRY_MIRROR_X] = -asymmetry({ board, axis: FLIP_FILES });
 	features[SYMMETRY_MIRROR_Y] = -asymmetry({ board, axis: FLIP_RANKS });

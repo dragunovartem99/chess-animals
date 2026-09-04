@@ -20,15 +20,15 @@ const D = Math.log(1.6);
 
 // Deterministic expected counts from the rating model — no sampling, so a pair played twice just
 // doubles its weight and the standard errors fall smoothly with the game total.
-function oracle(gamesPerColour: number) {
+function oracle(gamesPerColor: number) {
 	const counts = (white: string, black: string) => {
 		const delta = (TRUE_ELO[white] - TRUE_ELO[black] + WHITE_ADVANTAGE) / ELO_PER_LOG;
 		const pWhite = sigmoid(delta - D);
 		const pBlack = sigmoid(-delta - D);
 		return {
-			whiteWins: gamesPerColour * pWhite,
-			blackWins: gamesPerColour * pBlack,
-			draws: gamesPerColour * (1 - pWhite - pBlack),
+			whiteWins: gamesPerColor * pWhite,
+			blackWins: gamesPerColor * pBlack,
+			draws: gamesPerColor * (1 - pWhite - pBlack),
 		};
 	};
 	return (a: string, b: string): Promise<PairOutcome> =>

@@ -27,7 +27,7 @@ describe("useBoardConfig", () => {
 		expect(dests?.get("b1")).toEqual(["a3", "c3"]);
 	});
 
-	it("lets the viewer move only the colours it was given", () => {
+	it("lets the viewer move only the colors it was given", () => {
 		expect(build({ playable: ["white"] }).value.movable?.color).toBe("white");
 		expect(build({ playable: ["black"] }).value.movable?.color).toBeUndefined();
 		expect(build().value.movable?.color).toBeUndefined();

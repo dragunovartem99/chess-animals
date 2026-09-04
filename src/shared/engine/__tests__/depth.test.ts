@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { playPair, type TestBot } from "../../test-support/play";
 import { defaultishWeights } from "../../test-support/weights";
 
-// Four openings a few moves in, so the two bots do not simply replay one game. Colours are
+// Four openings a few moves in, so the two bots do not simply replay one game. Colors are
 // swapped inside `playPair`, so what is measured is the search, not the first move.
 const OPENINGS = [
 	"rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",

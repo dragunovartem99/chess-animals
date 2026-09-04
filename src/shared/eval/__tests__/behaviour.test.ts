@@ -46,13 +46,13 @@ describe("kingProximity", () => {
 });
 
 describe("sameColorSquares", () => {
-	it("counts our pieces standing on squares of our own colour", () => {
+	it("counts our pieces standing on squares of our own color", () => {
 		// White's rook is on h1, a light square. Black's king is on g8, also light, so it does
-		// not count for Black, whose colour is dark.
+		// not count for Black, whose color is dark.
 		expect(read({ fen: "6k1/8/8/8/8/8/8/K6R w - - 0 1", key: "sameColorSquares" })).toBe(1);
 	});
 
-	it("does not count a piece sitting on the other colour", () => {
+	it("does not count a piece sitting on the other color", () => {
 		expect(read({ fen: "6k1/8/8/8/8/8/8/K7 w - - 0 1", key: "sameColorSquares" })).toBe(0);
 	});
 });

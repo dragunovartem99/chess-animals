@@ -15,7 +15,7 @@ type AttackMaps = {
 
 // Everything more than one family needs, computed once per position rather than once per family.
 // `us` is always the side to move: the whole evaluation is written from that perspective, so no
-// feature is ever colour-specific and a bot plays the same way with either colour.
+// feature is ever color-specific and a bot plays the same way with either color.
 export type EvalContext = {
 	position: Chess;
 	us: Color;

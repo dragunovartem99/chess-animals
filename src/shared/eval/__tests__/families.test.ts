@@ -28,7 +28,7 @@ describe("material", () => {
 		expect(read({ fen: "4k3/8/8/8/8/8/8/3QK3 w - - 0 1", key: "materialQueen" })).toBe(1);
 	});
 
-	it("flips sign with the side to move, so a bot plays the same way with either colour", () => {
+	it("flips sign with the side to move, so a bot plays the same way with either color", () => {
 		const fen = "4k3/8/8/8/8/8/8/3QK3";
 
 		expect(read({ fen: `${fen} w - - 0 1`, key: "materialQueen" })).toBe(1);

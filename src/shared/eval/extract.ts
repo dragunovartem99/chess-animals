@@ -44,8 +44,8 @@ export type ExtractFrame = { position: Chess; played?: PlayedMove; into?: Featur
 export type Extractor = (frame: ExtractFrame) => FeatureVector;
 
 // Every feature a bot could be scored on, read off one position, always from the **side to
-// move's** perspective — so no evaluation code is ever colour-specific and a bot plays the same
-// way with either colour.
+// move's** perspective — so no evaluation code is ever color-specific and a bot plays the same
+// way with either color.
 //
 // `createContext` walks the board once and hands each family the piece list with its attack sets
 // already computed; the families then do index and bitboard arithmetic only.

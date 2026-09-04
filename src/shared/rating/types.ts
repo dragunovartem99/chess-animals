@@ -1,5 +1,5 @@
 // Aggregated results of every game one ordered pair played: `whiteWins` + `blackWins` + `draws`
-// games with `white` on the white side. Colour matters — the model carries a white-advantage
+// games with `white` on the white side. Color matters — the model carries a white-advantage
 // term — so a pair that met both ways contributes two matchups.
 export type Matchup = {
 	white: string;

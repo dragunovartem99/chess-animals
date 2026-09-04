@@ -40,14 +40,14 @@ function enumerate(
 // Mean points per game from the candidate's side: a win is 1, a draw ½.
 function meanPoints(games: readonly Game[], reports: readonly GameReport[]): number {
 	const points = reports.reduce((sum, report, i) => {
-		const candidateColour = games[i].candidateWhite ? "white" : "black";
-		if (report.result === candidateColour) return sum + 1;
+		const candidateColor = games[i].candidateWhite ? "white" : "black";
+		if (report.result === candidateColor) return sum + 1;
 		return report.result === null ? sum + 0.5 : sum;
 	}, 0);
 	return points / games.length;
 }
 
-// A fixed set of games — every opponent, every opening, both colours — with the seeds pinned up
+// A fixed set of games — every opponent, every opening, both colors — with the seeds pinned up
 // front. The candidate's weights are the only thing that changes between calls, so two probes
 // differ only by the perturbation and not by which games they drew: the common random numbers
 // SPSA needs for a usable signal.

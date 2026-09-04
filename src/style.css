@@ -72,7 +72,7 @@ h3 {
 	letter-spacing: -0.02em;
 }
 
-/* Animal emoji are the roster's portraits, so they must be the colour glyphs everywhere —
+/* Animal emoji are the roster's portraits, so they must be the color glyphs everywhere —
    including inside <option>, which is why the rule is global rather than a component's. */
 .emoji {
 	font-family: "Noto Color Emoji", "Apple Color Emoji", "Segoe UI Emoji", sans-serif;

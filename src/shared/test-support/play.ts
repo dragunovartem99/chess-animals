@@ -9,10 +9,10 @@ import type { WeightVector } from "../eval";
 
 export type TestBot = { weights: WeightVector; search: SearchOptions; temperature?: number };
 
-function points({ result, colour }: { result: GameResult; colour: Color }): number {
+function points({ result, color }: { result: GameResult; color: Color }): number {
 	if (result === null) return 0.5;
 
-	return result === colour ? 1 : 0;
+	return result === color ? 1 : 0;
 }
 
 // A game between two bots, played to a finish or to the ply cap. The real runner lives in the
@@ -55,7 +55,7 @@ export function playGame({
 	}
 }
 
-// The same pairing played twice with the colours swapped, which is how the arena will run every
+// The same pairing played twice with the colors swapped, which is how the arena will run every
 // opening: it cancels out whatever the first move is worth, so a difference in the score is a
 // difference between the bots.
 export function playPair({
@@ -75,6 +75,6 @@ export function playPair({
 	const asBlack = playGame({ white: two, black: one, fen, plyLimit, seed });
 
 	return (
-		points({ result: asWhite, colour: "white" }) + points({ result: asBlack, colour: "black" })
+		points({ result: asWhite, color: "white" }) + points({ result: asBlack, color: "black" })
 	);
 }

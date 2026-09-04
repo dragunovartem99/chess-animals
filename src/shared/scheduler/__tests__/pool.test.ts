@@ -22,7 +22,7 @@ const B: BotDefinition = {
 	weights: { mobility: 5, swarm: -20 },
 };
 
-// A spread of short games: every opening, both colours, a few seeds each.
+// A spread of short games: every opening, both colors, a few seeds each.
 function specs(count: number): GameSpec[] {
 	return Array.from({ length: count }, (_, i) => {
 		const opening = openings[i % openings.length];

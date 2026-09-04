@@ -8,7 +8,7 @@ import { positionFromFen } from "@/shared/chess";
 export type BoardOptions = {
 	fen: Ref<string>;
 	orientation: Ref<"white" | "black">;
-	// Which colours the viewer may move. Empty means a board that only watches.
+	// Which colors the viewer may move. Empty means a board that only watches.
 	playable: Ref<("white" | "black")[]>;
 	lastMove: Ref<[Key, Key] | undefined>;
 	onMove: (move: { from: Key; to: Key }) => void;

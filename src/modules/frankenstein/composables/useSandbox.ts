@@ -8,7 +8,7 @@ import { blankPreset, presetFromBot } from "../utils/presets";
 import { createAutoplayLoop } from "./autoplay";
 import { buildEngine, reseed } from "./engine";
 
-// One weight vector, applied to both colours — the per-animal editor was cut in favour of this
+// One weight vector, applied to both colors — the per-animal editor was cut in favour of this
 // single live sandbox. A local (non-worker) UCI engine
 // keeps every slider tick and depth change one `setOption` away, with no restart: `applyOption`
 // mutates the live config, which is the whole point of routing weight and depth changes through
@@ -98,7 +98,7 @@ export function useSandbox() {
 	}
 
 	// A human move gets one reply back, not a takeover of the other side — autoplay is the only
-	// mode where the bot plays both colours against itself.
+	// mode where the bot plays both colors against itself.
 	async function playHuman(move: NormalMove): Promise<void> {
 		game.play(move);
 		await stepOnce();

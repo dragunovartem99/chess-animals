@@ -11,7 +11,7 @@ const matchups: Matchup[] = [
 ];
 
 describe("crossTable", () => {
-	it("folds both colours into one score per opponent", () => {
+	it("folds both colors into one score per opponent", () => {
 		const table = crossTable({ ids: ["a", "b", "c"], matchups });
 		const rowA = table.rows.find((row) => row.id === "a")!;
 

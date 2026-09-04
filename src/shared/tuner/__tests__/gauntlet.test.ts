@@ -22,7 +22,7 @@ const openings = [
 ];
 
 describe("createGauntlet", () => {
-	it("plays every opponent × opening × colour", () => {
+	it("plays every opponent × opening × color", () => {
 		const { gameCount } = createGauntlet({
 			candidate,
 			spec: defaultTuneSpec(candidate.weights),

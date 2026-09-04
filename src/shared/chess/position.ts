@@ -30,7 +30,7 @@ export function repetitionKey(position: Chess): string {
 
 // The moves one piece makes, promotions expanded into one move per role. Whether the piece is a
 // pawn is settled once here rather than per destination, and `rank` is the only rank a pawn of
-// this colour can promote on — so the inner loop is a comparison, not two board lookups.
+// this color can promote on — so the inner loop is a comparison, not two board lookups.
 function expand({
 	from,
 	dests,

@@ -30,7 +30,7 @@ describe("centralization", () => {
 		expect(cornered).toBe(0);
 	});
 
-	it("reads the same for both colours", () => {
+	it("reads the same for both colors", () => {
 		const white = read({ fen: "4k3/8/8/8/3N4/8/8/4K3 w - - 0 1", key: "centralizationKnight" });
 		const black = read({ fen: "4k3/8/8/3n4/8/8/8/4K3 b - - 0 1", key: "centralizationKnight" });
 
@@ -43,7 +43,7 @@ describe("advancement", () => {
 		expect(read({ fen: INITIAL_FEN, key: "advancementPawn" })).toBe(0);
 	});
 
-	it("counts ranks from a piece's own back rank, so both colours read alike", () => {
+	it("counts ranks from a piece's own back rank, so both colors read alike", () => {
 		const white = read({ fen: "4k3/8/8/8/8/8/4P3/4K3 w - - 0 1", key: "advancementPawn" });
 		const black = read({ fen: "4k3/4p3/8/8/8/8/8/4K3 b - - 0 1", key: "advancementPawn" });
 

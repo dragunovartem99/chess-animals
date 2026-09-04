@@ -10,7 +10,7 @@ export type CrossRow = {
 
 export type CrossTable = { ids: string[]; rows: CrossRow[] };
 
-// The head-to-head score grid. Colours are folded together: a cell is everything the row bot
+// The head-to-head score grid. Colors are folded together: a cell is everything the row bot
 // scored against the column bot, from either side. The row order is the caller's; sorting it by
 // `points` should reproduce the rating order, which is the tournament's headline sanity check.
 export function crossTable({

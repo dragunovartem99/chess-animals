@@ -30,7 +30,7 @@ describe("probe", () => {
 });
 
 describe("openingSchedule", () => {
-	it("plays every opening once each colour", () => {
+	it("plays every opening once each color", () => {
 		const schedule = openingSchedule();
 		expect(schedule).toHaveLength(openings.length * 2);
 

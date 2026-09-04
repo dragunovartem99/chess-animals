@@ -45,7 +45,7 @@ describe("gameKey", () => {
 		expect(gameKey(spec({ white: bot("a", 21) }))).not.toBe(gameKey(spec()));
 	});
 
-	it("changes when the colours are swapped", () => {
+	it("changes when the colors are swapped", () => {
 		expect(gameKey(spec({ white: bot("b", 20), black: bot("a", 20) }))).not.toBe(
 			gameKey(spec())
 		);

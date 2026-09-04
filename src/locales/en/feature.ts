@@ -37,7 +37,7 @@ export default {
 	huddle: "Huddle around our king",
 	kingProximity: "Distance between kings",
 	reverseStarting: "March to the reversed setup",
-	sameColorSquares: "Pieces on our own colour",
+	sameColorSquares: "Pieces on our own color",
 	symmetryMirrorX: "Symmetry: mirrored files",
 	symmetryMirrorY: "Symmetry: mirrored ranks",
 	symmetryRot180: "Symmetry: half-turn",

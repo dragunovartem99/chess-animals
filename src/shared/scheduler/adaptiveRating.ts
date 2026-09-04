@@ -5,7 +5,7 @@ import { ratingsSettled, standingOrder } from "./settled";
 
 export type PairCounts = { whiteWins: number; blackWins: number; draws: number };
 // One mini-match between two bots: the counts with `a` on white and, separately, with `b` on
-// white. Colour is kept split so the fit can still estimate the white advantage.
+// white. Color is kept split so the fit can still estimate the white advantage.
 export type PairOutcome = { aWhite: PairCounts; bWhite: PairCounts };
 
 type Round = { round: number; standings: Standing[]; games: number };

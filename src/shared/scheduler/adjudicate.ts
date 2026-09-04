@@ -7,7 +7,7 @@ export const DEFAULT_ADJUDICATION: Adjudication = { resignThreshold: 15, patienc
 
 const VALUE: Record<string, number> = { pawn: 1, knight: 3, bishop: 3, rook: 5, queen: 9, king: 0 };
 
-// White material minus black material, in pawns. Colour-relative sign, unlike the eval, so the
+// White material minus black material, in pawns. Color-relative sign, unlike the eval, so the
 // adjudicator never needs a weight vector to decide a game is over.
 export function materialEdge(position: Chess): number {
 	let edge = 0;

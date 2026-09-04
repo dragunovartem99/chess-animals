@@ -6,17 +6,17 @@ import type { Animal } from "@/modules/bots/roster";
 defineProps<{ roster: Animal[]; human: string }>();
 const players = defineModel<Record<Color, string>>({ required: true });
 
-const COLOURS: Color[] = ["white", "black"];
+const COLORS: Color[] = ["white", "black"];
 </script>
 
 <template>
 	<div class="players">
 		<label
-			v-for="colour in COLOURS"
-			:key="colour"
+			v-for="color in COLORS"
+			:key="color"
 		>
-			<span>{{ $t(`game.turn.${colour}`) }}</span>
-			<select v-model="players[colour]">
+			<span>{{ $t(`game.turn.${color}`) }}</span>
+			<select v-model="players[color]">
 				<option :value="human">{{ $t("game.human") }}</option>
 				<option
 					v-for="animal in roster"

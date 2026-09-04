@@ -24,7 +24,7 @@ describe("bishopPair", () => {
 });
 
 describe("rookOpenFile", () => {
-	it("counts a file with no pawns of either colour", () => {
+	it("counts a file with no pawns of either color", () => {
 		expect(read({ fen: "4k3/8/8/8/8/8/8/R3K3 w - - 0 1", key: "rookOpenFile" })).toBe(1);
 	});
 
@@ -38,7 +38,7 @@ describe("rookOpenFile", () => {
 });
 
 describe("rookSeventh", () => {
-	it("reads the same rank for both colours, counted from their own side", () => {
+	it("reads the same rank for both colors, counted from their own side", () => {
 		const white = read({ fen: "4k3/R7/8/8/8/8/8/4K3 w - - 0 1", key: "rookSeventh" });
 		const black = read({ fen: "4k3/8/8/8/8/8/r7/4K3 b - - 0 1", key: "rookSeventh" });
 

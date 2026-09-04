@@ -2,7 +2,7 @@ import type { Matchup } from "./types";
 
 export type ChampionShare = { id: string; share: number };
 
-// P(row beats column) across both colours. A pair that never met is left at 0.5 — neutral, so an
+// P(row beats column) across both colors. A pair that never met is left at 0.5 — neutral, so an
 // unplayed edge neither helps nor hurts. Draws lower both entries: they are neither a win.
 function beatMatrix(matchups: readonly Matchup[], ids: readonly string[]): number[][] {
 	const index = new Map(ids.map((id, position) => [id, position]));
