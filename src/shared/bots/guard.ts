@@ -1,4 +1,5 @@
 import { FEATURES_BY_KEY } from "../eval";
+import { BASES } from "./bases";
 import type { BotDefinition } from "./types";
 
 const ID_PATTERN = /^[a-z][a-z0-9-]*$/u;
@@ -41,6 +42,11 @@ export function assertBotDefinition(value: unknown): asserts value is BotDefinit
 
 	if (typeof candidate.temperature !== "number" || candidate.temperature < 0) {
 		fail({ id, problem: "temperature must be zero or more" });
+	}
+
+	const { base } = candidate;
+	if (base !== undefined && (typeof base !== "string" || !(base in BASES))) {
+		fail({ id, problem: `unknown base "${String(base)}"` });
 	}
 
 	checkWeights({ id, record: candidate.weights });

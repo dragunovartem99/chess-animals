@@ -6,9 +6,8 @@ import type { Animal } from "./types";
 //
 // `swarm` is the *mean* distance from our pieces to the enemy king, so the weight is negative:
 // less distance, more score. It reads in king-moves per piece, and the weight prices one of them
-// at nine pawns — walking the whole army a square closer is worth a queen to the Wolf. The piece
-// values are the classical ones, and they are what stop it throwing everything away for a square
-// of proximity.
+// at nine pawns — walking the whole army a square closer is worth a queen to the Wolf. The
+// `material` base is what stops it throwing everything away for one square of proximity.
 export const WOLF: Animal = {
 	emoji: "🐺",
 	tint: "#0ea5e9",
@@ -16,14 +15,7 @@ export const WOLF: Animal = {
 		id: "wolf",
 		search: { depth: 3 },
 		temperature: 0,
-		weights: {
-			swarm: -900,
-			givesMate: 1,
-			materialPawn: 100,
-			materialKnight: 300,
-			materialBishop: 300,
-			materialRook: 500,
-			materialQueen: 900,
-		},
+		base: "material",
+		weights: { swarm: -900 },
 	},
 };

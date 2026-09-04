@@ -1,5 +1,6 @@
 import type { SearchOptions } from "../engine";
 import type { WeightVector } from "../eval";
+import type { BaseName } from "./bases";
 
 // What a bot is on disk and on the wire: plain JSON-shaped data, so a tuned bot can be exported,
 // pasted into a file, sent to a worker, or hashed into a cache key without any of them needing to
@@ -13,7 +14,12 @@ export type BotDefinition = {
 	// How many points of evaluation the bot will throw away when picking a move. Zero is a strict
 	// argmax; the paper's weighted-sampling players live above it.
 	temperature: number;
-	// Everything the bot is, keyed by feature name. Anything not named is zero.
+	// The starting point the weights are written over — piece values and mate-awareness, usually.
+	// Omitted means `zero`: a bot that names no base is exactly what its weights say and nothing
+	// else, which is what the paper's `random_move` needs.
+	base?: BaseName;
+	// The bot's own idea, keyed by feature name. Anything the base does not set and this does not
+	// name is zero.
 	weights: Record<string, number>;
 };
 

@@ -1,22 +1,19 @@
 import { describe, expect, it } from "vitest";
 
+import { BASES } from "@/shared/bots";
 import { FEATURES } from "@/shared/eval";
 
 import { blankPreset, DEFAULT_DEPTH, presetFromBot } from "../utils/presets";
 
 describe("blankPreset", () => {
-	it("starts material-only plus mate-awareness, everything else at zero", () => {
+	it("starts on the material base, everything else at zero", () => {
 		const preset = blankPreset();
 
 		expect(preset.depth).toBe(DEFAULT_DEPTH);
 		expect(preset.quiescence).toBe(true);
-		expect(preset.weights.givesMate).toBe(1);
+		const base: Record<string, number> = BASES.material;
 		for (const feature of FEATURES) {
-			if (feature.key === "givesMate") continue;
-
-			expect(preset.weights[feature.key]).toBe(
-				feature.family === "material" ? feature.defaultWeight : 0
-			);
+			expect(preset.weights[feature.key]).toBe(base[feature.key] ?? 0);
 		}
 	});
 });

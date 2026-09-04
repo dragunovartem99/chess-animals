@@ -5,9 +5,9 @@ import type { Animal } from "./types";
 // an idea, because the ones it is up against read a whole position and it reads one move.
 //
 // The order is the weights: a check outbids the biggest capture (`captureValue` is priced in
-// pawns, so a queen reads nine), and a push breaks the ties left over. There is deliberately no
-// material term — it never once notices what it is losing, which is what keeps it above the
-// Donkey and below everything else.
+// pawns, so a queen reads nine), and a push breaks the ties left over. It is written on `mate`
+// rather than `material` deliberately — it never once notices what it is losing, which is what
+// keeps it above the Donkey and below everything else.
 export const SHARK: Animal = {
 	emoji: "🦈",
 	tint: "#64748b",
@@ -16,8 +16,9 @@ export const SHARK: Animal = {
 		// Depth 1: the strategy is a priority over the moves in front of it, not a plan.
 		search: { depth: 1 },
 		temperature: 0,
+		// No material base: it never once notices what it is losing.
+		base: "mate",
 		weights: {
-			givesMate: 1,
 			givesCheck: 1000,
 			captureValue: 100,
 			pushDepth: 10,

@@ -48,6 +48,12 @@ describe("assertBotDefinition", () => {
 		expect(isBotDefinition({ ...VALID, weights: undefined })).toBe(false);
 	});
 
+	it("rejects a base that does not exist", () => {
+		expect(isBotDefinition({ ...VALID, base: "matrial" })).toBe(false);
+		expect(isBotDefinition({ ...VALID, base: 7 })).toBe(false);
+		expect(isBotDefinition({ ...VALID, base: "material" })).toBe(true);
+	});
+
 	it("rejects anything that is not an object at all", () => {
 		for (const value of [null, undefined, 42, "wolf", []])
 			expect(isBotDefinition(value)).toBe(false);

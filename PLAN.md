@@ -96,6 +96,7 @@ arena: it burns cores for minutes and rewrites a bot's weights file.
 
 ## Landed outside the ladder
 
+- ✅ `bots: give a definition a base to be written on` — `zero`/`mate`/`material` as frozen literal weight records, so an animal's file is its idea and not seven repeated piece values; the Turtle is one line. Pinned by `bases.test.ts`, since a base is what bots on disk were written against
 - ✅ `bots: price every animal in centipawns` — the roster valued a pawn at 20 so a behavioural weight could outweigh it, which left every animal's numbers comparable to nothing. Each vector is scaled so material reads at classical values instead; multiplying a whole vector by a constant changes no move an argmax bot plays, and all twenty roster pairings replay move for move
 - ✅ `bots: one weight vector, not three phases` — no animal ever used the phase axis: every definition wrote `middlegame` and inherited the rest, and the sandbox applied one vector to all three. `PhaseWeights`, `interpolateWeights`, the evaluator's blend cache, `gamePhase`, the `Phase` type, the `all.`/`<phase>.` UCI scoping and the tuner's phase axis all go with it; a `setoption` now names a feature key and nothing else
 - ✅ `perf: extract only the features a bot weighs` — `liveSlots` + `createExtractor` skip every family a bot leaves at zero, and `dot` walks the same sparse list. An animal's node goes 18 µs → ~6 µs and the whole search 3–4× faster; the random mover extracts nothing at all
