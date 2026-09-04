@@ -68,14 +68,20 @@ component in with it.
 ## The evaluation
 
 `shared/eval/extract.ts` reads the features off one position in a single walk of the board, in
-`createContext`, which hands each family the piece list with its attack sets already computed;
+`createContext`, which hands each family the piece list with its attack sets worked out once;
 the families then do index and bitboard arithmetic only. Reading all sixty-odd measures
 **~18 µs**, with a 60 µs regression guard asserted in the suite.
+
+That walk is **lazy**, because it is most of the cost and most bots never need it: `reach`,
+`pawnAttacks` and `attacksBy` are prototype getters that call `attacks` on all thirty-two men the
+first time one of them is read, and never if none is. A material-only evaluation went 5.3 µs a
+node to 0.4. (Prototype getters, not accessors in an object literal — those are own properties
+built per instance and cost more than the walk they were meant to avoid.)
 
 A search does not read all sixty-odd. A weight of zero cannot change a score, so `liveSlots`
 reads the bot's weight vector once per `go` and `createExtractor` runs only
 the families that union touches — the dot product then walks the same list instead of multiplying
-fifty-odd zeros. An animal names a handful of features, which is **~6 µs** a node and a 3–4×
+fifty-odd zeros. An animal names a handful of features, which is **~3 µs** a node and a 3–4×
 faster search; `cccp` reads only the move and never builds the context at all; the random mover
 extracts nothing. Each family declares the slots it writes next to its extractor, and the suite
 holds every family to writing exactly those.

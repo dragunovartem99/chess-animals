@@ -1,8 +1,9 @@
-import { COLORS, type Color, type Role, ROLES } from "chessops/types";
+import { type Color, ROLES } from "chessops/types";
 
 import { featureId } from "../features";
 import type { FeatureVector } from "../vector";
 import type { EvalContext } from "./context";
+import { HOME_SQUARES } from "./homeSquares";
 import { chebyshev } from "./masks";
 
 const SWARM = featureId("swarm");
@@ -12,92 +13,85 @@ const REVERSE_STARTING = featureId("reverseStarting");
 
 export const SLOTS = [SWARM, HUDDLE, KING_PROXIMITY, REVERSE_STARTING];
 
-const BACK_RANK_FILES: Partial<Record<Role, number[]>> = {
-	rook: [0, 7],
-	knight: [1, 6],
-	bishop: [2, 5],
-	queen: [3],
-	king: [4],
-};
-
-// Where a side's pieces stand in the *opponent's* opening position — the squares
-// `reverseStarting` walks towards. Built once at module load rather than per piece per node.
-const HOME_SQUARES = Object.fromEntries(
-	COLORS.map((color) => [
-		color,
-		Object.fromEntries(
-			ROLES.map((role) => {
-				const backRank = color === "white" ? 7 : 6;
-				if (role === "pawn")
-					return [role, Array.from({ length: 8 }, (_, file) => backRank * 8 + file)];
-
-				const rank = color === "white" ? 7 : 0;
-				return [role, (BACK_RANK_FILES[role] ?? []).map((file) => rank * 8 + file)];
-			})
-		) as Record<Role, number[]>,
-	])
-) as Record<Color, Record<Role, number[]>>;
-
 // The *mean* distance, not the total. Summing made the term a measure of material with the sign
 // inverted: every extra piece adds its own distance to your own side of the subtraction, so a
 // side that is ahead reads as the worse swarmer. In a Scholar's mate — White's queen sitting on
 // f7 beside the black king — the totals gave Black the better swarm score, purely because Black
 // had one fewer piece left to count. Dividing by the piece count cancels that out and leaves the
 // thing the feature is named for.
-function meanDistance({
+// Both kings in one walk: `swarm` and `huddle` are the same measurement against different
+// targets, and an army is walked once per side rather than once per feature per side.
+function meanDistances({
 	context,
 	color,
-	target,
+	kings,
 }: {
 	context: EvalContext;
 	color: Color;
-	target: number;
-}): number {
-	const targetFile = target & 7;
-	const targetRank = target >> 3;
-	let total = 0;
+	kings: { ours: number; theirs: number };
+}): { ours: number; theirs: number } {
+	const ourFile = kings.ours & 7;
+	const ourRank = kings.ours >> 3;
+	const theirFile = kings.theirs & 7;
+	const theirRank = kings.theirs >> 3;
+
+	let toOurs = 0;
+	let toTheirs = 0;
 	let count = 0;
 
-	// Chebyshev distance, inlined: this runs for every piece of both sides, four times per
-	// position, and the call's argument object was costing more than the arithmetic.
+	// Chebyshev distance, inlined: this runs for every piece of both sides, and the call's
+	// argument object was costing more than the arithmetic.
 	for (const square of context.position.board[color]) {
-		const file = Math.abs((square & 7) - targetFile);
-		const rank = Math.abs((square >> 3) - targetRank);
+		const file = square & 7;
+		const rank = square >> 3;
 
-		total += file > rank ? file : rank;
+		const ourFileGap = Math.abs(file - ourFile);
+		const ourRankGap = Math.abs(rank - ourRank);
+		toOurs += ourFileGap > ourRankGap ? ourFileGap : ourRankGap;
+
+		const theirFileGap = Math.abs(file - theirFile);
+		const theirRankGap = Math.abs(rank - theirRank);
+		toTheirs += theirFileGap > theirRankGap ? theirFileGap : theirRankGap;
+
 		count += 1;
 	}
 
-	return count === 0 ? 0 : total / count;
+	if (count === 0) return { ours: 0, theirs: 0 };
+
+	return { ours: toOurs / count, theirs: toTheirs / count };
 }
 
 // How far a side's pieces are, on average, from where they would stand if the board were upside
 // down. A mean for the same reason as `meanDistance`.
 function reverseDistance({ context, color }: { context: EvalContext; color: Color }): number {
 	const homes = HOME_SQUARES[color];
+	const { board } = context.position;
 	let total = 0;
 	let count = 0;
 
-	for (const { square, piece } of context.reach) {
-		if (piece.color !== color) continue;
+	// Walked a role at a time off the board's own bitboards, rather than through `context.reach`:
+	// this family wants a piece's square and role and never what it attacks, and asking for
+	// `reach` would make the Wolf pay for the attack walk it has no feature to spend it on.
+	for (const role of ROLES) {
+		const targets = homes[role];
+		if (targets.length === 0) continue;
 
-		const targets = homes[piece.role];
-		const file = square & 7;
-		const rank = square >> 3;
-		let nearest = Infinity;
+		for (const square of board.pieces(color, role)) {
+			const file = square & 7;
+			const rank = square >> 3;
+			let nearest = Infinity;
 
-		for (const target of targets) {
-			const fileGap = Math.abs(file - (target & 7));
-			const rankGap = Math.abs(rank - (target >> 3));
-			const distance = fileGap > rankGap ? fileGap : rankGap;
+			for (const target of targets) {
+				const fileGap = Math.abs(file - (target & 7));
+				const rankGap = Math.abs(rank - (target >> 3));
+				const distance = fileGap > rankGap ? fileGap : rankGap;
 
-			if (distance < nearest) nearest = distance;
+				if (distance < nearest) nearest = distance;
+			}
+
+			total += nearest;
+			count += 1;
 		}
-
-		if (nearest === Infinity) continue;
-
-		total += nearest;
-		count += 1;
 	}
 
 	return count === 0 ? 0 : total / count;
@@ -118,13 +112,13 @@ export function extractProximity({
 	const theirKing = board.kingOf(context.them);
 	if (ourKing === undefined || theirKing === undefined) return;
 
-	features[SWARM] =
-		meanDistance({ context, color: context.us, target: theirKing }) -
-		meanDistance({ context, color: context.them, target: ourKing });
+	const kings = { ours: ourKing, theirs: theirKing };
+	const ours = meanDistances({ context, color: context.us, kings });
+	// From their side of the board the two kings swap roles, so their means come back reversed.
+	const theirs = meanDistances({ context, color: context.them, kings });
 
-	features[HUDDLE] =
-		meanDistance({ context, color: context.us, target: ourKing }) -
-		meanDistance({ context, color: context.them, target: theirKing });
+	features[SWARM] = ours.theirs - theirs.ours;
+	features[HUDDLE] = ours.ours - theirs.theirs;
 
 	// The two kings are the same distance apart from either side's point of view, so this one is
 	// a raw value rather than a difference — there is nothing to subtract.
