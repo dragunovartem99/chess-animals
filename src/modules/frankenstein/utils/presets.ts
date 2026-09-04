@@ -9,14 +9,10 @@ export const MAX_DEPTH = 3;
 
 export type Preset = { weights: Record<string, number>; depth: number; quiescence: boolean };
 
-// The weight every roster animal that names it at all gives `givesMate` — large enough that a
-// mating move always outscores anything else on offer, the standard way this codebase spells
-// "always take the mate" (see `shark`/`snake`/`turtle`/`wolf`).
-const MATE_WEIGHT = 100000;
-
 function startingWeight(feature: Feature): number {
-	if (feature.family === "material") return feature.defaultWeight;
-	if (feature.key === "givesMate") return MATE_WEIGHT;
+	if (feature.family === "material" || feature.key === "givesMate") {
+		return feature.defaultWeight;
+	}
 
 	return 0;
 }

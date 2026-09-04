@@ -10,7 +10,7 @@ describe("blankPreset", () => {
 
 		expect(preset.depth).toBe(DEFAULT_DEPTH);
 		expect(preset.quiescence).toBe(true);
-		expect(preset.weights.givesMate).toBe(100000);
+		expect(preset.weights.givesMate).toBe(1);
 		for (const feature of FEATURES) {
 			if (feature.key === "givesMate") continue;
 
@@ -27,7 +27,7 @@ describe("presetFromBot", () => {
 
 		expect(preset).toMatchObject({ depth: 3, quiescence: false });
 		expect(preset?.weights.swarm).toBe(-180);
-		expect(preset?.weights.givesMate).toBe(100000);
+		expect(preset?.weights.givesMate).toBe(1);
 	});
 
 	it("fills in zero for every feature the animal does not name", () => {

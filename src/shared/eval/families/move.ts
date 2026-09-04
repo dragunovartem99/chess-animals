@@ -8,9 +8,7 @@ import type { FeatureVector } from "../vector";
 // only one that needs to look backwards.
 export type PlayedMove = { parent: Chess; move: Move };
 
-const GIVES_MATE = featureId("givesMate");
 const GIVES_CHECK = featureId("givesCheck");
-const GIVES_STALEMATE = featureId("givesStalemate");
 const CAPTURE_VALUE = featureId("captureValue");
 const IS_PROMOTION = featureId("isPromotion");
 const IS_CASTLE = featureId("isCastle");
@@ -60,9 +58,10 @@ export function extractMoveFeatures({
 }): void {
 	if (!played) return;
 
-	if (position.isCheckmate()) features[GIVES_MATE] = -1;
-	else if (position.isStalemate()) features[GIVES_STALEMATE] = -1;
-	else if (position.isCheck()) features[GIVES_CHECK] = -1;
+	// Only `isCheck`, which is one attack test. Mate and stalemate are scored by `terminalTerm`
+	// before extraction is ever reached, so asking about them here would be both redundant and,
+	// in `isStalemate`'s case, a walk for a legal move on every quiet node of every search.
+	if (position.isCheck()) features[GIVES_CHECK] = -1;
 
 	const captured = capturedRole(played);
 	if (captured) features[CAPTURE_VALUE] = -CAPTURE_VALUES[captured];

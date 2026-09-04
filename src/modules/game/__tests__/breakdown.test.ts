@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest";
 import { afterMove, legalMoves, positionFromFen } from "@/shared/chess";
 import { evaluatePosition } from "@/shared/engine";
 import { toUci } from "@/shared/engine/uci/moves";
+import { MATE_SCORE } from "@/shared/eval";
 import { onlyWeights } from "@/shared/test-support/weights";
 
 import { explainPosition } from "../utils/breakdown";
@@ -62,7 +63,7 @@ describe("explainPosition", () => {
 });
 
 describe("the move that produced the position", () => {
-	const weights = onlyWeights({ givesMate: 100000, materialRook: 500 });
+	const weights = onlyWeights({ givesMate: 1, materialRook: 500 });
 
 	it("shows the mate, rather than scoring a mated position as merely quiet", () => {
 		// Ra1-a8 is checkmate. Without the move, every move-level feature reads zero and the panel
@@ -76,9 +77,14 @@ describe("the move that produced the position", () => {
 		const withMove = explainPosition({ position, weights, played: { parent, move } });
 		const without = explainPosition({ position, weights });
 
-		// White delivered the mate, so White-relative it is a large positive.
-		expect(withMove.rows.find((row) => row.key === "givesMate")?.points).toBe(100000);
-		expect(without.rows.find((row) => row.key === "givesMate")?.points).toBeCloseTo(0);
+		// White delivered the mate, so White-relative it is a large positive — and it is the
+		// only row, because a mate replaces the evaluation instead of joining it.
+		expect(withMove.rows.map((row) => row.key)).toEqual(["givesMate"]);
+		expect(withMove.rows[0].points).toBe(MATE_SCORE);
+
+		// The mate is a property of the position, not of the move that produced it, so the panel
+		// still reports it when it was not told which move was played.
+		expect(without.rows.map((row) => row.key)).toEqual(["givesMate"]);
 	});
 
 	it("still sums to what the search would score", () => {

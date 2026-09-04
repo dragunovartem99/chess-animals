@@ -91,6 +91,14 @@ the last ply along captures, and `nodeLimit` caps the work one move may cost (re
 the search going deeper rather than corrupting the result). Depth 1 short-circuits to scoring
 every legal move.
 
+Mate is the one thing that is **not** a term in the dot product. `terminalScore` replaces the
+evaluation of a finished game with `MATE_SCORE - ply`, scaled by `givesMate` — a preference in
+[-1, 1] where +1 chases mate, -1 flees it and 0 cannot see one, in which case the position is
+evaluated like any other. `givesStalemate` works the same way on the same scale. Adding mate to
+the evaluation instead, as a weight of 100000, was wrong twice over: every mate scored the same
+whatever its distance, and the leaf of a slow mate then collected plies of positional bonus on
+top of it, so every animal in the roster walked past a mate in one.
+
 `policy.ts` turns those scores into a move: `temperature: 0` is a strict argmax with a seeded
 tie-break, above it a softmax sample. All randomness comes from `createRng` — xorshift128, seeded
 per game — so a game replays exactly from its seed.

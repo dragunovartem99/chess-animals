@@ -1,7 +1,7 @@
 import type { Chess } from "chessops/chess";
 import type { NormalMove } from "chessops/types";
 
-import { afterMove, hasLegalMove, legalMoves } from "../chess";
+import { afterMove, legalMoves } from "../chess";
 import type { PhaseWeights, PlayedMove } from "../eval";
 import { createEvaluator } from "./evaluate";
 import { orderMoves } from "./ordering";
@@ -21,34 +21,39 @@ export type ScoredMove = { move: NormalMove; score: number };
 
 const INFINITY = Number.POSITIVE_INFINITY;
 
-type Frame = { position: Chess; played?: PlayedMove; depth: number; alpha: number; beta: number };
+type Frame = {
+	position: Chess;
+	played?: PlayedMove;
+	depth: number;
+	ply: number;
+	alpha: number;
+	beta: number;
+};
 
 function createSearch({ weights, options }: { weights: PhaseWeights; options: SearchOptions }) {
 	const limit = options.nodeLimit ?? INFINITY;
 	let nodes = 0;
 
 	const scorePosition = createEvaluator({ weights });
-	const evaluate = ({ position, played }: { position: Chess; played?: PlayedMove }) => {
+	const evaluate = (frame: { position: Chess; played?: PlayedMove; ply: number }) => {
 		nodes += 1;
-		return scorePosition({ position, played });
+		return scorePosition(frame);
 	};
 
 	const quiesce = createQuiescence({ evaluate, exhausted: () => nodes >= limit });
 
-	function negamax({ position, played, depth, alpha, beta }: Frame): number {
-		// At a leaf the move list is never walked, so it is not built. Mate and stalemate are still
-		// scored by the evaluation rather than a hardcoded win — `givesMate` and `givesStalemate`
-		// are weights a bot may set however it likes — which for a plain leaf is what `evaluate`
-		// already returns; quiescence needs the check because a mated side has no stand-pat.
+	function negamax({ position, played, depth, ply, alpha, beta }: Frame): number {
+		// At a leaf the move list is never walked, so it is not built — a mated leaf needs no
+		// special case, because `evaluate` recognises the mate itself and quiescence finds no
+		// captures to try from one.
 		if (depth <= 0 || nodes >= limit) {
-			if (!options.quiescence || !hasLegalMove(position)) {
-				return evaluate({ position, played });
-			}
-			return quiesce({ position, played, alpha, beta });
+			return options.quiescence
+				? quiesce({ position, played, ply, alpha, beta })
+				: evaluate({ position, played, ply });
 		}
 
 		const moves = legalMoves(position);
-		if (moves.length === 0) return evaluate({ position, played });
+		if (moves.length === 0) return evaluate({ position, played, ply });
 
 		let best = -INFINITY;
 
@@ -58,6 +63,7 @@ function createSearch({ weights, options }: { weights: PhaseWeights; options: Se
 				position: child,
 				played: { parent: position, move },
 				depth: depth - 1,
+				ply: ply + 1,
 				alpha: -beta,
 				beta: -Math.max(alpha, best),
 			});
@@ -106,6 +112,7 @@ export function searchRoot({
 			position: afterMove({ position, move }),
 			played: { parent: position, move },
 			depth: options.depth - 1,
+			ply: 1,
 			alpha: -INFINITY,
 			beta: prune ? -best : INFINITY,
 		});

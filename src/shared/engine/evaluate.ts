@@ -8,10 +8,17 @@ import {
 	interpolateWeights,
 	type PhaseWeights,
 	type PlayedMove,
+	terminalScore,
 	type WeightVector,
 } from "../eval";
 
-export type PositionEvaluator = (frame: { position: Chess; played?: PlayedMove }) => number;
+// `ply` is the distance from the root, and only a game-ending position uses it: it is what makes
+// a mate in one beat a mate in three.
+export type PositionEvaluator = (frame: {
+	position: Chess;
+	played?: PlayedMove;
+	ply?: number;
+}) => number;
 
 // A scorer bound to one bot's weights, holding the scratch it reuses between calls. The search
 // makes one of these per `go` and calls it once per node, so the two allocations a naive
@@ -25,7 +32,7 @@ export function createEvaluator({ weights }: { weights: PhaseWeights }): Positio
 	const blendByPhase = new Map<number, WeightVector>();
 	const scratch = createFeatureVector();
 
-	return function evaluate({ position, played }): number {
+	return function evaluate({ position, played, ply = 0 }): number {
 		const phase = gamePhase(position);
 
 		let blended = blendByPhase.get(phase);
@@ -33,6 +40,10 @@ export function createEvaluator({ weights }: { weights: PhaseWeights }): Positio
 			blended = interpolateWeights({ weights, phase });
 			blendByPhase.set(phase, blended);
 		}
+
+		// A mate replaces the evaluation rather than joining it — see `terminalScore`.
+		const terminal = terminalScore({ position, weights: blended, ply });
+		if (terminal !== undefined) return terminal;
 
 		return dot(extractFeatures({ position, played, into: scratch }), blended);
 	};
@@ -50,5 +61,5 @@ export function evaluatePosition({
 	played?: PlayedMove;
 	weights: PhaseWeights;
 }): number {
-	return createEvaluator({ weights })({ position, played });
+	return createEvaluator({ weights })({ position, played, ply: 0 });
 }

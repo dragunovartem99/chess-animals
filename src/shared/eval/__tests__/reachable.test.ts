@@ -19,9 +19,12 @@ const CORPUS = [
 	"r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R w KQkq - 0 1",
 	"4k3/8/8/8/8/8/8/2B1KB2 w - - 0 1",
 	"4k3/8/8/8/P7/P7/8/4K3 w - - 0 1",
-	// Qf7 is stalemate, which is the only way `givesStalemate` ever fires.
-	"7k/8/6K1/8/8/8/8/5Q2 w - - 0 1",
 ];
+
+// The two game-enders are preferences, not extracted features: nothing ever writes them into a
+// vector, because `terminalTerm` scores a finished game instead of the extractor describing one.
+// `terminal.test.ts` is what holds them to firing.
+const NOT_EXTRACTED = new Set(["givesMate", "givesStalemate"]);
 
 function everyVectorInCorpus(): number[][] {
 	const vectors: number[][] = [];
@@ -45,8 +48,10 @@ describe("the feature registry", () => {
 	// them — a bot silently loses a whole part of its personality with nothing to show for it.
 	it("has no feature that never fires anywhere in the corpus", () => {
 		const vectors = everyVectorInCorpus();
-		const dead = FEATURES.filter((feature) =>
-			vectors.every((vector) => vector[feature.id] === 0)
+		const dead = FEATURES.filter(
+			(feature) =>
+				!NOT_EXTRACTED.has(feature.key) &&
+				vectors.every((vector) => vector[feature.id] === 0)
 		);
 
 		expect(dead.map((feature) => feature.key)).toEqual([]);

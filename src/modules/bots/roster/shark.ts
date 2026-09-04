@@ -18,7 +18,7 @@ export const SHARK: Animal = {
 		temperature: 0,
 		weights: {
 			middlegame: {
-				givesMate: 100000,
+				givesMate: 1,
 				givesCheck: 1000,
 				captureValue: 100,
 				pushDepth: 10,

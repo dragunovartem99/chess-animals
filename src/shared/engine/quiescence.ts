@@ -4,9 +4,15 @@ import { afterMove, legalCaptures } from "../chess";
 import type { PlayedMove } from "../eval";
 import { orderMoves } from "./ordering";
 
-export type QuiescenceFrame = { position: Chess; played?: PlayedMove; alpha: number; beta: number };
+export type QuiescenceFrame = {
+	position: Chess;
+	played?: PlayedMove;
+	ply: number;
+	alpha: number;
+	beta: number;
+};
 
-type Evaluate = (frame: { position: Chess; played?: PlayedMove }) => number;
+type Evaluate = (frame: { position: Chess; played?: PlayedMove; ply: number }) => number;
 
 // Captures only, from a stand-pat baseline: if simply declining to capture already beats the
 // window, the opponent would never have allowed the position in the first place.
@@ -22,8 +28,8 @@ export function createQuiescence({
 	evaluate: Evaluate;
 	exhausted: () => boolean;
 }): (frame: QuiescenceFrame) => number {
-	return function quiesce({ position, played, alpha, beta }: QuiescenceFrame): number {
-		const standPat = evaluate({ position, played });
+	return function quiesce({ position, played, ply, alpha, beta }: QuiescenceFrame): number {
+		const standPat = evaluate({ position, played, ply });
 		if (standPat >= beta || exhausted()) return standPat;
 
 		let best = Math.max(standPat, alpha);
@@ -32,6 +38,7 @@ export function createQuiescence({
 			const score = -quiesce({
 				position: afterMove({ position, move }),
 				played: { parent: position, move },
+				ply: ply + 1,
 				alpha: -beta,
 				beta: -best,
 			});

@@ -20,4 +20,5 @@ export {
 	type WeightVector,
 	weightsFromRecord,
 } from "./vector";
+export { MATE_SCORE, type TerminalTerm, terminalScore, terminalTerm } from "./terminal";
 export { interpolateWeights, type PhaseWeights } from "./weights";

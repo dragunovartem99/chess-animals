@@ -18,7 +18,7 @@ export const WOLF: Animal = {
 		weights: {
 			middlegame: {
 				swarm: -180,
-				givesMate: 100000,
+				givesMate: 1,
 				materialPawn: 20,
 				materialKnight: 60,
 				materialBishop: 60,

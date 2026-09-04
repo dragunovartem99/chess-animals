@@ -4,8 +4,9 @@ import { describe, expect, it } from "vitest";
 
 import { type BotConfig, assertBotDefinition, compileBot } from "@/shared/bots";
 import { legalMoves, positionFromFen } from "@/shared/chess";
-import { chooseMove } from "@/shared/engine";
+import { chooseMove, searchRoot } from "@/shared/engine";
 import { createRng } from "@/shared/engine/rng";
+import { featureId } from "@/shared/eval";
 import { playPair } from "@/shared/test-support/play";
 
 import { ROSTER, ROSTER_BY_ID } from "../index";
@@ -86,4 +87,34 @@ describe("the animals against the Donkey", () => {
 		},
 		300_000
 	);
+});
+
+// Every animal that claims to see mate used to walk straight past this one. `givesMate` was a
+// weight like any other, so a mate in three scored the same 100000 as the mate in one and then
+// collected three plies of positional bonus on top of it. Scoring the mate in the search instead
+// — decaying with ply, replacing the evaluation rather than joining it — is what fixes it, and
+// this holds the whole roster to it at once.
+describe("a mate in one", () => {
+	// Qh2# and Qh4# both mate at once; every other queen move mates in three at best.
+	const MATE_IN_ONE = "7k/8/8/8/8/8/5Q2/6RK w - - 0 1";
+	const IMMEDIATE = ["f2h2", "f2h4"];
+
+	const mateAware = ROSTER.map((animal) => ({
+		animal,
+		config: compileBot(animal.definition),
+	})).filter(({ config }) => config.weights.middlegame[featureId("givesMate")] !== 0);
+
+	for (const { animal, config } of mateAware) {
+		it(`is what the ${animal.definition.id} plays`, () => {
+			const position = positionFromFen(MATE_IN_ONE);
+			const scored = searchRoot({
+				position,
+				weights: config.weights,
+				options: { ...config.search, depth: 3 },
+			});
+			const best = scored.reduce((left, right) => (right.score > left.score ? right : left));
+
+			expect(IMMEDIATE).toContain(makeUci(best.move));
+		});
+	}
 });

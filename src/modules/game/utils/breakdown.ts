@@ -8,6 +8,8 @@ import {
 	interpolateWeights,
 	type PhaseWeights,
 	type PlayedMove,
+	terminalTerm,
+	type WeightVector,
 } from "@/shared/eval";
 
 export type Contribution = {
@@ -23,6 +25,31 @@ export type Contribution = {
 };
 
 export type Breakdown = { total: number; phase: number; rows: Contribution[] };
+
+// One row, from a feature id and what the position reads for it. `sign` is the White-relative
+// flip; the weight is already blended for this position's phase.
+function contribution({
+	id,
+	value,
+	weights,
+	sign,
+}: {
+	id: number;
+	value: number;
+	weights: WeightVector;
+	sign: number;
+}): Contribution {
+	const feature = FEATURES[id];
+
+	return {
+		key: feature.key,
+		i18nKey: feature.i18nKey,
+		family: feature.family,
+		value: sign * value,
+		weight: weights[id],
+		points: sign * value * weights[id],
+	};
+}
 
 // Why a bot likes a position, term by term. The rows sum to exactly the number the search would
 // score this position at, which is what makes this a debugging tool rather than an illustration:
@@ -50,17 +77,22 @@ export function explainPosition({
 }): Breakdown {
 	const phase = gamePhase(position);
 	const blended = interpolateWeights({ weights, phase });
-	const features = extractFeatures({ position, played });
 	const sign = position.turn === "white" ? 1 : -1;
 
-	const rows = FEATURES.map((feature) => ({
-		key: feature.key,
-		i18nKey: feature.i18nKey,
-		family: feature.family,
-		value: sign * features[feature.id],
-		weight: blended[feature.id],
-		points: sign * features[feature.id] * blended[feature.id],
-	}))
+	// A game-ending position is scored by one term that replaces the evaluation, so the panel
+	// shows that one term rather than a table of contributions the search never added up.
+	const terminal = terminalTerm({ position, weights: blended });
+	if (terminal) {
+		const row = contribution({ ...terminal, weights: blended, sign });
+
+		return { total: row.points, phase, rows: [row] };
+	}
+
+	const features = extractFeatures({ position, played });
+
+	const rows = FEATURES.map((feature) =>
+		contribution({ id: feature.id, value: features[feature.id], weights: blended, sign })
+	)
 		.filter((row) => row.weight !== 0)
 		.toSorted((left, right) => Math.abs(right.points) - Math.abs(left.points));
 

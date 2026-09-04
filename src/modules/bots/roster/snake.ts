@@ -17,7 +17,7 @@ export const SNAKE: Animal = {
 		weights: {
 			middlegame: {
 				opponentMobility: -25,
-				givesMate: 100000,
+				givesMate: 1,
 				materialPawn: 20,
 				materialKnight: 60,
 				materialBishop: 60,

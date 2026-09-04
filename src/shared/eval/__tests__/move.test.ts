@@ -23,14 +23,7 @@ describe("move-level features at the root", () => {
 		const features = extractFeatures({
 			position: positionFromFen("4k3/8/8/8/8/8/8/4K2R w K - 0 1"),
 		});
-		const keys = [
-			"givesMate",
-			"givesCheck",
-			"captureValue",
-			"isPromotion",
-			"isCastle",
-			"movedRook",
-		];
+		const keys = ["givesCheck", "captureValue", "isPromotion", "isCastle", "movedRook"];
 
 		for (const key of keys) expect(features[featureId(key)]).toBe(0);
 	});
@@ -45,14 +38,13 @@ describe("givesCheck", () => {
 			afterUci({ fen: "4k3/8/8/8/8/8/8/R3K3 w Q - 0 1", uci: "a1a8", key: "givesCheck" })
 		).toBe(-1);
 	});
-});
 
-describe("givesMate", () => {
-	it("replaces the check it also is, rather than counting twice", () => {
-		const mate = { fen: "6k1/5ppp/8/8/8/8/8/R5K1 w - - 0 1", uci: "a1a8" };
-
-		expect(afterUci({ ...mate, key: "givesMate" })).toBe(-1);
-		expect(afterUci({ ...mate, key: "givesCheck" })).toBe(0);
+	// A mate is also a check, and the extractor no longer asks which: a mated position never
+	// reaches extraction, because `terminalTerm` has already scored it.
+	it("reads on a mating move too, which only a mate-blind bot ever sees", () => {
+		expect(
+			afterUci({ fen: "6k1/5ppp/8/8/8/8/8/R5K1 w - - 0 1", uci: "a1a8", key: "givesCheck" })
+		).toBe(-1);
 	});
 });
 

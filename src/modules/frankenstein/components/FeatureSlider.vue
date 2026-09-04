@@ -6,9 +6,8 @@ import type { SliderRange } from "../utils/ranges";
 const props = defineProps<{ feature: Feature; value: number; range: SliderRange }>();
 const emit = defineEmits<{ change: [number] }>();
 
-// The slider clamps to the family band; the number input is the value of record, so an outlier
-// like the Wolf's `givesMate: 100000` can still be entered exactly even though no slider could
-// usefully span that range.
+// The slider clamps to the family band; the number input is the value of record, so a weight
+// deliberately outside the band its family usually lives in can still be entered exactly.
 const clamped = (raw: number) => Math.min(Math.max(raw, props.range.min), props.range.max);
 </script>
 

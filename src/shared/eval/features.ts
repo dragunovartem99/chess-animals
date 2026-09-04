@@ -107,10 +107,13 @@ export const FEATURES = defineFeatures([
 	// Properties of the move that produced the position. They are what let `cccp` and `pacifist`
 	// be weights rather than special-cased players. See `families/move.ts` for the sign
 	// convention: a positive weight always means "the mover wants this".
-	{ key: "givesMate", family: "move", group: "forcing", defaultWeight: 0 },
+	// The two game-enders are **preferences in [-1, 1]**, not scores: +1 chases it, -1 flees it,
+	// 0 cannot see it. They are the only weights that are not centipawns, because the thing they
+	// price is not worth a number of pawns — see `terminal.ts`.
+	{ key: "givesMate", family: "move", group: "forcing", defaultWeight: 1 },
 	{ key: "givesCheck", family: "move", group: "forcing", defaultWeight: 0 },
 	// The paper calls out `min_oppt_moves` for not telling mate from stalemate "despite these
-	// having very different results". Making it a feature is what lets a bot tell them apart —
+	// having very different results". A separate preference is what lets a bot tell them apart —
 	// and lets one that would rather draw say so.
 	{ key: "givesStalemate", family: "move", group: "forcing", defaultWeight: 0 },
 	{ key: "captureValue", family: "move", group: "forcing", defaultWeight: 0 },

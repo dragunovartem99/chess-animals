@@ -41,14 +41,14 @@ line**, and adding an animal is a data file.
 drives the extractor, the weight-editor sliders, the SPSA parameter space, the JSON schema for
 bot configs, and the locale files.
 
-| Family        | Count | What it covers                                                                                                                   |
-| ------------- | ----: | -------------------------------------------------------------------------------------------------------------------------------- |
-| `material`    |     5 | one weight per piece — piece values are **tunable per phase**, not constants                                                     |
-| `positional`  |    22 | centralization and advancement per role, rook on open file and seventh, bishop pair, outpost, space, centre control, hanging     |
-| `pawns`       |     8 | doubled, isolated, backward, connected, passed and its advancement, shield, islands                                              |
-| `king`        |     4 | king-zone attackers, ring defenders, open file, king–pawn distance, and the endgame centralization term                          |
-| `behavioural` |    11 | the animals: swarm, huddle, king proximity, same-colour squares, the symmetries, opponent mobility, push depth, offered material |
-| `move`        |    12 | properties of the move that produced the position — gives mate, gives check, capture value, promotion, castle, moved role        |
+| Family        | Count | What it covers                                                                                                                         |
+| ------------- | ----: | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `material`    |     5 | one weight per piece — piece values are **tunable per phase**, not constants                                                           |
+| `positional`  |    22 | centralization and advancement per role, rook on open file and seventh, bishop pair, outpost, space, centre control, hanging           |
+| `pawns`       |     8 | doubled, isolated, backward, connected, passed and its advancement, shield, islands                                                    |
+| `king`        |     4 | king-zone attackers, ring defenders, open file, king–pawn distance, and the endgame centralization term                                |
+| `behavioural` |    11 | the animals: swarm, huddle, king proximity, same-colour squares, the symmetries, opponent mobility, push depth, offered material       |
+| `move`        |    12 | properties of the move that produced the position — gives check, capture value, promotion, castle, moved role, and the two game-enders |
 
 Centralization and advancement are a parametrised stand-in for piece-square tables: two numbers
 per role instead of sixty-four, which is what keeps the tuner's search space small enough to move
