@@ -12,10 +12,10 @@ import { searchRoot } from "../search";
 //
 // Depth 2 is the shallowest depth that actually exercises alpha-beta, move ordering and the
 // child-node blend, so a regression in any of those shows up here. `prune` is the path an argmax
-// bot takes — the whole roster — so it is what the guard should watch. The real number is ~13 ms
+// bot takes — the whole roster — so it is what the guard should watch. The real number is ~2.5 ms
 // (`npm run bench`); the budget carries wide headroom because the suite's other files run in
 // parallel and contend for the same cores while this measures wall time.
-const BUDGET_MILLISECONDS = 150;
+const BUDGET_MILLISECONDS = 40;
 
 // v8's coverage instrumentation multiplies per-node cost, so under `npm run test:coverage` the
 // number measures the instrumentation rather than the search. There the guard only keeps the

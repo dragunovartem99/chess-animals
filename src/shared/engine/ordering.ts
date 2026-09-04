@@ -25,6 +25,11 @@ function priority({ position, move }: { position: Chess; move: NormalMove }): nu
 	return 100 + WORTH[victim] * 10 - WORTH[attacker];
 }
 
+// Insertion sort over one copy of the list, rather than a `{ move, priority }` object per move
+// and two more arrays around a comparator sort. Priorities are never negative, so a quiet move
+// can never move left and is skipped outright: a position with no captures — most of them — costs
+// one pass and no shuffling at all, and the handful that do cost a shift past the quiet moves
+// they overtake. Equal priorities keep their generated order, as the comparator sort did.
 export function orderMoves({
 	position,
 	moves,
@@ -32,8 +37,25 @@ export function orderMoves({
 	position: Chess;
 	moves: NormalMove[];
 }): NormalMove[] {
-	return moves
-		.map((move) => ({ move, priority: priority({ position, move }) }))
-		.toSorted((left, right) => right.priority - left.priority)
-		.map((entry) => entry.move);
+	const ordered = moves.slice();
+	const priorities: number[] = [];
+	for (const move of ordered) priorities.push(priority({ position, move }));
+
+	for (let index = 1; index < ordered.length; index += 1) {
+		const move = ordered[index];
+		const value = priorities[index];
+		if (value === 0) continue;
+
+		let slot = index - 1;
+		while (slot >= 0 && priorities[slot] < value) {
+			ordered[slot + 1] = ordered[slot];
+			priorities[slot + 1] = priorities[slot];
+			slot -= 1;
+		}
+
+		ordered[slot + 1] = move;
+		priorities[slot + 1] = value;
+	}
+
+	return ordered;
 }

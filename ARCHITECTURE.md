@@ -81,7 +81,7 @@ built per instance and cost more than the walk they were meant to avoid.)
 A search does not read all sixty-odd. A weight of zero cannot change a score, so `liveSlots`
 reads the bot's weight vector once per `go` and `createExtractor` runs only
 the families that union touches — the dot product then walks the same list instead of multiplying
-fifty-odd zeros. An animal names a handful of features, which is **~3 µs** a node and a 3–4×
+fifty-odd zeros. An animal names a handful of features, which is **~3 µs** a node and a 3–5×
 faster search; `cccp` reads only the move and never builds the context at all; the random mover
 extracts nothing. Each family declares the slots it writes next to its extractor, and the suite
 holds every family to writing exactly those.
