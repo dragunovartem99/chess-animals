@@ -1,12 +1,9 @@
 import type { Chess } from "chessops/chess";
 
-import { gamePhase } from "@/shared/chess";
 import {
 	extractFeatures,
 	type FeatureFamily,
 	FEATURES,
-	interpolateWeights,
-	type PhaseWeights,
 	type PlayedMove,
 	terminalTerm,
 	type WeightVector,
@@ -18,16 +15,15 @@ export type Contribution = {
 	family: FeatureFamily;
 	// What the position reads for this feature, before any weight is applied.
 	value: number;
-	// The weight after the three phase sets have been blended for this position.
 	weight: number;
 	// Their product: what this feature is actually worth here.
 	points: number;
 };
 
-export type Breakdown = { total: number; phase: number; rows: Contribution[] };
+export type Breakdown = { total: number; rows: Contribution[] };
 
 // One row, from a feature id and what the position reads for it. `sign` is the White-relative
-// flip; the weight is already blended for this position's phase.
+// flip.
 function contribution({
 	id,
 	value,
@@ -72,29 +68,27 @@ export function explainPosition({
 	played,
 }: {
 	position: Chess;
-	weights: PhaseWeights;
+	weights: WeightVector;
 	played?: PlayedMove;
 }): Breakdown {
-	const phase = gamePhase(position);
-	const blended = interpolateWeights({ weights, phase });
 	const sign = position.turn === "white" ? 1 : -1;
 
 	// A game-ending position is scored by one term that replaces the evaluation, so the panel
 	// shows that one term rather than a table of contributions the search never added up.
-	const terminal = terminalTerm({ position, weights: blended });
+	const terminal = terminalTerm({ position, weights: weights });
 	if (terminal) {
-		const row = contribution({ ...terminal, weights: blended, sign });
+		const row = contribution({ ...terminal, weights: weights, sign });
 
-		return { total: row.points, phase, rows: [row] };
+		return { total: row.points, rows: [row] };
 	}
 
 	const features = extractFeatures({ position, played });
 
 	const rows = FEATURES.map((feature) =>
-		contribution({ id: feature.id, value: features[feature.id], weights: blended, sign })
+		contribution({ id: feature.id, value: features[feature.id], weights: weights, sign })
 	)
 		.filter((row) => row.weight !== 0)
 		.toSorted((left, right) => Math.abs(right.points) - Math.abs(left.points));
 
-	return { total: rows.reduce((sum, row) => sum + row.points, 0), phase, rows };
+	return { total: rows.reduce((sum, row) => sum + row.points, 0), rows };
 }

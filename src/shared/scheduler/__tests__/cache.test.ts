@@ -13,7 +13,7 @@ const bot = (id: string, weight: number): BotDefinition => ({
 	id,
 	search: { depth: 1 },
 	temperature: 0,
-	weights: { middlegame: { materialPawn: weight } },
+	weights: { materialPawn: weight },
 });
 
 const spec = (over: Partial<GameSpec> = {}): GameSpec => ({

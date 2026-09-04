@@ -7,7 +7,7 @@ const VALID: BotDefinition = {
 	id: "swarm-wolf",
 	search: { depth: 1 },
 	temperature: 0,
-	weights: { middlegame: { swarm: -12 } },
+	weights: { swarm: -12 },
 };
 
 describe("assertBotDefinition", () => {
@@ -33,22 +33,19 @@ describe("assertBotDefinition", () => {
 	});
 
 	it("rejects a weight naming a feature that does not exist", () => {
-		expect(() =>
-			assertBotDefinition({ ...VALID, weights: { middlegame: { swrm: 1 } } })
-		).toThrow('names unknown feature "swrm"');
+		expect(() => assertBotDefinition({ ...VALID, weights: { swrm: 1 } })).toThrow(
+			'unknown feature "swrm"'
+		);
 	});
 
 	it("rejects a weight that is not a finite number", () => {
-		expect(isBotDefinition({ ...VALID, weights: { middlegame: { swarm: Infinity } } })).toBe(
-			false
-		);
-		expect(isBotDefinition({ ...VALID, weights: { middlegame: { swarm: "-12" } } })).toBe(
-			false
-		);
+		expect(isBotDefinition({ ...VALID, weights: { swarm: Infinity } })).toBe(false);
+		expect(isBotDefinition({ ...VALID, weights: { swarm: "-12" } })).toBe(false);
 	});
 
-	it("requires the middlegame, which the other phases fall back to", () => {
-		expect(isBotDefinition({ ...VALID, weights: { opening: { swarm: -12 } } })).toBe(false);
+	it("rejects weights that are not a flat record of feature keys", () => {
+		expect(isBotDefinition({ ...VALID, weights: { middlegame: { swarm: -12 } } })).toBe(false);
+		expect(isBotDefinition({ ...VALID, weights: undefined })).toBe(false);
 	});
 
 	it("rejects anything that is not an object at all", () => {

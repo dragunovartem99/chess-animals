@@ -32,12 +32,7 @@ function playHumanMove({ from, to, promotion }: { from: Key; to: Key; promotion?
 	if (move) void sandbox.playHuman(move);
 }
 
-const vector = computed(() => weightsFromRecord(sandbox.weights.value));
-const weights = computed(() => ({
-	opening: vector.value,
-	middlegame: vector.value,
-	endgame: vector.value,
-}));
+const weights = computed(() => weightsFromRecord(sandbox.weights.value));
 </script>
 
 <template>

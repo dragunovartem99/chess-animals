@@ -13,12 +13,12 @@ const detuned: BotDefinition = {
 	id: BOT_ID,
 	search: { depth: 1 },
 	temperature: 0,
-	weights: { middlegame: { swarm: 100, materialPawn: 8, materialKnight: 30 } },
+	weights: { swarm: 100, materialPawn: 8, materialKnight: 30 },
 };
 
 const opponent = (id: string): { id: string; definition: BotDefinition } => ({
 	id,
-	definition: { id, search: { depth: 1 }, temperature: 0, weights: { middlegame: {} } },
+	definition: { id, search: { depth: 1 }, temperature: 0, weights: {} },
 });
 
 const openings = Array.from({ length: 4 }, (_, i) => ({ id: `op${i}`, fen: `fen-${i}` }));
@@ -32,7 +32,7 @@ function rand(seed: number): number {
 
 // How close the candidate's tuned weights are to the ideal — the stand-in for real strength.
 function quality(definition: BotDefinition): number {
-	const w = definition.weights.middlegame;
+	const w = definition.weights;
 	return -TUNE_KEYS.reduce((sum, key) => sum + ((w[key] ?? 0) - TARGET[key]) ** 2, 0) / 20000;
 }
 
@@ -74,7 +74,7 @@ describe("runTuning", () => {
 
 		expect(result.final).toBeGreaterThan(result.baseline + 0.05);
 		// The wrong-signed weight is pulled back below zero.
-		expect(result.tuned.weights.middlegame.swarm).toBeLessThan(0);
+		expect(result.tuned.weights.swarm).toBeLessThan(0);
 		expect(result.spsa.scores).toHaveLength(60);
 	}, 20_000);
 
@@ -87,7 +87,7 @@ describe("runTuning", () => {
 			run: fakeRun,
 		});
 		expect(result.tuned.id).toBe(BOT_ID);
-		expect(Object.keys(result.tuned.weights.middlegame).toSorted()).toEqual([
+		expect(Object.keys(result.tuned.weights).toSorted()).toEqual([
 			"materialKnight",
 			"materialPawn",
 			"swarm",

@@ -8,12 +8,12 @@ const candidate: BotDefinition = {
 	id: "cand",
 	search: { depth: 1 },
 	temperature: 0,
-	weights: { middlegame: { materialPawn: 20, swarm: -10 } },
+	weights: { materialPawn: 20, swarm: -10 },
 };
 
 const opponent = (id: string): { id: string; definition: BotDefinition } => ({
 	id,
-	definition: { id, search: { depth: 1 }, temperature: 0, weights: { middlegame: {} } },
+	definition: { id, search: { depth: 1 }, temperature: 0, weights: {} },
 });
 
 const openings = [

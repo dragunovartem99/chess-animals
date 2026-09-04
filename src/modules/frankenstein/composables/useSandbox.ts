@@ -8,8 +8,8 @@ import { blankPreset, presetFromBot } from "../utils/presets";
 import { createAutoplayLoop } from "./autoplay";
 import { buildEngine, reseed } from "./engine";
 
-// One weight vector, applied to both colours and to all three phases at once — the per-animal,
-// per-phase editor was cut in favour of this single live sandbox. A local (non-worker) UCI engine
+// One weight vector, applied to both colours — the per-animal editor was cut in favour of this
+// single live sandbox. A local (non-worker) UCI engine
 // keeps every slider tick and depth change one `setOption` away, with no restart: `applyOption`
 // mutates the live config, which is the whole point of routing weight and depth changes through
 // UCI instead of just re-evaluating the position by hand.
@@ -30,7 +30,7 @@ export function useSandbox() {
 
 	function setWeight(key: string, value: number): void {
 		weights.value = { ...weights.value, [key]: value };
-		engine.setOption({ name: `all.${key}`, value: String(value) });
+		engine.setOption({ name: key, value: String(value) });
 	}
 
 	function setDepth(value: number): void {

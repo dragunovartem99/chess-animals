@@ -5,9 +5,9 @@ import { afterMove, type GameResult, gameStatus, positionFromFen, repetitionKey 
 import { chooseMove } from "../engine";
 import { createRng } from "../engine/rng";
 import type { SearchOptions } from "../engine/search";
-import type { PhaseWeights } from "../eval";
+import type { WeightVector } from "../eval";
 
-export type TestBot = { weights: PhaseWeights; search: SearchOptions; temperature?: number };
+export type TestBot = { weights: WeightVector; search: SearchOptions; temperature?: number };
 
 function points({ result, colour }: { result: GameResult; colour: Color }): number {
 	if (result === null) return 0.5;

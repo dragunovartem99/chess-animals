@@ -10,7 +10,7 @@ const config = compileBot({
 	id: "wolf",
 	search: { depth: 1 },
 	temperature: 0,
-	weights: { middlegame: { swarm: -12 } },
+	weights: { swarm: -12 },
 });
 
 const set = ({ name, value }: { name: string; value?: string }) =>
@@ -32,30 +32,13 @@ describe("applyOption", () => {
 	});
 
 	it("sets a fractional, negative weight — which is what a tuned bot is made of", () => {
-		expect(
-			set({ name: "middlegame.swarm", value: "-12.5" }).weights.middlegame[SWARM]
-		).toBeCloseTo(-12.5);
-	});
-
-	it("changes one phase without touching the others", () => {
-		const next = set({ name: "endgame.swarm", value: "-2" });
-
-		expect(next.weights.endgame[SWARM]).toBe(-2);
-		expect(next.weights.middlegame[SWARM]).toBe(-12);
-	});
-
-	it("changes every phase at once with the all scope", () => {
-		const next = set({ name: "all.swarm", value: "-1" });
-
-		for (const phase of ["opening", "middlegame", "endgame"] as const) {
-			expect(next.weights[phase][SWARM]).toBe(-1);
-		}
+		expect(set({ name: "swarm", value: "-12.5" }).weights[SWARM]).toBeCloseTo(-12.5);
 	});
 
 	it("never mutates the config it was given, so a tuner can hold on to the original", () => {
-		set({ name: "all.swarm", value: "999" });
+		set({ name: "swarm", value: "999" });
 
-		expect(config.weights.middlegame[SWARM]).toBe(-12);
+		expect(config.weights[SWARM]).toBe(-12);
 	});
 
 	it("turns quiescence on and off", () => {
@@ -72,9 +55,8 @@ describe("applyOption", () => {
 		for (const option of [
 			{ name: "Depth", value: "0" },
 			{ name: "Temperature", value: "-1" },
-			{ name: "middlegame.swrm", value: "1" },
-			{ name: "sometime.swarm", value: "1" },
-			{ name: "middlegame.swarm", value: "not a number" },
+			{ name: "swrm", value: "1" },
+			{ name: "swarm", value: "not a number" },
 			{ name: "Threads", value: "8" },
 		]) {
 			expect(set(option)).toEqual(config);

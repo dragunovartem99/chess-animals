@@ -16,15 +16,13 @@ export const WOLF: Animal = {
 		search: { depth: 3 },
 		temperature: 0,
 		weights: {
-			middlegame: {
-				swarm: -180,
-				givesMate: 1,
-				materialPawn: 20,
-				materialKnight: 60,
-				materialBishop: 60,
-				materialRook: 100,
-				materialQueen: 180,
-			},
+			swarm: -180,
+			givesMate: 1,
+			materialPawn: 20,
+			materialKnight: 60,
+			materialBishop: 60,
+			materialRook: 100,
+			materialQueen: 180,
 		},
 	},
 };

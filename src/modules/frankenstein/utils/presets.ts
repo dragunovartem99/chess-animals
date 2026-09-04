@@ -37,7 +37,7 @@ export function presetFromBot(id: string): Preset | undefined {
 	const animal = ROSTER_BY_ID.get(id);
 	if (!animal) return undefined;
 
-	const vector = compileBot(animal.definition).weights.middlegame;
+	const vector = compileBot(animal.definition).weights;
 	const weights = Object.fromEntries(
 		FEATURES.map((feature) => [feature.key, vector[feature.id]])
 	);

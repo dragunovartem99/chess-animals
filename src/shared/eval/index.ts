@@ -16,9 +16,9 @@ export {
 	defaultWeights,
 	dot,
 	type FeatureVector,
+	liveSlots,
 	recordFromWeights,
 	type WeightVector,
 	weightsFromRecord,
 } from "./vector";
 export { MATE_SCORE, type TerminalTerm, terminalScore, terminalTerm } from "./terminal";
-export { interpolateWeights, liveSlots, type PhaseWeights } from "./weights";

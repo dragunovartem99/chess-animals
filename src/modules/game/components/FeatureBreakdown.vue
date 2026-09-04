@@ -2,13 +2,13 @@
 import type { Chess } from "chessops/chess";
 import { computed } from "vue";
 
-import type { PhaseWeights, PlayedMove } from "@/shared/eval";
+import type { PlayedMove, WeightVector } from "@/shared/eval";
 
 import { explainPosition } from "../utils/breakdown";
 
 const props = defineProps<{
 	position: Chess;
-	weights: PhaseWeights;
+	weights: WeightVector;
 	name: string;
 	played?: PlayedMove;
 }>();
@@ -31,9 +31,6 @@ const format = (value: number) => (Number.isInteger(value) ? String(value) : val
 		<p class="perspective">{{ $t("game.breakdown.absolute") }}</p>
 		<p class="total">
 			{{ $t("game.breakdown.total") }}: <strong>{{ pawns(breakdown.total) }}</strong>
-			<span class="phase">{{
-				$t("game.breakdown.phase", { phase: (breakdown.phase * 100).toFixed(0) })
-			}}</span>
 		</p>
 
 		<table>

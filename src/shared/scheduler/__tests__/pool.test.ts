@@ -13,13 +13,13 @@ const A: BotDefinition = {
 	id: "a",
 	search: { depth: 1 },
 	temperature: 30,
-	weights: { middlegame: { materialPawn: 20, materialKnight: 60, captureValue: 6 } },
+	weights: { materialPawn: 20, materialKnight: 60, captureValue: 6 },
 };
 const B: BotDefinition = {
 	id: "b",
 	search: { depth: 1 },
 	temperature: 30,
-	weights: { middlegame: { mobility: 5, swarm: -20 } },
+	weights: { mobility: 5, swarm: -20 },
 };
 
 // A spread of short games: every opening, both colours, a few seeds each.

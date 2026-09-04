@@ -2,7 +2,7 @@ import type { Chess } from "chessops/chess";
 import type { NormalMove } from "chessops/types";
 
 import { afterMove, legalMoves } from "../chess";
-import type { PhaseWeights, PlayedMove } from "../eval";
+import type { WeightVector, PlayedMove } from "../eval";
 import { createEvaluator } from "./evaluate";
 import { orderMoves } from "./ordering";
 import { createQuiescence } from "./quiescence";
@@ -30,7 +30,7 @@ type Frame = {
 	beta: number;
 };
 
-function createSearch({ weights, options }: { weights: PhaseWeights; options: SearchOptions }) {
+function createSearch({ weights, options }: { weights: WeightVector; options: SearchOptions }) {
 	const limit = options.nodeLimit ?? INFINITY;
 	let nodes = 0;
 
@@ -93,7 +93,7 @@ export function searchRoot({
 	prune = false,
 }: {
 	position: Chess;
-	weights: PhaseWeights;
+	weights: WeightVector;
 	options: SearchOptions;
 	prune?: boolean;
 }): ScoredMove[] {

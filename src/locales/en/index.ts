@@ -30,7 +30,6 @@ export default {
 			title: "What {name} sees",
 			absolute: "Plus is good for White, minus is good for Black. Points = Amount × Weight.",
 			total: "Total",
-			phase: "{phase}% endgame",
 			feature: "Parameter",
 			amount: "Amount",
 			weight: "Weight",

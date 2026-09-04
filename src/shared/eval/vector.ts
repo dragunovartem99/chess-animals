@@ -4,8 +4,24 @@ import { FEATURE_COUNT, FEATURES, FEATURES_BY_KEY } from "./features";
 // move is one dot product, and these arrays are allocated per node.
 export type FeatureVector = Float32Array;
 
-// One weight per feature. A bot carries three of these — opening, middlegame, endgame.
+// One weight per feature. A bot is one of these and nothing else.
 export type WeightVector = Float32Array;
+
+// The slots a bot actually weighs — an animal names a handful of the sixty-odd features and
+// leaves the rest at zero.
+//
+// A weight of zero cannot change a score, so this list is the whole of what a search has to do:
+// the extractor runs only the families it touches, and `dot` walks it instead of multiplying
+// fifty-odd zeros.
+export function liveSlots(weights: WeightVector): number[] {
+	const live: number[] = [];
+
+	for (let slot = 0; slot < weights.length; slot += 1) {
+		if (weights[slot] !== 0) live.push(slot);
+	}
+
+	return live;
+}
 
 export function createFeatureVector(): FeatureVector {
 	return new Float32Array(FEATURE_COUNT);

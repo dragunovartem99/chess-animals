@@ -20,13 +20,13 @@ paper.pdf       Elo World, the design's source
 
 ### Modules
 
-| Module         | What it does                                                                                                                                                                                                                |
-| -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `bots`         | the animal roster (`roster/*.ts`, plain data) and its landing page                                                                                                                                                          |
-| `game`         | `/play` — human vs bot, bot vs bot, move list, feature breakdown                                                                                                                                                            |
-| `board`        | the chessground wrapper, orientation, legal dests, the promotion picker                                                                                                                                                     |
-| `frankenstein` | `/frankenstein` — a live weight/depth sandbox: one weight vector across all features and phases, an in-thread UCI engine tuned by `setOption` (no restart), autoplay, seeding from a roster animal or the registry defaults |
-| `about`        | the method and credit to the paper — placeholder, Phase G                                                                                                                                                                   |
+| Module         | What it does                                                                                                                                                                                                      |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `bots`         | the animal roster (`roster/*.ts`, plain data) and its landing page                                                                                                                                                |
+| `game`         | `/play` — human vs bot, bot vs bot, move list, feature breakdown                                                                                                                                                  |
+| `board`        | the chessground wrapper, orientation, legal dests, the promotion picker                                                                                                                                           |
+| `frankenstein` | `/frankenstein` — a live weight/depth sandbox: one weight vector across every feature, an in-thread UCI engine tuned by `setOption` (no restart), autoplay, seeding from a roster animal or the registry defaults |
+| `about`        | the method and credit to the paper — placeholder, Phase G                                                                                                                                                         |
 
 The tournament runner and the SPSA tuner are **dev CLIs under `cli/`**, not modules — they need
 every core and have no place in the shipped app. The rating, scheduler and tuner math they drive
@@ -51,8 +51,8 @@ One flat area per folder, each with its own `index.ts`, and deliberately **no ro
 
 | Area           | What it holds                                                                                                                    |
 | -------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| `chess`        | chessops wrappers — FEN in/out, legal moves, `afterMove`, repetition keys, game-over detection, and the tapered `gamePhase`      |
-| `eval`         | the feature registry, the extractor and its families, feature/weight vectors, phase interpolation — the heart of the project     |
+| `chess`        | chessops wrappers — FEN in/out, legal moves, `afterMove`, repetition keys, and game-over detection                               |
+| `eval`         | the feature registry, the extractor and its families, feature and weight vectors, terminal scoring — the heart of the project    |
 | `engine`       | negamax search, move ordering, quiescence, the move policy, the seeded RNG, the UCI codec, the engine client and its transports  |
 | `bots`         | `BotDefinition` (JSON on disk) and `BotConfig` (compiled), the guard that validates one, and `compileBot` between them           |
 | `openings`     | the curated paired opening set (JSON), `probe(fen)`, and the colour-swapped schedule                                             |
@@ -73,7 +73,7 @@ the families then do index and bitboard arithmetic only. Reading all sixty-odd m
 **~18 µs**, with a 60 µs regression guard asserted in the suite.
 
 A search does not read all sixty-odd. A weight of zero cannot change a score, so `liveSlots`
-takes the union of the bot's three phase vectors once per `go` and `createExtractor` runs only
+reads the bot's weight vector once per `go` and `createExtractor` runs only
 the families that union touches — the dot product then walks the same list instead of multiplying
 fifty-odd zeros. An animal names a handful of features, which is **~6 µs** a node and a 3–4×
 faster search; `cccp` reads only the move and never builds the context at all; the random mover
@@ -82,11 +82,6 @@ holds every family to writing exactly those.
 
 Everything is from the **side to move's** perspective, so no evaluation code is colour-specific
 and a bot plays the same way with either colour.
-
-The three weight sets are **interpolated** along the phase axis (`interpolateWeights`) rather
-than switched between — a hard switch puts a step in the evaluation that bots shuffle back and
-forth across. `gamePhase` is non-pawn material, 0 at the full board and 1 at bare kings, with the
-middlegame set at the midpoint.
 
 Feature keys are what a bot config stores, what a UCI `setoption` names, and what the locale
 files key their labels on. Ids are assigned from registry order and never stored, so appending a

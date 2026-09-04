@@ -31,7 +31,6 @@ const messages: Messages = {
 			title: "Что видит {name}",
 			absolute: "Плюс — хорошо для белых, минус — для черных. Очки = Значение × Вес.",
 			total: "Итого",
-			phase: "эндшпиль: {phase}%",
 			feature: "Параметр",
 			amount: "Значение",
 			weight: "Вес",

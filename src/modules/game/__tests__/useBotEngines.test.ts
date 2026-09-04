@@ -13,7 +13,7 @@ const DONKEY: Animal = {
 		id: "donkey",
 		search: { depth: 1 },
 		temperature: 0,
-		weights: { middlegame: { materialPawn: 100, materialKnight: 300 } },
+		weights: { materialPawn: 100, materialKnight: 300 },
 	},
 };
 
@@ -24,7 +24,7 @@ const WOLF: Animal = {
 		id: "wolf",
 		search: { depth: 1 },
 		temperature: 0,
-		weights: { middlegame: { materialQueen: 900, givesMate: 100000 } },
+		weights: { materialQueen: 900, givesMate: 100000 },
 	},
 };
 

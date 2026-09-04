@@ -12,6 +12,6 @@ export const DONKEY: Animal = {
 		id: "donkey",
 		search: { depth: 1 },
 		temperature: 0,
-		weights: { middlegame: {} },
+		weights: {},
 	},
 };

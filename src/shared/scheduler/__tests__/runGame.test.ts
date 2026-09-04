@@ -10,16 +10,14 @@ const HUNTER: BotDefinition = {
 	id: "hunter",
 	search: { depth: 1 },
 	temperature: 40,
-	weights: {
-		middlegame: { materialPawn: 20, materialKnight: 60, materialRook: 100, captureValue: 8 },
-	},
+	weights: { materialPawn: 20, materialKnight: 60, materialRook: 100, captureValue: 8 },
 };
 
 const DRIFTER: BotDefinition = {
 	id: "drifter",
 	search: { depth: 1 },
 	temperature: 40,
-	weights: { middlegame: { mobility: 4, centralizationKnight: 3 } },
+	weights: { mobility: 4, centralizationKnight: 3 },
 };
 
 const spec = (over: Partial<GameSpec> = {}): GameSpec => ({

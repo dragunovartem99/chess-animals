@@ -9,7 +9,7 @@ const WOLF: BotDefinition = {
 	id: "wolf",
 	search: { depth: 1 },
 	temperature: 0,
-	weights: { middlegame: { swarm: -12, givesMate: 100000, materialQueen: 180 } },
+	weights: { swarm: -12, givesMate: 100000, materialQueen: 180 },
 };
 
 function connect(definition = WOLF) {
@@ -49,7 +49,7 @@ describe("the engine over UCI", () => {
 		// for nothing has to come out positive.
 		const engine = connect({
 			...WOLF,
-			weights: { middlegame: { materialQueen: 900, materialRook: 500 } },
+			weights: { materialQueen: 900, materialRook: 500 },
 		});
 		await engine.init();
 		engine.setPosition({ fen: "4k3/8/8/3q4/8/8/8/3RK3 w - - 0 1" });
@@ -63,7 +63,7 @@ describe("the engine over UCI", () => {
 	it("names castling the way every other engine does", async () => {
 		const engine = connect({
 			...WOLF,
-			weights: { middlegame: { isCastle: 1000 } },
+			weights: { isCastle: 1000 },
 		});
 		await engine.init();
 		engine.setPosition({ fen: "4k3/8/8/8/8/8/8/R3K2R w KQ - 0 1" });

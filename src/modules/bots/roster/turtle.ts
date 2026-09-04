@@ -15,15 +15,13 @@ export const TURTLE: Animal = {
 		search: { depth: 2 },
 		temperature: 0,
 		weights: {
-			middlegame: {
-				huddle: -150,
-				givesMate: 1,
-				materialPawn: 20,
-				materialKnight: 60,
-				materialBishop: 60,
-				materialRook: 100,
-				materialQueen: 180,
-			},
+			huddle: -150,
+			givesMate: 1,
+			materialPawn: 20,
+			materialKnight: 60,
+			materialBishop: 60,
+			materialRook: 100,
+			materialQueen: 180,
 		},
 	},
 };

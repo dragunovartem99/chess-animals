@@ -1,7 +1,7 @@
 import type { Chess } from "chessops/chess";
 import type { NormalMove } from "chessops/types";
 
-import type { PhaseWeights } from "../eval";
+import type { WeightVector } from "../eval";
 import type { Rng } from "./rng";
 import { softmaxSample } from "./sample";
 import { type ScoredMove, searchRoot, type SearchOptions } from "./search";
@@ -18,7 +18,7 @@ export function scoreMoves({
 	temperature = 0,
 }: {
 	position: Chess;
-	weights: PhaseWeights;
+	weights: WeightVector;
 	search: SearchOptions;
 	// A bot that only takes the argmax lets the search narrow its window on the non-best moves;
 	// one that samples needs their scores exact. Defaults to the argmax case.
@@ -60,7 +60,7 @@ export function chooseMove({
 	rng,
 }: {
 	position: Chess;
-	weights: PhaseWeights;
+	weights: WeightVector;
 	search: SearchOptions;
 	temperature: number;
 	rng: Rng;

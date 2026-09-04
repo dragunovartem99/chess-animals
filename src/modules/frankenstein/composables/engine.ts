@@ -22,7 +22,7 @@ export function buildEngine({
 		temperature: 0,
 		// Spread into a plain object: `weights` is a Vue-reactive proxy, and `postMessage`'s
 		// structured clone cannot serialise one — only the values it wraps.
-		weights: { middlegame: { ...weights } },
+		weights: { ...weights },
 	};
 
 	const worker = new Worker(new URL("../../../workers/uciEngine.worker.ts", import.meta.url), {

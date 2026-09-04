@@ -28,7 +28,7 @@ The central design choice: **every bot, serious or silly, is the same code path.
 is a dot product.
 
 ```ts
-score = dot(features(position, move), lerp3(weights, phase));
+score = dot(features(position, move), weights);
 ```
 
 A personality is nothing but a weight vector. `swarm` is not a special case in the engine — it is
@@ -43,7 +43,7 @@ bot configs, and the locale files.
 
 | Family        | Count | What it covers                                                                                                                         |
 | ------------- | ----: | -------------------------------------------------------------------------------------------------------------------------------------- |
-| `material`    |     5 | one weight per piece — piece values are **tunable per phase**, not constants                                                           |
+| `material`    |     5 | one weight per piece — piece values are **tunable**, not constants                                                                     |
 | `positional`  |    22 | centralization and advancement per role, rook on open file and seventh, bishop pair, outpost, space, centre control, hanging           |
 | `pawns`       |     8 | doubled, isolated, backward, connected, passed and its advancement, shield, islands                                                    |
 | `king`        |     4 | king-zone attackers, ring defenders, open file, king–pawn distance, and the endgame centralization term                                |
@@ -57,16 +57,14 @@ in seconds.
 The `move` family is why `cccp` and `pacifist` need no special casing — "prefer checks", "never
 capture" are weights like any other.
 
-## Three phases, blended
+## One vector, not three
 
-A bot carries three weight sets, so it can value a rook differently in the opening than in the
-endgame. They are **interpolated** along the phase axis rather than switched between: a hard
-switch puts a step in the evaluation, and bots shuffle back and forth across it. Phase is
-non-pawn material, 0 at the full board and 1 at bare kings — pawns are excluded because they
-leave the board last and would keep every long game reading as a middlegame.
-
-A definition may omit a phase, in which case it inherits from the middlegame. Most animals have
-one idea and play it throughout, and writing that idea three times invites drift.
+A bot is a single weight vector. It used to carry three — opening, middlegame and endgame,
+interpolated along a phase axis — so that it could value a rook differently late than early. No
+animal ever used it: every definition wrote only the middlegame set and inherited the other two,
+and the sandbox applied one vector to all three. It was three times the configuration surface, a
+blend cache in the evaluator and a phase axis in the tuner, all to express something nothing
+expressed. It is gone. A bot is what its file says, once.
 
 ## Why sampling matters
 
@@ -117,14 +115,14 @@ under threshold or the ordering has been stable for _k_ games.
 
 ## Tuning
 
-SPSA over one phase's weights or all three jointly: draw a Rademacher perturbation δ, play `w+cδ`
+SPSA over the weights the bot names: draw a Rademacher perturbation δ, play `w+cδ`
 and `w−cδ` over the same gauntlet with the same seeds, then step
 `w ← w + a·(score₊ − score₋)/(2c)·δ` with `a` and `c` decaying. The paired gauntlet is what makes
 a noisy signal usable. Target: a useful run in 1–2 minutes.
 
 ## How we know it works
 
-- **Unit** — the extractor against hand-checked FENs; phase interpolation; the UCI codec's
+- **Unit** — the extractor against hand-checked FENs; the UCI codec's
   round-trips; `fitBradleyTerry` recovering known ratings from a synthetic matrix and staying
   stable under deliberately imbalanced pair counts; `markovChampion` on a matrix with a known
   stationary distribution.

@@ -1,13 +1,11 @@
-import type { BotConfig, Phase } from "../bots";
-import { FEATURES_BY_KEY, type PhaseWeights } from "../eval";
+import type { BotConfig } from "../bots";
+import { FEATURES_BY_KEY, type WeightVector } from "../eval";
 import type { UciResponse } from "./uci/types";
 
-const PHASES: Phase[] = ["opening", "middlegame", "endgame"];
-
-// Engine options are advertised the usual way. Weights are not: there are sixty-odd features and
-// three phases, and listing two hundred lines in answer to `uci` would drown the useful ones.
-// They are still settable by name — `middlegame.swarm`, or `all.swarm` for every phase — and the
-// feature registry is the list of what may be named, which the tuner reads directly.
+// Engine options are advertised the usual way. Weights are not: there are sixty-odd of them, and
+// listing them in answer to `uci` would drown the useful ones. They are still settable by their
+// feature key — `setoption name swarm value -180` — and the registry is the list of what may be
+// named, which the tuner reads directly.
 export function describeOptions(config: BotConfig): UciResponse[] {
 	return [
 		{ type: "option", name: "Depth", optionType: "spin", default: String(config.search.depth) },
@@ -35,39 +33,21 @@ export function describeOptions(config: BotConfig): UciResponse[] {
 	];
 }
 
+// Copied rather than written in place: a config is treated as immutable everywhere else, and a
+// live search holds the vector it was built with.
 function withWeight({
 	weights,
-	phases,
 	id,
 	value,
 }: {
-	weights: PhaseWeights;
-	phases: Phase[];
+	weights: WeightVector;
 	id: number;
 	value: number;
-}): PhaseWeights {
-	const next = { ...weights };
-
-	for (const phase of phases) {
-		const copy = Float32Array.from(next[phase]);
-		copy[id] = value;
-		next[phase] = copy;
-	}
+}): WeightVector {
+	const next = Float32Array.from(weights);
+	next[id] = value;
 
 	return next;
-}
-
-// `<phase>.<feature>`, or `all.<feature>` for every phase at once. Anything else is not a weight.
-function parseWeightName(name: string): { phases: Phase[]; id: number } | undefined {
-	const [scope, key] = name.split(".");
-	const feature = key === undefined ? undefined : FEATURES_BY_KEY.get(key);
-	if (!feature) return undefined;
-
-	if (scope === "all") return { phases: PHASES, id: feature.id };
-
-	return PHASES.includes(scope as Phase)
-		? { phases: [scope as Phase], id: feature.id }
-		: undefined;
 }
 
 // Applies one `setoption` to a config, returning a new one. Values arrive as strings — UCI has no
@@ -102,11 +82,11 @@ export function applyOption({
 			break;
 	}
 
-	const weight = parseWeightName(name);
-	if (!weight || !usable) return config;
+	const feature = FEATURES_BY_KEY.get(name);
+	if (!feature || !usable) return config;
 
 	return {
 		...config,
-		weights: withWeight({ weights: config.weights, ...weight, value: number }),
+		weights: withWeight({ weights: config.weights, id: feature.id, value: number }),
 	};
 }

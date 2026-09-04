@@ -15,15 +15,13 @@ export const SNAKE: Animal = {
 		search: { depth: 2 },
 		temperature: 0,
 		weights: {
-			middlegame: {
-				opponentMobility: -25,
-				givesMate: 1,
-				materialPawn: 20,
-				materialKnight: 60,
-				materialBishop: 60,
-				materialRook: 100,
-				materialQueen: 180,
-			},
+			opponentMobility: -25,
+			givesMate: 1,
+			materialPawn: 20,
+			materialKnight: 60,
+			materialBishop: 60,
+			materialRook: 100,
+			materialQueen: 180,
 		},
 	},
 };

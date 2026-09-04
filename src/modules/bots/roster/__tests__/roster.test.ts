@@ -102,7 +102,7 @@ describe("a mate in one", () => {
 	const mateAware = ROSTER.map((animal) => ({
 		animal,
 		config: compileBot(animal.definition),
-	})).filter(({ config }) => config.weights.middlegame[featureId("givesMate")] !== 0);
+	})).filter(({ config }) => config.weights[featureId("givesMate")] !== 0);
 
 	for (const { animal, config } of mateAware) {
 		it(`is what the ${animal.definition.id} plays`, () => {

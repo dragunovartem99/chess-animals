@@ -1,5 +1,4 @@
 export { gameStatus } from "./outcome";
-export { gamePhase } from "./phase";
 export {
 	afterMove,
 	fenFromPosition,

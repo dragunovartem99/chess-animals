@@ -1,7 +1,5 @@
 import { FEATURES_BY_KEY } from "../eval";
-import type { BotDefinition, Phase } from "./types";
-
-const PHASES: Phase[] = ["opening", "middlegame", "endgame"];
+import type { BotDefinition } from "./types";
 
 const ID_PATTERN = /^[a-z][a-z0-9-]*$/u;
 
@@ -9,15 +7,14 @@ function fail({ id, problem }: { id: unknown; problem: string }): never {
 	throw new Error(`invalid bot "${typeof id === "string" ? id : "?"}": ${problem}`);
 }
 
-function checkWeights({ id, phase, record }: { id: string; phase: string; record: unknown }): void {
+function checkWeights({ id, record }: { id: string; record: unknown }): void {
 	if (typeof record !== "object" || record === null)
-		fail({ id, problem: `${phase} weights are not an object` });
+		fail({ id, problem: "weights are not an object" });
 
 	for (const [key, value] of Object.entries(record as Record<string, unknown>)) {
-		if (!FEATURES_BY_KEY.has(key))
-			fail({ id, problem: `${phase} names unknown feature "${key}"` });
+		if (!FEATURES_BY_KEY.has(key)) fail({ id, problem: `unknown feature "${key}"` });
 		if (typeof value !== "number" || !Number.isFinite(value)) {
-			fail({ id, problem: `${phase} weight "${key}" is not a finite number` });
+			fail({ id, problem: `weight "${key}" is not a finite number` });
 		}
 	}
 }
@@ -46,14 +43,7 @@ export function assertBotDefinition(value: unknown): asserts value is BotDefinit
 		fail({ id, problem: "temperature must be zero or more" });
 	}
 
-	const weights = candidate.weights as Record<string, unknown> | undefined;
-	if (!weights || typeof weights.middlegame !== "object") {
-		fail({ id, problem: "weights.middlegame is required — the other phases fall back to it" });
-	}
-
-	for (const phase of PHASES) {
-		if (weights[phase] !== undefined) checkWeights({ id, phase, record: weights[phase] });
-	}
+	checkWeights({ id, record: candidate.weights });
 }
 
 export function isBotDefinition(value: unknown): value is BotDefinition {

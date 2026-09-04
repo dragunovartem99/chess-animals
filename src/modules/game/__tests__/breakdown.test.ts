@@ -47,19 +47,6 @@ describe("explainPosition", () => {
 		expect(first.key).toBe("materialQueen");
 		expect(first.points).toBe(-900);
 	});
-
-	it("shows the weight after the phase blend, not the one that was authored", () => {
-		const weights = {
-			opening: onlyWeights({ materialPawn: 100 }).opening,
-			middlegame: onlyWeights({ materialPawn: 100 }).middlegame,
-			endgame: onlyWeights({ materialPawn: 200 }).endgame,
-		};
-		const endgame = positionFromFen("4k3/pppppppp/8/8/8/8/PPPPPPPP/4K3 w - - 0 1");
-		const [row] = explainPosition({ position: endgame, weights }).rows;
-
-		expect(explainPosition({ position: endgame, weights }).phase).toBe(1);
-		expect(row.weight).toBe(200);
-	});
 });
 
 describe("the move that produced the position", () => {
