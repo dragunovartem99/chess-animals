@@ -3,6 +3,7 @@ import { makeUci } from "chessops/util";
 import { describe, expect, it } from "vitest";
 
 import { positionFromFen } from "../../chess";
+import { MATE_SCORE } from "../../eval";
 import { defaultishWeights, onlyWeights } from "../../test-support/weights";
 import { searchRoot } from "../search";
 
@@ -68,6 +69,34 @@ describe("looking one move further", () => {
 
 	it("declines it at depth one too, once quiescence sees the recapture", () => {
 		expect(bestMove({ fen: POISONED, depth: 1, quiescence: true })).not.toBe("a1a7");
+	});
+});
+
+describe("quiescence in check", () => {
+	// Ra8+ is a back-rank check the black king cannot walk out of: every escape square on the
+	// rank is the rook's, so the queen has to interpose and is taken. A quiescence that lets the
+	// checked side stand pat never sees that — it prices the position as if Black could decline —
+	// and White plays a shuffling rook move instead of winning a queen for a rook.
+	const BACK_RANK = "6k1/5ppp/3q4/8/8/8/5PPP/R5K1 w - - 0 1";
+
+	it("searches every evasion, not only the capturing ones", () => {
+		expect(bestMove({ fen: BACK_RANK, depth: 1, quiescence: true })).toBe("a1a8");
+	});
+
+	it("still recognises a check with no evasion at all as mate", () => {
+		// The same rook, with the queen gone: Ra8 is mate. There is no evasion to search and
+		// nothing to stand pat on, so the leaf falls through to the evaluation, which is what
+		// scores a finished game.
+		const position = positionFromFen("6k1/5ppp/8/8/8/8/5PPP/R5K1 w - - 0 1");
+		const scored = searchRoot({
+			position,
+			weights: onlyWeights({ materialPawn: 100, givesMate: 1 }),
+			options: { depth: 1, quiescence: true },
+		});
+		const best = scored.reduce((left, right) => (right.score > left.score ? right : left));
+
+		expect(makeUci(best.move)).toBe("a1a8");
+		expect(best.score).toBeGreaterThan(MATE_SCORE - 10);
 	});
 });
 

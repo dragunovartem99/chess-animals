@@ -100,6 +100,13 @@ the last ply along captures, and `nodeLimit` caps the work one move may cost (re
 the search going deeper rather than corrupting the result). Depth 1 short-circuits to scoring
 every legal move.
 
+Quiescence stands pat and then searches captures — except in check, where there is nothing to
+stand on: the side to move may not decline, so **every** evasion is searched, not only the ones
+that capture. That extension is worth one check per line (`EVASION_BUDGET`); unbounded, a
+checking sequence never shrinks the move list and the benchmark ran 2.5× slower. Quiet moves that
+_give_ check are not searched at all — the other half of what "quiescence with checks" usually
+means, and the half no depth-2 animal is going to follow up on.
+
 Mate is the one thing that is **not** a term in the dot product. `terminalScore` replaces the
 evaluation of a finished game with `MATE_SCORE - ply`, scaled by `givesMate` — a preference in
 [-1, 1] where +1 chases mate, -1 flees it and 0 cannot see one, in which case the position is
