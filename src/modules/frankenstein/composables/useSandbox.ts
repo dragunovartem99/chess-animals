@@ -6,7 +6,7 @@ import { fromUci } from "@/shared/engine/uci/moves";
 
 import { blankPreset, presetFromBot } from "../utils/presets";
 import { createAutoplayLoop } from "./autoplay";
-import { buildEngine } from "./engine";
+import { buildEngine, reseed } from "./engine";
 
 // One weight vector, applied to both colours and to all three phases at once — the per-animal,
 // per-phase editor was cut in favour of this single live sandbox. A local (non-worker) UCI engine
@@ -108,6 +108,7 @@ export function useSandbox() {
 		loop.stop();
 		autoplay.value = false;
 		game.reset();
+		reseed(engine);
 	}
 
 	onBeforeUnmount(() => engine.dispose());

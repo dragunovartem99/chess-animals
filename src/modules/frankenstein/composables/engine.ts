@@ -32,5 +32,15 @@ export function buildEngine({
 	const post = worker.postMessage.bind(worker);
 	post({ definition, name: ENGINE_NAME });
 
-	return createUciClient({ transport: createWorkerTransport({ worker }) });
+	const engine = createUciClient({ transport: createWorkerTransport({ worker }) });
+	reseed(engine);
+
+	return engine;
+}
+
+// The engine's RNG seed defaults to its id, which is the constant `ENGINE_NAME` for every build —
+// without this, every fresh engine (and every `reset()` on the same one) ties-break identically,
+// so two autoplay runs from the same weights would replay the exact same game move for move.
+export function reseed(engine: UciEngineClient): void {
+	engine.setOption({ name: "Seed", value: crypto.randomUUID() });
 }
