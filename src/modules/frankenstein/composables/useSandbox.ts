@@ -28,7 +28,9 @@ export function useSandbox() {
 	});
 
 	function setWeight(key: string, value: number): void {
-		weights.value = { ...weights.value, [key]: value };
+		// Mutate in place — the ref is deep-reactive, so a slider drag updates one key instead of
+		// spreading a fresh ~30-key record (and re-rendering every other slider) per input tick.
+		weights.value[key] = value;
 		engine.setOption({ name: key, value: String(value) });
 	}
 
