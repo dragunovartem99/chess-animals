@@ -5,11 +5,15 @@ import { ROSTER } from "@/modules/bots/roster";
 import { openings } from "@/shared/openings";
 import { createGameCache, createGamePool, runGamesCached, runTournament } from "@/shared/scheduler";
 
+import { LAB } from "./lab";
 import { renderCrossTable, renderRatingTable } from "./render";
 
 // `npm run arena` — rate the whole roster against itself over the paired opening set, print the
 // tables, and write the full result to `arena-results.json`. A dev tool: it leans on every core
 // (pass `--jobs=` to cap it), prints a line per round, and runs for tens of seconds.
+//
+// `--lab` also rates the candidate bots staged in `cli/lab.ts` — the way a new idea gets a
+// number against the Hedgehog before it becomes an animal. `--seed=` picks the game seed.
 //
 // Deterministic: the same `--seed` gives the same games, the same ratings, the same JSON. The
 // result cache under `.cache/arena` means adding or retuning one bot only replays that bot.
@@ -19,10 +23,15 @@ const numArg = (name: string): number | undefined => {
 };
 const seed = numArg("seed") ?? 1;
 
+const write = (line: string) => process.stdout.write(`${line}\n`);
+
+// `--lab` rates the candidates in `cli/lab.ts` alongside the roster; without it, only the roster.
+const withLab = process.argv.includes("--lab");
+if (withLab && LAB.length === 0) write("--lab: cli/lab.ts holds no candidates");
+const roster = [...ROSTER.map((animal) => animal.definition), ...(withLab ? LAB : [])];
+
 // Leave a core free by default so the machine stays usable while the arena runs; `--jobs=` overrides.
 const jobs = Math.max(1, numArg("jobs") ?? availableParallelism() - 1);
-
-const write = (line: string) => process.stdout.write(`${line}\n`);
 
 const cache = createGameCache({ dir: ".cache/arena" });
 
@@ -31,7 +40,7 @@ const started = Date.now();
 // would spawn `jobs` workers per pair. This caps the process at `jobs` workers total.
 const pool = createGamePool({ concurrency: jobs });
 const result = await runTournament({
-	bots: ROSTER.map((animal) => ({ id: animal.definition.id, definition: animal.definition })),
+	bots: roster.map((definition) => ({ id: definition.id, definition })),
 	openings: openings.map((opening) => ({ id: opening.id, fen: opening.fen })),
 	seed,
 	run: (specs) =>

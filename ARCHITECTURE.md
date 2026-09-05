@@ -13,7 +13,8 @@ src/
   shared/       primitives more than one module needs; depends on nothing above it
   locales/      ru/ en/ — UI strings, bot names, feature labels
   workers/      uciEngine.worker.ts
-cli/            dev CLIs — the tournament runner and the SPSA tuner (run with tsx)
+cli/            dev CLIs — the tournament runner and the SPSA tuner (run with tsx); lab.ts stages
+                candidate bots for `arena -- --lab`
 public/         favicon
 paper.pdf       Elo World, the design's source
 ```
