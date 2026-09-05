@@ -4,10 +4,9 @@ export type Standing = { id: string; rating: number; stderr: number };
 export type Pair = { a: string; b: string };
 
 // An order-free key for the unordered pair, so play counts and dedup work regardless of which bot
-// is named first.
-export function pairKey(a: string, b: string): string {
-	return [a, b].toSorted().join("::");
-}
+// is named first. A ternary rather than `[a, b].toSorted().join()` — no array per call, and this
+// runs once per pair per round.
+export const pairKey = (a: string, b: string): string => (a < b ? `${a}::${b}` : `${b}::${a}`);
 
 export function allPairs(ids: readonly string[]): Pair[] {
 	const pairs: Pair[] = [];

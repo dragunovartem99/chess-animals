@@ -37,7 +37,8 @@ function foldRound({
 	pairs.forEach(({ a, b }, i) => {
 		games += add(matchups, a, b, outcomes[i].aWhite);
 		games += add(matchups, b, a, outcomes[i].bWhite);
-		playCounts.set(pairKey(a, b), (playCounts.get(pairKey(a, b)) ?? 0) + 1);
+		const key = pairKey(a, b);
+		playCounts.set(key, (playCounts.get(key) ?? 0) + 1);
 	});
 	return games;
 }

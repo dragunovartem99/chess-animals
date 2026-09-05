@@ -1,5 +1,5 @@
 import type { BotDefinition } from "../bots";
-import type { GameReport, GameSpec } from "../scheduler";
+import { type GameReport, type GameSpec, mixSeed } from "../scheduler";
 import { fromVector, type TuneSpec } from "./parameters";
 
 export type GauntletBot = { id: string; definition: BotDefinition };
@@ -12,14 +12,6 @@ type Game = {
 	seed: number;
 };
 
-function seedFrom(parts: (string | number)[]): number {
-	let hash = 2166136261;
-	for (const character of parts.join("|")) {
-		hash = Math.imul(hash ^ (character.codePointAt(0) ?? 0), 16777619) >>> 0;
-	}
-	return hash >>> 0;
-}
-
 function enumerate(
 	opponents: readonly GauntletBot[],
 	openings: readonly GauntletOpening[],
@@ -31,7 +23,7 @@ function enumerate(
 				opponent: opponent.definition,
 				opening,
 				candidateWhite,
-				seed: seedFrom([seed, opponent.id, opening.id, candidateWhite ? "w" : "b"]),
+				seed: mixSeed([seed, opponent.id, opening.id, candidateWhite ? "w" : "b"]),
 			}))
 		)
 	);

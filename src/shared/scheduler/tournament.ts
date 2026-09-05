@@ -2,9 +2,10 @@ import type { BotDefinition } from "../bots";
 import type { RatingResult } from "../rating";
 import { type PairOutcome, runAdaptiveRating } from "./adaptiveRating";
 import { crossTable, type CrossTable } from "./crossTable";
+import { pairKey } from "./pairing";
 import { runGames } from "./pool";
 import { standingOrder } from "./settled";
-import { pairKeyOf, pairSpecs, type TournamentOpening, tally } from "./tournamentSpecs";
+import { pairSpecs, type TournamentOpening, tally } from "./tournamentSpecs";
 import type { GameReport, GameSpec } from "./types";
 
 export type { TournamentOpening };
@@ -45,8 +46,9 @@ export async function runTournament({
 	const replays = new Map<string, number>();
 
 	const playPair = async (a: string, b: string): Promise<PairOutcome> => {
-		const replay = replays.get(pairKeyOf(a, b)) ?? 0;
-		replays.set(pairKeyOf(a, b), replay + 1);
+		const key = pairKey(a, b);
+		const replay = replays.get(key) ?? 0;
+		replays.set(key, replay + 1);
 		const entries = pairSpecs(a, b, replay, context);
 		return tally(entries, await run(entries.map((entry) => entry.spec)));
 	};

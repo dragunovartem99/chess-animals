@@ -3,6 +3,7 @@ export { type PairOutcome, runAdaptiveRating } from "./adaptiveRating";
 export { allPairs, nextPairings, type Pair, pairKey, type Standing } from "./pairing";
 export { ratingsSettled, standingOrder } from "./settled";
 export { createGameCache, gameKey } from "./cache";
+export { mixSeed } from "./seed";
 export { runGamesCached } from "./cached";
 export { type CrossRow, crossTable, type CrossTable } from "./crossTable";
 export { type GamePool, createGamePool } from "./gamePool";

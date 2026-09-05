@@ -1,5 +1,7 @@
 import type { BotDefinition } from "../bots";
 import type { PairOutcome } from "./adaptiveRating";
+import { pairKey } from "./pairing";
+import { mixSeed } from "./seed";
 import type { GameReport, GameSpec } from "./types";
 
 export type TournamentOpening = { id: string; fen: string };
@@ -11,19 +13,6 @@ export type SpecContext = {
 	plyLimit: number;
 };
 
-export const pairKeyOf = (a: string, b: string): string => (a < b ? `${a}::${b}` : `${b}::${a}`);
-
-// A stable 32-bit mix — enough to give every (pair, opening, replay, color) its own game seed,
-// so replaying a pair in a later round adds fresh games and re-running the whole tournament from
-// the same master seed reproduces every one of them.
-function mixSeed(parts: (string | number)[]): number {
-	let hash = 2166136261;
-	for (const character of parts.join("|")) {
-		hash = Math.imul(hash ^ (character.codePointAt(0) ?? 0), 16777619) >>> 0;
-	}
-	return hash >>> 0;
-}
-
 // Both colors of every opening for one pair, on this replay of it.
 export function pairSpecs(
 	a: string,
@@ -31,7 +20,7 @@ export function pairSpecs(
 	replay: number,
 	context: SpecContext
 ): TaggedSpec[] {
-	const key = pairKeyOf(a, b);
+	const key = pairKey(a, b);
 	return context.openings.flatMap((opening) =>
 		(
 			[
