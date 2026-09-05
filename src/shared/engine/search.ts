@@ -102,8 +102,9 @@ export function searchRoot({
 
 	// Search best-capture-first so the narrowing window bites sooner, but report the moves in
 	// generated order regardless: the policy's tie-break picks by index, so a caller must see the
-	// same order whether or not the search pruned.
-	const order = prune ? orderMoves({ position, moves }) : moves;
+	// same order whether or not the search pruned. `orderMoves` sorts in place, so the root — the
+	// one caller that still needs the generated order afterwards — hands it a copy.
+	const order = prune ? orderMoves({ position, moves: moves.slice() }) : moves;
 	const scoreByMove = new Map<NormalMove, number>();
 	let best = -INFINITY;
 
