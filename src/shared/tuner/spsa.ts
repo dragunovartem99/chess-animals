@@ -53,12 +53,8 @@ export async function runSpsa({
 		const slope = (scorePlus - scoreMinus) / (2 * ck);
 		current = clamp(current.map((value, i) => value + ak * slope * delta[i]));
 
-		for (const [candidate, score] of [
-			[plus, scorePlus],
-			[minus, scoreMinus],
-		] as const) {
-			if (score > best.score) best = { theta: candidate, score };
-		}
+		if (scorePlus > best.score) best = { theta: plus, score: scorePlus };
+		if (scoreMinus > best.score) best = { theta: minus, score: scoreMinus };
 
 		const score = (scorePlus + scoreMinus) / 2;
 		scores.push(score);
