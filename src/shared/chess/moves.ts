@@ -5,7 +5,7 @@ import type { NormalMove, Role, Square } from "chessops/types";
 import { opposite } from "chessops/util";
 
 // Every role a pawn may become. Ordered best-first, so move ordering gets queens early.
-export const PROMOTION_ROLES: Role[] = ["queen", "knight", "rook", "bishop"];
+const PROMOTION_ROLES: Role[] = ["queen", "knight", "rook", "bishop"];
 
 // The moves one piece makes, promotions expanded into one move per role. `promotionRank` is the
 // only rank this piece could promote on, or `-1` when it is not a pawn — so the inner loop is a
@@ -94,20 +94,6 @@ function generate({ position, targets }: { position: Chess; targets?: SquareSet 
 	}
 
 	return moves;
-}
-
-// Whether the side to move has any legal move at all, short-circuiting on the first piece that
-// has one — almost always the first piece looked at. `legalMoves(position).length === 0` answers
-// the same question but builds the whole list first; at a search leaf, where all that matters is
-// telling a mate or stalemate from a playable position, that list is never used.
-export function hasLegalMove(position: Chess): boolean {
-	const context = position.ctx();
-
-	for (const from of position.board[position.turn]) {
-		if (position.dests(from, context).nonEmpty()) return true;
-	}
-
-	return false;
 }
 
 export function legalMoves(position: Chess): NormalMove[] {
