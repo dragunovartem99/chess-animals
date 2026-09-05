@@ -29,7 +29,7 @@ export function buildTree({
 			flexDirection: "column",
 			alignItems: "center",
 			justifyContent: "center",
-			paddingTop: 16,
+			paddingTop: 40,
 			backgroundImage: `url(${backgroundDataUri})`,
 			backgroundSize: `${OG_WIDTH}px ${OG_HEIGHT}px`,
 		},

@@ -17,10 +17,11 @@ export function title(text: string) {
 		"div",
 		{
 			fontFamily: "Fredoka",
-			fontSize: 116,
+			fontSize: 104,
 			fontWeight: 600,
 			color: "#ffffff",
 			letterSpacing: 1,
+			marginTop: 8,
 			transform: "rotate(-3deg)",
 			textShadow: TITLE_SHADOW,
 		},

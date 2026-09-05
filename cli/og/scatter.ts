@@ -7,12 +7,12 @@ import type { Chip, PieceUris } from "./tree";
 // outline reads as a cartoon toy against the greenery, where the black pieces flattened into
 // dark blobs.
 const FLOATING = [
-	{ key: "white-knight", left: 34, top: 44, size: 150, rot: -14 },
-	{ key: "white-bishop", left: 268, top: 34, size: 82, rot: -10 },
-	{ key: "white-pawn", left: 470, top: 40, size: 60, rot: 9 },
-	{ key: "white-queen", left: 690, top: 36, size: 78, rot: -7 },
-	{ key: "white-rook", left: 26, top: 250, size: 116, rot: 9 },
-	{ key: "white-king", left: 1090, top: 250, size: 98, rot: -10 },
+	{ key: "white-knight", left: 34, top: 50, size: 146, rot: -14 },
+	{ key: "white-bishop", left: 250, top: 12, size: 74, rot: -10 },
+	{ key: "white-pawn", left: 470, top: 6, size: 54, rot: 9 },
+	{ key: "white-queen", left: 700, top: 10, size: 70, rot: -7 },
+	{ key: "white-rook", left: 20, top: 196, size: 112, rot: 9 },
+	{ key: "white-king", left: 1096, top: 200, size: 96, rot: -10 },
 ];
 
 export function floatingPieces(uris: PieceUris) {
@@ -34,9 +34,12 @@ const clamp = (n: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, n
 // The row has to hold whatever the roster grows to, so nothing here is a fixed size: each
 // animal gets an equal slice of ~1120px and the disc, emoji and label are sized off that slice.
 // Past ~13 animals the slice is too narrow for a readable name, so the labels drop out.
-export function layout(count: number) {
+//
+// `discCap` is lower when the stickers stack in two rows: a full-width disc twice over plus its
+// label runs past the 630px frame, so the two-row caller pins it smaller.
+export function layout(count: number, discCap = 118) {
 	const slot = Math.min(154, Math.floor(1120 / count));
-	const disc = clamp(slot - 8, 44, 118);
+	const disc = clamp(slot - 8, 44, discCap);
 	return {
 		slot,
 		disc,
@@ -99,11 +102,23 @@ function bubble(chip: Chip, i: number, l: ReturnType<typeof layout>) {
 
 // One animal is a sticker: emoji in a cream disc ringed in its tint, a hard offset shadow, and
 // a slight tilt that alternates down the row, so they read as pinned on by hand.
+//
+// The roster is split across two rows so each disc keeps a readable size and its label as the
+// field grows; both rows are sized off the fuller one (the top) so the discs match. The top row
+// takes the extra sticker when the count is odd.
 export function bubbleRow(chips: Chip[]) {
-	const l = layout(chips.length);
+	const half = Math.ceil(chips.length / 2);
+	const rows = [chips.slice(0, half), chips.slice(half)];
+	const l = layout(half, 92);
 	return el(
 		"div",
-		{ display: "flex", justifyContent: "center", marginTop: 30 },
-		chips.map((c, i) => bubble(c, i, l))
+		{ display: "flex", flexDirection: "column", alignItems: "center", marginTop: 30 },
+		rows.map((row, r) =>
+			el(
+				"div",
+				{ display: "flex", justifyContent: "center", marginTop: r === 0 ? 0 : 8 },
+				row.map((c, i) => bubble(c, r * half + i, l))
+			)
+		)
 	);
 }
