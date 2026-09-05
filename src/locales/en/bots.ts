@@ -12,6 +12,10 @@ export default {
 		name: "Parrot",
 		description: "Plays your move back at you. Keeps it up until copying you costs a piece.",
 	},
+	turtle: {
+		name: "Turtle",
+		description: "Every piece hides at home around its king, and nothing ever comes out.",
+	},
 	elephant: {
 		name: "Elephant",
 		description: "It only steps on squares of its own color — like you did when you were five.",
