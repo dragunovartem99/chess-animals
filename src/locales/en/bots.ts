@@ -30,4 +30,8 @@ export default {
 		name: "Hawk",
 		description: "Finds your king and never looks away. Then everyone dives at it.",
 	},
+	spider: {
+		name: "Spider",
+		description: "Eight legs, and every one reaches for a new square.",
+	},
 };

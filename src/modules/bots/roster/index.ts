@@ -5,6 +5,7 @@ import { HAWK } from "./hawk";
 import { HEDGEHOG } from "./hedgehog";
 import { MONKEY } from "./monkey";
 import { PARROT } from "./parrot";
+import { SPIDER } from "./spider";
 import type { Animal } from "./types";
 
 // The roster, weakest first: the order is the one `npm run arena` measured, not one anybody
@@ -15,10 +16,11 @@ import type { Animal } from "./types";
 // to answer one question about the animals around it — is a blunder the animal's one idea, or
 // just what any weights do at this depth? The Hawk sits just above it: the same material, aimed
 // at the enemy king. The Hedgehog above them both is the counterexample — the Monkey plus a
-// single safety instinct, worth more than material or an attack alone.
+// single safety instinct, worth more than material or an attack alone. The Spider tops the
+// table: the same material again, plus giving every piece the most squares it can have.
 //
 // Every animal reads a feature no other one does, so the roster is a tour of the registry.
-export const ROSTER: Animal[] = [DONKEY, GOAT, PARROT, ELEPHANT, MONKEY, HAWK, HEDGEHOG];
+export const ROSTER: Animal[] = [DONKEY, GOAT, PARROT, ELEPHANT, MONKEY, HAWK, HEDGEHOG, SPIDER];
 
 export const ROSTER_BY_ID = new Map(ROSTER.map((animal) => [animal.definition.id, animal]));
 
