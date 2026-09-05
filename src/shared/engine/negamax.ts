@@ -72,7 +72,10 @@ export function negamax(frame: Frame): number {
 	if (depth <= 0 || leaf.exhausted()) return leaf.score(frame);
 
 	const moves = legalMoves(position);
-	if (moves.length === 0) return leaf.evaluate(frame);
+	// No moves means the game is over here — mate or stalemate. Hand the check state to the
+	// evaluation so `terminalScore` runs one of the two probes rather than both.
+	if (moves.length === 0)
+		return leaf.evaluate({ position, played: frame.played, ply, inCheck: position.isCheck() });
 
 	let best = -INFINITY;
 

@@ -82,13 +82,18 @@ function hopeless({
 }
 
 export function createQuiescence(deps: Deps): (frame: QuiescenceFrame) => number {
-	return (frame: QuiescenceFrame) => quiesce({ ...frame, deps, budget: EVASION_BUDGET });
+	// The entry skips the draw test: negamax has already run it on this exact position before it
+	// hands the leaf over. `quiesce` still tests every position the recursion makes.
+	return (frame: QuiescenceFrame) => quiesceNode({ ...frame, deps, budget: EVASION_BUDGET });
 }
 
-function quiesce({ deps, budget, position, played, ply, alpha, beta }: Descent): number {
-	const { descend, drawn, drawScore, evaluate, exhausted, worth } = deps;
+function quiesce(descent: Descent): number {
+	if (descent.deps.drawn(descent.position)) return descent.deps.drawScore;
+	return quiesceNode(descent);
+}
 
-	if (drawn(position)) return drawScore;
+function quiesceNode({ deps, budget, position, played, ply, alpha, beta }: Descent): number {
+	const { descend, evaluate, exhausted, worth } = deps;
 
 	// One `isCheck` for the node: `checked` is the position's own state, `inCheck` is that gated by
 	// the evasion budget. Handing `checked` to `evaluate` lets `terminalScore` skip a mate/stalemate
