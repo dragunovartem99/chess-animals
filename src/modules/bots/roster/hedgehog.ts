@@ -6,7 +6,7 @@ import type { Animal } from "./types";
 // material at depth 2 is not, and it is enough to beat it.
 export const HEDGEHOG: Animal = {
 	emoji: "🦔",
-	tint: "#f43f5e",
+	tint: "#a95447",
 	definition: {
 		id: "hedgehog",
 		search: { depth: 2 },

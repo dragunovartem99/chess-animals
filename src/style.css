@@ -8,12 +8,12 @@
 	font-family: "Noto Sans", system-ui, sans-serif;
 	line-height: 1.4;
 
-	/* Zinc neutrals with amber used sparingly: amber marks state — the page you are on, the
-	   move just played — and never fills a large surface. */
+	/* Amber is the one accent — it marks state (the page you are on, the move just played) and
+	   fills the primary button. Tailwind's amber ramp (300 / 500 / 700): deriving the shades by
+	   lightness alone went muddy, because the ramp also shifts hue toward orange as it darkens. */
 	--color-accent-light: #fcd34d;
 	--color-accent: #f59e0b;
 	--color-accent-dark: #b45309;
-	/* Amber at a whisper, for chips sitting on the dark bars. */
 	--color-accent-veil: rgb(245 158 11 / 16%);
 
 	--color-neutral-lightest: #e4e4e7;
@@ -27,18 +27,29 @@
 	--color-black: #18181b;
 	--color-white: #fafafa;
 
+	/* The header is dark walnut derived straight from the board: same hue and saturation as the
+	   dark square, only much darker. The on-wood text takes the light square's hue, near-white.
+	   Amber (state) also carries on the wood. */
+	--color-wood: hsl(from var(--color-board-dark) h s 16%);
+	--color-wood-light: hsl(from var(--color-board-dark) h s 30%);
+	--color-wood-text: hsl(from var(--color-board-light) h s 92%);
+
 	--color-bg: var(--color-neutral-darker);
-	--color-surface: #ffffff;
+	--color-surface: #fdfaf2;
 	--color-ink: var(--color-black);
-	--color-ink-muted: var(--color-neutral);
+	--color-ink-muted: var(--color-neutral-darker);
 	--color-border: var(--color-neutral-lightest);
-	--color-stripe: #f4f4f5;
+	/* Warm neutrals for surfaces sitting on the cream card: zebra rows and the sunken tracks of
+	   the segmented controls. Cool zinc greys read as a colour clash against the cream. */
+	--color-stripe: #f4efe2;
+	--color-sunken: #e8e0cd;
 
 	--color-good: #15803d;
 	--color-bad: #b91c1c;
 
-	--color-board-light: #f4f4f5;
-	--color-board-dark: #a1a1aa;
+	/* lichess "brown" board. */
+	--color-board-light: #f0d9b5;
+	--color-board-dark: #b58863;
 
 	--radius-sm: 0.5rem;
 	--radius-md: 1rem;
@@ -56,7 +67,16 @@ body {
 body {
 	min-height: 100vh;
 	overflow-x: hidden;
-	background: var(--color-bg);
+	/* A cartoon meadow behind the cards, taken down a few stops with a dark-green wash so the
+	   bright lawn doesn't shout over the white cards. The wash is kept a touch warm and lighter
+	   than pure shadow so the lawn reads as grass, not mud, and the tile is large enough that the
+	   repeat is not obvious behind the cards. */
+	background-color: #3a4d24;
+	background-image:
+		linear-gradient(rgb(34 44 18 / 46%), rgb(34 44 18 / 46%)),
+		url("/chess-animals/cartoon-grass.jpg");
+	background-size: auto, 440px;
+	background-attachment: fixed, fixed;
 	color: var(--color-ink);
 }
 
@@ -111,7 +131,7 @@ button {
 	padding: 0.5em 1.5em;
 	border: none;
 	border-radius: var(--radius-sm);
-	background: var(--color-neutral-darkest);
+	background: var(--color-accent-dark);
 	color: var(--color-white);
 	cursor: pointer;
 	box-shadow: var(--shadow-button);
@@ -119,7 +139,7 @@ button {
 }
 
 button:hover {
-	background: var(--color-neutral-dark);
+	background: var(--color-accent);
 }
 
 button:active {
@@ -136,7 +156,7 @@ select {
 }
 
 /* The bundled chessground theme washes its squares out with an opacity overlay; painting the
-   board ourselves keeps the zinc pair exact. */
+   board ourselves keeps the lichess brown pair exact. */
 cg-board {
 	background-color: var(--color-board-light);
 	background-image: repeating-conic-gradient(

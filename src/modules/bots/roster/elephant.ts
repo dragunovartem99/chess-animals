@@ -5,7 +5,7 @@ import type { Animal } from "./types";
 // negamax flips its sign every ply.
 export const ELEPHANT: Animal = {
 	emoji: "🐘",
-	tint: "#64748b",
+	tint: "#82786b",
 	definition: {
 		id: "elephant",
 		search: { depth: 2 },

@@ -6,7 +6,7 @@ import type { Animal } from "./types";
 // and the difference is what the idea is actually costing.
 export const MONKEY: Animal = {
 	emoji: "🐒",
-	tint: "#f97316",
+	tint: "#b56a43",
 	definition: {
 		id: "monkey",
 		search: { depth: 2 },
