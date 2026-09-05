@@ -1,6 +1,6 @@
 import type { Chess } from "chessops/chess";
 
-import { afterMove, legalCaptures, legalMoves } from "../chess";
+import { type Descend, legalCaptures, legalMoves } from "../chess";
 import type { PlayedMove } from "../eval";
 import { orderMoves } from "./ordering";
 
@@ -38,9 +38,11 @@ const EVASION_BUDGET = 1;
 // move list stops shrinking, so the tree grows several times over to buy tactics a depth-2 animal
 // was never going to follow up on anyway.
 export function createQuiescence({
+	descend,
 	evaluate,
 	exhausted,
 }: {
+	descend: Descend;
 	evaluate: Evaluate;
 	exhausted: () => boolean;
 }): (frame: QuiescenceFrame) => number {
@@ -67,7 +69,7 @@ export function createQuiescence({
 		for (const move of orderMoves({ position, moves })) {
 			const score = -quiesce(
 				{
-					position: afterMove({ position, move }),
+					position: descend({ position, move, ply: ply + 1 }),
 					played: { parent: position, move },
 					ply: ply + 1,
 					alpha: -beta,

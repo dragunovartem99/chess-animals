@@ -1,7 +1,7 @@
 import type { Chess } from "chessops/chess";
 import type { NormalMove } from "chessops/types";
 
-import { afterMove, legalMoves } from "../chess";
+import { createDescend, legalMoves } from "../chess";
 import type { WeightVector, PlayedMove } from "../eval";
 import { createEvaluator } from "./evaluate";
 import { orderMoves } from "./ordering";
@@ -32,6 +32,7 @@ type Frame = {
 
 function createSearch({ weights, options }: { weights: WeightVector; options: SearchOptions }) {
 	const limit = options.nodeLimit ?? INFINITY;
+	const descend = createDescend();
 	let nodes = 0;
 
 	const scorePosition = createEvaluator({ weights });
@@ -40,7 +41,7 @@ function createSearch({ weights, options }: { weights: WeightVector; options: Se
 		return scorePosition(frame);
 	};
 
-	const quiesce = createQuiescence({ evaluate, exhausted: () => nodes >= limit });
+	const quiesce = createQuiescence({ descend, evaluate, exhausted: () => nodes >= limit });
 
 	function negamax({ position, played, depth, ply, alpha, beta }: Frame): number {
 		// At a leaf the move list is never walked, so it is not built — a mated leaf needs no
@@ -58,9 +59,8 @@ function createSearch({ weights, options }: { weights: WeightVector; options: Se
 		let best = -INFINITY;
 
 		for (const move of orderMoves({ position, moves })) {
-			const child = afterMove({ position, move });
 			const score = -negamax({
-				position: child,
+				position: descend({ position, move, ply: ply + 1 }),
 				played: { parent: position, move },
 				depth: depth - 1,
 				ply: ply + 1,
@@ -75,7 +75,7 @@ function createSearch({ weights, options }: { weights: WeightVector; options: Se
 		return best;
 	}
 
-	return { negamax, nodeCount: () => nodes };
+	return { descend, negamax, nodeCount: () => nodes };
 }
 
 // Every legal move with what it is worth to the mover, searched to the requested depth.
@@ -97,7 +97,7 @@ export function searchRoot({
 	options: SearchOptions;
 	prune?: boolean;
 }): ScoredMove[] {
-	const { negamax } = createSearch({ weights, options });
+	const { descend, negamax } = createSearch({ weights, options });
 	const moves = legalMoves(position);
 
 	// Search best-capture-first so the narrowing window bites sooner, but report the moves in
@@ -110,7 +110,7 @@ export function searchRoot({
 
 	for (const move of order) {
 		const score = -negamax({
-			position: afterMove({ position, move }),
+			position: descend({ position, move, ply: 1 }),
 			played: { parent: position, move },
 			depth: options.depth - 1,
 			ply: 1,
