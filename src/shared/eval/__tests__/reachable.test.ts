@@ -97,6 +97,26 @@ describe("the feature registry", () => {
 		expect(dead.map((feature) => feature.key)).toEqual([]);
 	});
 
+	// A family may also gate one expensive feature behind `context.weighs`, which is only sound if
+	// the gate names the slot it guards. Get that wrong and the feature reads zero for the bot
+	// that asked for it and only for that bot — invisible to the test above, which turns a whole
+	// family on at once. So every feature is asked for entirely on its own and held to the value
+	// the ungated extractor reads.
+	it("reads the same value for a feature asked for alone as for all of them", () => {
+		const frames = everyFrame();
+		const full = frames.map((frame) => extractFeatures(frame));
+
+		for (const feature of FEATURES) {
+			const alone = createExtractor({ slots: [feature.id] });
+			const gated = frames.map((frame) => alone(frame)[feature.id]);
+
+			expect({ key: feature.key, values: gated }).toEqual({
+				key: feature.key,
+				values: full.map((vector) => vector[feature.id]),
+			});
+		}
+	});
+
 	// `createExtractor` skips a family whose slots a bot leaves at zero, which is only sound if
 	// the slots a family declares are exactly the ones it writes. A feature added to an extractor
 	// but not to its `SLOTS` would read zero for every bot that weighs it and nothing else — the

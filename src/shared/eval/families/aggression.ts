@@ -77,9 +77,19 @@ export function extractAggression({
 	context: EvalContext;
 	features: FeatureVector;
 }): void {
-	features[OPPONENT_MOBILITY] = reachable({ context, color: context.them });
-	features[PUSH_DEPTH] =
-		depth({ context, color: context.us }) - depth({ context, color: context.them });
-	features[OFFERED_MATERIAL] =
-		offered({ context, color: context.us }) - offered({ context, color: context.them });
+	// Three separate walks, so three separate gates — the Snake names `opponentMobility` alone and
+	// has no use for the other two.
+	if (context.weighs(OPPONENT_MOBILITY)) {
+		features[OPPONENT_MOBILITY] = reachable({ context, color: context.them });
+	}
+
+	if (context.weighs(PUSH_DEPTH)) {
+		features[PUSH_DEPTH] =
+			depth({ context, color: context.us }) - depth({ context, color: context.them });
+	}
+
+	if (context.weighs(OFFERED_MATERIAL)) {
+		features[OFFERED_MATERIAL] =
+			offered({ context, color: context.us }) - offered({ context, color: context.them });
+	}
 }
