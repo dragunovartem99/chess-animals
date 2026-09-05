@@ -157,9 +157,10 @@ a noisy signal usable. Target: a useful run in 1–2 minutes.
   change that shifts a game shows up as a diff, which is the cheapest possible regression net for
   a heuristic engine.
 - **Determinism** — the same tournament seed twice gives an identical rating table.
-- **Behavioural sanity** — the Wolf beats the Donkey well over 90% of paired games; the pacifist
-  draws far more than it wins. **Matching the paper's ordering is the strongest signal the
-  features are right**, and it is the check that would actually catch a wrong sign.
+- **Behavioural sanity** — the Wolf beats the Donkey well over 90% of paired games; the Dove and
+  the Lemming (the paper's `pacifist` and `generous`) are the two animals the Donkey itself
+  beats. **Matching the paper's ordering is the strongest signal the features are right**, and it
+  is the check that would actually catch a wrong sign.
 - **Performance** — `npm run bench` reports extraction cost; the suite asserts it under the 60 µs
   guard, and a full 12-bot ranking under the 30 s budget.
 

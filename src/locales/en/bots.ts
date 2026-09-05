@@ -4,6 +4,19 @@ export default {
 		description:
 			"Doesn't think. Moves whatever, wherever — and sometimes that's enough to win.",
 	},
+	dove: {
+		name: "Dove",
+		description: "Won't check, won't take, won't land the mate. It loses very politely.",
+	},
+	lemming: {
+		name: "Lemming",
+		description: "Hands you its pieces, biggest first. Then hands you the rest, too.",
+	},
+	dodo: {
+		name: "Dodo",
+		description:
+			"Afraid of nothing. Walks its own king right across the board, straight at yours.",
+	},
 	goat: {
 		name: "Goat",
 		description: "Checks, bites, pushes — in that order. It never asks what the meal costs.",
