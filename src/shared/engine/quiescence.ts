@@ -1,7 +1,9 @@
 import type { Chess } from "chessops/chess";
+import type { Role } from "chessops/types";
 
 import { type Descend, legalCaptures, legalMoves } from "../chess";
 import type { PlayedMove } from "../eval";
+import { DELTA_MARGIN } from "./delta";
 import { orderMoves } from "./ordering";
 
 export type QuiescenceFrame = {
@@ -23,6 +25,8 @@ type Deps = {
 	drawScore: number;
 	evaluate: Evaluate;
 	exhausted: () => boolean;
+	// The most this bot can win by taking a piece of each role. See `captureWorth`.
+	worth: Record<Role, number>;
 };
 
 type Descent = QuiescenceFrame & { deps: Deps; budget: number };
@@ -54,12 +58,30 @@ const EVASION_BUDGET = 1;
 // "quiescence with checks" usually means, and they cost far more than they are worth here: the
 // move list stops shrinking, so the tree grows several times over to buy tactics a depth-2 animal
 // was never going to follow up on anyway.
+// Delta pruning: a capture that could not lift the standing score to `alpha` even if the piece
+// were free is not searched. Down a rook, there is no point looking at what happens after taking a
+// pawn — the reply does not matter, because the pawn was never going to be enough.
+//
+// A promotion is never pruned: it wins a queen on top of whatever it takes, which is not what
+// `worth` measures. Nor is anything while in check, where there is no standing score to add to.
+function hopeless({
+	standPat,
+	alpha,
+	worth,
+}: {
+	standPat: number;
+	alpha: number;
+	worth: number;
+}): boolean {
+	return standPat + worth + DELTA_MARGIN <= alpha;
+}
+
 export function createQuiescence(deps: Deps): (frame: QuiescenceFrame) => number {
 	return (frame: QuiescenceFrame) => quiesce({ ...frame, deps, budget: EVASION_BUDGET });
 }
 
 function quiesce({ deps, budget, position, played, ply, alpha, beta }: Descent): number {
-	const { descend, drawn, drawScore, evaluate, exhausted } = deps;
+	const { descend, drawn, drawScore, evaluate, exhausted, worth } = deps;
 
 	if (drawn(position)) return drawScore;
 
@@ -80,6 +102,9 @@ function quiesce({ deps, budget, position, played, ply, alpha, beta }: Descent):
 	let best = inCheck ? -Infinity : Math.max(standPat, alpha);
 
 	for (const move of orderMoves({ position, moves })) {
+		const victim = inCheck || move.promotion ? undefined : position.board.getRole(move.to);
+		if (victim && hopeless({ standPat, alpha, worth: worth[victim] })) continue;
+
 		const score = -quiesce({
 			deps,
 			budget: inCheck ? budget - 1 : budget,

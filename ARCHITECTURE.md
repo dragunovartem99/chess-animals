@@ -102,6 +102,14 @@ the last ply along captures, and `nodeLimit` caps the work one move may cost (re
 the search going deeper rather than corrupting the result). Depth 1 short-circuits to scoring
 every legal move.
 
+Captures it cannot afford are not searched at all. If the standing score plus the piece on offer
+plus a two-pawn margin still fails to reach `alpha`, the capture is skipped — a pawn is not worth
+looking at while a rook down. The piece is priced from the bot's _own_ material and `captureValue`
+weights, so a Snake that thinks a rook beats a queen prunes by its own values and a bot weighing
+no material at all gets a bound of zero, which is the truth: captures cannot move a score that
+does not count them. The margin is the wager, since a capture moves mobility and king safety too
+and nothing bounds those; it is worth about 15% of a search with quiescence on.
+
 Quiescence stands pat and then searches captures — except in check, where there is nothing to
 stand on: the side to move may not decline, so **every** evasion is searched, not only the ones
 that capture. That extension is worth one check per line (`EVASION_BUDGET`); unbounded, a

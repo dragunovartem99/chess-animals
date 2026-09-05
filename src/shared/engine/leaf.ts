@@ -2,6 +2,7 @@ import type { Chess } from "chessops/chess";
 
 import type { Descend } from "../chess";
 import type { PlayedMove, WeightVector } from "../eval";
+import { captureWorth } from "./delta";
 import { createEvaluator } from "./evaluate";
 import { createQuiescence } from "./quiescence";
 
@@ -51,7 +52,16 @@ export function createLeaf({
 	};
 
 	const exhausted = () => nodes >= nodeLimit;
-	const quiesce = createQuiescence({ descend, drawn, drawScore, evaluate, exhausted });
+	const quiesce = createQuiescence({
+		descend,
+		drawn,
+		drawScore,
+		evaluate,
+		exhausted,
+		// Once per search, off the weights it was built with: a bot's own prices are what its
+		// captures are pruned by.
+		worth: captureWorth(weights),
+	});
 
 	return {
 		score: (frame) => (quiescence ? quiesce(frame) : evaluate(frame)),
