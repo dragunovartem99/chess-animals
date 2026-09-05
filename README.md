@@ -2,7 +2,7 @@
 
 Chess bots with animal personalities, benchmarked against each other in seconds.
 
-Every animal — the random 🐴 Donkey, the all-in 🐺 Wolf — runs the same code. A personality is
+Every animal — the random 🐴 Donkey, the greedy 🐒 Monkey — runs the same code. A personality is
 nothing but a set of tunable heuristic weights, and a move is a dot product between those weights
 and one feature vector describing the position.
 
@@ -52,11 +52,11 @@ Built: the feature evaluation, negamax search with quiescence, the UCI codec and
 the board, `/play` with a per-feature breakdown of what the bot sees, `/frankenstein` as a live
 weight-and-depth sandbox, and the dev CLIs — `npm run arena` (paired openings, Bradley-Terry
 ratings with confidence intervals, a worker pool running whole games, adaptive pairing) and
-`npm run tune` (SPSA against a gauntlet). The roster is five animals so far — Donkey, Shark,
-Snake, Turtle, Wolf — listed weakest first, in the order the arena rated them.
+`npm run tune` (SPSA against a gauntlet). The roster is six animals — Donkey, Goat, Parrot,
+Elephant, Monkey, Hedgehog — listed weakest first, in the order the arena rated them.
 
-Next, per [PLAN.md](./PLAN.md): the full twelve-animal roster, golden-game fixtures, the about
-page, and a tablebase probe interface.
+Next, per [PLAN.md](./PLAN.md): golden-game fixtures, the about page, and a tablebase probe
+interface.
 
 ## Credit
 
