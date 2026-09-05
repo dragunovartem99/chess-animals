@@ -75,9 +75,18 @@ export function applyOption({
 		case "Quiescence":
 			return { ...config, search: { ...config.search, quiescence: value === "true" } };
 		case "NodeLimit":
-			return usable && number > 0
-				? { ...config, search: { ...config.search, nodeLimit: Math.floor(number) } }
-				: { ...config, search: { ...config.search, nodeLimit: undefined } };
+			// Zero is the protocol's way of saying "no limit", so it clears one — but a value
+			// that is not a number at all is ignored like every other option's, rather than
+			// quietly turning the budget off.
+			if (!usable || number < 0) return config;
+
+			return {
+				...config,
+				search: {
+					...config.search,
+					nodeLimit: number >= 1 ? Math.floor(number) : undefined,
+				},
+			};
 		default:
 			break;
 	}

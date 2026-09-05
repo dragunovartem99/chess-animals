@@ -46,9 +46,14 @@ describe("applyOption", () => {
 		expect(set({ name: "Quiescence", value: "false" }).search.quiescence).toBe(false);
 	});
 
-	it("clears the node limit when given zero", () => {
-		expect(set({ name: "NodeLimit", value: "0" }).search.nodeLimit).toBeUndefined();
+	it("clears the node limit when given zero, but not when given nonsense", () => {
 		expect(set({ name: "NodeLimit", value: "5000" }).search.nodeLimit).toBe(5000);
+		expect(set({ name: "NodeLimit", value: "0" }).search.nodeLimit).toBeUndefined();
+
+		const budgeted = applyOption({ config, name: "NodeLimit", value: "5000" });
+		const kept = applyOption({ config: budgeted, name: "NodeLimit", value: "nonsense" });
+
+		expect(kept.search.nodeLimit).toBe(5000);
 	});
 
 	it("ignores what it cannot use rather than breaking the engine", () => {
