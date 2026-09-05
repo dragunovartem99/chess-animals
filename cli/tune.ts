@@ -2,7 +2,7 @@ import { writeFileSync } from "node:fs";
 
 import { ROSTER } from "@/modules/bots/roster";
 import { openings } from "@/shared/openings";
-import { runGames } from "@/shared/scheduler";
+import { createGamePool } from "@/shared/scheduler";
 import { runTuning } from "@/shared/tuner";
 
 // `npm run tune -- <botId> [--iterations=40] [--seed=1] [--openings=12]` — SPSA one roster bot's
@@ -33,16 +33,21 @@ const gauntletOpenings = openings
 
 write(`tuning ${botId}: ${iterations} iterations vs ${opponents.map((o) => o.id).join(", ")}`);
 
+// One pool for the whole run: SPSA fires two paired probes per iteration through `Promise.all`,
+// and each probe is a full gauntlet — a per-call pool would spawn (and pay the tsx startup for)
+// `availableParallelism()` workers ~80 times over a default run. Mirrors `cli/arena.ts`.
+const pool = createGamePool();
 const result = await runTuning({
 	definition: animal.definition,
 	opponents,
 	openings: gauntletOpenings,
 	iterations,
 	seed,
-	run: (specs) => runGames({ specs }),
+	run: (specs) => pool.run(specs),
 	onStep: ({ iteration, score }) =>
 		write(`  ${String(iteration + 1).padStart(3)}/${iterations}   ${score.toFixed(3)}`),
 });
+await pool.close();
 
 const delta = result.final - result.baseline;
 write(
