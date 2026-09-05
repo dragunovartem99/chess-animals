@@ -15,7 +15,7 @@ const MATERIAL = onlyWeights({
 });
 
 function bestMove({ fen, weights = MATERIAL }: { fen: string; weights?: typeof MATERIAL }): string {
-	const scored = searchRoot({
+	const { scored } = searchRoot({
 		position: positionFromFen(fen),
 		weights,
 		options: { depth: 3, quiescence: true },

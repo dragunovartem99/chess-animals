@@ -41,9 +41,9 @@ describe("scoreMoves", () => {
 	it("scores every legal move", () => {
 		const position = positionFromFen(INITIAL_FEN);
 
-		expect(scoreMoves({ position, weights: defaultishWeights(), search: GREEDY })).toHaveLength(
-			20
-		);
+		expect(
+			scoreMoves({ position, weights: defaultishWeights(), search: GREEDY }).scored
+		).toHaveLength(20);
 	});
 
 	it("returns nothing when the game is already over", () => {
@@ -55,7 +55,7 @@ describe("scoreMoves", () => {
 				weights: defaultishWeights(),
 				search: GREEDY,
 			})
-		).toEqual([]);
+		).toEqual({ scored: [], best: undefined });
 	});
 });
 

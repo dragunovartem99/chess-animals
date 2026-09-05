@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import { positionFromFen } from "../../chess";
 import { onlyWeights } from "../../test-support/weights";
 import { SEARCH_POSITIONS } from "../__benchmarks__/positions";
+import { createRng } from "../rng";
 import { searchRoot } from "../search";
 
 // The search runs once per move of every game of every tournament, and its cost is dominated by
@@ -35,9 +36,18 @@ const MEASURED_PASSES = 20;
 
 function millisecondsPerPass(): number {
 	const positions = SEARCH_POSITIONS.map((fen) => positionFromFen(fen));
+	// With an rng, because that is the path the roster takes: a shuffled root is what breaks a
+	// bot's ties, and it is searched unordered, so timing it without one times nothing real.
+	const rng = createRng(1);
 	const pass = () => {
 		for (const position of positions) {
-			searchRoot({ position, weights: WEIGHTS, options: { depth: 2 }, prune: true });
+			searchRoot({
+				position,
+				weights: WEIGHTS,
+				options: { depth: 2 },
+				prune: true,
+				rng,
+			});
 		}
 	};
 

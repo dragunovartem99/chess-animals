@@ -4,29 +4,42 @@ import { describe, expect, it } from "vitest";
 
 import { compileBot } from "@/shared/bots";
 import { positionFromFen } from "@/shared/chess";
-import { searchRoot } from "@/shared/engine";
+import { chooseMove } from "@/shared/engine";
+import { createRng } from "@/shared/engine/rng";
 
 import { ROSTER_BY_ID } from "../index";
 
 const PARROT = ROSTER_BY_ID.get("parrot")!.definition;
 
-// Play a line against the Parrot and collect what it answered each move with.
-function answers({ white, depth }: { white: string[]; depth: number }): string[] {
+// Play a line against the Parrot and collect what it answered each move with. Through
+// `chooseMove` and a seed, which is the path the app plays on: pruned, and with the tie between
+// equally good moves broken by the rng.
+function answers({
+	white,
+	depth,
+	seed = 0,
+}: {
+	white: string[];
+	depth: number;
+	seed?: number;
+}): string[] {
 	const bot = compileBot(PARROT);
 	const position = positionFromFen(INITIAL_FEN);
+	const rng = createRng(seed);
 	const replies: string[] = [];
 
 	for (const move of white) {
 		position.play(parseUci(move)!);
-		const scored = searchRoot({
+		const reply = chooseMove({
 			position,
 			weights: bot.weights,
-			options: { ...bot.search, depth },
-		});
-		const best = scored.reduce((left, right) => (right.score > left.score ? right : left));
+			search: { ...bot.search, depth },
+			temperature: bot.temperature,
+			rng,
+		})!;
 
-		replies.push(makeUci(best.move));
-		position.play(best.move);
+		replies.push(makeUci(reply));
+		position.play(reply);
 	}
 
 	return replies;
@@ -37,8 +50,11 @@ const WHITE = ["e2e4", "g1f3", "f1c4", "d2d3", "b1c3", "e1g1", "c1g5", "d1d2", "
 const MIRRORED = ["e7e5", "g8f6", "f8c5", "d7d6", "b8c6", "e8h8", "c8g4", "d8d7", "a7a6", "h7h6"];
 
 describe("the Parrot", () => {
-	it("answers a move with the same move, castling included", () => {
-		expect(answers({ white: WHITE, depth: PARROT.search.depth })).toEqual(MIRRORED);
+	// Every seed, not one: the mirror is a strictly better move than anything else on the board,
+	// so no tie-break may reach past it. It did — a worse move came back from the pruned search
+	// reading the top score, and 2...Ne7 was played one game in three.
+	it.each([0, 1, 2, 3, 4])("answers a move with the same move on seed %i", (seed) => {
+		expect(answers({ white: WHITE, depth: PARROT.search.depth, seed })).toEqual(MIRRORED);
 	});
 
 	// The one thing its definition is not free to change. A symmetry reads the same from either

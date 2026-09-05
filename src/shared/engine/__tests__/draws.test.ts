@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 
 import { afterMove, createRepetition, positionFromFen } from "../../chess";
 import { onlyWeights } from "../../test-support/weights";
-import { searchRoot } from "../search";
+import { type ScoredMove, searchRoot } from "../search";
 
 const MATERIAL = onlyWeights({ materialPawn: 100, materialQueen: 900 });
 
@@ -28,7 +28,7 @@ function played({ fen, moves }: { fen: string; moves: readonly string[] }) {
 	return { position, repetition };
 }
 
-function scoreOf({ scored, uci }: { scored: ReturnType<typeof searchRoot>; uci: string }): number {
+function scoreOf({ scored, uci }: { scored: ScoredMove[]; uci: string }): number {
 	return scored.find((entry) => makeUci(entry.move) === uci)!.score;
 }
 
@@ -36,7 +36,7 @@ describe("a search that knows the game behind it", () => {
 	it("scores a move back into a position the game has already stood in as a draw", () => {
 		const { position, repetition } = played({ fen: QUEEN_UP, moves: SHUFFLE });
 
-		const scored = searchRoot({
+		const { scored } = searchRoot({
 			position,
 			weights: MATERIAL,
 			options: { depth: 1 },
@@ -52,7 +52,7 @@ describe("a search that knows the game behind it", () => {
 	it("plays the queen up rather than repeat", () => {
 		const { position, repetition } = played({ fen: QUEEN_UP, moves: SHUFFLE });
 
-		const scored = searchRoot({
+		const { scored } = searchRoot({
 			position,
 			weights: MATERIAL,
 			options: { depth: 1 },
@@ -71,7 +71,7 @@ describe("a search that knows the game behind it", () => {
 			moves: SHUFFLE.slice(0, 1),
 		});
 
-		const scored = searchRoot({
+		const { scored } = searchRoot({
 			position,
 			weights: MATERIAL,
 			options: { depth: 1 },
@@ -85,7 +85,7 @@ describe("a search that knows the game behind it", () => {
 	it("does not see a repetition a caller gave it no history for", () => {
 		const { position } = played({ fen: QUEEN_UP, moves: SHUFFLE });
 
-		const scored = searchRoot({ position, weights: MATERIAL, options: { depth: 1 } });
+		const { scored } = searchRoot({ position, weights: MATERIAL, options: { depth: 1 } });
 
 		expect(scoreOf({ scored, uci: "g1h1" })).toBe(900);
 	});

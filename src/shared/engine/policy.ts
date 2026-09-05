@@ -5,9 +5,9 @@ import type { Repetition } from "../chess";
 import type { WeightVector } from "../eval";
 import type { Rng } from "./rng";
 import { softmaxSample } from "./sample";
-import { type ScoredMove, searchRoot, type SearchOptions } from "./search";
+import { type RootSearch, type ScoredMove, searchRoot, type SearchOptions } from "./search";
 
-export type { ScoredMove };
+export type { RootSearch, ScoredMove };
 
 // Every legal move with what it is worth to the mover. At `depth: 1` this is pure greed — score
 // each child, take the best — which is the paper's own ground rule; deeper is the same search
@@ -17,6 +17,7 @@ export function scoreMoves({
 	weights,
 	search,
 	temperature = 0,
+	rng,
 	repetition,
 }: {
 	position: Chess;
@@ -25,41 +26,56 @@ export function scoreMoves({
 	// A bot that only takes the argmax lets the search narrow its window on the non-best moves;
 	// one that samples needs their scores exact. Defaults to the argmax case.
 	temperature?: number;
+	// Breaks the tie between equally good moves, by shuffling the order the root searches them
+	// in. Only an argmax bot needs it — a sampling one draws its variety from the distribution.
+	rng?: Rng;
 	// The positions the game has already stood in, so a move back into one scores as the draw it
 	// is. A caller with no game behind it leaves it out.
 	repetition?: Repetition;
-}): ScoredMove[] {
+}): RootSearch {
+	const argmax = temperature <= 0;
+
 	return searchRoot({
 		position,
 		weights,
 		options: search,
-		prune: temperature <= 0,
+		prune: argmax,
+		rng: argmax ? rng : undefined,
 		repetition,
 	});
 }
 
-// The sampling half of the policy, over scores someone else has already searched. It is split out
+// The sampling half of the policy, over a search someone else has already run. It is split out
 // so a caller that needs both the move and the scores behind it — the UCI layer reports the score
 // it played on — pays for one search rather than two.
 //
-// `temperature` is in the same units as the scores: at zero this is a plain argmax with the tie
-// broken by the rng, and above zero the bot samples, which is how the paper's weighted-sampling
-// players work — and what stops two deterministic bots replaying one identical game every time
-// the arena pairs them.
+// `temperature` is in the same units as the scores: at zero the bot takes what the root settled
+// on, its tie already broken by the shuffled search order, and above zero it samples, which is
+// how the paper's weighted-sampling players work — and what stops two deterministic bots
+// replaying one identical game every time the arena pairs them.
+//
+// The argmax reads `root.best` rather than the top of `root.scored` because a pruned search
+// reports worse moves as bounds, and a bound can read exactly the top score. Taking the maximum
+// of the scores here is what made the Parrot answer 1.e4 e5 2.Nf3 with 2...Ne7.
 export function pickMove({
-	scored,
+	root,
 	temperature,
 	rng,
 }: {
-	scored: ScoredMove[];
+	root: RootSearch;
 	temperature: number;
 	rng: Rng;
 }): NormalMove | undefined {
-	if (scored.length === 0) return undefined;
+	if (temperature <= 0) return root.best;
+	if (root.scored.length === 0) return undefined;
 
-	const index = softmaxSample({ scores: scored.map((entry) => entry.score), temperature, rng });
+	const index = softmaxSample({
+		scores: root.scored.map((entry) => entry.score),
+		temperature,
+		rng,
+	});
 
-	return scored[index].move;
+	return root.scored[index].move;
 }
 
 // The move a bot plays from this position, or `undefined` when the game is already over.
@@ -79,7 +95,7 @@ export function chooseMove({
 	repetition?: Repetition;
 }): NormalMove | undefined {
 	return pickMove({
-		scored: scoreMoves({ position, weights, search, temperature, repetition }),
+		root: scoreMoves({ position, weights, search, temperature, rng, repetition }),
 		temperature,
 		rng,
 	});

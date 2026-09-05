@@ -107,7 +107,7 @@ describe("a mate in one", () => {
 	for (const { animal, config } of mateAware) {
 		it(`is what the ${animal.definition.id} plays`, () => {
 			const position = positionFromFen(MATE_IN_ONE);
-			const scored = searchRoot({
+			const { scored } = searchRoot({
 				position,
 				weights: config.weights,
 				options: { ...config.search, depth: 3 },

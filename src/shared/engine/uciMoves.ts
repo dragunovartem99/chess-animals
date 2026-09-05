@@ -77,20 +77,21 @@ export function findBestMove({
 
 	// One search, then sample from it. Scoring the moves and then asking the policy to score them
 	// again would double the cost of every move the engine plays.
-	const scored = scoreMoves({
+	const root = scoreMoves({
 		position,
 		weights: config.weights,
 		search,
 		temperature: config.temperature,
+		rng,
 		repetition,
 	});
-	const move = pickMove({ scored, temperature: config.temperature, rng });
+	const move = pickMove({ root, temperature: config.temperature, rng });
 
 	// `0000` is UCI's null move, which is what an engine says when it has nothing to play. Better
 	// than silence: a caller waiting on `bestmove` would otherwise wait forever.
 	if (!move) return [{ type: "bestmove", move: "0000" }];
 
-	const best = Math.max(...scored.map((entry) => entry.score));
+	const best = Math.max(...root.scored.map((entry) => entry.score));
 	const uci = toUci({ position, move });
 
 	return [

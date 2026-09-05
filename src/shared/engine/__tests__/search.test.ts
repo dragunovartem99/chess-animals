@@ -5,7 +5,8 @@ import { describe, expect, it } from "vitest";
 import { positionFromFen } from "../../chess";
 import { MATE_SCORE } from "../../eval";
 import { defaultishWeights, onlyWeights } from "../../test-support/weights";
-import { searchRoot } from "../search";
+import { createRng } from "../rng";
+import { type RootSearch, searchRoot } from "../search";
 
 const MATERIAL = onlyWeights({
 	materialPawn: 100,
@@ -24,7 +25,7 @@ function bestMove({
 	depth: number;
 	quiescence?: boolean;
 }): string {
-	const scored = searchRoot({
+	const { scored } = searchRoot({
 		position: positionFromFen(fen),
 		weights: MATERIAL,
 		options: { depth, quiescence },
@@ -40,7 +41,7 @@ describe("searchRoot", () => {
 
 		for (const depth of [1, 2]) {
 			expect(
-				searchRoot({ position, weights: defaultishWeights(), options: { depth } })
+				searchRoot({ position, weights: defaultishWeights(), options: { depth } }).scored
 			).toHaveLength(20);
 		}
 	});
@@ -50,7 +51,7 @@ describe("searchRoot", () => {
 
 		expect(
 			searchRoot({ position: positionFromFen(fen), weights: MATERIAL, options: { depth: 3 } })
-		).toEqual([]);
+		).toEqual({ scored: [], best: undefined });
 	});
 });
 
@@ -88,7 +89,7 @@ describe("quiescence in check", () => {
 		// nothing to stand pat on, so the leaf falls through to the evaluation, which is what
 		// scores a finished game.
 		const position = positionFromFen("6k1/5ppp/8/8/8/8/5PPP/R5K1 w - - 0 1");
-		const scored = searchRoot({
+		const { scored } = searchRoot({
 			position,
 			weights: onlyWeights({ materialPawn: 100, givesMate: 1 }),
 			options: { depth: 1, quiescence: true },
@@ -116,17 +117,18 @@ function topScore(scored: readonly { score: number }[]): number {
 	return Math.max(...scored.map((entry) => entry.score));
 }
 
-// The indices of the moves sharing the top score, which is what an argmax with a seeded
-// tie-break actually picks from.
-function atTop(scored: readonly { score: number }[]): number[] {
+// The moves sharing the top score of a full-window search — every move it is correct for an
+// argmax to play, and nothing else.
+function bestOf({ scored }: RootSearch): string[] {
 	const top = topScore(scored);
 
-	return scored.flatMap((entry, index) => (entry.score >= top - 1e-6 ? [index] : []));
+	return scored.flatMap((entry) => (entry.score >= top - 1e-6 ? [makeUci(entry.move)] : []));
 }
 
 describe("root pruning", () => {
-	// The pruned search may leave a worse move as a bound, but the best move's score and every
-	// genuine tie for it must survive — that is what the argmax and its seeded tie-break stand on.
+	// A pruned search reports a worse move as a bound, which can read as high as the top score —
+	// so what has to survive pruning is not the shape of the score list but `best`, the move the
+	// root settled on, which is only ever set by a move that strictly beat everything before it.
 	const FENS = [
 		INITIAL_FEN,
 		"r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
@@ -135,34 +137,68 @@ describe("root pruning", () => {
 	];
 
 	for (const fen of FENS) {
-		it(`agrees with the full-window search on the best score from ${fen}`, () => {
+		it(`settles on a move the full-window search agrees is best from ${fen}`, () => {
 			const position = positionFromFen(fen);
 			const options = { depth: 3 };
 
 			const full = searchRoot({ position, weights: MATERIAL, options });
 			const pruned = searchRoot({ position, weights: MATERIAL, options, prune: true });
 
-			expect(topScore(pruned)).toBeCloseTo(topScore(full), 5);
+			expect(topScore(pruned.scored)).toBeCloseTo(topScore(full.scored), 5);
+			expect(bestOf(full)).toContain(makeUci(pruned.best!));
 
 			// The pruned search reports moves in generated order, same as the full one.
-			expect(pruned.map((entry) => makeUci(entry.move))).toEqual(
-				full.map((entry) => makeUci(entry.move))
+			expect(pruned.scored.map((entry) => makeUci(entry.move))).toEqual(
+				full.scored.map((entry) => makeUci(entry.move))
 			);
-
-			// The moves reading the top score have to be the same ones, both ways round: every
-			// genuine tie kept, and — the half that used to be missing — no worse move reported
-			// at the top. A cutoff returns a bound rather than a score, and a bound landing on
-			// the window reads as an exact tie; the tie-break cannot tell the two apart, so the
-			// bot plays a move it scored hundreds of points lower.
-			expect(atTop(pruned)).toEqual(atTop(full));
 		});
 	}
+});
+
+describe("the root tie-break", () => {
+	// Where the variety between two games of the same two bots comes from, and the one thing the
+	// old score-comparing tie-break got wrong: a bound landing on the window read as an exact
+	// tie, so the spread reached moves the search had scored hundreds of points lower. The
+	// shuffle cannot, because only a move that strictly beat every move before it is ever `best`.
+	it("spreads over the moves that genuinely tie, and never past them", () => {
+		const position = positionFromFen(INITIAL_FEN);
+		const options = { depth: 2 };
+
+		const tied = bestOf(searchRoot({ position, weights: MATERIAL, options }));
+		const picks = new Set(
+			Array.from({ length: 100 }, (_, seed) =>
+				makeUci(
+					searchRoot({
+						position,
+						weights: MATERIAL,
+						options,
+						prune: true,
+						rng: createRng(seed),
+					}).best!
+				)
+			)
+		);
+
+		expect(picks.size).toBeGreaterThan(1);
+		expect([...picks].filter((pick) => !tied.includes(pick))).toEqual([]);
+	});
+
+	it("is the same move every time without an rng", () => {
+		const position = positionFromFen(INITIAL_FEN);
+		const search = () =>
+			makeUci(
+				searchRoot({ position, weights: MATERIAL, options: { depth: 2 }, prune: true })
+					.best!
+			);
+
+		expect(search()).toBe(search());
+	});
 });
 
 describe("nodeLimit", () => {
 	it("still returns a score for every move when the budget runs out", () => {
 		const position = positionFromFen(INITIAL_FEN);
-		const scored = searchRoot({
+		const { scored } = searchRoot({
 			position,
 			weights: MATERIAL,
 			options: { depth: 4, nodeLimit: 50 },
