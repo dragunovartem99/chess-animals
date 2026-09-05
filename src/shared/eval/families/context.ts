@@ -1,7 +1,7 @@
 import { attacks } from "chessops/attacks";
 import type { Chess } from "chessops/chess";
 import { SquareSet } from "chessops/squareSet";
-import type { ByColor, Color, Piece } from "chessops/types";
+import { type ByColor, type Color, COLORS, type Piece, ROLES } from "chessops/types";
 import { opposite } from "chessops/util";
 
 // One piece on the board, with the squares it attacks already worked out.
@@ -29,6 +29,15 @@ export type EvalContext = {
 	// Squares each side attacks with anything at all, pawns and king included. Defence is
 	// membership in your own set, so this is what tells a hanging piece from a defended one.
 	attacksBy: ByColor<SquareSet>;
+	// Whether a slot's weight is non-zero for the bot being scored — the same question
+	// `createExtractor` asks of a whole family, asked of one feature.
+	//
+	// Family granularity is not always enough. `reverseStarting` walks both armies against every
+	// role's home squares and `symmetryMirrorX` walks the board a second time, while the features
+	// beside them in the same family cost a few bitboard operations. An animal that names one of
+	// the four proximity features was paying for all four, and the expensive one dominated its
+	// search. A cheap feature is not worth a branch; one that walks the board is.
+	weighs: (slot: number) => boolean;
 };
 
 function walkBoard(position: Chess): AttackMaps {
@@ -36,16 +45,28 @@ function walkBoard(position: Chess): AttackMaps {
 	const attacksBy = { white: SquareSet.empty(), black: SquareSet.empty() };
 	const pawnAttacks = { white: SquareSet.empty(), black: SquareSet.empty() };
 
-	for (const [square, piece] of position.board) {
-		const squares = attacks(piece, square, position.board.occupied);
+	// Walked a colour and a role at a time off the bitboards that already separate them. The
+	// board's own iterator works the other way round — it resolves every square's colour and role
+	// by scanning eight sets, and hands back a fresh pair and a fresh `Piece` for each — which is
+	// sixty-odd objects a node for facts that are one intersection away. The `Piece` here is
+	// shared by every man of its kind, which nothing downstream may mutate and nothing does.
+	for (const color of COLORS) {
+		const ours = position.board[color];
 
-		reach.push({ square, piece, reach: squares });
-		attacksBy[piece.color] = attacksBy[piece.color].union(squares);
+		for (const role of ROLES) {
+			const piece: Piece = { color, role };
 
-		// `attacks` for a pawn is exactly its capture squares, so the pawn map falls out of the
-		// same call rather than needing a second one.
-		if (piece.role === "pawn")
-			pawnAttacks[piece.color] = pawnAttacks[piece.color].union(squares);
+			for (const square of position.board[role].intersect(ours)) {
+				const squares = attacks(piece, square, position.board.occupied);
+
+				reach.push({ square, piece, reach: squares });
+				attacksBy[color] = attacksBy[color].union(squares);
+
+				// `attacks` for a pawn is exactly its capture squares, so the pawn map falls out
+				// of the same call rather than needing a second one.
+				if (role === "pawn") pawnAttacks[color] = pawnAttacks[color].union(squares);
+			}
+		}
 	}
 
 	return { reach, pawnAttacks, attacksBy };
@@ -62,13 +83,17 @@ function walkBoard(position: Chess): AttackMaps {
 // and cost 1.5 µs a node to install — more than the walk they were meant to avoid — while on a
 // prototype they are free (0.01 µs) and the walked path is unchanged.
 class LazyContext implements EvalContext {
+	readonly position: Chess;
 	readonly us: Color;
 	readonly them: Color;
+	readonly weighs: (slot: number) => boolean;
 	#maps: AttackMaps | undefined;
 
-	constructor(readonly position: Chess) {
+	constructor({ position, weighs }: { position: Chess; weighs: (slot: number) => boolean }) {
+		this.position = position;
 		this.us = position.turn;
 		this.them = opposite(position.turn);
+		this.weighs = weighs;
 	}
 
 	get #walked(): AttackMaps {
@@ -88,6 +113,16 @@ class LazyContext implements EvalContext {
 	}
 }
 
-export function createContext(position: Chess): EvalContext {
-	return new LazyContext(position);
+// Every feature counts unless the caller says otherwise — the breakdown the UI shows reads them
+// all, and only a search knows which ones its bot leaves at zero.
+const WEIGHS_EVERYTHING = () => true;
+
+export function createContext({
+	position,
+	weighs = WEIGHS_EVERYTHING,
+}: {
+	position: Chess;
+	weighs?: (slot: number) => boolean;
+}): EvalContext {
+	return new LazyContext({ position, weighs });
 }

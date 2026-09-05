@@ -1,12 +1,5 @@
+export { createDescend, type Descend } from "./descend";
 export { gameStatus } from "./outcome";
-export {
-	afterMove,
-	fenFromPosition,
-	hasLegalMove,
-	legalCaptures,
-	legalMoves,
-	positionFromFen,
-	PROMOTION_ROLES,
-	repetitionKey,
-} from "./position";
+export { hasLegalMove, legalCaptures, legalMoves, PROMOTION_ROLES } from "./moves";
+export { afterMove, fenFromPosition, positionFromFen, repetitionKey } from "./position";
 export type { EndReason, GameResult, GameStatus } from "./types";

@@ -71,7 +71,17 @@ export function extractSymmetry({
 	features[SAME_COLOR_SQUARES] =
 		onOwnColor({ board, color: context.us }) - onOwnColor({ board, color: context.them });
 
-	features[SYMMETRY_MIRROR_X] = -asymmetry({ board, axis: FLIP_FILES });
-	features[SYMMETRY_MIRROR_Y] = -asymmetry({ board, axis: FLIP_RANKS });
-	features[SYMMETRY_ROT180] = -asymmetry({ board, axis: HALF_TURN });
+	// One walk of the board apiece, so each is asked for separately: a bot that wants a mirrored
+	// board rarely wants all three of the mirrors.
+	if (context.weighs(SYMMETRY_MIRROR_X)) {
+		features[SYMMETRY_MIRROR_X] = -asymmetry({ board, axis: FLIP_FILES });
+	}
+
+	if (context.weighs(SYMMETRY_MIRROR_Y)) {
+		features[SYMMETRY_MIRROR_Y] = -asymmetry({ board, axis: FLIP_RANKS });
+	}
+
+	if (context.weighs(SYMMETRY_ROT180)) {
+		features[SYMMETRY_ROT180] = -asymmetry({ board, axis: HALF_TURN });
+	}
 }

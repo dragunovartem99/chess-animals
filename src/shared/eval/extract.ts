@@ -59,7 +59,7 @@ export function extractFeatures({ position, played, into }: ExtractFrame): Featu
 	const features = into ?? createFeatureVector();
 	if (into) into.fill(0);
 
-	const context = createContext(position);
+	const context = createContext({ position });
 
 	features[TEMPO] = 1;
 	extractMaterial({ context, features });
@@ -89,10 +89,11 @@ export function extractFeatures({ position, played, into }: ExtractFrame): Featu
 // once per `go` rather than consulted per node.
 export function createExtractor({ slots }: { slots: Iterable<number> }): Extractor {
 	const live = new Set(slots);
-	const weighs = (candidates: readonly number[]) => candidates.some((slot) => live.has(slot));
+	const weighs = (slot: number) => live.has(slot);
+	const weighsAny = (candidates: readonly number[]) => candidates.some((slot) => weighs(slot));
 
-	const families = BOARD_FAMILIES.filter((family) => weighs(family.slots));
-	const move = weighs(MOVE);
+	const families = BOARD_FAMILIES.filter((family) => weighsAny(family.slots));
+	const move = weighsAny(MOVE);
 	const tempo = live.has(TEMPO);
 
 	return function extract({ position, played, into }): FeatureVector {
@@ -104,7 +105,7 @@ export function createExtractor({ slots }: { slots: Iterable<number> }): Extract
 		// The context is a walk of the whole board, so it is not built at all for a bot that
 		// weighs nothing on it — `cccp` reads only the move that was played.
 		if (families.length > 0) {
-			const context = createContext(position);
+			const context = createContext({ position, weighs });
 			for (const family of families) family.run({ context, features });
 		}
 

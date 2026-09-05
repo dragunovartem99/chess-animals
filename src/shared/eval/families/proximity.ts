@@ -40,20 +40,31 @@ function meanDistances({
 	let count = 0;
 
 	// Chebyshev distance, inlined: this runs for every piece of both sides, and the call's
-	// argument object was costing more than the arithmetic.
-	for (const square of context.position.board[color]) {
-		const file = square & 7;
-		const rank = square >> 3;
+	// argument object was costing more than the arithmetic. The army is walked as the bit loop
+	// behind a `SquareSet`'s iterator for the same reason — this is the Wolf's whole evaluation,
+	// twice a node.
+	const army = context.position.board[color];
 
-		const ourFileGap = Math.abs(file - ourFile);
-		const ourRankGap = Math.abs(rank - ourRank);
-		toOurs += ourFileGap > ourRankGap ? ourFileGap : ourRankGap;
+	for (let half = 0; half < 2; half += 1) {
+		let bits = half === 0 ? army.lo : army.hi;
 
-		const theirFileGap = Math.abs(file - theirFile);
-		const theirRankGap = Math.abs(rank - theirRank);
-		toTheirs += theirFileGap > theirRankGap ? theirFileGap : theirRankGap;
+		while (bits !== 0) {
+			const square = (half << 5) + 31 - Math.clz32(bits & -bits);
+			bits &= bits - 1;
 
-		count += 1;
+			const file = square & 7;
+			const rank = square >> 3;
+
+			const ourFileGap = Math.abs(file - ourFile);
+			const ourRankGap = Math.abs(rank - ourRank);
+			toOurs += ourFileGap > ourRankGap ? ourFileGap : ourRankGap;
+
+			const theirFileGap = Math.abs(file - theirFile);
+			const theirRankGap = Math.abs(rank - theirRank);
+			toTheirs += theirFileGap > theirRankGap ? theirFileGap : theirRankGap;
+
+			count += 1;
+		}
 	}
 
 	if (count === 0) return { ours: 0, theirs: 0 };
@@ -112,19 +123,27 @@ export function extractProximity({
 	const theirKing = board.kingOf(context.them);
 	if (ourKing === undefined || theirKing === undefined) return;
 
-	const kings = { ours: ourKing, theirs: theirKing };
-	const ours = meanDistances({ context, color: context.us, kings });
-	// From their side of the board the two kings swap roles, so their means come back reversed.
-	const theirs = meanDistances({ context, color: context.them, kings });
+	if (context.weighs(SWARM) || context.weighs(HUDDLE)) {
+		const kings = { ours: ourKing, theirs: theirKing };
+		const ours = meanDistances({ context, color: context.us, kings });
+		// From their side of the board the two kings swap roles, so their means come back
+		// reversed.
+		const theirs = meanDistances({ context, color: context.them, kings });
 
-	features[SWARM] = ours.theirs - theirs.ours;
-	features[HUDDLE] = ours.ours - theirs.theirs;
+		features[SWARM] = ours.theirs - theirs.ours;
+		features[HUDDLE] = ours.ours - theirs.theirs;
+	}
 
 	// The two kings are the same distance apart from either side's point of view, so this one is
 	// a raw value rather than a difference — there is nothing to subtract.
 	features[KING_PROXIMITY] = chebyshev({ from: ourKing, to: theirKing });
 
-	features[REVERSE_STARTING] =
-		reverseDistance({ context, color: context.us }) -
-		reverseDistance({ context, color: context.them });
+	// Behind its own gate because it is the priciest feature in the registry — both armies,
+	// against every home square of their role — and the Wolf, which names `swarm` and nothing
+	// else in this family, was spending more of its search here than in the search.
+	if (context.weighs(REVERSE_STARTING)) {
+		features[REVERSE_STARTING] =
+			reverseDistance({ context, color: context.us }) -
+			reverseDistance({ context, color: context.them });
+	}
 }
