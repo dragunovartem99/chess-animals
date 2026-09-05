@@ -19,7 +19,9 @@ export function useChessground({
 		if (element.value) api.value = Chessground(element.value, config.value);
 	});
 
-	watch(config, (next) => api.value?.set(next), { deep: true });
+	// `config` is a computed that returns a fresh object every recompute, so a shallow watch already
+	// fires on every change — `deep` would only add a full traversal (the dests Map included) per move.
+	watch(config, (next) => api.value?.set(next));
 
 	onBeforeUnmount(() => {
 		api.value?.destroy();
