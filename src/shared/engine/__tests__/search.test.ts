@@ -116,6 +116,14 @@ function topScore(scored: readonly { score: number }[]): number {
 	return Math.max(...scored.map((entry) => entry.score));
 }
 
+// The indices of the moves sharing the top score, which is what an argmax with a seeded
+// tie-break actually picks from.
+function atTop(scored: readonly { score: number }[]): number[] {
+	const top = topScore(scored);
+
+	return scored.flatMap((entry, index) => (entry.score >= top - 1e-6 ? [index] : []));
+}
+
 describe("root pruning", () => {
 	// The pruned search may leave a worse move as a bound, but the best move's score and every
 	// genuine tie for it must survive — that is what the argmax and its seeded tie-break stand on.
@@ -141,12 +149,12 @@ describe("root pruning", () => {
 				full.map((entry) => makeUci(entry.move))
 			);
 
-			// Every move at the top score in the full search is still at the top in the pruned one.
-			const top = topScore(full);
-			for (const [index, entry] of full.entries()) {
-				if (entry.score < top - 1e-6) continue;
-				expect(pruned[index].score).toBeCloseTo(entry.score, 5);
-			}
+			// The moves reading the top score have to be the same ones, both ways round: every
+			// genuine tie kept, and — the half that used to be missing — no worse move reported
+			// at the top. A cutoff returns a bound rather than a score, and a bound landing on
+			// the window reads as an exact tie; the tie-break cannot tell the two apart, so the
+			// bot plays a move it scored hundreds of points lower.
+			expect(atTop(pruned)).toEqual(atTop(full));
 		});
 	}
 });

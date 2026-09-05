@@ -20,14 +20,26 @@ export type ScoredMove = { move: NormalMove; score: number };
 
 const INFINITY = Number.POSITIVE_INFINITY;
 
+// The slack that keeps a cutoff off the window. Searching a root move against exactly `-best`
+// cuts off when its score merely *reaches* the best, and a cutoff reports the bound rather than
+// the score — so a strictly worse move comes back reading exactly `best` and the argmax's
+// tie-break, which cannot tell a bound from a value, spreads over it: the Parrot answered
+// 1.e4 e5 2.Nf3 with 2...Ne7 one game in three, scoring it 500 points below 2...Nf6.
+//
+// One epsilon of window is the whole fix. A cutoff now needs a score of `best - EPSILON` or
+// less, so no bound can land on `best` and every move still reading it is an exact tie. Two
+// distinct evaluations never land this close — they are sums of centipawn weights — and if they
+// ever did the only cost would be an exact score for a move that is worse by a millionth.
+const TIE_EPSILON = 1e-6;
+
 // Every legal move with what it is worth to the mover, searched to the requested depth.
 //
 // `prune` narrows the window as the best root score rises, the way a normal engine always would.
 // It is off by default because a non-best move then comes back as a bound rather than a value,
 // and the policy samples across those scores at non-zero temperature — a bound would distort the
 // distribution. When the caller will only take the argmax (`temperature <= 0`) the bounds are
-// harmless: a move that truly ties the best still comes back equal to it, so the seeded
-// tie-break is unaffected, and only strictly worse moves are left as bounds.
+// harmless, but only because of the re-search below: a cutoff that lands exactly on the window
+// is otherwise indistinguishable from a real tie, and the tie-break would spread over both.
 //
 // `repetition` carries the game so far, so a move back into a position the players have already
 // stood in scores as the draw it is heading for. A caller with no game behind it — a test scoring
@@ -66,7 +78,7 @@ export function searchRoot({
 			depth: options.depth - 1,
 			ply: 1,
 			alpha: -INFINITY,
-			beta: prune ? -best : INFINITY,
+			beta: prune ? -best + TIE_EPSILON : INFINITY,
 		});
 
 		scoreByMove.set(move, score);
