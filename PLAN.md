@@ -125,6 +125,7 @@ arena: it burns cores for minutes and rewrites a bot's weights file.
 - ✅ `ci: check every push and deploy main to Pages`
 - ✅ `test: cover the bot engines, the worker transport and the mask helpers`
 - ✅ `arena: shared worker pool, job cap, per-round progress`
+- ✅ `bots: add the Parrot, a copycat` — `symmetryMirrorY` was in the registry with no bot reading it; on the `material` base at 150 it mirrors a move until mirroring would cost a knight. The arena rates it 1498, between the Shark and the Snake. Its depth has to be even: a symmetry reads the same from either seat, so negamax flips its sign every ply and the depth-1 Parrot answers 1.e4 with 1...a5
 - ✅ `bots: three more simple animals` — the Turtle, the Snake and the Shark; the roster listed weakest first, in arena order
 - ✅ `bots: two-animal roster with a landing page` — the Donkey and the Wolf as data, `RosterView` as `/`
 - ✅ `copy: skill for writing player-facing text`

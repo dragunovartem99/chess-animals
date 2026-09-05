@@ -16,6 +16,10 @@ export default {
 		name: "Snake",
 		description: "Coils around you and squeezes. Soon you have nowhere left to go.",
 	},
+	parrot: {
+		name: "Parrot",
+		description: "Plays your move back at you. Keeps it up until copying you costs a piece.",
+	},
 	shark: {
 		name: "Shark",
 		description: "Bites whatever it can reach. It never asks what the bite costs.",
