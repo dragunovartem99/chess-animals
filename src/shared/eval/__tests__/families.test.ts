@@ -57,24 +57,3 @@ describe("mobility", () => {
 		expect(friendOnTarget).toBe(7);
 	});
 });
-
-describe("safeMobility", () => {
-	it("matches plain mobility when no pawn covers anything", () => {
-		const fen = "4k3/8/8/8/3N4/8/8/4K3 w - - 0 1";
-
-		expect(read({ fen, key: "safeMobility" })).toBe(read({ fen, key: "mobility" }));
-	});
-
-	it("discounts squares an enemy pawn covers", () => {
-		const fen = "4k3/8/4p3/8/3N4/8/8/4K3 w - - 0 1";
-
-		expect(read({ fen, key: "mobility" })).toBe(8);
-		expect(read({ fen, key: "safeMobility" })).toBe(7);
-	});
-});
-
-describe("tempo", () => {
-	it("is always one, so its weight is the whole bonus", () => {
-		expect(read({ fen: INITIAL_FEN, key: "tempo" })).toBe(1);
-	});
-});

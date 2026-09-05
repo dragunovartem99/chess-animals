@@ -61,14 +61,16 @@ describe("the engine over UCI", () => {
 	});
 
 	it("names castling the way every other engine does", async () => {
+		// No feature says "castle"; instead the one legal move that frees the rook most is O-O,
+		// which puts it on f1 with the whole first rank and f-file behind it.
 		const engine = connect({
 			...WOLF,
-			weights: { isCastle: 1000 },
+			weights: { mobility: 1000 },
 		});
 		await engine.init();
-		engine.setPosition({ fen: "4k3/8/8/8/8/8/8/R3K2R w KQ - 0 1" });
+		engine.setPosition({ fen: "4k3/8/8/8/8/8/PPPPP1PP/R3K2R w KQ - 0 1" });
 
-		expect((await engine.go({ depth: 1 })).move).toMatch(/^e1[gc]1$/u);
+		expect((await engine.go({ depth: 1 })).move).toBe("e1g1");
 	});
 
 	it("replays exactly after ucinewgame, from the seed it was given", async () => {

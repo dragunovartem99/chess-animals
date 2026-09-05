@@ -72,10 +72,10 @@ describe("symmetry", () => {
 	});
 
 	it("reads the same for both sides, being a property of the whole board", () => {
-		const fen = "4k3/8/8/8/8/8/8/4K3";
+		const fen = "r3k3/8/8/8/8/8/8/4K2R";
 
-		expect(read({ fen: `${fen} w - - 0 1`, key: "symmetryRot180" })).toBe(
-			read({ fen: `${fen} b - - 0 1`, key: "symmetryRot180" })
+		expect(read({ fen: `${fen} w Kq - 0 1`, key: "symmetryMirrorY" })).toBe(
+			read({ fen: `${fen} b Kq - 0 1`, key: "symmetryMirrorY" })
 		);
 	});
 });

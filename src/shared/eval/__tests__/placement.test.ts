@@ -37,29 +37,3 @@ describe("centralization", () => {
 		expect(black).toBe(white);
 	});
 });
-
-describe("advancement", () => {
-	it("is level in the symmetric opening position", () => {
-		expect(read({ fen: INITIAL_FEN, key: "advancement" })).toBe(0);
-	});
-
-	it("counts ranks from a pawn's own back rank, so both colors read alike", () => {
-		const white = read({ fen: "4k3/8/8/8/8/8/4P3/4K3 w - - 0 1", key: "advancement" });
-		const black = read({ fen: "4k3/4p3/8/8/8/8/8/4K3 b - - 0 1", key: "advancement" });
-
-		expect(white).toBe(1);
-		expect(black).toBe(1);
-	});
-
-	it("grows as a pawn walks up the board", () => {
-		const second = read({ fen: "4k3/8/8/8/8/8/4P3/4K3 w - - 0 1", key: "advancement" });
-		const seventh = read({ fen: "4k3/4P3/8/8/8/8/8/4K3 w - - 0 1", key: "advancement" });
-
-		expect(seventh).toBeGreaterThan(second);
-		expect(seventh).toBe(6);
-	});
-
-	it("does not count pieces, only pawns", () => {
-		expect(read({ fen: "4k3/8/8/8/R7/8/8/4K3 w - - 0 1", key: "advancement" })).toBe(0);
-	});
-});

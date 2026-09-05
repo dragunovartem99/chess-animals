@@ -33,10 +33,10 @@ export type EvalContext = {
 	// `createExtractor` asks of a whole family, asked of one feature.
 	//
 	// Family granularity is not always enough. `reverseStarting` walks both armies against every
-	// role's home squares and `symmetryMirrorX` walks the board a second time, while the features
-	// beside them in the same family cost a few bitboard operations. An animal that names one of
-	// the four proximity features was paying for all four, and the expensive one dominated its
-	// search. A cheap feature is not worth a branch; one that walks the board is.
+	// role's home squares, while the features beside it in the same family cost a few bitboard
+	// operations. An animal that names one of the proximity features was paying for all of them,
+	// and the expensive one dominated its search. A cheap feature is not worth a branch; one that
+	// walks the board is.
 	weighs: (slot: number) => boolean;
 };
 

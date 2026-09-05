@@ -1,4 +1,3 @@
-import { INITIAL_FEN } from "chessops/fen";
 import { describe, expect, it } from "vitest";
 
 import { positionFromFen } from "../../chess";
@@ -27,9 +26,9 @@ describe("weightsFromRecord", () => {
 	});
 
 	it("overrides only the features it names", () => {
-		const weights = weightsFromRecord({ tempo: -5 });
+		const weights = weightsFromRecord({ mobility: -5 });
 
-		expect(weights[FEATURES_BY_KEY.get("tempo")!.id]).toBe(-5);
+		expect(weights[FEATURES_BY_KEY.get("mobility")!.id]).toBe(-5);
 	});
 
 	it("rejects a key no feature answers to, rather than dropping it silently", () => {
@@ -43,11 +42,11 @@ describe("recordFromWeights", () => {
 	});
 
 	it("keeps a registry default, which is a weight like any other once a bot is saved", () => {
-		expect(recordFromWeights(defaultWeights()).tempo).toBe(10);
+		expect(recordFromWeights(defaultWeights()).mobility).toBe(4);
 	});
 
 	it("round-trips the values it does keep", () => {
-		const record = { tempo: 42 };
+		const record = { mobility: 42 };
 
 		expect(recordFromWeights(weightsFromRecord(record))).toEqual(record);
 	});
@@ -71,9 +70,11 @@ describe("dot", () => {
 	});
 
 	it("scores a real position against real weights", () => {
-		const weights = weightsFromRecord({ tempo: 10 });
-		const features = extractFeatures({ position: positionFromFen(INITIAL_FEN) });
+		const weights = weightsFromRecord({ materialQueen: 10 });
+		const features = extractFeatures({
+			position: positionFromFen("4k3/8/8/8/8/8/8/3QK3 w - - 0 1"),
+		});
 
-		expect(dot({ features, weights, slots: [featureId("tempo")] })).toBe(10);
+		expect(dot({ features, weights, slots: [featureId("materialQueen")] })).toBe(10);
 	});
 });

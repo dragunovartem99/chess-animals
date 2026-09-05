@@ -23,7 +23,7 @@ describe("move-level features at the root", () => {
 		const features = extractFeatures({
 			position: positionFromFen("4k3/8/8/8/8/8/8/4K2R w K - 0 1"),
 		});
-		const keys = ["givesCheck", "captureValue", "isPromotion", "isCastle", "movedRook"];
+		const keys = ["givesCheck", "captureValue", "isPromotion"];
 
 		for (const key of keys) expect(features[featureId(key)]).toBe(0);
 	});
@@ -75,32 +75,6 @@ describe("isPromotion", () => {
 		).toBe(-1);
 		expect(
 			afterUci({ fen: "7k/3P4/8/8/8/8/8/4K3 w - - 0 1", uci: "d7d8n", key: "isPromotion" })
-		).toBe(-1);
-	});
-});
-
-describe("isCastle", () => {
-	// chessops names a castling move by the square the *rook* stands on, Chess960 style.
-	it("fires on castling but not on an ordinary king move", () => {
-		const fen = "4k3/8/8/8/8/8/8/4K2R w K - 0 1";
-
-		expect(afterUci({ fen, uci: "e1h1", key: "isCastle" })).toBe(-1);
-		expect(afterUci({ fen, uci: "e1d1", key: "isCastle" })).toBe(0);
-	});
-});
-
-describe("the moved piece", () => {
-	it("names exactly one role", () => {
-		const fen = "4k3/8/8/8/8/8/8/4K2R w K - 0 1";
-
-		expect(afterUci({ fen, uci: "h1h2", key: "movedRook" })).toBe(-1);
-		expect(afterUci({ fen, uci: "h1h2", key: "movedKing" })).toBe(0);
-		expect(afterUci({ fen, uci: "e1d1", key: "movedKing" })).toBe(-1);
-	});
-
-	it("credits castling to the king, not the rook", () => {
-		expect(
-			afterUci({ fen: "4k3/8/8/8/8/8/8/4K2R w K - 0 1", uci: "e1h1", key: "movedKing" })
 		).toBe(-1);
 	});
 });

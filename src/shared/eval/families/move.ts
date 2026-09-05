@@ -1,5 +1,5 @@
-import { castlingSide, type Chess } from "chessops/chess";
-import { isNormal, type Move, type Role, ROLES } from "chessops/types";
+import type { Chess } from "chessops/chess";
+import { isNormal, type Move, type Role } from "chessops/types";
 
 import { CLASSICAL_VALUES } from "../../chess";
 import { featureId } from "../features";
@@ -12,19 +12,8 @@ export type PlayedMove = { parent: Chess; move: Move };
 const GIVES_CHECK = featureId("givesCheck");
 const CAPTURE_VALUE = featureId("captureValue");
 const IS_PROMOTION = featureId("isPromotion");
-const IS_CASTLE = featureId("isCastle");
 
-const MOVED_SLOTS = Object.fromEntries(
-	ROLES.map((role) => [role, featureId(`moved${role[0].toUpperCase()}${role.slice(1)}`)])
-) as Record<Role, number>;
-
-export const SLOTS = [
-	GIVES_CHECK,
-	CAPTURE_VALUE,
-	IS_PROMOTION,
-	IS_CASTLE,
-	...Object.values(MOVED_SLOTS),
-];
+export const SLOTS = [GIVES_CHECK, CAPTURE_VALUE, IS_PROMOTION];
 
 function capturedRole({ parent, move }: PlayedMove): Role | undefined {
 	if (!isNormal(move)) return undefined;
@@ -64,12 +53,6 @@ export function extractMoveFeatures({
 	const captured = capturedRole(played);
 	if (captured) features[CAPTURE_VALUE] = -CLASSICAL_VALUES[captured];
 
-	const { parent, move } = played;
-	if (!isNormal(move)) return;
-
-	if (move.promotion) features[IS_PROMOTION] = -1;
-	if (castlingSide(parent, move) !== undefined) features[IS_CASTLE] = -1;
-
-	const moved = parent.board.getRole(move.from);
-	if (moved) features[MOVED_SLOTS[moved]] = -1;
+	if (!isNormal(played.move)) return;
+	if (played.move.promotion) features[IS_PROMOTION] = -1;
 }

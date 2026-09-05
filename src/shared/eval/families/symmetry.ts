@@ -7,21 +7,16 @@ import type { FeatureVector } from "../vector";
 import type { EvalContext } from "./context";
 
 const SAME_COLOR_SQUARES = featureId("sameColorSquares");
-const SYMMETRY_MIRROR_X = featureId("symmetryMirrorX");
 const SYMMETRY_MIRROR_Y = featureId("symmetryMirrorY");
-const SYMMETRY_ROT180 = featureId("symmetryRot180");
 
-export const SLOTS = [SAME_COLOR_SQUARES, SYMMETRY_MIRROR_X, SYMMETRY_MIRROR_Y, SYMMETRY_ROT180];
+export const SLOTS = [SAME_COLOR_SQUARES, SYMMETRY_MIRROR_Y];
 
 const LIGHT = SquareSet.lightSquares();
 const DARK = SquareSet.darkSquares();
 
-// A square's mirror is one exclusive-or away: flipping the ranks inverts the high three bits, the
-// files the low three, and a half-turn both. None of the three has a fixed point, so a square is
-// never paired with itself.
+// A square's mirror is one exclusive-or away: flipping the ranks inverts the high three bits.
+// No rank flip has a fixed point, so a square is never paired with itself.
 const FLIP_RANKS = 56;
-const FLIP_FILES = 7;
-const HALF_TURN = 63;
 
 // The paper's scoring: facing a piece with its opposite number costs nothing, facing the wrong
 // piece of the right color costs a little, and an empty square opposite a piece costs more.
@@ -57,8 +52,8 @@ function onOwnColor({ board, color }: { board: Board; color: Color }): number {
 }
 
 // Shape rather than strength: how much a side's pieces sit on their own color, and how close the
-// whole board is to being a mirror of itself. The three symmetries are whole-board properties, so
-// like `kingProximity` they are raw values with nothing to subtract.
+// whole board is to being a mirror of itself across the ranks. Both are whole-board properties,
+// so like `kingProximity` they are raw values with nothing to subtract.
 export function extractSymmetry({
 	context,
 	features,
@@ -70,18 +65,5 @@ export function extractSymmetry({
 
 	features[SAME_COLOR_SQUARES] =
 		onOwnColor({ board, color: context.us }) - onOwnColor({ board, color: context.them });
-
-	// One walk of the board apiece, so each is asked for separately: a bot that wants a mirrored
-	// board rarely wants all three of the mirrors.
-	if (context.weighs(SYMMETRY_MIRROR_X)) {
-		features[SYMMETRY_MIRROR_X] = -asymmetry({ board, axis: FLIP_FILES });
-	}
-
-	if (context.weighs(SYMMETRY_MIRROR_Y)) {
-		features[SYMMETRY_MIRROR_Y] = -asymmetry({ board, axis: FLIP_RANKS });
-	}
-
-	if (context.weighs(SYMMETRY_ROT180)) {
-		features[SYMMETRY_ROT180] = -asymmetry({ board, axis: HALF_TURN });
-	}
+	features[SYMMETRY_MIRROR_Y] = -asymmetry({ board, axis: FLIP_RANKS });
 }

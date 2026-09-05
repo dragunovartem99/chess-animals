@@ -28,8 +28,7 @@ function reachable({ context, color }: { context: EvalContext; color: Color }): 
 }
 
 // How far into enemy territory a side has pushed, counting only what has crossed the halfway
-// line. Deliberately not the `advancement` feature, which counts every pawn's rank and would give
-// the tuner two ways to say a related thing.
+// line — the pressure a `push` bot wants, as opposed to counting every pawn's rank from home.
 function depth({ context, color }: { context: EvalContext; color: Color }): number {
 	let total = 0;
 

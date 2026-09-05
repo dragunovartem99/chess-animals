@@ -30,7 +30,7 @@ describe("presetFromBot", () => {
 	it("fills in zero for every feature the animal does not name", () => {
 		const preset = presetFromBot("hedgehog");
 
-		expect(preset?.weights.pawnPassed).toBe(0);
+		expect(preset?.weights.centralization).toBe(0);
 	});
 
 	it("is undefined for an id off the roster", () => {

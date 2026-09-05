@@ -7,15 +7,10 @@ import { extractKing, SLOTS as KING } from "./families/king";
 import { extractMaterial, SLOTS as MATERIAL } from "./families/material";
 import { extractMobility, SLOTS as MOBILITY } from "./families/mobility";
 import { extractMoveFeatures, SLOTS as MOVE, type PlayedMove } from "./families/move";
-import { extractPawns, SLOTS as PAWNS } from "./families/pawns";
-import { extractPieces, SLOTS as PIECES } from "./families/pieces";
 import { extractPlacement, SLOTS as PLACEMENT } from "./families/placement";
 import { extractProximity, SLOTS as PROXIMITY } from "./families/proximity";
 import { extractSymmetry, SLOTS as SYMMETRY } from "./families/symmetry";
-import { featureId } from "./features";
 import { createFeatureVector, type FeatureVector } from "./vector";
-
-const TEMPO = featureId("tempo");
 
 // Every family that reads the board, with the vector slots it writes. The slots are declared
 // beside the extractor rather than here, so the two cannot drift; `reachable.test.ts` holds every
@@ -23,8 +18,6 @@ const TEMPO = featureId("tempo");
 const BOARD_FAMILIES = [
 	{ slots: MATERIAL, run: extractMaterial },
 	{ slots: PLACEMENT, run: extractPlacement },
-	{ slots: PIECES, run: extractPieces },
-	{ slots: PAWNS, run: extractPawns },
 	{ slots: KING, run: extractKing },
 	{ slots: MOBILITY, run: extractMobility },
 	{ slots: CONTROL, run: extractControl },
@@ -54,18 +47,15 @@ export type Extractor = (frame: ExtractFrame) => FeatureVector;
 // reads worse and is deliberate: a loop over the table is one call site with ten targets, and it
 // measured three times slower than ten call sites with one target each. A search uses
 // `createExtractor`, which runs few enough families for that not to matter; this is the path that
-// runs all ten, so it pays for none of the indirection.
+// runs all eight, so it pays for none of the indirection.
 export function extractFeatures({ position, played, into }: ExtractFrame): FeatureVector {
 	const features = into ?? createFeatureVector();
 	if (into) into.fill(0);
 
 	const context = createContext({ position });
 
-	features[TEMPO] = 1;
 	extractMaterial({ context, features });
 	extractPlacement({ context, features });
-	extractPieces({ context, features });
-	extractPawns({ context, features });
 	extractKing({ context, features });
 	extractMobility({ context, features });
 	extractControl({ context, features });
@@ -80,14 +70,13 @@ export function extractFeatures({ position, played, into }: ExtractFrame): Featu
 // The features **this** bot is scored on, and no others.
 //
 // A weight of zero cannot change a score, so the family behind it need never run. That is not a
-// micro-optimisation: an animal names a handful of the sixty-odd features, and reading all of
+// micro-optimisation: an animal names a handful of the two dozen-odd features, and reading all of
 // them cost about 25 µs a node whoever was playing. The Elephant pays for material and its one
 // idea and skips the rest, the Goat skips the board entirely, and the random mover extracts
 // nothing at all.
 //
-// `slots` is the union over all three phases — a weight that is zero in every one of them stays
-// zero through every blend — and it is fixed for the life of a search, which is why this is built
-// once per `go` rather than consulted per node.
+// `slots` is fixed for the life of a search, which is why this is built once per `go` rather than
+// consulted per node.
 export function createExtractor({ slots }: { slots: Iterable<number> }): Extractor {
 	const live = new Set(slots);
 	const weighs = (slot: number) => live.has(slot);
@@ -95,13 +84,10 @@ export function createExtractor({ slots }: { slots: Iterable<number> }): Extract
 
 	const families = BOARD_FAMILIES.filter((family) => weighsAny(family.slots));
 	const move = weighsAny(MOVE);
-	const tempo = live.has(TEMPO);
 
 	return function extract({ position, played, into }): FeatureVector {
 		const features = into ?? createFeatureVector();
 		if (into) into.fill(0);
-
-		if (tempo) features[TEMPO] = 1;
 
 		// The context is a walk of the whole board, so it is not built at all for a bot that
 		// weighs nothing on it — `cccp` reads only the move that was played.

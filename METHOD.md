@@ -37,24 +37,25 @@ zero. The random bot is every weight at zero, where the argmax tie-break picks u
 what makes the roster extensible: **adding a heuristic is one registry entry and one extractor
 line**, and adding an animal is a data file.
 
-52 features in six families, declared once in `shared/eval/features.ts`. That single registry
+27 features in five families, declared once in `shared/eval/features.ts`. That single registry
 drives the extractor, the weight-editor sliders, the SPSA parameter space, the JSON schema for
 bot configs, and the locale files.
 
-| Family        | Count | What it covers                                                                                                                         |
-| ------------- | ----: | -------------------------------------------------------------------------------------------------------------------------------------- |
-| `material`    |     5 | one weight per piece — piece values are **tunable**, not constants                                                                     |
-| `positional`  |    12 | centralization, pawn advancement, rook on open file and seventh, bishop pair, outpost, space, centre control, hanging, mobility, tempo |
-| `pawns`       |     8 | doubled, isolated, backward, connected, passed and its advancement, shield, islands                                                    |
-| `king`        |     4 | king-zone attackers, ring defenders, open file, king–pawn distance, and the endgame centralization term                                |
-| `behavioural` |    11 | the animals: swarm, huddle, king proximity, same-colour squares, the symmetries, opponent mobility, push depth, offered material       |
-| `move`        |    12 | properties of the move that produced the position — gives check, capture value, promotion, castle, moved role, and the two game-enders |
+| Family        | Count | What it covers                                                                                                                     |
+| ------------- | ----: | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `material`    |     5 | one weight per piece — piece values are **tunable**, not constants                                                                 |
+| `positional`  |     5 | centralization, space, centre control, hanging, mobility                                                                           |
+| `king`        |     3 | king-zone attackers, open files by the king, king–pawn distance                                                                    |
+| `behavioural` |     9 | the animals: swarm, huddle, king proximity, reversed setup, same-colour squares, mirror, opponent mobility, push, offered material |
+| `move`        |     5 | properties of the move that produced the position — gives check, capture value, promotion, and the two game-enders                 |
 
-`centralization` and `advancement` are a parametrised stand-in for piece-square tables: two
-numbers — how far the pieces stand from the rim, how far the pawns have walked — instead of
-sixty-four per role. The registry once carried one of each _per role_; no animal used them and
-the lab rated them as noise at depth 2, so a knight wanting the centre and a rook wanting the
-seventh now come out of the same slider.
+`centralization` is a parametrised stand-in for a piece-square table: one number — how far the
+pieces stand from the rim — instead of sixty-four per role. The registry once carried a
+centralization _and_ an advancement weight _per role_, then two role-agnostic ones; the lab rated
+the per-role sliders as noise and, on a second pass, rated every pawn-structure weight the
+registry had (passed pawns, a lumped weakness, pawn advancement) at or below bare material — so
+the whole `pawns` family is gone rather than kept as dead sliders. A knight wanting the centre and
+a rook wanting the seventh come out of the one `centralization` number.
 
 The `move` family is why `cccp` and `pacifist` need no special casing — "prefer checks", "never
 capture" are weights like any other.

@@ -27,19 +27,17 @@ function ringOf({ king }: { king: number }): SquareSet {
 function countFor({ context, color }: { context: EvalContext; color: Color }): KingCounts {
 	const { board } = context.position;
 	const king = board.kingOf(color);
-	if (king === undefined) return { attackers: 0, defenders: 0, openFiles: 0, pawnDistance: 0 };
+	if (king === undefined) return { attackers: 0, openFiles: 0, pawnDistance: 0 };
 
 	const ring = ringOf({ king });
 	const enemy = opposite(color);
 
 	let attackers = 0;
-	let defenders = 0;
 
 	for (const { piece, reach } of context.reach) {
-		if (piece.role === "king" || !reach.intersects(ring)) continue;
+		if (piece.role === "king" || piece.color !== enemy || !reach.intersects(ring)) continue;
 
-		if (piece.color === enemy) attackers += ATTACK_VALUE[piece.role] ?? 0;
-		else defenders += 1;
+		attackers += ATTACK_VALUE[piece.role] ?? 0;
 	}
 
 	const pawns = board.pieces(color, "pawn");
@@ -57,7 +55,7 @@ function countFor({ context, color }: { context: EvalContext; color: Color }): K
 		pawnDistance = Math.min(...[...pawns].map((pawn) => chebyshev({ from: king, to: pawn })));
 	}
 
-	return { attackers, defenders, openFiles, pawnDistance };
+	return { attackers, openFiles, pawnDistance };
 }
 
 export function extractKing({

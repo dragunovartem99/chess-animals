@@ -4,7 +4,6 @@ export type FeatureFamily =
 	// Counted from the board.
 	| "material"
 	| "positional"
-	| "pawns"
 	| "king"
 	// The animal in the bot: the Elo World strategies, expressed as ordinary weights.
 	| "behavioural"
@@ -61,26 +60,12 @@ export const FEATURES = defineFeatures([
 	{ key: "materialRook", family: "material", group: "pieces", defaultWeight: 500 },
 	{ key: "materialQueen", family: "material", group: "pieces", defaultWeight: 900 },
 
-	{ key: "bishopPair", family: "positional", group: "pieces", defaultWeight: 30 },
-	{ key: "rookOpenFile", family: "positional", group: "pieces", defaultWeight: 20 },
-	{ key: "rookSeventh", family: "positional", group: "pieces", defaultWeight: 20 },
-	{ key: "knightOutpost", family: "positional", group: "pieces", defaultWeight: 25 },
-
-	// Pawn structure is the one part of the position that outlives every piece trade, so each
-	// trait is its own weight rather than one lumped "structure" score.
-	{ key: "pawnDoubled", family: "pawns", group: "weaknesses", defaultWeight: -12 },
-	{ key: "pawnIsolated", family: "pawns", group: "weaknesses", defaultWeight: -15 },
-	{ key: "pawnBackward", family: "pawns", group: "weaknesses", defaultWeight: -10 },
-	{ key: "pawnIslands", family: "pawns", group: "weaknesses", defaultWeight: -8 },
-	{ key: "pawnConnected", family: "pawns", group: "strengths", defaultWeight: 8 },
-	{ key: "pawnPassed", family: "pawns", group: "strengths", defaultWeight: 25 },
-	{ key: "pawnPassedAdvancement", family: "pawns", group: "strengths", defaultWeight: 8 },
-	{ key: "pawnShield", family: "pawns", group: "strengths", defaultWeight: 10 },
-
 	// King safety is counted around the king rather than on it: what attacks the squares he stands
-	// among, what defends them, and how exposed he is once the pawns in front of him are gone.
+	// among, and how exposed he is once the pawns in front of him are gone. A `kingRingDefenders`
+	// count sat here too and the lab rated it −46 against bare material — defenders that are just
+	// pieces standing near the king, with no read on whether they defend anything, told the
+	// evaluation to keep its army home and lose.
 	{ key: "kingAttackers", family: "king", group: "safety", defaultWeight: -12 },
-	{ key: "kingRingDefenders", family: "king", group: "safety", defaultWeight: 6 },
 	{ key: "kingOpenFile", family: "king", group: "safety", defaultWeight: -20 },
 	// Endgame business: the king is a piece, and it wants to be near the pawns.
 	{ key: "kingPawnDistance", family: "king", group: "endgame", defaultWeight: -4 },
@@ -92,9 +77,10 @@ export const FEATURES = defineFeatures([
 	{ key: "kingProximity", family: "behavioural", group: "distance", defaultWeight: 0 },
 	{ key: "reverseStarting", family: "behavioural", group: "distance", defaultWeight: 0 },
 	{ key: "sameColorSquares", family: "behavioural", group: "shape", defaultWeight: 0 },
-	{ key: "symmetryMirrorX", family: "behavioural", group: "shape", defaultWeight: 0 },
+	// The rank-flip mirror alone — the copycat symmetry, and the only one of the three an animal
+	// has ever wanted. A pawn on e4 facing a pawn on e5 costs nothing, so maximising it answers
+	// every move with the same move.
 	{ key: "symmetryMirrorY", family: "behavioural", group: "shape", defaultWeight: 0 },
-	{ key: "symmetryRot180", family: "behavioural", group: "shape", defaultWeight: 0 },
 	{ key: "opponentMobility", family: "behavioural", group: "pressure", defaultWeight: 0 },
 	{ key: "pushDepth", family: "behavioural", group: "pressure", defaultWeight: 0 },
 	{ key: "offeredMaterial", family: "behavioural", group: "pressure", defaultWeight: 0 },
@@ -113,32 +99,22 @@ export const FEATURES = defineFeatures([
 	{ key: "givesStalemate", family: "move", group: "forcing", defaultWeight: 0 },
 	{ key: "captureValue", family: "move", group: "forcing", defaultWeight: 0 },
 	{ key: "isPromotion", family: "move", group: "forcing", defaultWeight: 0 },
-	{ key: "isCastle", family: "move", group: "quiet", defaultWeight: 0 },
-	{ key: "movedPawn", family: "move", group: "quiet", defaultWeight: 0 },
-	{ key: "movedKnight", family: "move", group: "quiet", defaultWeight: 0 },
-	{ key: "movedBishop", family: "move", group: "quiet", defaultWeight: 0 },
-	{ key: "movedRook", family: "move", group: "quiet", defaultWeight: 0 },
-	{ key: "movedQueen", family: "move", group: "quiet", defaultWeight: 0 },
-	{ key: "movedKing", family: "move", group: "quiet", defaultWeight: 0 },
 
 	{ key: "centerControl", family: "positional", group: "control", defaultWeight: 8 },
 	{ key: "space", family: "positional", group: "control", defaultWeight: 2 },
 	{ key: "hanging", family: "positional", group: "control", defaultWeight: -15 },
 
 	{ key: "mobility", family: "positional", group: "activity", defaultWeight: 4 },
-	{ key: "safeMobility", family: "positional", group: "activity", defaultWeight: 3 },
-	// Having the move is worth something in itself. It is also the one feature that needs no
-	// board walk at all, which makes it the registry's worked example.
-	{ key: "tempo", family: "positional", group: "initiative", defaultWeight: 10 },
 
-	// Two strategic stand-ins for a piece-square table, role-agnostic on purpose: `centralization`
-	// is how far the minor and major pieces stand from the rim, `advancement` how far the pawns
-	// have walked. They replaced twelve per-role sliders (one centralization and one advancement
-	// for each of the six roles) that no animal ever used and the lab rated as noise at depth 2 —
-	// a knight wanting the centre and a rook wanting the seventh are the same instinct, and one
-	// number says it.
+	// A strategic stand-in for a piece-square table, role-agnostic on purpose: how far the minor
+	// and major pieces stand from the rim. It replaced twelve per-role sliders (a centralization
+	// and an advancement for each of the six roles) that no animal used, and the lab then rated it
+	// a top-three feature on its own — a knight wanting the centre and a rook wanting the seventh
+	// are the same instinct, and one number says it. The paired `advancement` term for pawns went
+	// with the rest of the pawn family: every pawn-structure weight the registry carried — passed,
+	// the lumped weakness, forwardness — measured at or below bare material in the lab, so the
+	// family is gone rather than kept as a drawer of dead sliders.
 	{ key: "centralization", family: "positional", group: "placement", defaultWeight: 0 },
-	{ key: "advancement", family: "positional", group: "placement", defaultWeight: 0 },
 ]);
 
 export const FEATURE_COUNT = FEATURES.length;

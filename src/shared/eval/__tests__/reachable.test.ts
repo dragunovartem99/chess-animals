@@ -10,12 +10,10 @@ import { SLOTS as KING } from "../families/king";
 import { SLOTS as MATERIAL } from "../families/material";
 import { SLOTS as MOBILITY } from "../families/mobility";
 import { SLOTS as MOVE } from "../families/move";
-import { SLOTS as PAWNS } from "../families/pawns";
-import { SLOTS as PIECES } from "../families/pieces";
 import { SLOTS as PLACEMENT } from "../families/placement";
 import { SLOTS as PROXIMITY } from "../families/proximity";
 import { SLOTS as SYMMETRY } from "../families/symmetry";
-import { FEATURES, featureId } from "../features";
+import { FEATURES } from "../features";
 
 // A spread wide enough that every feature has somewhere to fire: a middlegame, a broken pawn
 // structure, an exposed king, a promotion, a mate in one, and a position where castling is legal.
@@ -38,13 +36,10 @@ const CORPUS = [
 // `terminal.test.ts` is what holds them to firing.
 const NOT_EXTRACTED = new Set(["givesMate", "givesStalemate"]);
 
-// Every family's declared slots, by the name the extractor knows it under. `tempo` is its own
-// one-line family, written by the extractor itself rather than by a `families/` module.
+// Every family's declared slots, by the name the extractor knows it under.
 const DECLARED = {
 	material: MATERIAL,
 	placement: PLACEMENT,
-	pieces: PIECES,
-	pawns: PAWNS,
 	king: KING,
 	mobility: MOBILITY,
 	control: CONTROL,
@@ -52,7 +47,6 @@ const DECLARED = {
 	symmetry: SYMMETRY,
 	aggression: AGGRESSION,
 	move: MOVE,
-	tempo: [featureId("tempo")],
 };
 
 // Every frame in the corpus: each position, and each position a legal move from it produces.
