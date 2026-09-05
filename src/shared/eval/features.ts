@@ -61,21 +61,6 @@ export const FEATURES = defineFeatures([
 	{ key: "materialRook", family: "material", group: "pieces", defaultWeight: 500 },
 	{ key: "materialQueen", family: "material", group: "pieces", defaultWeight: 900 },
 
-	// A parametrised stand-in for piece-square tables: two numbers per role instead of sixty-four,
-	// which is what keeps the tuner's search space small enough to move in seconds.
-	{ key: "centralizationPawn", family: "positional", group: "placement", defaultWeight: 0 },
-	{ key: "centralizationKnight", family: "positional", group: "placement", defaultWeight: 0 },
-	{ key: "centralizationBishop", family: "positional", group: "placement", defaultWeight: 0 },
-	{ key: "centralizationRook", family: "positional", group: "placement", defaultWeight: 0 },
-	{ key: "centralizationQueen", family: "positional", group: "placement", defaultWeight: 0 },
-	{ key: "centralizationKing", family: "positional", group: "placement", defaultWeight: 0 },
-	{ key: "advancementPawn", family: "positional", group: "placement", defaultWeight: 0 },
-	{ key: "advancementKnight", family: "positional", group: "placement", defaultWeight: 0 },
-	{ key: "advancementBishop", family: "positional", group: "placement", defaultWeight: 0 },
-	{ key: "advancementRook", family: "positional", group: "placement", defaultWeight: 0 },
-	{ key: "advancementQueen", family: "positional", group: "placement", defaultWeight: 0 },
-	{ key: "advancementKing", family: "positional", group: "placement", defaultWeight: 0 },
-
 	{ key: "bishopPair", family: "positional", group: "pieces", defaultWeight: 30 },
 	{ key: "rookOpenFile", family: "positional", group: "pieces", defaultWeight: 20 },
 	{ key: "rookSeventh", family: "positional", group: "pieces", defaultWeight: 20 },
@@ -145,6 +130,15 @@ export const FEATURES = defineFeatures([
 	// Having the move is worth something in itself. It is also the one feature that needs no
 	// board walk at all, which makes it the registry's worked example.
 	{ key: "tempo", family: "positional", group: "initiative", defaultWeight: 10 },
+
+	// Two strategic stand-ins for a piece-square table, role-agnostic on purpose: `centralization`
+	// is how far the minor and major pieces stand from the rim, `advancement` how far the pawns
+	// have walked. They replaced twelve per-role sliders (one centralization and one advancement
+	// for each of the six roles) that no animal ever used and the lab rated as noise at depth 2 —
+	// a knight wanting the centre and a rook wanting the seventh are the same instinct, and one
+	// number says it.
+	{ key: "centralization", family: "positional", group: "placement", defaultWeight: 0 },
+	{ key: "advancement", family: "positional", group: "placement", defaultWeight: 0 },
 ]);
 
 export const FEATURE_COUNT = FEATURES.length;

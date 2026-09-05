@@ -37,22 +37,24 @@ zero. The random bot is every weight at zero, where the argmax tie-break picks u
 what makes the roster extensible: **adding a heuristic is one registry entry and one extractor
 line**, and adding an animal is a data file.
 
-62 features in six families, declared once in `shared/eval/features.ts`. That single registry
+52 features in six families, declared once in `shared/eval/features.ts`. That single registry
 drives the extractor, the weight-editor sliders, the SPSA parameter space, the JSON schema for
 bot configs, and the locale files.
 
 | Family        | Count | What it covers                                                                                                                         |
 | ------------- | ----: | -------------------------------------------------------------------------------------------------------------------------------------- |
 | `material`    |     5 | one weight per piece — piece values are **tunable**, not constants                                                                     |
-| `positional`  |    22 | centralization and advancement per role, rook on open file and seventh, bishop pair, outpost, space, centre control, hanging           |
+| `positional`  |    12 | centralization, pawn advancement, rook on open file and seventh, bishop pair, outpost, space, centre control, hanging, mobility, tempo |
 | `pawns`       |     8 | doubled, isolated, backward, connected, passed and its advancement, shield, islands                                                    |
 | `king`        |     4 | king-zone attackers, ring defenders, open file, king–pawn distance, and the endgame centralization term                                |
 | `behavioural` |    11 | the animals: swarm, huddle, king proximity, same-colour squares, the symmetries, opponent mobility, push depth, offered material       |
 | `move`        |    12 | properties of the move that produced the position — gives check, capture value, promotion, castle, moved role, and the two game-enders |
 
-Centralization and advancement are a parametrised stand-in for piece-square tables: two numbers
-per role instead of sixty-four, which is what keeps the tuner's search space small enough to move
-in seconds.
+`centralization` and `advancement` are a parametrised stand-in for piece-square tables: two
+numbers — how far the pieces stand from the rim, how far the pawns have walked — instead of
+sixty-four per role. The registry once carried one of each _per role_; no animal used them and
+the lab rated them as noise at depth 2, so a knight wanting the centre and a rook wanting the
+seventh now come out of the same slider.
 
 The `move` family is why `cccp` and `pacifist` need no special casing — "prefer checks", "never
 capture" are weights like any other.

@@ -17,7 +17,7 @@ const DRIFTER: BotDefinition = {
 	id: "drifter",
 	search: { depth: 1 },
 	temperature: 40,
-	weights: { mobility: 4, centralizationKnight: 3 },
+	weights: { mobility: 4, centralization: 3 },
 };
 
 const spec = (over: Partial<GameSpec> = {}): GameSpec => ({

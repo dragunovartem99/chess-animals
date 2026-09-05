@@ -24,7 +24,7 @@ next in [PLAN.md](./PLAN.md).
 ## The feature registry
 
 - DO add a heuristic as one entry in `shared/eval/features.ts` plus one line in its family's extractor — the registry is what drives the sliders, the UCI options, the bot schema and the locale files at once
-- DO append entries, never reorder or remove them: ids are assigned from registry order, and a bot's saved weights are keyed by `key`
+- DO append entries, never reorder them: ids are assigned from registry order, and a bot's saved weights are keyed by `key`. Removing a dead entry is allowed only in a single commit that also migrates every base, bot and test off its key — no weights persist outside the repo, so a clean cut beats carrying a zombie slider forever
 - DO give every feature a label in **both** locales — the coverage spec fails otherwise
 - DO evaluate from the side to move's perspective, always. No evaluation code is colour-specific
 

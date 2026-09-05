@@ -13,7 +13,8 @@ import { renderCrossTable, renderRatingTable } from "./render";
 // (pass `--jobs=` to cap it), prints a line per round, and runs for tens of seconds.
 //
 // `--lab` also rates the candidate bots staged in `cli/lab.ts` — the way a new idea gets a
-// number against the Hedgehog before it becomes an animal. `--seed=` picks the game seed.
+// number against the Hedgehog before it becomes an animal. `--lab-only` rates the candidates
+// against each other with the roster left out. `--seed=` picks the game seed.
 //
 // Deterministic: the same `--seed` gives the same games, the same ratings, the same JSON. The
 // result cache under `.cache/arena` means adding or retuning one bot only replays that bot.
@@ -25,10 +26,16 @@ const seed = numArg("seed") ?? 1;
 
 const write = (line: string) => process.stdout.write(`${line}\n`);
 
-// `--lab` rates the candidates in `cli/lab.ts` alongside the roster; without it, only the roster.
-const withLab = process.argv.includes("--lab");
+// `--lab` rates the candidates in `cli/lab.ts` alongside the roster; `--lab-only` rates the
+// candidates against each other and nothing else — a cheap sweep when the question is which idea
+// beats which, not where each lands on the roster scale. Without either, only the roster.
+const labOnly = process.argv.includes("--lab-only");
+const withLab = labOnly || process.argv.includes("--lab");
 if (withLab && LAB.length === 0) write("--lab: cli/lab.ts holds no candidates");
-const roster = [...ROSTER.map((animal) => animal.definition), ...(withLab ? LAB : [])];
+const roster = [
+	...(labOnly ? [] : ROSTER.map((animal) => animal.definition)),
+	...(withLab ? LAB : []),
+];
 
 // Leave a core free by default so the machine stays usable while the arena runs; `--jobs=` overrides.
 const jobs = Math.max(1, numArg("jobs") ?? availableParallelism() - 1);

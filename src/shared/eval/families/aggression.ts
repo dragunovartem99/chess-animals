@@ -28,8 +28,8 @@ function reachable({ context, color }: { context: EvalContext; color: Color }): 
 }
 
 // How far into enemy territory a side has pushed, counting only what has crossed the halfway
-// line. Deliberately not the sum of the per-role advancement features, which would give the tuner
-// two ways to say the same thing.
+// line. Deliberately not the `advancement` feature, which counts every pawn's rank and would give
+// the tuner two ways to say a related thing.
 function depth({ context, color }: { context: EvalContext; color: Color }): number {
 	let total = 0;
 

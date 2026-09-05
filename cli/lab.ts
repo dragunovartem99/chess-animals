@@ -11,12 +11,12 @@ import type { BotDefinition } from "@/shared/bots";
 //   - a candidate that loses is deleted
 // So this list is empty between experiments, and never a second roster.
 //
-// Found so far: material + one instinct barely clears the Hedgehog, except `hanging`, which
-// clears it comfortably (that one is the Hedgehog). `kingAttackers: -40` lands between the
-// Monkey and the Hedgehog and became the Hawk.
+// What past experiments turned up is in `../LAB.md` — a broad-feature ranking, and why
+// `hanging` became the Hedgehog, `kingAttackers` the Hawk, `mobility` the Spider.
 //
 // `lab("kingatk", { kingAttackers: -40 })` is the shape — id gets the `lab-` prefix, `material`
-// base and depth 2 unless the third argument says otherwise.
+// base and depth 2 unless the third argument says otherwise. `npm run arena -- --lab-only` rates
+// the candidates against each other; `--lab` rates them alongside the roster.
 export function lab(id: string, weights: Record<string, number>, depth = 2): BotDefinition {
 	return { id: `lab-${id}`, search: { depth }, temperature: 0, base: "material", weights };
 }
