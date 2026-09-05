@@ -35,30 +35,21 @@ scale is self-referential and compressed; bare `material` is the anchor at **146
 | 15  | `givesStalemate` (−1)                |   1479 |           +19 |
 | 16  | `captureValue` (25) _(Goat)_         |   1465 |            +5 |
 | —   | `material` (bare)                    |   1460 |             0 |
-| 17  | `isPromotion` (60)                   |   1459 |            −1 |
-| 18  | `symmetryMirrorY` (15) _(Parrot)_    |   1440 |           −20 |
-| 19  | `sameColorSquares` (15) _(Elephant)_ |   1436 |           −24 |
-| 20  | `kingProximity` (−20)                |   1279 |          −181 |
+| 17  | `symmetryMirrorY` (15) _(Parrot)_    |   1440 |           −20 |
+| 18  | `sameColorSquares` (15) _(Elephant)_ |   1436 |           −24 |
+| 19  | `kingProximity` (−20)                |   1279 |          −181 |
 
-## What this run says to cut
+## What sits below material
 
-- **`isPromotion` (−1, noise).** Nothing set it — no base, no animal — and it could not: the
-  value of queening already lands in the evaluation as the material swing on the move after. It
-  was the `tempo` of this pass, a slot that reads a real event and changes no decision.
-- **`kingOpenFile` (+19, noise).** Two sweeps rated it inside the noise band (+17, then +19) and
-  nothing weighted it. It counts the pawnless files beside the king, but `kingAttackers` already
-  reads the same danger one step later — as the rook or queen now aiming down that file, scored
-  by its force. King safety is `kingAttackers` + `kingPawnDistance` now.
-
-Both gone from the registry now (27 → 25).
-
-Everything else at or below `material` is load-bearing and not a "beats material" bet:
+Everything at or below the anchor is load-bearing and was never a "beats material" bet:
 
 - **`symmetryMirrorY`, `sameColorSquares`, `kingProximity`** each back a paper animal — the
   Parrot, the Elephant, and the suicide-king the roster has not drawn yet (`kingProximity` at
   this sign _is_ `suicide_king`: −181 is the personality working, not failing). Kept for the same
   reason `givesStalemate` is: it lets a bot tell mate from stalemate, which the paper calls out
   `min_oppt_moves` for missing.
+- **`captureValue`, `pushDepth`, `givesCheck`** are the Goat (the paper's `cccp`), which cannot
+  be expressed without them.
 
 ## What is working that no animal uses
 
@@ -73,7 +64,7 @@ Everything else at or below `material` is load-bearing and not a "beats material
 - **Only the top eight beat bare material at depth 2.** `offeredMaterial`, `mobility`,
   `centralization`, `hanging`, `space`, `swarm`, `kingAttackers`, `centerControl` — dense signals
   that nudge almost every quiet move. Below `centerControl` the whole field is one CI wide: rows
-  9–17 are statistically the same bot as the anchor, ordered by luck as much as merit.
+  9–16 are statistically the same bot as the anchor, ordered by luck as much as merit.
 - **`centralization` holds its top-three place** from the last pass — the role-agnostic
   piece-square stand-in carries strength the twelve per-role sliders it replaced never showed.
 - **Forcing and structure features fire too rarely** at depth 2 to separate from material with
