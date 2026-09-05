@@ -61,12 +61,13 @@ export const FEATURES = defineFeatures([
 	{ key: "materialQueen", family: "material", group: "pieces", defaultWeight: 900 },
 
 	// King safety is counted around the king rather than on it: what attacks the squares he stands
-	// among, and how exposed he is once the pawns in front of him are gone. A `kingRingDefenders`
-	// count sat here too and the lab rated it −46 against bare material — defenders that are just
-	// pieces standing near the king, with no read on whether they defend anything, told the
-	// evaluation to keep its army home and lose.
+	// among. A `kingRingDefenders` count sat here too and the lab rated it −46 against bare
+	// material — defenders that are just pieces standing near the king, with no read on whether
+	// they defend anything, told the evaluation to keep its army home and lose. A `kingOpenFile`
+	// count of the pawnless files beside him went the other way: two sweeps rated it +17 and +19,
+	// inside the noise, and nothing weighted it — `kingAttackers` already reads the open line as
+	// the piece now aiming down it.
 	{ key: "kingAttackers", family: "king", group: "safety", defaultWeight: -12 },
-	{ key: "kingOpenFile", family: "king", group: "safety", defaultWeight: -20 },
 	// Endgame business: the king is a piece, and it wants to be near the pawns.
 	{ key: "kingPawnDistance", family: "king", group: "endgame", defaultWeight: -4 },
 

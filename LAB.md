@@ -32,21 +32,25 @@ scale is self-referential and compressed; bare `material` is the anchor at **146
 | 12  | `pushDepth` (15) _(Goat)_            |   1490 |           +30 |
 | 13  | `opponentMobility` (−8)              |   1482 |           +22 |
 | 14  | `huddle` (−40) _(Turtle)_            |   1482 |           +22 |
-| 15  | `kingOpenFile` (−35)                 |   1479 |           +19 |
-| 16  | `givesStalemate` (−1)                |   1479 |           +19 |
-| 17  | `captureValue` (25) _(Goat)_         |   1465 |            +5 |
+| 15  | `givesStalemate` (−1)                |   1479 |           +19 |
+| 16  | `captureValue` (25) _(Goat)_         |   1465 |            +5 |
 | —   | `material` (bare)                    |   1460 |             0 |
-| 18  | `isPromotion` (60)                   |   1459 |            −1 |
-| 19  | `symmetryMirrorY` (15) _(Parrot)_    |   1440 |           −20 |
-| 20  | `sameColorSquares` (15) _(Elephant)_ |   1436 |           −24 |
-| 21  | `kingProximity` (−20)                |   1279 |          −181 |
+| 17  | `isPromotion` (60)                   |   1459 |            −1 |
+| 18  | `symmetryMirrorY` (15) _(Parrot)_    |   1440 |           −20 |
+| 19  | `sameColorSquares` (15) _(Elephant)_ |   1436 |           −24 |
+| 20  | `kingProximity` (−20)                |   1279 |          −181 |
 
 ## What this run says to cut
 
-- **`isPromotion` (−1, noise) — cut, registry now 26.** Nothing set it — no base, no animal —
-  and it could not: the value of queening already lands in the evaluation as the material swing
-  on the move after. It was the `tempo` of this pass, a slot that reads a real event and changes
-  no decision.
+- **`isPromotion` (−1, noise).** Nothing set it — no base, no animal — and it could not: the
+  value of queening already lands in the evaluation as the material swing on the move after. It
+  was the `tempo` of this pass, a slot that reads a real event and changes no decision.
+- **`kingOpenFile` (+19, noise).** Two sweeps rated it inside the noise band (+17, then +19) and
+  nothing weighted it. It counts the pawnless files beside the king, but `kingAttackers` already
+  reads the same danger one step later — as the rook or queen now aiming down that file, scored
+  by its force. King safety is `kingAttackers` + `kingPawnDistance` now.
+
+Both gone from the registry now (27 → 25).
 
 Everything else at or below `material` is load-bearing and not a "beats material" bet:
 
@@ -69,7 +73,7 @@ Everything else at or below `material` is load-bearing and not a "beats material
 - **Only the top eight beat bare material at depth 2.** `offeredMaterial`, `mobility`,
   `centralization`, `hanging`, `space`, `swarm`, `kingAttackers`, `centerControl` — dense signals
   that nudge almost every quiet move. Below `centerControl` the whole field is one CI wide: rows
-  9–18 are statistically the same bot as the anchor, ordered by luck as much as merit.
+  9–17 are statistically the same bot as the anchor, ordered by luck as much as merit.
 - **`centralization` holds its top-three place** from the last pass — the role-agnostic
   piece-square stand-in carries strength the twelve per-role sliders it replaced never showed.
 - **Forcing and structure features fire too rarely** at depth 2 to separate from material with

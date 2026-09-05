@@ -8,7 +8,6 @@ export default {
 	materialRook: "Ценность ладьи",
 	materialQueen: "Ценность ферзя",
 	kingAttackers: "Атакующие у короля",
-	kingOpenFile: "Открытые линии у короля",
 	kingPawnDistance: "Король — свои пешки",
 	swarm: "Армия у чужого короля",
 	huddle: "Армия у своего короля",

@@ -11,7 +11,7 @@ function read({ fen, key }: { fen: string; key: string }): number {
 
 describe("king safety in the opening position", () => {
 	it("is level on every trait", () => {
-		for (const key of ["kingAttackers", "kingOpenFile", "kingPawnDistance"]) {
+		for (const key of ["kingAttackers", "kingPawnDistance"]) {
 			expect(read({ fen: INITIAL_FEN, key })).toBe(0);
 		}
 	});
@@ -33,16 +33,6 @@ describe("kingAttackers", () => {
 
 	it("ignores a piece that reaches nowhere near the king", () => {
 		expect(read({ fen: "6k1/8/8/8/8/8/8/n5K1 b - - 0 1", key: "kingAttackers" })).toBe(0);
-	});
-});
-
-describe("kingOpenFile", () => {
-	it("counts the king's file and both neighbours when nothing of ours is left on them", () => {
-		expect(read({ fen: "6k1/5ppp/8/8/8/8/8/6K1 w - - 0 1", key: "kingOpenFile" })).toBe(3);
-	});
-
-	it("is zero behind an intact shield", () => {
-		expect(read({ fen: "6k1/8/8/8/8/8/5PPP/6K1 w - - 0 1", key: "kingOpenFile" })).toBe(-3);
 	});
 });
 
