@@ -1,10 +1,7 @@
 <script setup lang="ts">
 import type { Key } from "chessground/types";
 import type { Role } from "chessops/types";
-import { parseSquare } from "chessops/util";
 import { computed, ref, toRef } from "vue";
-
-import { positionFromFen } from "@/shared/chess";
 
 import { useBoardConfig } from "../composables/useBoardConfig";
 import { useChessground } from "../composables/useChessground";
@@ -25,8 +22,6 @@ const emit = defineEmits<{ move: [{ from: Key; to: Key; promotion?: Role }] }>()
 
 const element = ref<HTMLElement>();
 const pending = ref<{ from: Key; to: Key }>();
-
-const turn = computed(() => positionFromFen(props.fen).turn);
 
 function play({ from, to }: { from: Key; to: Key }) {
 	if (isPromotionMove({ fen: props.fen, from, to })) {
@@ -51,6 +46,10 @@ const config = useBoardConfig({
 });
 
 useChessground({ element, config });
+
+// Reuse the parse `useBoardConfig` already did rather than parsing the FEN a second time here —
+// only the promotion picker reads it, for the colour of the pieces it offers.
+const turn = computed(() => config.value.turnColor ?? "white");
 </script>
 
 <template>
