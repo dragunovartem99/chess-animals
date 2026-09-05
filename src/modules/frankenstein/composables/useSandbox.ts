@@ -9,10 +9,9 @@ import { createAutoplayLoop } from "./autoplay";
 import { buildEngine, reseed } from "./engine";
 
 // One weight vector, applied to both colors — the per-animal editor was cut in favour of this
-// single live sandbox. A local (non-worker) UCI engine
-// keeps every slider tick and depth change one `setOption` away, with no restart: `applyOption`
-// mutates the live config, which is the whole point of routing weight and depth changes through
-// UCI instead of just re-evaluating the position by hand.
+// single live sandbox. The engine runs in a worker (see `engine.ts` for why), but every slider
+// tick and depth change still reaches it as a plain `setoption` line with no restart — routing
+// weight and depth edits through UCI is what keeps them live.
 export function useSandbox() {
 	const game = useGame();
 	const starter = blankPreset();

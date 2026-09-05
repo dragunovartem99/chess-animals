@@ -35,7 +35,10 @@ export function buildEngine({
 	const engine = createUciClient({ transport: createWorkerTransport({ worker }) });
 	reseed(engine);
 
-	return engine;
+	// Handshake once, not once per autoplay step: `uci`/`isready` are two round trips over the
+	// worker boundary and `stepOnce` awaits `init` every move. Same pattern as `useBotEngines`.
+	const ready = engine.init();
+	return { ...engine, init: () => ready };
 }
 
 // The engine's RNG seed defaults to its id, which is the constant `ENGINE_NAME` for every build —
