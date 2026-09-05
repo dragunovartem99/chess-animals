@@ -15,10 +15,17 @@ function canonical(value: unknown): string {
 	return `{${entries.map(([k, v]) => `${JSON.stringify(k)}:${canonical(v)}`).join(",")}}`;
 }
 
+// A `get` that misses is followed by a `set` with the same spec object, and canonicalising +
+// hashing a spec (bot definitions and all) is not free — so the digest is memoised per spec.
+const digests = new WeakMap<GameSpec, string>();
+
 // Everything that determines a game's result. The opening is keyed by id when the caller has one
 // (a curated set entry) and by its FEN otherwise, so an edited opening line invalidates its rows
 // without disturbing the others.
 export function gameKey(spec: GameSpec): string {
+	const memoised = digests.get(spec);
+	if (memoised !== undefined) return memoised;
+
 	const payload = canonical({
 		white: spec.white,
 		black: spec.black,
@@ -27,7 +34,9 @@ export function gameKey(spec: GameSpec): string {
 		plyLimit: spec.plyLimit,
 		adjudication: spec.adjudication,
 	});
-	return createHash("sha256").update(payload).digest("hex");
+	const digest = createHash("sha256").update(payload).digest("hex");
+	digests.set(spec, digest);
+	return digest;
 }
 
 // A content-addressed store of finished games on disk. A re-run after adding or retuning one bot
