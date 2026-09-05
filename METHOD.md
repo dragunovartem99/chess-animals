@@ -41,13 +41,13 @@ line**, and adding an animal is a data file.
 drives the extractor, the weight-editor sliders, the SPSA parameter space, the JSON schema for
 bot configs, and the locale files.
 
-| Family        | Count | What it covers                                                                                                                     |
-| ------------- | ----: | ---------------------------------------------------------------------------------------------------------------------------------- |
-| `material`    |     5 | one weight per piece — piece values are **tunable**, not constants                                                                 |
-| `positional`  |     5 | centralization, space, centre control, hanging, mobility                                                                           |
-| `king`        |     2 | king-zone attackers, king–pawn distance                                                                                            |
-| `behavioural` |     9 | the animals: swarm, huddle, king proximity, reversed setup, same-colour squares, mirror, opponent mobility, push, offered material |
-| `move`        |     4 | properties of the move that produced the position — gives check, capture value, and the two game-enders                            |
+| Family        | Count | Features, with the registry's default weight in centipawns                                                                                                                   |
+| ------------- | ----: | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `material`    |     5 | one **tunable** weight per piece — `materialPawn` 100, `materialKnight` 320, `materialBishop` 330, `materialRook` 500, `materialQueen` 900                                   |
+| `positional`  |     5 | `centerControl` 8, `space` 2, `hanging` −15, `mobility` 4, `centralization` 0                                                                                                |
+| `king`        |     2 | `kingAttackers` −12, `kingPawnDistance` −4                                                                                                                                   |
+| `behavioural` |     9 | the animals, all default 0: `swarm`, `huddle`, `kingProximity`, `reverseStarting`, `sameColorSquares`, `symmetryMirrorY`, `opponentMobility`, `pushDepth`, `offeredMaterial` |
+| `move`        |     4 | properties of the move played — `givesMate` 1, `givesCheck` 0, `givesStalemate` 0, `captureValue` 0; the two `gives*` enders are preferences in [−1, 1], not centipawns      |
 
 `centralization` is a parametrised stand-in for a piece-square table: one number — how far the
 pieces stand from the rim — instead of sixty-four per role. The registry once carried a
