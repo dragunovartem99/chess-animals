@@ -11,9 +11,8 @@ export type PlayedMove = { parent: Chess; move: Move };
 
 const GIVES_CHECK = featureId("givesCheck");
 const CAPTURE_VALUE = featureId("captureValue");
-const IS_PROMOTION = featureId("isPromotion");
 
-export const SLOTS = [GIVES_CHECK, CAPTURE_VALUE, IS_PROMOTION];
+export const SLOTS = [GIVES_CHECK, CAPTURE_VALUE];
 
 function capturedRole({ parent, move }: PlayedMove): Role | undefined {
 	if (!isNormal(move)) return undefined;
@@ -52,7 +51,4 @@ export function extractMoveFeatures({
 
 	const captured = capturedRole(played);
 	if (captured) features[CAPTURE_VALUE] = -CLASSICAL_VALUES[captured];
-
-	if (!isNormal(played.move)) return;
-	if (played.move.promotion) features[IS_PROMOTION] = -1;
 }

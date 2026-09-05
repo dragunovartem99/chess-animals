@@ -23,7 +23,7 @@ describe("move-level features at the root", () => {
 		const features = extractFeatures({
 			position: positionFromFen("4k3/8/8/8/8/8/8/4K2R w K - 0 1"),
 		});
-		const keys = ["givesCheck", "captureValue", "isPromotion"];
+		const keys = ["givesCheck", "captureValue"];
 
 		for (const key of keys) expect(features[featureId(key)]).toBe(0);
 	});
@@ -65,16 +65,5 @@ describe("captureValue", () => {
 		const fen = "4k3/8/8/3pP3/8/8/8/4K3 w - d6 0 2";
 
 		expect(afterUci({ fen, uci: "e5d6", key: "captureValue" })).toBe(-1);
-	});
-});
-
-describe("isPromotion", () => {
-	it("fires on the promotion, whatever the piece chosen", () => {
-		expect(
-			afterUci({ fen: "7k/3P4/8/8/8/8/8/4K3 w - - 0 1", uci: "d7d8q", key: "isPromotion" })
-		).toBe(-1);
-		expect(
-			afterUci({ fen: "7k/3P4/8/8/8/8/8/4K3 w - - 0 1", uci: "d7d8n", key: "isPromotion" })
-		).toBe(-1);
 	});
 });

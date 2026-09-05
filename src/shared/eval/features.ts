@@ -98,7 +98,6 @@ export const FEATURES = defineFeatures([
 	// and lets one that would rather draw say so.
 	{ key: "givesStalemate", family: "move", group: "forcing", defaultWeight: 0 },
 	{ key: "captureValue", family: "move", group: "forcing", defaultWeight: 0 },
-	{ key: "isPromotion", family: "move", group: "forcing", defaultWeight: 0 },
 
 	{ key: "centerControl", family: "positional", group: "control", defaultWeight: 8 },
 	{ key: "space", family: "positional", group: "control", defaultWeight: 2 },

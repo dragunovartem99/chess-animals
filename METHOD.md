@@ -37,7 +37,7 @@ zero. The random bot is every weight at zero, where the argmax tie-break picks u
 what makes the roster extensible: **adding a heuristic is one registry entry and one extractor
 line**, and adding an animal is a data file.
 
-27 features in five families, declared once in `shared/eval/features.ts`. That single registry
+26 features in five families, declared once in `shared/eval/features.ts`. That single registry
 drives the extractor, the weight-editor sliders, the SPSA parameter space, the JSON schema for
 bot configs, and the locale files.
 
@@ -47,7 +47,7 @@ bot configs, and the locale files.
 | `positional`  |     5 | centralization, space, centre control, hanging, mobility                                                                           |
 | `king`        |     3 | king-zone attackers, open files by the king, king–pawn distance                                                                    |
 | `behavioural` |     9 | the animals: swarm, huddle, king proximity, reversed setup, same-colour squares, mirror, opponent mobility, push, offered material |
-| `move`        |     5 | properties of the move that produced the position — gives check, capture value, promotion, and the two game-enders                 |
+| `move`        |     4 | properties of the move that produced the position — gives check, capture value, and the two game-enders                            |
 
 `centralization` is a parametrised stand-in for a piece-square table: one number — how far the
 pieces stand from the rim — instead of sixty-four per role. The registry once carried a

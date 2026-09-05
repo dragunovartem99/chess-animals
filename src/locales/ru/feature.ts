@@ -23,7 +23,6 @@ export default {
 	givesCheck: "Ход даёт шах",
 	givesStalemate: "Ход ставит пат",
 	captureValue: "Ценность взятой фигуры",
-	isPromotion: "Ход проводит пешку",
 	centerControl: "Контроль центра",
 	space: "Пространство у соперника",
 	hanging: "Незащищённые фигуры",

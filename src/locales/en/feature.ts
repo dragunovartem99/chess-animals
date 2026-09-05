@@ -24,7 +24,6 @@ export default {
 	givesCheck: "Move gives check",
 	givesStalemate: "Move gives stalemate",
 	captureValue: "Captured piece value",
-	isPromotion: "Move promotes",
 	centerControl: "Centre control",
 	space: "Space in enemy half",
 	hanging: "Undefended pieces",
