@@ -4,7 +4,7 @@ import feature from "./feature";
 export default {
 	app: {
 		title: "Chess Animals",
-		tagline: "Every bot here is sure of one wrong thing about chess. Prove it wrong.",
+		tagline: "Every animal plays chess its own strange way. Can you beat one?",
 	},
 	nav: {
 		roster: "Roster",
@@ -23,7 +23,7 @@ export default {
 	},
 	bot: bots,
 	roster: {
-		lead: "Every animal here plays chess its own way. Tap one and take it on.",
+		lead: "Every animal plays chess its own strange way. Can you beat one?",
 	},
 	game: {
 		breakdown: {

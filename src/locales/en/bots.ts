@@ -19,11 +19,15 @@ export default {
 	monkey: {
 		name: "Monkey",
 		description:
-			"It sees what every piece is worth and takes the best of it. No tricks — it doesn't need any.",
+			"It sees what every piece is worth and takes the best one. No tricks — it doesn't need any.",
 	},
 	hedgehog: {
 		name: "Hedgehog",
 		description:
-			"It grabs whatever is worth the most. And it never leaves a piece for you to take.",
+			"Grabs the biggest thing on the board. And it never leaves a piece for you to take.",
+	},
+	hawk: {
+		name: "Hawk",
+		description: "Finds your king and never looks away. Then everyone dives at it.",
 	},
 };

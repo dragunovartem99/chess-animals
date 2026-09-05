@@ -48,10 +48,8 @@ h1 {
 
 .lead {
 	margin: 0.25rem 0 0;
-	max-width: 34rem;
 	color: var(--color-neutral-lightest);
 	font-size: 1.05rem;
-	text-wrap: balance;
 }
 
 .grid {
