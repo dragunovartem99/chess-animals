@@ -8,7 +8,13 @@ import { createQuiescence } from "./quiescence";
 
 // What scoring one position needs. The window is only quiescence's business, so the plain
 // evaluation asks for less than the extension does.
-export type ScoreFrame = { position: Chess; played?: PlayedMove; ply: number };
+export type ScoreFrame = {
+	position: Chess;
+	played?: PlayedMove;
+	ply: number;
+	// Threaded through to `terminalScore` when the caller already knows it — see `terminalTerm`.
+	inCheck?: boolean;
+};
 
 export type LeafFrame = ScoreFrame & { alpha: number; beta: number };
 

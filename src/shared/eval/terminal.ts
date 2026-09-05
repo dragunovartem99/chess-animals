@@ -35,18 +35,24 @@ export function terminalTerm({
 	position,
 	weights,
 	ply = 0,
+	inCheck,
 }: {
 	position: Chess;
 	weights: WeightVector;
 	ply?: number;
+	// What the caller already knows about `position.isCheck()`, if anything. A mate needs a check
+	// and a stalemate needs its absence, so a known answer skips a `checkmate`/`stalemate` probe
+	// (each of which recomputes the checkers and scans for a legal move) that can only come back
+	// false. `undefined` means "not known" — both probes run, as before.
+	inCheck?: boolean;
 }): TerminalTerm | undefined {
 	// The weight is checked before the position: `isStalemate` walks for a legal move, and a bot
 	// that does not care about stalemate should not pay for that on every node of every search.
-	if (weights[GIVES_MATE] !== 0 && position.isCheckmate()) {
+	if (weights[GIVES_MATE] !== 0 && inCheck !== false && position.isCheckmate()) {
 		return { id: GIVES_MATE, value: -(MATE_SCORE - ply) };
 	}
 
-	if (weights[GIVES_STALEMATE] !== 0 && position.isStalemate()) {
+	if (weights[GIVES_STALEMATE] !== 0 && inCheck !== true && position.isStalemate()) {
 		return { id: GIVES_STALEMATE, value: -(MATE_SCORE - ply) };
 	}
 
@@ -59,12 +65,14 @@ export function terminalScore({
 	position,
 	weights,
 	ply = 0,
+	inCheck,
 }: {
 	position: Chess;
 	weights: WeightVector;
 	ply?: number;
+	inCheck?: boolean;
 }): number | undefined {
-	const term = terminalTerm({ position, weights, ply });
+	const term = terminalTerm({ position, weights, ply, inCheck });
 
 	return term && term.value * weights[term.id];
 }

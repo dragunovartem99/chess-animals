@@ -14,7 +14,12 @@ export type QuiescenceFrame = {
 	beta: number;
 };
 
-type Evaluate = (frame: { position: Chess; played?: PlayedMove; ply: number }) => number;
+type Evaluate = (frame: {
+	position: Chess;
+	played?: PlayedMove;
+	ply: number;
+	inCheck?: boolean;
+}) => number;
 
 // What the extension holds for a whole search, alongside the budget the current line has left.
 // Carried in the frame rather than closed over for the same reason as negamax's: the frame is
@@ -85,8 +90,12 @@ function quiesce({ deps, budget, position, played, ply, alpha, beta }: Descent):
 
 	if (drawn(position)) return drawScore;
 
-	const inCheck = budget > 0 && position.isCheck();
-	const standPat = evaluate({ position, played, ply });
+	// One `isCheck` for the node: `checked` is the position's own state, `inCheck` is that gated by
+	// the evasion budget. Handing `checked` to `evaluate` lets `terminalScore` skip a mate/stalemate
+	// probe that the check state already answers.
+	const checked = position.isCheck();
+	const inCheck = budget > 0 && checked;
+	const standPat = evaluate({ position, played, ply, inCheck: checked });
 
 	// Standing pat is only on offer when the side to move may decline: in check it must answer, so
 	// the baseline is dropped and the score comes from the evasions alone. Both cutoffs come

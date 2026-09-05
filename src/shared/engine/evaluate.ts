@@ -16,6 +16,8 @@ export type PositionEvaluator = (frame: {
 	position: Chess;
 	played?: PlayedMove;
 	ply?: number;
+	// Passed through to `terminalScore` — see there. Quiescence knows it, the plain search does not.
+	inCheck?: boolean;
 }) => number;
 
 // A scorer bound to one bot's weights, holding everything it can work out from them up front:
@@ -28,9 +30,9 @@ export function createEvaluator({ weights }: { weights: WeightVector }): Positio
 	const slots = liveSlots(weights);
 	const extract = createExtractor({ slots });
 
-	return function evaluate({ position, played, ply = 0 }): number {
+	return function evaluate({ position, played, ply = 0, inCheck }): number {
 		// A mate replaces the evaluation rather than joining it — see `terminalScore`.
-		const terminal = terminalScore({ position, weights, ply });
+		const terminal = terminalScore({ position, weights, ply, inCheck });
 		if (terminal !== undefined) return terminal;
 
 		return dot({ features: extract({ position, played, into: scratch }), weights, slots });
