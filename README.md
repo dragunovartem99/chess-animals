@@ -1,6 +1,6 @@
 # chess-animals
 
-<img src="public/og.png" width="480" alt="chess-animals preview card: the roster, weakest first">
+<img src="public/og.png" alt="chess-animals preview card: the roster, weakest first">
 
 Every animal plays chess its own strange way. Can you beat one?
 
