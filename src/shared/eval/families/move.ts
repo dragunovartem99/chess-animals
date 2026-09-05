@@ -1,6 +1,7 @@
 import { castlingSide, type Chess } from "chessops/chess";
 import { isNormal, type Move, type Role, ROLES } from "chessops/types";
 
+import { CLASSICAL_VALUES } from "../../chess";
 import { featureId } from "../features";
 import type { FeatureVector } from "../vector";
 
@@ -24,17 +25,6 @@ export const SLOTS = [
 	IS_CASTLE,
 	...Object.values(MOVED_SLOTS),
 ];
-
-// What a captured piece is worth here. Fixed rather than read from the tunable material weights,
-// so retuning piece values does not quietly move every capture-loving bot with them.
-const CAPTURE_VALUES: Record<Role, number> = {
-	pawn: 1,
-	knight: 3,
-	bishop: 3,
-	rook: 5,
-	queen: 9,
-	king: 0,
-};
 
 function capturedRole({ parent, move }: PlayedMove): Role | undefined {
 	if (!isNormal(move)) return undefined;
@@ -72,7 +62,7 @@ export function extractMoveFeatures({
 	if (position.isCheck()) features[GIVES_CHECK] = -1;
 
 	const captured = capturedRole(played);
-	if (captured) features[CAPTURE_VALUE] = -CAPTURE_VALUES[captured];
+	if (captured) features[CAPTURE_VALUE] = -CLASSICAL_VALUES[captured];
 
 	const { parent, move } = played;
 	if (!isNormal(move)) return;

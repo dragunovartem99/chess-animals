@@ -1,17 +1,8 @@
 import type { Board } from "chessops/board";
 import type { Chess } from "chessops/chess";
-import type { NormalMove, Role } from "chessops/types";
+import type { NormalMove } from "chessops/types";
 
-// Rough worth of a piece, for deciding which move to look at first. Nothing is scored with these
-// — they only sort — so they are fixed rather than read from the tunable material weights.
-const WORTH: Record<Role, number> = {
-	pawn: 1,
-	knight: 3,
-	bishop: 3,
-	rook: 5,
-	queen: 9,
-	king: 0,
-};
+import { CLASSICAL_VALUES } from "../chess";
 
 // The priorities of the list being sorted, reused across calls rather than allocated per node.
 // One buffer is enough because the sort runs to completion before the search recurses, and 256
@@ -31,7 +22,7 @@ function priority({ board, move }: { board: Board; move: NormalMove }): number {
 	const victim = board.getRole(move.to) ?? "king";
 	const attacker = board.getRole(move.from) ?? "king";
 
-	return 100 + WORTH[victim] * 10 - WORTH[attacker];
+	return 100 + CLASSICAL_VALUES[victim] * 10 - CLASSICAL_VALUES[attacker];
 }
 
 // Sorts `moves` **in place** and returns it: every caller has just generated the list and owns

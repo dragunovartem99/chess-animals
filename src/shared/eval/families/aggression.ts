@@ -1,6 +1,7 @@
-import type { Color, Role } from "chessops/types";
+import type { Color } from "chessops/types";
 import { opposite } from "chessops/util";
 
+import { CLASSICAL_VALUES } from "../../chess";
 import { featureId } from "../features";
 import type { FeatureVector } from "../vector";
 import type { EvalContext } from "./context";
@@ -11,17 +12,6 @@ const PUSH_DEPTH = featureId("pushDepth");
 const OFFERED_MATERIAL = featureId("offeredMaterial");
 
 export const SLOTS = [OPPONENT_MOBILITY, PUSH_DEPTH, OFFERED_MATERIAL];
-
-// The paper's own values, used only to price what is being offered — the tunable piece values
-// live in the material family and would make this feature move when they did.
-const OFFER_VALUE: Record<Role, number> = {
-	pawn: 1,
-	knight: 3,
-	bishop: 3,
-	rook: 5,
-	queen: 9,
-	king: 0,
-};
 
 // Squares a side's pieces can move to, pawn pushes aside. Real legal-move generation would mean
 // flipping the side to move, which is not even a legal position when the other king is in check,
@@ -61,7 +51,7 @@ function offered({ context, color }: { context: EvalContext; color: Color }): nu
 		if (piece.color !== enemy) continue;
 
 		for (const target of reach.intersect(board[color])) {
-			total += OFFER_VALUE[board.getRole(target) ?? "king"];
+			total += CLASSICAL_VALUES[board.getRole(target) ?? "king"];
 		}
 	}
 

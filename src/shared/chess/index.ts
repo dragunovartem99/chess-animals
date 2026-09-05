@@ -1,3 +1,4 @@
+export { CLASSICAL_VALUES } from "./values";
 export { createDescend, type Descend } from "./descend";
 export { gameStatus } from "./outcome";
 export { hasLegalMove, legalCaptures, legalMoves, PROMOTION_ROLES } from "./moves";
