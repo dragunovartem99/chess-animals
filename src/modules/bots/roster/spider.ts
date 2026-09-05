@@ -10,7 +10,7 @@ import type { Animal } from "./types";
 // Depth 2, temp 0. No other animal reads mobility.
 export const SPIDER: Animal = {
 	emoji: "🕷️",
-	tint: "#566a6b",
+	tint: "#5f5a54",
 	definition: {
 		id: "spider",
 		search: { depth: 2 },

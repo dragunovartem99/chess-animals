@@ -5,7 +5,7 @@ import type { Animal } from "./types";
 // the same clamp on the centre from behind its own pawns.
 export const HIPPO: Animal = {
 	emoji: "🦛",
-	tint: "#6a6a94",
+	tint: "#84787e",
 	definition: {
 		id: "hippo",
 		search: { depth: 2 },
