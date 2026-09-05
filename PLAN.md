@@ -82,12 +82,13 @@ arena: it burns cores for minutes and rewrites a bot's weights file.
 
 ## Phase G — finishing
 
-| #   | Commit                               | Contents                                                                        | Green when                                          |
-| --- | ------------------------------------ | ------------------------------------------------------------------------------- | --------------------------------------------------- |
-| 33  | ✅ `bots: rebuild the animal roster` | Six animals spanning the range, RU/EN names and descriptions                    | The ordering is the arena's, weakest first          |
-| 34  | ⬜ `test: golden games`              | Fixed pair + seed + opening → committed PGN fixtures                            | Any eval change surfaces as a diff                  |
-| 35  | ⬜ `docs: about page`                | `/about` explaining the method and crediting the paper                          | Both locales complete                               |
-| 36  | ⬜ `tablebase: probe interface`      | `probe(fen) → { wdl, dtz, moves }` stub, `bot.useTablebase` honoured as a no-op | The interface compiles and is tested against a fake |
+| #   | Commit                               | Contents                                                                        | Green when                                             |
+| --- | ------------------------------------ | ------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| 33  | ✅ `bots: rebuild the animal roster` | Six animals spanning the range, RU/EN names and descriptions                    | The ordering is the arena's, weakest first             |
+| 34  | ⬜ `test: golden games`              | Fixed pair + seed + opening → committed PGN fixtures                            | Any eval change surfaces as a diff                     |
+| 35  | ⬜ `docs: about page`                | `/about` explaining the method and crediting the paper                          | Both locales complete                                  |
+| 36  | ⬜ `tablebase: probe interface`      | `probe(fen) → { wdl, dtz, moves }` stub, `bot.useTablebase` honoured as a no-op | The interface compiles and is tested against a fake    |
+| 37  | ✅ `seo: social preview card`        | `tsx cli/og.ts` renders `public/og.png` from the roster; `og:`/`twitter:` meta  | `npm run build` regenerates it, the parsers are tested |
 
 ## Outside v1
 
