@@ -71,7 +71,7 @@ body {
 	   bright lawn doesn't shout over the white cards. The wash is kept a touch warm and lighter
 	   than pure shadow so the lawn reads as grass, not mud, and the tile is large enough that the
 	   repeat is not obvious behind the cards. */
-	background-color: #3a4d24;
+	background-color: #5b7512;
 	background-image:
 		linear-gradient(rgb(34 44 18 / 46%), rgb(34 44 18 / 46%)),
 		url("/chess-animals/cartoon-grass.jpg");
