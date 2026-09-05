@@ -45,4 +45,4 @@ next in [PLAN.md](./PLAN.md).
 - DO leave the repo green at every commit: `format:check`, `types:check`, `lint:check`, `test:coverage`, `build`
 - DO make one commit do one thing, so it is reviewable on its own and revertable without unpicking the next
 - DO write `<area>: <what>` in the imperative, lower case, one line, e.g. `eval: add pawn structure features`
-- DO tick the matching row in [PLAN.md](./PLAN.md) in the same commit that lands it
+- DO delete the matching row from [PLAN.md](./PLAN.md) in the same commit that lands it — the file lists only what is still to come
