@@ -85,7 +85,13 @@ watch(
 		const animal = ROSTER_BY_ID.get(players.value[color]);
 		if (!animal) return;
 
-		const answer = await engines.askForMove({ animal, fen: game.fen.value });
+		// The move list, not just the FEN: the engine rebuilds the repetition history from it, so
+		// without it a temperature-0 bot-vs-bot game is blind to threefold and can only end at the
+		// ply cap.
+		const answer = await engines.askForMove({
+			animal,
+			moves: game.turns.value.map((played) => played.uci),
+		});
 
 		// The board may have moved on while the worker was thinking — a restart, or the player
 		// switching who plays which color. Applying a stale answer would corrupt the game.
