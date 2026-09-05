@@ -140,7 +140,7 @@ const weights = computed(() => weightsFromRecord(sandbox.weights.value));
 	gap: 0.25rem;
 	padding: 0.25rem;
 	border-radius: var(--radius-full);
-	background: var(--color-neutral-lightest);
+	background: var(--color-sunken);
 }
 
 .tabs button {
@@ -154,7 +154,7 @@ const weights = computed(() => weightsFromRecord(sandbox.weights.value));
 }
 
 .tabs button:hover {
-	background: var(--color-neutral-light);
+	background: var(--color-stripe);
 }
 
 .tabs button.active {

@@ -10,7 +10,7 @@ import LocaleSwitcher from "./LocaleSwitcher.vue";
 					class="brand title"
 					:to="{ name: 'roster' }"
 				>
-					<span class="emoji logo">🦊</span>
+					<span class="emoji logo">🌞</span>
 					{{ $t("app.title") }}
 				</RouterLink>
 				<LocaleSwitcher />
@@ -34,11 +34,11 @@ import LocaleSwitcher from "./LocaleSwitcher.vue";
 
 <style scoped>
 .header-top {
-	background: var(--color-neutral-darkest);
+	background: var(--color-wood);
 }
 
 .header-sub {
-	background: var(--color-neutral-dark);
+	background: var(--color-wood-light);
 }
 
 .top {
@@ -54,7 +54,7 @@ import LocaleSwitcher from "./LocaleSwitcher.vue";
 	align-items: center;
 	gap: 0.6rem;
 	font-size: 1.35rem;
-	color: var(--color-neutral-lightest);
+	color: var(--color-wood-text);
 	text-decoration: none;
 }
 
@@ -73,7 +73,7 @@ import LocaleSwitcher from "./LocaleSwitcher.vue";
 .nav a {
 	padding: 0.35rem 0.9rem;
 	border-radius: var(--radius-full);
-	color: var(--color-neutral-lighter);
+	color: rgb(244 234 217 / 72%);
 	font-weight: 600;
 	font-size: 0.9rem;
 	text-decoration: none;
@@ -83,7 +83,7 @@ import LocaleSwitcher from "./LocaleSwitcher.vue";
 }
 
 .nav a:hover {
-	color: var(--color-neutral-lightest);
+	color: var(--color-wood-text);
 }
 
 /* Exact, not `router-link-active`: the roster sits at the locale root, which is a prefix of

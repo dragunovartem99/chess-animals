@@ -246,7 +246,7 @@ watch(
 	gap: 0.25rem;
 	padding: 0.25rem;
 	border-radius: var(--radius-full);
-	background: var(--color-neutral-lightest);
+	background: var(--color-sunken);
 }
 
 .tabs button {
@@ -260,7 +260,7 @@ watch(
 }
 
 .tabs button:hover {
-	background: var(--color-neutral-light);
+	background: var(--color-stripe);
 }
 
 /* On a white card an amber chip would shout; the selected tab is simply lifted out of the

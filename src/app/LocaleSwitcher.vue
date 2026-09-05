@@ -36,13 +36,13 @@ const links = computed(() =>
 	gap: 0.25rem;
 	padding: 0.25rem;
 	border-radius: var(--radius-full);
-	background: var(--color-neutral-dark);
+	background: var(--color-wood-light);
 }
 
 a {
 	padding: 0.25rem 0.9rem;
 	border-radius: var(--radius-full);
-	color: var(--color-neutral-lighter);
+	color: rgb(244 234 217 / 72%);
 	font-size: 0.8rem;
 	font-weight: 700;
 	text-decoration: none;
@@ -52,7 +52,7 @@ a {
 }
 
 a:hover {
-	color: var(--color-neutral-lightest);
+	color: var(--color-wood-text);
 }
 
 a.router-link-exact-active {

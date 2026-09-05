@@ -141,7 +141,7 @@ async function copyWeights() {
 	gap: 0.35rem;
 	padding: 0.2rem 0.2rem 0.2rem 0.6rem;
 	border-radius: var(--radius-full);
-	background: var(--color-neutral-lightest);
+	background: var(--color-sunken);
 }
 
 .depth button {
@@ -154,7 +154,7 @@ async function copyWeights() {
 }
 
 .depth button:hover {
-	background: var(--color-neutral-light);
+	background: var(--color-stripe);
 }
 
 .depth button.active {
