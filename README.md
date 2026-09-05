@@ -1,6 +1,8 @@
 # chess-animals
 
-Chess bots with animal personalities, benchmarked against each other in seconds.
+<img src="public/og.png" width="480" alt="chess-animals preview card: the roster, weakest first">
+
+Every animal plays chess its own strange way. Can you beat one?
 
 Every animal — the random 🐴 Donkey, the greedy 🐒 Monkey — runs the same code. A personality is
 nothing but a set of tunable heuristic weights, and a move is a dot product between those weights
