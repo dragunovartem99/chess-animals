@@ -1,8 +1,9 @@
 import { INITIAL_FEN } from "chessops/fen";
 import { describe, expect, it } from "vitest";
 
-import { gameStatus } from "../outcome";
+import { createDrawTest, gameStatus } from "../outcome";
 import { positionFromFen, repetitionKey } from "../position";
+import { createRepetition } from "../repetition";
 
 describe("gameStatus", () => {
 	it("reports an opening position as unfinished", () => {
@@ -62,5 +63,42 @@ describe("gameStatus adjudication", () => {
 			reason: "ply-limit",
 		});
 		expect(gameStatus({ position, plyLimit: 200, ply: 199 })).toEqual({ over: false });
+	});
+});
+
+describe("createDrawTest", () => {
+	const drawn = createDrawTest(createRepetition());
+
+	it("calls a hundred half-moves without a capture or a pawn a draw", () => {
+		const position = positionFromFen("6k1/8/8/8/8/8/8/1Q4K1 w - - 100 80");
+
+		expect(drawn(position)).toBe(true);
+	});
+
+	it("calls mate on the hundredth half-move mate, not a draw", () => {
+		const position = positionFromFen(
+			"rnb1kbnr/pppp1ppp/8/4p3/6Pq/5P2/PPPPP2P/RNBQKBNR w KQkq - 100 3"
+		);
+
+		expect(drawn(position)).toBe(false);
+	});
+
+	it("calls two bare kings a draw", () => {
+		const position = positionFromFen("4k3/8/8/8/8/8/8/4K3 w - - 0 1");
+
+		expect(drawn(position)).toBe(true);
+	});
+
+	it("does not call a full board a draw", () => {
+		expect(drawn(positionFromFen(INITIAL_FEN))).toBe(false);
+	});
+
+	it("calls a position the line has already stood in a draw", () => {
+		const position = positionFromFen("6k1/8/8/8/8/8/8/1Q4K1 w - - 10 40");
+		const repetition = createRepetition();
+
+		for (let ply = 0; ply < 4; ply += 1) repetition.push(position);
+
+		expect(createDrawTest(repetition)(position)).toBe(true);
 	});
 });

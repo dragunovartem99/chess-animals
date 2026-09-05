@@ -1,6 +1,7 @@
 import type { Chess } from "chessops/chess";
 import type { NormalMove } from "chessops/types";
 
+import type { Repetition } from "../chess";
 import type { WeightVector } from "../eval";
 import type { Rng } from "./rng";
 import { softmaxSample } from "./sample";
@@ -16,6 +17,7 @@ export function scoreMoves({
 	weights,
 	search,
 	temperature = 0,
+	repetition,
 }: {
 	position: Chess;
 	weights: WeightVector;
@@ -23,8 +25,17 @@ export function scoreMoves({
 	// A bot that only takes the argmax lets the search narrow its window on the non-best moves;
 	// one that samples needs their scores exact. Defaults to the argmax case.
 	temperature?: number;
+	// The positions the game has already stood in, so a move back into one scores as the draw it
+	// is. A caller with no game behind it leaves it out.
+	repetition?: Repetition;
 }): ScoredMove[] {
-	return searchRoot({ position, weights, options: search, prune: temperature <= 0 });
+	return searchRoot({
+		position,
+		weights,
+		options: search,
+		prune: temperature <= 0,
+		repetition,
+	});
 }
 
 // The sampling half of the policy, over scores someone else has already searched. It is split out
@@ -58,15 +69,17 @@ export function chooseMove({
 	search,
 	temperature,
 	rng,
+	repetition,
 }: {
 	position: Chess;
 	weights: WeightVector;
 	search: SearchOptions;
 	temperature: number;
 	rng: Rng;
+	repetition?: Repetition;
 }): NormalMove | undefined {
 	return pickMove({
-		scored: scoreMoves({ position, weights, search, temperature }),
+		scored: scoreMoves({ position, weights, search, temperature, repetition }),
 		temperature,
 		rng,
 	});

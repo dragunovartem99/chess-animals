@@ -2,27 +2,36 @@ import type { Chess } from "chessops/chess";
 import { INITIAL_FEN } from "chessops/fen";
 
 import type { BotConfig } from "../bots";
-import { afterMove, positionFromFen } from "../chess";
+import { afterMove, createRepetition, positionFromFen, type Repetition } from "../chess";
 import { pickMove, scoreMoves } from "./policy";
 import type { Rng } from "./rng";
 import type { SearchOptions } from "./search";
 import { fromUci, toUci } from "./uci/moves";
 import type { GoLimits, UciResponse } from "./uci/types";
 
-// Rebuilds the position a `position` command describes. A move the position rejects means the
-// caller and the engine no longer agree about the game; stopping there leaves the engine on the
-// last position both sides did agree on, rather than on a board neither of them meant.
-export function replay({ fen, moves }: { fen?: string; moves: string[] }): Chess {
+export type Replayed = { position: Chess; repetition: Repetition };
+
+// Rebuilds the position a `position` command describes, and the history behind it. A move the
+// position rejects means the caller and the engine no longer agree about the game; stopping there
+// leaves the engine on the last position both sides did agree on, rather than on a board neither
+// of them meant.
+//
+// The history is collected here rather than asked for separately because this is the only place
+// that has it: `position startpos moves …` is how a UCI caller tells an engine what has already
+// been played, and without it the engine would repeat a line it has already repeated twice.
+export function replay({ fen, moves }: { fen?: string; moves: string[] }): Replayed {
 	let position = positionFromFen(fen ?? INITIAL_FEN);
+	const repetition = createRepetition();
 
 	for (const uci of moves) {
 		const move = fromUci({ position, uci });
-		if (!move) return position;
+		if (!move) return { position, repetition };
 
+		repetition.push(position);
 		position = afterMove({ position, move });
 	}
 
-	return position;
+	return { position, repetition };
 }
 
 // What one `go` searches: the bot's own settings, with the limits on this particular `go`
@@ -56,11 +65,13 @@ export function findBestMove({
 	config,
 	limits = {},
 	rng,
+	repetition,
 }: {
 	position: Chess;
 	config: BotConfig;
 	limits?: GoLimits;
 	rng: Rng;
+	repetition?: Repetition;
 }): UciResponse[] {
 	const search = withLimits({ search: config.search, limits });
 
@@ -71,6 +82,7 @@ export function findBestMove({
 		weights: config.weights,
 		search,
 		temperature: config.temperature,
+		repetition,
 	});
 	const move = pickMove({ scored, temperature: config.temperature, rng });
 

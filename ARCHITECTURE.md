@@ -49,17 +49,17 @@ own lazy chunk.
 One flat area per folder, each with its own `index.ts`, and deliberately **no root barrel**.
 `shared/` depends on nothing else in the repo.
 
-| Area           | What it holds                                                                                                                              |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| `chess`        | chessops wrappers — FEN in/out, legal moves, `afterMove`, the search's per-ply scratch positions, repetition keys, and game-over detection |
-| `eval`         | the feature registry, the extractor and its families, feature and weight vectors, terminal scoring — the heart of the project              |
-| `engine`       | negamax search, move ordering, quiescence, the move policy, the seeded RNG, the UCI codec, the engine client and its transports            |
-| `bots`         | `BotDefinition` (JSON on disk) and `BotConfig` (compiled), the frozen weight bases, the guard, and `compileBot` between them               |
-| `openings`     | the curated paired opening set (JSON), `probe(fen)`, and the colour-swapped schedule                                                       |
-| `rating`       | Bradley–Terry MLE with a white advantage and Rao–Kupper draw term, CIs from the Hessian, and the Markov champion iteration                 |
-| `scheduler`    | the pure `runGame`, a `worker_threads` pool, the result cache, adaptive pairing, and `runTournament` over all of it                        |
-| `tuner`        | SPSA — the decaying gain sequences, the Rademacher perturbation, the ascent loop, and the bot-weights ↔ parameter-vector mapping           |
-| `test-support` | fixtures and helpers shared by specs — component mounting, played games, weight vectors, a fake worker                                     |
+| Area           | What it holds                                                                                                                                         |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `chess`        | chessops wrappers — FEN in/out, legal moves, `afterMove`, the search's per-ply scratch positions, repetition keys and hashes, and game-over detection |
+| `eval`         | the feature registry, the extractor and its families, feature and weight vectors, terminal scoring — the heart of the project                         |
+| `engine`       | negamax search, move ordering, quiescence, the move policy, the seeded RNG, the UCI codec, the engine client and its transports                       |
+| `bots`         | `BotDefinition` (JSON on disk) and `BotConfig` (compiled), the frozen weight bases, the guard, and `compileBot` between them                          |
+| `openings`     | the curated paired opening set (JSON), `probe(fen)`, and the colour-swapped schedule                                                                  |
+| `rating`       | Bradley–Terry MLE with a white advantage and Rao–Kupper draw term, CIs from the Hessian, and the Markov champion iteration                            |
+| `scheduler`    | the pure `runGame`, a `worker_threads` pool, the result cache, adaptive pairing, and `runTournament` over all of it                                   |
+| `tuner`        | SPSA — the decaying gain sequences, the Rademacher perturbation, the ascent loop, and the bot-weights ↔ parameter-vector mapping                      |
+| `test-support` | fixtures and helpers shared by specs — component mounting, played games, weight vectors, a fake worker                                                |
 
 `shared/bots` sits below both `eval` and `engine` in the dependency order rather than beside the
 roster, because the worker and the cache key need to read a bot definition without pulling a Vue
@@ -95,7 +95,9 @@ feature is safe and reordering one is not.
 
 ## The engine
 
-`searchRoot` is negamax with alpha-beta; `depth` comes from the bot, `quiescence` extends past
+`searchRoot` is negamax with alpha-beta, and `leaf.ts` is what happens once it stops descending —
+the evaluation, quiescence and the node budget, which is a property of leaves because a leaf is
+the only thing that spends one. `depth` comes from the bot, `quiescence` extends past
 the last ply along captures, and `nodeLimit` caps the work one move may cost (reaching it stops
 the search going deeper rather than corrupting the result). Depth 1 short-circuits to scoring
 every legal move.
@@ -114,6 +116,20 @@ evaluated like any other. `givesStalemate` works the same way on the same scale.
 the evaluation instead, as a weight of 100000, was wrong twice over: every mate scored the same
 whatever its distance, and the leaf of a slow mate then collected plies of positional bonus on
 top of it, so every animal in the roster walked past a mate in one.
+
+A draw is the other thing the search must see for itself, and the one it used to be blind to.
+`createDrawTest` scores a repetition, the fifty-move rule and insufficient material at a flat
+zero, before the position is evaluated and before its moves are generated — the game does not go
+on from there. Unlike mate this is not a preference: zero is the honest price of splitting the
+point, because every feature is a difference between the sides, so a level position already scores
+near it. Without it a bot two queens up would shuffle back into a position it had already drawn
+twice and score it as winning.
+
+The history comes from whoever owns the game — `runGame` in the arena, `position … moves` over
+UCI — as a `Repetition`, a stack of 64-bit position hashes the search pushes its own ancestors
+onto. Hashes rather than the exact FEN `repetitionKey` the game-level rule uses, because a string
+per node is what the search cannot afford; the hash is only computed once `halfmoves` says a
+repetition is reachable at all, which is most of why knowing about draws costs 2–4%.
 
 `policy.ts` turns those scores into a move: `temperature: 0` is a strict argmax with a seeded
 tie-break, above it a softmax sample. All randomness comes from `createRng` — xorshift128, seeded

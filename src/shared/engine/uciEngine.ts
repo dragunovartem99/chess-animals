@@ -1,13 +1,19 @@
 import { INITIAL_FEN } from "chessops/fen";
 
 import type { BotConfig } from "../bots";
-import { positionFromFen } from "../chess";
+import { createRepetition, positionFromFen } from "../chess";
 import { applyOption, describeOptions } from "./options";
 import { createRng } from "./rng";
 import type { UciCommand, UciResponse } from "./uci/types";
-import { findBestMove, replay } from "./uciMoves";
+import { findBestMove, type Replayed, replay } from "./uciMoves";
 
 export type UciEngineState = { config: BotConfig; name: string };
+
+// The board and the game behind it travel together, because `position` is the one command that
+// sets both and `go` is the one that needs both.
+function startpos(): Replayed {
+	return { position: positionFromFen(INITIAL_FEN), repetition: createRepetition() };
+}
 
 // One bot, driven by UCI commands. It holds no worker, no timers and no I/O: a command goes in,
 // a list of responses comes out. That is what lets the whole protocol be tested without spawning
@@ -15,7 +21,7 @@ export type UciEngineState = { config: BotConfig; name: string };
 export function createUciEngine({ config, name }: UciEngineState) {
 	let current = config;
 	let seed: number | string = config.id;
-	let position = positionFromFen(INITIAL_FEN);
+	let game = startpos();
 	let rng = createRng(seed);
 
 	return {
@@ -34,7 +40,7 @@ export function createUciEngine({ config, name }: UciEngineState) {
 					// Back to the seed the caller set, so a game replays move for move. The
 					// scheduler gives each game its own seed; nothing here invents randomness.
 					rng = createRng(seed);
-					position = positionFromFen(INITIAL_FEN);
+					game = startpos();
 					return [];
 				case "setoption":
 					if (command.name === "Seed" && command.value !== undefined) {
@@ -50,10 +56,10 @@ export function createUciEngine({ config, name }: UciEngineState) {
 					});
 					return [];
 				case "position":
-					position = replay(command);
+					game = replay(command);
 					return [];
 				case "go":
-					return findBestMove({ position, config: current, limits: command.limits, rng });
+					return findBestMove({ ...game, config: current, limits: command.limits, rng });
 				default:
 					return [];
 			}

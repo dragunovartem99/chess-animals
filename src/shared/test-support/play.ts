@@ -1,7 +1,14 @@
 import { INITIAL_FEN } from "chessops/fen";
 import type { Color } from "chessops/types";
 
-import { afterMove, type GameResult, gameStatus, positionFromFen, repetitionKey } from "../chess";
+import {
+	afterMove,
+	createRepetition,
+	type GameResult,
+	gameStatus,
+	positionFromFen,
+	repetitionKey,
+} from "../chess";
 import { chooseMove } from "../engine";
 import { createRng } from "../engine/rng";
 import type { SearchOptions } from "../engine/search";
@@ -33,6 +40,7 @@ export function playGame({
 	const rng = createRng(seed);
 	let position = positionFromFen(fen);
 	const keys: string[] = [];
+	const repetition = createRepetition();
 	let ply = 0;
 
 	for (;;) {
@@ -46,10 +54,12 @@ export function playGame({
 			search: bot.search,
 			temperature: bot.temperature ?? 0,
 			rng,
+			repetition,
 		});
 		if (!move) return null;
 
 		keys.push(repetitionKey(position));
+		repetition.push(position);
 		position = afterMove({ position, move });
 		ply += 1;
 	}

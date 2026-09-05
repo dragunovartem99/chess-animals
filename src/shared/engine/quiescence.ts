@@ -14,6 +14,19 @@ export type QuiescenceFrame = {
 
 type Evaluate = (frame: { position: Chess; played?: PlayedMove; ply: number }) => number;
 
+// What the extension holds for a whole search, alongside the budget the current line has left.
+// Carried in the frame rather than closed over for the same reason as negamax's: the frame is
+// allocated per node regardless, and this keeps the recursion a plain function.
+type Deps = {
+	descend: Descend;
+	drawn: (position: Chess) => boolean;
+	drawScore: number;
+	evaluate: Evaluate;
+	exhausted: () => boolean;
+};
+
+type Descent = QuiescenceFrame & { deps: Deps; budget: number };
+
 // How many times one line may stop to answer a check before the extension gives up and stands pat
 // again. Unbounded, a checking sequence is a hole in the bottom of the search: the move list stops
 // shrinking, and the quiescence benchmark ran 2.5× slower for tactics no depth-2 animal follows
@@ -33,57 +46,53 @@ const EVASION_BUDGET = 1;
 // score the position as if it could just stay in check. The recursion still terminates, because
 // an evasion is answered by captures only — every second ply removes a piece.
 //
+// A capture is irreversible, so these lines almost never reach a repetition — but they do run the
+// clock into the fifty-move rule and take the last pieces off the board, so `drawn` is asked here
+// too: a bot that traded into a dead draw must not be told it stood a queen up.
+//
 // Quiet moves that *give* check are deliberately not searched. They are the other half of what
 // "quiescence with checks" usually means, and they cost far more than they are worth here: the
 // move list stops shrinking, so the tree grows several times over to buy tactics a depth-2 animal
 // was never going to follow up on anyway.
-export function createQuiescence({
-	descend,
-	evaluate,
-	exhausted,
-}: {
-	descend: Descend;
-	evaluate: Evaluate;
-	exhausted: () => boolean;
-}): (frame: QuiescenceFrame) => number {
-	function quiesce(
-		{ position, played, ply, alpha, beta }: QuiescenceFrame,
-		budget: number
-	): number {
-		const inCheck = budget > 0 && position.isCheck();
-		const standPat = evaluate({ position, played, ply });
+export function createQuiescence(deps: Deps): (frame: QuiescenceFrame) => number {
+	return (frame: QuiescenceFrame) => quiesce({ ...frame, deps, budget: EVASION_BUDGET });
+}
 
-		// Standing pat is only on offer when the side to move may decline: in check it must
-		// answer, so the baseline is dropped and the score comes from the evasions alone. Both
-		// cutoffs come before the move list, which neither of them needs.
-		if (exhausted() || (!inCheck && standPat >= beta)) return standPat;
+function quiesce({ deps, budget, position, played, ply, alpha, beta }: Descent): number {
+	const { descend, drawn, drawScore, evaluate, exhausted } = deps;
 
-		const moves = inCheck ? legalMoves(position) : legalCaptures(position);
+	if (drawn(position)) return drawScore;
 
-		// No move at all means mate, and `standPat` is what recognises it. Out of check it means
-		// the position is already quiet, which is what the whole search is looking for.
-		if (moves.length === 0) return standPat;
+	const inCheck = budget > 0 && position.isCheck();
+	const standPat = evaluate({ position, played, ply });
 
-		let best = inCheck ? -Infinity : Math.max(standPat, alpha);
+	// Standing pat is only on offer when the side to move may decline: in check it must answer, so
+	// the baseline is dropped and the score comes from the evasions alone. Both cutoffs come
+	// before the move list, which neither of them needs.
+	if (exhausted() || (!inCheck && standPat >= beta)) return standPat;
 
-		for (const move of orderMoves({ position, moves })) {
-			const score = -quiesce(
-				{
-					position: descend({ position, move, ply: ply + 1 }),
-					played: { parent: position, move },
-					ply: ply + 1,
-					alpha: -beta,
-					beta: -best,
-				},
-				inCheck ? budget - 1 : budget
-			);
+	const moves = inCheck ? legalMoves(position) : legalCaptures(position);
 
-			if (score >= beta) return score;
-			if (score > best) best = score;
-		}
+	// No move at all means mate, and `standPat` is what recognises it. Out of check it means the
+	// position is already quiet, which is what the whole search is looking for.
+	if (moves.length === 0) return standPat;
 
-		return best;
+	let best = inCheck ? -Infinity : Math.max(standPat, alpha);
+
+	for (const move of orderMoves({ position, moves })) {
+		const score = -quiesce({
+			deps,
+			budget: inCheck ? budget - 1 : budget,
+			position: descend({ position, move, ply: ply + 1 }),
+			played: { parent: position, move },
+			ply: ply + 1,
+			alpha: -beta,
+			beta: -best,
+		});
+
+		if (score >= beta) return score;
+		if (score > best) best = score;
 	}
 
-	return (frame: QuiescenceFrame) => quiesce(frame, EVASION_BUDGET);
+	return best;
 }

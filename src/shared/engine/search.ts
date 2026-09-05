@@ -1,11 +1,10 @@
 import type { Chess } from "chessops/chess";
 import type { NormalMove } from "chessops/types";
 
-import { createDescend, legalMoves } from "../chess";
-import type { WeightVector, PlayedMove } from "../eval";
-import { createEvaluator } from "./evaluate";
+import { createRepetition, legalMoves, type Repetition } from "../chess";
+import type { WeightVector } from "../eval";
+import { createSearchContext, negamax } from "./negamax";
 import { orderMoves } from "./ordering";
-import { createQuiescence } from "./quiescence";
 
 export type SearchOptions = {
 	depth: number;
@@ -21,63 +20,6 @@ export type ScoredMove = { move: NormalMove; score: number };
 
 const INFINITY = Number.POSITIVE_INFINITY;
 
-type Frame = {
-	position: Chess;
-	played?: PlayedMove;
-	depth: number;
-	ply: number;
-	alpha: number;
-	beta: number;
-};
-
-function createSearch({ weights, options }: { weights: WeightVector; options: SearchOptions }) {
-	const limit = options.nodeLimit ?? INFINITY;
-	const descend = createDescend();
-	let nodes = 0;
-
-	const scorePosition = createEvaluator({ weights });
-	const evaluate = (frame: { position: Chess; played?: PlayedMove; ply: number }) => {
-		nodes += 1;
-		return scorePosition(frame);
-	};
-
-	const quiesce = createQuiescence({ descend, evaluate, exhausted: () => nodes >= limit });
-
-	function negamax({ position, played, depth, ply, alpha, beta }: Frame): number {
-		// At a leaf the move list is never walked, so it is not built — a mated leaf needs no
-		// special case, because `evaluate` recognises the mate itself and quiescence finds no
-		// captures to try from one.
-		if (depth <= 0 || nodes >= limit) {
-			return options.quiescence
-				? quiesce({ position, played, ply, alpha, beta })
-				: evaluate({ position, played, ply });
-		}
-
-		const moves = legalMoves(position);
-		if (moves.length === 0) return evaluate({ position, played, ply });
-
-		let best = -INFINITY;
-
-		for (const move of orderMoves({ position, moves })) {
-			const score = -negamax({
-				position: descend({ position, move, ply: ply + 1 }),
-				played: { parent: position, move },
-				depth: depth - 1,
-				ply: ply + 1,
-				alpha: -beta,
-				beta: -Math.max(alpha, best),
-			});
-
-			if (score > best) best = score;
-			if (best >= beta) break;
-		}
-
-		return best;
-	}
-
-	return { descend, negamax, nodeCount: () => nodes };
-}
-
 // Every legal move with what it is worth to the mover, searched to the requested depth.
 //
 // `prune` narrows the window as the best root score rises, the way a normal engine always would.
@@ -86,18 +28,24 @@ function createSearch({ weights, options }: { weights: WeightVector; options: Se
 // distribution. When the caller will only take the argmax (`temperature <= 0`) the bounds are
 // harmless: a move that truly ties the best still comes back equal to it, so the seeded
 // tie-break is unaffected, and only strictly worse moves are left as bounds.
+//
+// `repetition` carries the game so far, so a move back into a position the players have already
+// stood in scores as the draw it is heading for. A caller with no game behind it — a test scoring
+// one position out of nowhere — leaves it out and gets the same search without that.
 export function searchRoot({
 	position,
 	weights,
 	options,
 	prune = false,
+	repetition = createRepetition(),
 }: {
 	position: Chess;
 	weights: WeightVector;
 	options: SearchOptions;
 	prune?: boolean;
+	repetition?: Repetition;
 }): ScoredMove[] {
-	const { descend, negamax } = createSearch({ weights, options });
+	const context = createSearchContext({ weights, options, repetition });
 	const moves = legalMoves(position);
 
 	// Search best-capture-first so the narrowing window bites sooner, but report the moves in
@@ -108,9 +56,12 @@ export function searchRoot({
 	const scoreByMove = new Map<NormalMove, number>();
 	let best = -INFINITY;
 
+	repetition.push(position);
+
 	for (const move of order) {
 		const score = -negamax({
-			position: descend({ position, move, ply: 1 }),
+			context,
+			position: context.descend({ position, move, ply: 1 }),
 			played: { parent: position, move },
 			depth: options.depth - 1,
 			ply: 1,
@@ -121,6 +72,8 @@ export function searchRoot({
 		scoreByMove.set(move, score);
 		if (score > best) best = score;
 	}
+
+	repetition.pop();
 
 	return moves.map((move) => ({ move, score: scoreByMove.get(move)! }));
 }
