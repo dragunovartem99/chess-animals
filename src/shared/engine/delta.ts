@@ -28,9 +28,9 @@ export const DELTA_MARGIN = 200;
 
 // The most one capture can be worth to *this* bot, per role taken.
 //
-// Read off the bot's own weights rather than assumed: a Snake that prices a rook above a queen
-// prunes by its own values, and a bot that weighs no material at all gets a bound of zero, which
-// is the truth — captures cannot move a score that does not count them.
+// Read off the bot's own weights rather than assumed: the bound prunes by the values the bot
+// itself plays by, and a bot that weighs no material at all — the Goat — gets a bound of zero,
+// which is the truth — captures cannot move a score that does not count them.
 //
 // Absolute values, because the bound has to be optimistic in both directions: a bot paid to shed
 // material gains by being taken, and pruning it on a signed value would cut the lines it is

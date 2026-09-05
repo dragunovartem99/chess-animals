@@ -34,7 +34,7 @@ const queryPlayers = computed(() => ({ white: queryPlayer("white"), black: query
 
 const players = ref<Record<Color, string>>({
 	white: queryPlayers.value.white ?? HUMAN,
-	black: queryPlayers.value.black ?? "donkey",
+	black: queryPlayers.value.black ?? "monkey",
 });
 
 const TABS = ["moves", "breakdown"] as const;

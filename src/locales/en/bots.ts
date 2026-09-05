@@ -4,24 +4,26 @@ export default {
 		description:
 			"Doesn't think. Moves whatever, wherever — and sometimes that's enough to win.",
 	},
-	wolf: {
-		name: "Wolf",
-		description: "Every piece walks toward your king. Nothing else matters to it.",
-	},
-	turtle: {
-		name: "Turtle",
-		description: "Hides behind its own shell. Every piece stays home, guarding the king.",
-	},
-	snake: {
-		name: "Snake",
-		description: "Coils around you and squeezes. Soon you have nowhere left to go.",
+	goat: {
+		name: "Goat",
+		description: "Eats whatever it can reach. Never asks what the meal costs.",
 	},
 	parrot: {
 		name: "Parrot",
 		description: "Plays your move back at you. Keeps it up until copying you costs a piece.",
 	},
-	shark: {
-		name: "Shark",
-		description: "Bites whatever it can reach. It never asks what the bite costs.",
+	elephant: {
+		name: "Elephant",
+		description: "It only steps on squares of its own color — like you did when you were five.",
+	},
+	monkey: {
+		name: "Monkey",
+		description:
+			"It sees what every piece is worth and takes the best of it. No tricks — it doesn't need any.",
+	},
+	hedgehog: {
+		name: "Hedgehog",
+		description:
+			"It grabs whatever is worth the most. And it never leaves a piece for you to take.",
 	},
 };

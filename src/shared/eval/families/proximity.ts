@@ -41,8 +41,8 @@ function meanDistances({
 
 	// Chebyshev distance, inlined: this runs for every piece of both sides, and the call's
 	// argument object was costing more than the arithmetic. The army is walked as the bit loop
-	// behind a `SquareSet`'s iterator for the same reason — this is the Wolf's whole evaluation,
-	// twice a node.
+	// behind a `SquareSet`'s iterator for the same reason — for a bot built on this family it is
+	// the whole evaluation, twice a node.
 	const army = context.position.board[color];
 
 	for (let half = 0; half < 2; half += 1) {
@@ -82,7 +82,7 @@ function reverseDistance({ context, color }: { context: EvalContext; color: Colo
 
 	// Walked a role at a time off the board's own bitboards, rather than through `context.reach`:
 	// this family wants a piece's square and role and never what it attacks, and asking for
-	// `reach` would make the Wolf pay for the attack walk it has no feature to spend it on.
+	// `reach` would make a bot here pay for the attack walk it has no feature to spend it on.
 	for (const role of ROLES) {
 		const targets = homes[role];
 		if (targets.length === 0) continue;
@@ -139,8 +139,8 @@ export function extractProximity({
 	features[KING_PROXIMITY] = chebyshev({ from: ourKing, to: theirKing });
 
 	// Behind its own gate because it is the priciest feature in the registry — both armies,
-	// against every home square of their role — and the Wolf, which names `swarm` and nothing
-	// else in this family, was spending more of its search here than in the search.
+	// against every home square of their role — and a bot naming one feature of this family was
+	// spending more of its search here than in the search.
 	if (context.weighs(REVERSE_STARTING)) {
 		features[REVERSE_STARTING] =
 			reverseDistance({ context, color: context.us }) -

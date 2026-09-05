@@ -67,8 +67,8 @@ export function extractAggression({
 	context: EvalContext;
 	features: FeatureVector;
 }): void {
-	// Three separate walks, so three separate gates — the Snake names `opponentMobility` alone and
-	// has no use for the other two.
+	// Three separate walks, so three separate gates — a bot naming one of them has no use for the
+	// other two.
 	if (context.weighs(OPPONENT_MOBILITY)) {
 		features[OPPONENT_MOBILITY] = reachable({ context, color: context.them });
 	}

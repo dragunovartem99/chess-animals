@@ -1,8 +1,8 @@
 // The starting points a bot can be written on top of.
 //
 // Without these, every animal repeated the same seven lines to say "and it knows what a rook is
-// worth", and the one line that was actually the animal got lost among them. The Turtle is a
-// shell built around its king; that is what its file should say, and now it does.
+// worth", and the one line that was actually the animal got lost among them. The Hedgehog is
+// greed with one instinct; that is what its file should say, and now it does.
 //
 // A base is **frozen literal numbers**, never derived from the registry's `defaultWeight`. That
 // is the whole point: `defaultWeight` is a suggestion the registry is free to retune, and if a

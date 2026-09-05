@@ -20,15 +20,15 @@ describe("blankPreset", () => {
 
 describe("presetFromBot", () => {
 	it("carries an animal's weights and its own search depth", () => {
-		const preset = presetFromBot("wolf");
+		const preset = presetFromBot("hedgehog");
 
-		expect(preset).toMatchObject({ depth: 3, quiescence: false });
-		expect(preset?.weights.swarm).toBe(-900);
+		expect(preset).toMatchObject({ depth: 2, quiescence: false });
+		expect(preset?.weights.hanging).toBe(-100);
 		expect(preset?.weights.givesMate).toBe(1);
 	});
 
 	it("fills in zero for every feature the animal does not name", () => {
-		const preset = presetFromBot("wolf");
+		const preset = presetFromBot("hedgehog");
 
 		expect(preset?.weights.pawnPassed).toBe(0);
 	});

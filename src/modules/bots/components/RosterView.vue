@@ -51,6 +51,7 @@ h1 {
 	max-width: 34rem;
 	color: var(--color-neutral-lightest);
 	font-size: 1.05rem;
+	text-wrap: balance;
 }
 
 .grid {

@@ -80,15 +80,15 @@ describe("useSandbox", () => {
 	it("seeds from an animal's own weights and depth", () => {
 		const { result } = mount();
 
-		result.seedFrom("wolf");
+		result.seedFrom("hedgehog");
 
-		expect(result.weights.value.swarm).toBe(-900);
-		expect(result.depth.value).toBe(3);
+		expect(result.weights.value.hanging).toBe(-100);
+		expect(result.depth.value).toBe(2);
 	});
 
 	it("seeds back to the blank preset with no id", () => {
 		const { result } = mount();
-		result.seedFrom("wolf");
+		result.seedFrom("hedgehog");
 
 		result.seedFrom();
 

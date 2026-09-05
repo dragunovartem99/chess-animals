@@ -81,8 +81,9 @@ export function extractFeatures({ position, played, into }: ExtractFrame): Featu
 //
 // A weight of zero cannot change a score, so the family behind it need never run. That is not a
 // micro-optimisation: an animal names a handful of the sixty-odd features, and reading all of
-// them cost about 25 µs a node whoever was playing. The Wolf pays for material and proximity and
-// skips the rest, `cccp` skips the board entirely, and the random mover extracts nothing at all.
+// them cost about 25 µs a node whoever was playing. The Elephant pays for material and its one
+// idea and skips the rest, the Goat skips the board entirely, and the random mover extracts
+// nothing at all.
 //
 // `slots` is the union over all three phases — a weight that is zero in every one of them stays
 // zero through every blend — and it is fixed for the life of a search, which is why this is built

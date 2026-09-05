@@ -53,8 +53,8 @@ export function defineFeatures(definitions: readonly FeatureDefinition[]): Featu
 // The two game-enders are the only exception: they are preferences in [-1, 1], because what they
 // price is not worth a number of pawns. See `terminal.ts`.
 export const FEATURES = defineFeatures([
-	// Piece values are features rather than constants, so a bot can be given its own — a Snake
-	// that thinks a rook is worth two knights is one number away.
+	// Piece values are features rather than constants, so a bot can be given its own — one that
+	// thinks a rook is worth two knights is one number away.
 	{ key: "materialPawn", family: "material", group: "pieces", defaultWeight: 100 },
 	{ key: "materialKnight", family: "material", group: "pieces", defaultWeight: 320 },
 	{ key: "materialBishop", family: "material", group: "pieces", defaultWeight: 330 },

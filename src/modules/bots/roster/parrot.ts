@@ -17,7 +17,7 @@ import type { Animal } from "./types";
 // into the first tactic and the joke is over on move six.
 export const PARROT: Animal = {
 	emoji: "🦜",
-	tint: "#ec4899",
+	tint: "#22c55e",
 	definition: {
 		id: "parrot",
 		search: { depth: 2 },

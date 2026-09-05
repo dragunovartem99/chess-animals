@@ -23,7 +23,7 @@ export default {
 	},
 	bot: bots,
 	roster: {
-		lead: "Every animal here has exactly one trick. Tap one and take it on.",
+		lead: "Every animal here plays chess its own way. Tap one and take it on.",
 	},
 	game: {
 		breakdown: {
