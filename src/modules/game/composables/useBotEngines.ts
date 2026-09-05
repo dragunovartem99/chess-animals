@@ -12,7 +12,13 @@ function spawnEngine(animal: Animal): UciEngineClient {
 	const post = worker.postMessage.bind(worker);
 	post({ definition: animal.definition, name: animal.definition.id });
 
-	return createUciClient({ transport: createWorkerTransport({ worker }) });
+	const client = createUciClient({ transport: createWorkerTransport({ worker }) });
+	// The handshake happens once, not once per move: `uci` and `isready` are two round trips
+	// across the worker boundary, and a bot is asked for hundreds of moves. Every caller still
+	// awaits `init` before it sends anything, and gets the same settled promise back.
+	const ready = client.init();
+
+	return { ...client, init: () => ready };
 }
 
 // A fresh seed per game, because the engine's default is the bot's own id: without this every
