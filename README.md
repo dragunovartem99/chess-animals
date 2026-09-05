@@ -54,8 +54,8 @@ Built: the feature evaluation, negamax search with quiescence, the UCI codec and
 the board, `/play` with a per-feature breakdown of what the bot sees, `/frankenstein` as a live
 weight-and-depth sandbox, and the dev CLIs — `npm run arena` (paired openings, Bradley-Terry
 ratings with confidence intervals, a worker pool running whole games, adaptive pairing) and
-`npm run tune` (SPSA against a gauntlet). The roster is six animals — Donkey, Goat, Parrot,
-Elephant, Monkey, Hedgehog — listed weakest first, in the order the arena rated them.
+`npm run tune` (SPSA against a gauntlet). The roster is listed weakest first, in the order the
+arena rated them.
 
 Next, per [PLAN.md](./PLAN.md): golden-game fixtures, the about page, and a tablebase probe
 interface.
