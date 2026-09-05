@@ -27,4 +27,7 @@ export default defineConfig({
 			"@": fileURLToPath(new URL("./src", import.meta.url)),
 		},
 	},
+	// The arena writes tens of thousands of result files under `.cache/`; left unignored, the dev
+	// server tries to watch each one and trips the OS file-watcher limit (ENOSPC) on startup.
+	server: { watch: { ignored: ["**/.cache/**"] } },
 });
