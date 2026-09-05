@@ -6,57 +6,51 @@ export default {
 	},
 	goat: {
 		name: "Goat",
-		description: "Eats whatever it can reach. Never asks what the meal costs.",
+		description: "Checks, bites, pushes — in that order. It never asks what the meal costs.",
 	},
 	crocodile: {
 		name: "Crocodile",
-		description:
-			"Barely looks up. But the moment a trade starts, it follows the bites all the way down.",
+		description: "Barely looks up. But once a trade starts, it bites all the way down.",
 	},
 	parrot: {
 		name: "Parrot",
-		description: "Plays your move back at you. Keeps it up until copying you costs a piece.",
+		description: "Copies every move you make — right up until it would lose a piece.",
 	},
 	turtle: {
 		name: "Turtle",
-		description: "Every piece hides at home around its king, and nothing ever comes out.",
+		description: "Every piece hides at home around its king. Nothing ever comes out.",
 	},
 	elephant: {
 		name: "Elephant",
-		description: "It only steps on squares of its own color — like you did when you were five.",
+		description: "Only ever steps on squares of its own color. Every piece, every move.",
 	},
 	hippo: {
 		name: "Hippo",
-		description:
-			"Wades into the middle of the board and stays there. Everything it owns aims at the center.",
+		description: "Wades into the middle of the board and never leaves. That's home now.",
 	},
 	owl: {
 		name: "Owl",
-		description:
-			"Plays it straight, like the Monkey — it just looks one move further ahead first.",
+		description: "Looks further ahead than anyone — then just plays the most sensible move.",
 	},
 	monkey: {
 		name: "Monkey",
-		description:
-			"It sees what every piece is worth and takes the best one. No tricks — it doesn't need any.",
+		description: "Sees what every piece is worth and takes the best one. No tricks needed.",
 	},
 	wolf: {
 		name: "Wolf",
-		description:
-			"The whole pack runs at your king at once, and never minds what it costs on the way.",
+		description: "The whole pack runs at your king at once. It never counts the cost.",
 	},
 	fox: {
 		name: "Fox",
 		description:
-			"Counts every way each piece could be taken before it moves. You'll never catch one loose.",
+			"Counts every trap on the board before it moves. You'll never catch one loose.",
 	},
 	hedgehog: {
 		name: "Hedgehog",
-		description:
-			"Grabs the biggest thing on the board. And it never leaves a piece for you to take.",
+		description: "Grabs the best thing it sees. And never leaves you a piece to take.",
 	},
 	spider: {
 		name: "Spider",
-		description: "Eight legs, and every one reaches for a new square.",
+		description: "Eight legs, and every one of them reaches for a new square.",
 	},
 };
