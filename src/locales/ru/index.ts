@@ -78,6 +78,7 @@ const messages: Messages = {
 	feature,
 	frankenstein: {
 		title: "Франкенштейн",
+		settings: "Настройки",
 		depth: "Глубина",
 		quiescence: "Тихий поиск",
 		seed: { blank: "Франкенштейн" },

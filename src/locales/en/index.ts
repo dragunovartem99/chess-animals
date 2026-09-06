@@ -77,6 +77,7 @@ export default {
 	feature,
 	frankenstein: {
 		title: "Frankenstein",
+		settings: "Settings",
 		depth: "Depth",
 		quiescence: "Quiescence search",
 		seed: { blank: "Frankenstein" },

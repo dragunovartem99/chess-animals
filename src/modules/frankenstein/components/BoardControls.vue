@@ -38,6 +38,27 @@ async function copyWeights() {
 </script>
 
 <template>
+	<div
+		class="preset"
+		role="group"
+		:aria-label="$t('frankenstein.settings')"
+	>
+		<span class="label">{{ $t("frankenstein.settings") }}</span>
+		<select
+			class="seed"
+			@change="emit('seed', ($event.target as HTMLSelectElement).value || undefined)"
+		>
+			<option value="">🧟 {{ $t("frankenstein.seed.blank") }}</option>
+			<option
+				v-for="animal in ROSTER"
+				:key="animal.definition.id"
+				:value="animal.definition.id"
+			>
+				{{ animal.emoji }} {{ $t(`bot.${animal.definition.id}.name`) }}
+			</option>
+		</select>
+	</div>
+
 	<div class="settings">
 		<div
 			class="depth"
@@ -64,20 +85,6 @@ async function copyWeights() {
 			/>
 			{{ $t("frankenstein.quiescence") }}
 		</label>
-
-		<select
-			class="seed"
-			@change="emit('seed', ($event.target as HTMLSelectElement).value || undefined)"
-		>
-			<option value="">🧟 {{ $t("frankenstein.seed.blank") }}</option>
-			<option
-				v-for="animal in ROSTER"
-				:key="animal.definition.id"
-				:value="animal.definition.id"
-			>
-				{{ animal.emoji }} {{ $t(`bot.${animal.definition.id}.name`) }}
-			</option>
-		</select>
 	</div>
 
 	<div class="actions">
@@ -120,12 +127,18 @@ async function copyWeights() {
 </template>
 
 <style scoped>
+.preset,
 .settings,
 .actions {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
 	gap: 0.5rem;
+}
+
+.preset .seed {
+	flex: 1;
+	min-width: 10rem;
 }
 
 .label {
