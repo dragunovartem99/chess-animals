@@ -1,13 +1,10 @@
 import type { Chess } from "chessops/chess";
 
-import {
-	extractFeatures,
-	type FeatureFamily,
-	FEATURES,
-	type PlayedMove,
-	terminalTerm,
-	type WeightVector,
-} from "@/shared/eval";
+import { extractFeatures } from "./extract";
+import type { PlayedMove } from "./families/move";
+import { type FeatureFamily, FEATURES } from "./features";
+import { terminalTerm } from "./terminal";
+import type { WeightVector } from "./vector";
 
 export type Contribution = {
 	key: string;

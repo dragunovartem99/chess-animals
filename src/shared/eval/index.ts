@@ -1,3 +1,4 @@
+export { type Breakdown, type Contribution, explainPosition } from "./breakdown";
 export { createExtractor, type ExtractFrame, extractFeatures } from "./extract";
 export type { PlayedMove } from "./families/move";
 export {

@@ -4,9 +4,9 @@ import type { Role } from "chessops/types";
 import { computed, ref } from "vue";
 
 import { ChessBoard } from "@/modules/board";
-import FeatureBreakdown from "@/modules/game/components/FeatureBreakdown.vue";
 import { fromUci } from "@/shared/engine/uci/moves";
 import { weightsFromRecord } from "@/shared/eval";
+import { FeatureBreakdown, SegmentedTabs } from "@/shared/ui";
 
 import { useSandbox } from "../composables/useSandbox";
 import { FAMILIES, featuresByFamily } from "../utils/families";
@@ -63,22 +63,11 @@ const weights = computed(() => weightsFromRecord(sandbox.weights.value));
 				@reset="sandbox.reset"
 			/>
 
-			<div
-				class="tabs"
-				role="tablist"
-			>
-				<button
-					v-for="name in TABS"
-					:key="name"
-					type="button"
-					role="tab"
-					:aria-selected="tab === name"
-					:class="{ active: tab === name }"
-					@click="tab = name"
-				>
-					{{ $t(`frankenstein.tab.${name}`) }}
-				</button>
-			</div>
+			<SegmentedTabs
+				v-model="tab"
+				:tabs="TABS"
+				i18n-prefix="frankenstein.tab"
+			/>
 
 			<div
 				v-if="tab === 'weights'"
@@ -132,34 +121,5 @@ const weights = computed(() => weightsFromRecord(sandbox.weights.value));
 	flex-direction: column;
 	max-height: 28rem;
 	overflow-y: auto;
-}
-
-/* Mirrors `/play`'s Moves/Breakdown segmented control exactly, down to the accent choice. */
-.tabs {
-	display: flex;
-	gap: 0.25rem;
-	padding: 0.25rem;
-	border-radius: var(--radius-full);
-	background: var(--color-sunken);
-}
-
-.tabs button {
-	flex: 1;
-	padding: 0.35rem 0.75rem;
-	border-radius: var(--radius-full);
-	background: none;
-	color: var(--color-neutral-darker);
-	font-size: 0.9rem;
-	box-shadow: none;
-}
-
-.tabs button:hover {
-	background: var(--color-stripe);
-}
-
-.tabs button.active {
-	background: var(--color-surface);
-	color: var(--color-ink);
-	box-shadow: 0 1px 2px rgb(24 24 27 / 20%);
 }
 </style>

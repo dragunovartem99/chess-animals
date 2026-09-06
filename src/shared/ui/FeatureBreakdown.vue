@@ -2,9 +2,7 @@
 import type { Chess } from "chessops/chess";
 import { computed } from "vue";
 
-import type { PlayedMove, WeightVector } from "@/shared/eval";
-
-import { explainPosition } from "../utils/breakdown";
+import { explainPosition, type PlayedMove, type WeightVector } from "../eval";
 
 const props = defineProps<{
 	position: Chess;

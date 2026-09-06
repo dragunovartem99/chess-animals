@@ -1,10 +1,9 @@
 import { INITIAL_FEN } from "chessops/fen";
 import { describe, expect, it } from "vitest";
 
-import { legalMoves } from "@/shared/chess";
-import { toUci } from "@/shared/engine/uci/moves";
-
-import { useGame } from "../composables/useGame";
+import { legalMoves } from "../../chess";
+import { toUci } from "../../engine/uci/moves";
+import { useGame } from "../useGame";
 
 function move({ game, uci }: { game: ReturnType<typeof useGame>; uci: string }) {
 	const found = legalMoves(game.position.value).find(

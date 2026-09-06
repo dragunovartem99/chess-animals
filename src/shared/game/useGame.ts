@@ -11,9 +11,9 @@ import {
 	gameStatus,
 	positionFromFen,
 	repetitionKey,
-} from "@/shared/chess";
-import { toUci } from "@/shared/engine/uci/moves";
-import type { PlayedMove } from "@/shared/eval";
+} from "../chess";
+import { toUci } from "../engine/uci/moves";
+import type { PlayedMove } from "../eval";
 
 export type PlayedTurn = { ply: number; san: string; uci: string };
 

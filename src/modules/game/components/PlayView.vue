@@ -8,10 +8,10 @@ import { ChessBoard } from "@/modules/board";
 import { ROSTER, ROSTER_BY_ID } from "@/modules/bots/roster";
 import { compileBot } from "@/shared/bots";
 import { fromUci } from "@/shared/engine/uci/moves";
+import { useGame } from "@/shared/game";
+import { FeatureBreakdown, SegmentedTabs } from "@/shared/ui";
 
 import { useBotEngines } from "../composables/useBotEngines";
-import { useGame } from "../composables/useGame";
-import FeatureBreakdown from "./FeatureBreakdown.vue";
 import MoveList from "./MoveList.vue";
 import PlayerPicker from "./PlayerPicker.vue";
 
@@ -189,22 +189,11 @@ watch(
 				{{ $t("game.restart") }}
 			</button>
 
-			<div
-				class="tabs"
-				role="tablist"
-			>
-				<button
-					v-for="name in TABS"
-					:key="name"
-					type="button"
-					role="tab"
-					:aria-selected="tab === name"
-					:class="{ active: tab === name }"
-					@click="tab = name"
-				>
-					{{ $t(`game.tab.${name}`) }}
-				</button>
-			</div>
+			<SegmentedTabs
+				v-model="tab"
+				:tabs="TABS"
+				i18n-prefix="game.tab"
+			/>
 
 			<MoveList
 				v-if="tab === 'moves'"
@@ -241,38 +230,6 @@ watch(
 	gap: 0.75rem;
 	flex: 1 1 18rem;
 	min-width: 16rem;
-}
-
-/* A segmented control rather than two buttons: the panel is one thing showing one of two
-   views of the same game, and the accent marks which. */
-.tabs {
-	display: flex;
-	gap: 0.25rem;
-	padding: 0.25rem;
-	border-radius: var(--radius-full);
-	background: var(--color-sunken);
-}
-
-.tabs button {
-	flex: 1;
-	padding: 0.35rem 0.75rem;
-	border-radius: var(--radius-full);
-	background: none;
-	color: var(--color-neutral-darker);
-	font-size: 0.9rem;
-	box-shadow: none;
-}
-
-.tabs button:hover {
-	background: var(--color-stripe);
-}
-
-/* On a white card an amber chip would shout; the selected tab is simply lifted out of the
-   track, which is all the signal two tabs need. */
-.tabs button.active {
-	background: var(--color-surface);
-	color: var(--color-ink);
-	box-shadow: 0 1px 2px rgb(24 24 27 / 20%);
 }
 
 .status {

@@ -1,13 +1,12 @@
 import { INITIAL_FEN } from "chessops/fen";
 import { describe, expect, it } from "vitest";
 
-import { afterMove, legalMoves, positionFromFen } from "@/shared/chess";
-import { evaluatePosition } from "@/shared/engine";
-import { toUci } from "@/shared/engine/uci/moves";
-import { MATE_SCORE } from "@/shared/eval";
-import { onlyWeights } from "@/shared/test-support/weights";
-
-import { explainPosition } from "../utils/breakdown";
+import { afterMove, legalMoves, positionFromFen } from "../../chess";
+import { evaluatePosition } from "../../engine";
+import { toUci } from "../../engine/uci/moves";
+import { onlyWeights } from "../../test-support/weights";
+import { explainPosition } from "../breakdown";
+import { MATE_SCORE } from "../terminal";
 
 const MATERIAL = onlyWeights({ materialQueen: 900, materialRook: 500, materialPawn: 100 });
 

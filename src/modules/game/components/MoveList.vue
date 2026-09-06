@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 
-import type { PlayedTurn } from "../composables/useGame";
+import type { PlayedTurn } from "@/shared/game";
 
 const props = defineProps<{ turns: PlayedTurn[] }>();
 

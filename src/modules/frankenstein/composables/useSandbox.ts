@@ -1,8 +1,8 @@
 import type { NormalMove } from "chessops/types";
 import { onBeforeUnmount, ref } from "vue";
 
-import { useGame } from "@/modules/game/composables/useGame";
 import { fromUci } from "@/shared/engine/uci/moves";
+import { useGame } from "@/shared/game";
 
 import { blankPreset, presetFromBot } from "../utils/presets";
 import { createAutoplayLoop } from "./autoplay";
