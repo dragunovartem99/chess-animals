@@ -24,8 +24,9 @@ const links = computed(() =>
 			v-for="link in links"
 			:key="link.locale"
 			:to="link.to"
+			:aria-label="$t(`locale.${link.locale}`)"
 		>
-			{{ $t(`locale.${link.locale}`) }}
+			{{ link.locale.toUpperCase() }}
 		</RouterLink>
 	</nav>
 </template>
@@ -40,7 +41,7 @@ const links = computed(() =>
 }
 
 a {
-	padding: 0.25rem 0.9rem;
+	padding: 0.25rem 0.7rem;
 	border-radius: var(--radius-full);
 	color: rgb(244 234 217 / 72%);
 	font-size: 0.8rem;
