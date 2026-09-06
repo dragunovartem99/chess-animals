@@ -25,6 +25,30 @@ export default {
 	roster: {
 		lead: "Every animal plays chess its own strange way. Can you beat one?",
 	},
+	about: {
+		title: "About",
+		lede: "A collection of deliberately weak chess bots, each with its own personality — a place to play them and a shared rating that ranks their strength.",
+		bots: {
+			title: "How the bots work",
+			body: "Every bot runs on the same engine. A move is scored as the dot product of a feature vector describing the position and a weight vector unique to that bot.",
+			listLead: "A bot's character is defined by its weights:",
+			wolf: "The Wolf drives straight at the enemy king.",
+			monkey: "The Monkey grabs any capture it can.",
+			donkey: "The Donkey leaves every weight at zero and moves at random.",
+		},
+		paper: {
+			title: "Background",
+			body: "The project is inspired by Tom 7's Elo World (SIGBOVIK 2019), where a field of deliberately weak engines plays itself to stretch the usual rating scale down toward zero and below.",
+		},
+		credit: {
+			title: "About the author",
+			body: "Created by Artem Dragunov. Links to the source and to the original talk are below.",
+		},
+		links: {
+			paper: "Elo World",
+			source: "Source on GitHub",
+		},
+	},
 	game: {
 		breakdown: {
 			title: "What {name} sees",

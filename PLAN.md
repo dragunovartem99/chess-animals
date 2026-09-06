@@ -9,7 +9,6 @@ types, lint, tests, build.
 | Commit                          | Contents                                                                        | Green when                                          |
 | ------------------------------- | ------------------------------------------------------------------------------- | --------------------------------------------------- |
 | ⬜ `test: golden games`         | Fixed pair + seed + opening → committed PGN fixtures                            | Any eval change surfaces as a diff                  |
-| ⬜ `docs: about page`           | `/about` explaining the method and crediting the paper                          | Both locales complete                               |
 | ⬜ `tablebase: probe interface` | `probe(fen) → { wdl, dtz, moves }` stub, `bot.useTablebase` honoured as a no-op | The interface compiles and is tested against a fake |
 
 ## Outside v1

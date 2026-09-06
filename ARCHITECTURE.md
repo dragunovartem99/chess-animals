@@ -27,7 +27,7 @@ paper.pdf       Elo World, the design's source
 | `game`         | `/play` — human vs bot, bot vs bot, move list, feature breakdown                                                                                                                                                  |
 | `board`        | the chessground wrapper, orientation, legal dests, the promotion picker                                                                                                                                           |
 | `frankenstein` | `/frankenstein` — a live weight/depth sandbox: one weight vector across every feature, an in-thread UCI engine tuned by `setOption` (no restart), autoplay, seeding from a roster animal or the registry defaults |
-| `about`        | the method and credit to the paper — placeholder, Phase G                                                                                                                                                         |
+| `about`        | `/about` — a short prose page: how the bots work, the paper it comes from, credit                                                                                                                                 |
 
 The tournament runner and the SPSA tuner are **dev CLIs under `cli/`**, not modules — they need
 every core and have no place in the shipped app. The rating, scheduler and tuner math they drive
