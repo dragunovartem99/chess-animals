@@ -63,7 +63,7 @@ capture" are weights like any other.
 ## A bot says only what it is
 
 A definition is a **base** and the animal's own idea over the top of it. `zero` is nothing,
-`mate` sees a checkmate and takes it, `material` adds the classical piece values — so the Turtle
+`mate` sees a checkmate and takes it, `material` adds the classical piece values — so the Sloth
 is `base: "material"` and `{ huddle: -750 }`, and the one line that is the animal is the only
 line in the file. Naming a feature the base sets replaces it, so disagreeing costs one line too.
 

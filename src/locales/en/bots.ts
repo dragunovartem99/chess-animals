@@ -25,9 +25,9 @@ export default {
 		name: "Parrot",
 		description: "Copies every move you make — right up until it would lose a piece.",
 	},
-	turtle: {
-		name: "Turtle",
-		description: "Every piece hides at home around its king. Nothing ever comes out.",
+	sloth: {
+		name: "Sloth",
+		description: "Every piece stays home around its king. Nothing is ever in a hurry to move.",
 	},
 	elephant: {
 		name: "Elephant",

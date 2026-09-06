@@ -31,7 +31,7 @@ scale is self-referential and compressed; bare `material` is the anchor at **146
 | 11  | `kingPawnDistance` (−15)             |   1490 |           +30 |
 | 12  | `pushDepth` (15) _(Goat)_            |   1490 |           +30 |
 | 13  | `opponentMobility` (−8)              |   1482 |           +22 |
-| 14  | `huddle` (−40) _(Turtle)_            |   1482 |           +22 |
+| 14  | `huddle` (−40) _(Sloth)_             |   1482 |           +22 |
 | 15  | `givesStalemate` (−1)                |   1479 |           +19 |
 | 16  | `captureValue` (25) _(Goat)_         |   1465 |            +5 |
 | —   | `material` (bare)                    |   1460 |             0 |
@@ -53,9 +53,9 @@ Everything at or below the anchor is load-bearing and was never a "beats materia
 
 ## What is working that no animal uses
 
-- **`swarm` (+101)** is the strongest personality in the registry with no bot on it. The roster
-  has the defensive half of the pair — `huddle`, the Turtle — but not the charge. A `swarm`
-  animal is one data file.
+- **`swarm` (+101)** was the strongest personality in the registry with no bot on it; the Tiger
+  now carries it (with `mobility` + `space`, at depth 3 + quiescence — see the last section). The
+  roster still has the defensive half of the pair too — `huddle`, the Sloth.
 - **`reverseStarting` (+41)** clears the noise floor on its own, more than a board-flip gimmick
   looked likely to.
 

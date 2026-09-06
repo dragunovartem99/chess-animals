@@ -14,9 +14,9 @@ import { OWL } from "./owl";
 import { PARROT } from "./parrot";
 import { RAVEN } from "./raven";
 import { RHINO } from "./rhino";
+import { SLOTH } from "./sloth";
 import { SPIDER } from "./spider";
 import { TIGER } from "./tiger";
-import { TURTLE } from "./turtle";
 import type { Animal } from "./types";
 import { WOLF } from "./wolf";
 
@@ -44,7 +44,7 @@ import { WOLF } from "./wolf";
 // Lemming reads the same `offeredMaterial` with the sign flipped and hands everything over, the
 // Spider gives every piece the most squares it can reach, the Hippo holds the centre, the
 // Hedgehog grabs everything and hangs nothing, the Wolf charges the whole army at the enemy king
-// (at -400 it overcommits — the earlier Wolf tuned nearer -200), the Turtle pulls it all home,
+// (at -400 it overcommits — the earlier Wolf tuned nearer -200), the Sloth pulls it all home,
 // the Goat chases checks and captures, the Parrot mirrors the board, the Elephant keeps to its
 // own colour, the Dove refuses to fight at all, and the Dodo runs its king at yours.
 //
@@ -64,7 +64,7 @@ export const ROSTER: Animal[] = [
 	DODO,
 	GOAT,
 	PARROT,
-	TURTLE,
+	SLOTH,
 	ELEPHANT,
 	WOLF,
 	MONKEY,
