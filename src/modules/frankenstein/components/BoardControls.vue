@@ -76,17 +76,16 @@ async function copyWeights() {
 				{{ level }}
 			</button>
 			<!-- Quiescence is the one non-depth setting, folded into the same pill as a trailing
-			     toggle: its full name is only ever in the tooltip, so the pill stays compact. -->
+			     toggle. The tooltip is the explanation, since the two-word name does not carry one. -->
 			<button
 				type="button"
 				class="quiescence"
 				:class="{ active: quiescence }"
 				:aria-pressed="quiescence"
-				:title="$t('frankenstein.quiescence')"
-				:aria-label="$t('frankenstein.quiescence')"
+				:title="$t('frankenstein.quiescenceHint')"
 				@click="emit('quiescence', !quiescence)"
 			>
-				Q
+				{{ $t("frankenstein.quiescence") }}
 			</button>
 		</div>
 	</div>
@@ -187,6 +186,9 @@ async function copyWeights() {
 	align-items: center;
 	gap: 0.35rem;
 	padding: 0.2rem 0.2rem 0.2rem 0.6rem;
+	/* Clips the trailing quiescence toggle to the pill's rounded end so its active fill reaches
+	   the edge instead of floating in a frame of track colour. */
+	overflow: hidden;
 	border-radius: var(--radius-full);
 	background: var(--color-sunken);
 }
@@ -213,10 +215,14 @@ async function copyWeights() {
 /* The quiescence toggle rides in the same pill after a hairline divider, amber when on — the one
    place state reads as colour rather than as the lifted-out surface the depth buttons use. */
 .depth .quiescence {
-	margin-left: 0.15rem;
+	align-self: stretch;
+	/* Negative margins cancel the pill's own padding so this segment bleeds to the top, bottom
+	   and right edges; the divider is its only inset. */
+	margin: -0.2rem -0.2rem -0.2rem 0.1rem;
+	padding: 0 0.9em;
 	border-left: 1px solid var(--color-neutral-lighter);
-	border-radius: 0 var(--radius-full) var(--radius-full) 0;
-	font-weight: 600;
+	border-radius: 0;
+	font-size: 0.85rem;
 }
 
 .depth .quiescence.active {

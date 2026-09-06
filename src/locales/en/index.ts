@@ -80,6 +80,7 @@ export default {
 		settings: "Settings",
 		depth: "Depth",
 		quiescence: "Quiescence",
+		quiescenceHint: "Plays out captures and checks so the score is not taken mid-exchange",
 		seed: { blank: "Frankenstein" },
 		autoplay: "Autoplay",
 		pause: "Pause",

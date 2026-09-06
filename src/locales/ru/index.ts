@@ -81,6 +81,7 @@ const messages: Messages = {
 		settings: "Настройки",
 		depth: "Глубина",
 		quiescence: "Тихий поиск",
+		quiescenceHint: "Досчитывает взятия и шахи, чтобы не обрывать оценку посреди размена",
 		seed: { blank: "Франкенштейн" },
 		autoplay: "Автоигра",
 		pause: "Пауза",
