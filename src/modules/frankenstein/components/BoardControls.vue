@@ -38,28 +38,28 @@ async function copyWeights() {
 </script>
 
 <template>
-	<div
-		class="preset"
-		role="group"
-		:aria-label="$t('frankenstein.settings')"
-	>
-		<span class="label">{{ $t("frankenstein.settings") }}</span>
-		<select
-			class="seed"
-			@change="emit('seed', ($event.target as HTMLSelectElement).value || undefined)"
-		>
-			<option value="">🧟 {{ $t("frankenstein.seed.blank") }}</option>
-			<option
-				v-for="animal in ROSTER"
-				:key="animal.definition.id"
-				:value="animal.definition.id"
-			>
-				{{ animal.emoji }} {{ $t(`bot.${animal.definition.id}.name`) }}
-			</option>
-		</select>
-	</div>
-
 	<div class="settings">
+		<div
+			class="preset"
+			role="group"
+			:aria-label="$t('frankenstein.settings')"
+		>
+			<span class="label">{{ $t("frankenstein.settings") }}</span>
+			<select
+				class="seed"
+				@change="emit('seed', ($event.target as HTMLSelectElement).value || undefined)"
+			>
+				<option value="">🧟 {{ $t("frankenstein.seed.blank") }}</option>
+				<option
+					v-for="animal in ROSTER"
+					:key="animal.definition.id"
+					:value="animal.definition.id"
+				>
+					{{ animal.emoji }} {{ $t(`bot.${animal.definition.id}.name`) }}
+				</option>
+			</select>
+		</div>
+
 		<div
 			class="depth"
 			role="group"
@@ -77,20 +77,22 @@ async function copyWeights() {
 			</button>
 		</div>
 
-		<label class="checkbox">
-			<input
-				type="checkbox"
-				:checked="quiescence"
-				@change="emit('quiescence', ($event.target as HTMLInputElement).checked)"
-			/>
+		<button
+			type="button"
+			class="toggle"
+			:class="{ active: quiescence }"
+			:aria-pressed="quiescence"
+			@click="emit('quiescence', !quiescence)"
+		>
 			{{ $t("frankenstein.quiescence") }}
-		</label>
+		</button>
 	</div>
 
 	<div class="actions">
 		<button
 			type="button"
-			class="emoji"
+			class="secondary emoji"
+			:class="{ playing: autoplay }"
 			:title="autoplay ? $t('frankenstein.pause') : $t('frankenstein.autoplay')"
 			:aria-label="autoplay ? $t('frankenstein.pause') : $t('frankenstein.autoplay')"
 			@click="emit('toggleAutoplay')"
@@ -145,9 +147,15 @@ async function copyWeights() {
 	gap: 0.5rem;
 }
 
+/* Preset picker and the depth pill share the first line and wrap when the panel is too narrow to
+   hold both; the play buttons are their own line below. */
+.preset {
+	flex: 1 1 12rem;
+}
+
 .preset .seed {
 	flex: 1;
-	min-width: 10rem;
+	min-width: 8rem;
 }
 
 /* Icon-only buttons: the label rides along as the tooltip and the accessible name. Square them
@@ -156,6 +164,12 @@ async function copyWeights() {
 	padding: 0.4em 0.6em;
 	font-size: 1.1rem;
 	line-height: 1;
+}
+
+/* The running-autoplay state is the one thing worth marking on the otherwise-flat button row. */
+.actions button.playing {
+	border-color: var(--color-accent);
+	background: var(--color-accent-veil);
 }
 
 .label {
@@ -193,24 +207,32 @@ async function copyWeights() {
 	box-shadow: 0 1px 2px rgb(24 24 27 / 20%);
 }
 
-.checkbox {
-	display: flex;
-	align-items: center;
-	gap: 0.4rem;
-	font-size: 0.9rem;
-	color: var(--color-ink-muted);
+/* Quiescence is one on/off setting sitting next to the depth pill, so it is a toggle button in
+   the same shape rather than a checkbox — amber when on, since that is how state reads elsewhere. */
+.toggle {
+	padding: 0.35em 0.9em;
+	border-radius: var(--radius-full);
+	background: var(--color-sunken);
+	color: var(--color-neutral-darker);
+	font-size: 0.85rem;
+	box-shadow: none;
 }
 
-.checkbox input {
-	accent-color: var(--color-accent);
+.toggle:hover {
+	background: var(--color-stripe);
+}
+
+.toggle.active {
+	background: var(--color-accent);
+	color: var(--color-white);
 }
 
 .seed {
 	padding: 0.4rem 0.6rem;
 }
 
-/* Autoplay is the one action worth a full solid button; step/reset/copy are lighter so the row
-   reads as one primary action plus a few incidental ones, not five equally loud buttons. */
+/* Every action button is light — no solid primary. Autoplay only stands out while it is running
+   (`.playing`), which is the sole state on this row worth a colour. */
 .secondary {
 	background: none;
 	color: var(--color-ink-muted);
