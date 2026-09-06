@@ -21,10 +21,6 @@ export default {
 		name: "Goat",
 		description: "Checks, bites, pushes — in that order. It never asks what the meal costs.",
 	},
-	crocodile: {
-		name: "Crocodile",
-		description: "Barely looks up. But once a trade starts, it bites all the way down.",
-	},
 	parrot: {
 		name: "Parrot",
 		description: "Copies every move you make — right up until it would lose a piece.",
@@ -43,7 +39,24 @@ export default {
 	},
 	owl: {
 		name: "Owl",
-		description: "Looks further ahead than anyone — then just plays the most sensible move.",
+		description: "Looks a long way ahead — then just plays the most sensible move.",
+	},
+	raven: {
+		name: "Raven",
+		description: "Waits for the fight to finish, then eats only what is really free.",
+	},
+	hare: {
+		name: "Hare",
+		description: "Checks every jump twice. Not one piece of its ever lands in your reach.",
+	},
+	bear: {
+		name: "Bear",
+		description:
+			"Takes the middle first. Then, slow and heavy, it comes for the rest of the board.",
+	},
+	rhino: {
+		name: "Rhino",
+		description: "Spreads out over the whole board and squeezes you into a corner.",
 	},
 	monkey: {
 		name: "Monkey",
