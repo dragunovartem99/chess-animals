@@ -112,3 +112,45 @@ roster they rank 2nd, 3rd and 4th. First is the **Raven** — plain material at 
 `quiescence` on, no weights — which beats the Hare ~9-in-10: resolving the capture chain past the
 leaf is worth more than any pair of weights, because the one blunder a material search makes is
 taking a piece that is recaptured. The Owl (depth 3, no quiescence, no weights) is 5th.
+
+## Depth 3 + quiescence + three-weight stacks (seed 1, lab-only)
+
+One round robin, 2,800 games, **~79 min wall** (8 bots, every game the Raven's depth-3 +
+quiescence search). All `base: "material"`, `temperature: 0`, `quiescence: true`. `lab-quiet` is
+the bare Raven build (no weights); every other candidate carries exactly three aggressive/mobile
+weights.
+
+| candidate   | weights                                                |   rating | vs `lab-quiet` |
+| ----------- | ------------------------------------------------------ | -------: | -------------- |
+| `lab-msc`   | `mobility` 10 + `space` 6 + `centralization` 8         | 1738 ±26 | 91.5/8.5       |
+| `lab-sms`   | `swarm` −40 + `mobility` 10 + `space` 6                | 1681 ±24 | 86/14          |
+| `lab-smf`   | `swarm` −40 + `mobility` 10 + `offeredMaterial` −20    | 1615 ±23 | 82/18          |
+| `lab-mks`   | `mobility` 10 + `kingAttackers` −40 + `space` 6        | 1516 ±23 | 84.5/15.5      |
+| `lab-smk`   | `swarm` −40 + `mobility` 10 + `kingAttackers` −40      | 1484 ±23 | 81.5/18.5      |
+| `lab-skc`   | `swarm` −40 + `kingAttackers` −40 + `centerControl` 30 | 1456 ±23 | 74/26          |
+| `lab-quiet` | —                                                      | 1284 ±25 | —              |
+| `lab-smo`   | `swarm` −40 + `mobility` 10 + `opponentMobility` −8    | 1227 ±28 | 38.5/61.5      |
+
+- **Bare quiescence is rudderless once everyone has it.** `lab-quiet` — the exact Raven build,
+  #1 on the full roster — finished **7th of 8** here. Quiescence stops you hanging to a
+  recapture; when every bot already does, knowing a good square from a bad one is all that's
+  left, and material knows nothing.
+- **`swarm` works at depth 3 once quiescence is on.** The earlier "swarm only works solo — two
+  charge-the-king signals hang the army" verdict was a _no-quiescence_ result. `lab-sms` and
+  `lab-smf` are 2nd and 3rd, both beating `lab-quiet` >4-to-1. Resolving the captures past the
+  leaf is what stops the charge being suicide.
+- **The strongest stack still carries no personality.** `lab-msc` (mobility + space +
+  centralization) tops the field and beats the best swarm bot 55/45 — real, ~2 CIs, not a rout.
+- **Doubling the king-charge still costs you.** `swarm` + `kingAttackers` together (`lab-smk`,
+  `lab-skc`) sank to mid-table. One king-attack signal is a plan; two overcommit even with
+  quiescence.
+- **`opponentMobility` as a third weight is toxic here** — `lab-smo` is the only candidate
+  _below_ bare material.
+- **Caveat:** lab-only, one seed, ratings self-referential to these eight. `1738` here is not
+  `1738` on the roster.
+
+### Graduated to the roster
+
+`lab-sms` (`swarm` + `mobility` + `space`) → **Tiger** — the aggressive-mobile pick over the
+higher-rated but personality-free `lab-msc`. Placed last on the roster provisionally; a `--lab`
+run to fix its rank against the real field is still to come.

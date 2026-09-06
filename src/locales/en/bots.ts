@@ -58,6 +58,11 @@ export default {
 		name: "Rhino",
 		description: "Spreads out over the whole board and squeezes you into a corner.",
 	},
+	tiger: {
+		name: "Tiger",
+		description:
+			"Drives at your king with the whole board — every piece active, every square held.",
+	},
 	monkey: {
 		name: "Monkey",
 		description: "Sees what every piece is worth and takes the best one. No tricks needed.",

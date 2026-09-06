@@ -6,10 +6,11 @@ built in [ARCHITECTURE.md](./ARCHITECTURE.md), the conventions in [CLAUDE.md](./
 One commit at a time, each does one thing, and **every commit leaves the repo green** — format,
 types, lint, tests, build.
 
-| Commit                          | Contents                                                                        | Green when                                          |
-| ------------------------------- | ------------------------------------------------------------------------------- | --------------------------------------------------- |
-| ⬜ `test: golden games`         | Fixed pair + seed + opening → committed PGN fixtures                            | Any eval change surfaces as a diff                  |
-| ⬜ `tablebase: probe interface` | `probe(fen) → { wdl, dtz, moves }` stub, `bot.useTablebase` honoured as a no-op | The interface compiles and is tested against a fake |
+| Commit                          | Contents                                                                                    | Green when                                          |
+| ------------------------------- | ------------------------------------------------------------------------------------------- | --------------------------------------------------- |
+| ⬜ `bots: place the Tiger`      | `npm run arena -- --lab`-style full-roster run, reorder `ROSTER`, drop the provisional note | The Tiger sits at its measured rank                 |
+| ⬜ `test: golden games`         | Fixed pair + seed + opening → committed PGN fixtures                                        | Any eval change surfaces as a diff                  |
+| ⬜ `tablebase: probe interface` | `probe(fen) → { wdl, dtz, moves }` stub, `bot.useTablebase` honoured as a no-op             | The interface compiles and is tested against a fake |
 
 ## Outside v1
 

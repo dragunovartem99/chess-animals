@@ -15,6 +15,7 @@ import { PARROT } from "./parrot";
 import { RAVEN } from "./raven";
 import { RHINO } from "./rhino";
 import { SPIDER } from "./spider";
+import { TIGER } from "./tiger";
 import { TURTLE } from "./turtle";
 import type { Animal } from "./types";
 import { WOLF } from "./wolf";
@@ -51,6 +52,11 @@ import { WOLF } from "./wolf";
 // (`offeredMaterial` + `hanging`) is second overall, the Bear (`centralization` + `space`) and
 // the Rhino (`mobility` + `opponentMobility`) next, all three above the plain Owl — two heuristics
 // and depth 3 beat one more ply with none, but not the Raven's quiescence.
+//
+// The Tiger is the exception: depth 3, quiescence on *and* three aggressive-mobile weights
+// (`swarm` + `mobility` + `space`). Once every bot has quiescence, bare material has no idea what
+// a good square is — the lab-only run had the Tiger's build beating the Raven's 86-14. Placed
+// last provisionally; a `--lab` roster run to fix its exact rank is still pending.
 export const ROSTER: Animal[] = [
 	DOVE,
 	LEMMING,
@@ -71,6 +77,7 @@ export const ROSTER: Animal[] = [
 	BEAR,
 	HARE,
 	RAVEN,
+	TIGER,
 ];
 
 export const ROSTER_BY_ID = new Map(ROSTER.map((animal) => [animal.definition.id, animal]));

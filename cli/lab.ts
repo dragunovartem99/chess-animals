@@ -21,4 +21,17 @@ export function lab(id: string, weights: Record<string, number>, depth = 2): Bot
 	return { id: `lab-${id}`, search: { depth }, temperature: 0, base: "material", weights };
 }
 
+// The Raven's shape — depth 3, quiescence on, `material` base — with a weight stack over the top,
+// for experiments that need every candidate on the same search as the roster's strongest bots.
+// The `swarm`+`mobility`+`space` run that became the Tiger used this (see `../LAB.md`).
+export function labQ(id: string, weights: Record<string, number>): BotDefinition {
+	return {
+		id: `lab-${id}`,
+		search: { depth: 3, quiescence: true },
+		temperature: 0,
+		base: "material",
+		weights,
+	};
+}
+
 export const LAB: BotDefinition[] = [];
