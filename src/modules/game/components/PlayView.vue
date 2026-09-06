@@ -43,6 +43,10 @@ const tab = ref<(typeof TABS)[number]>("moves");
 const humanColors = computed(() => COLORS.filter((color) => players.value[color] === HUMAN));
 const orientation = computed(() => humanColors.value[0] ?? "white");
 
+// A finished game is a view, not a position to move from: `game.play` already rejects the move,
+// but the board only resyncs on a FEN change, so a drop after the result would otherwise linger.
+const playable = computed(() => (game.status.value.over ? [] : humanColors.value));
+
 function playHumanMove({ from, to, promotion }: { from: Key; to: Key; promotion?: Role }) {
 	const move = fromUci({
 		position: game.position.value,
@@ -157,7 +161,7 @@ watch(
 			<ChessBoard
 				:fen="game.fen.value"
 				:orientation="orientation"
-				:playable="humanColors"
+				:playable="playable"
 				:last-move="game.lastMove.value as [Key, Key] | undefined"
 				@move="playHumanMove"
 			/>
