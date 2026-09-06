@@ -79,7 +79,7 @@ export default {
 		title: "Frankenstein",
 		depth: "Depth",
 		quiescence: "Quiescence search",
-		seed: { blank: "Default" },
+		seed: { blank: "Frankenstein" },
 		autoplay: "Autoplay",
 		pause: "Pause",
 		step: "Step",

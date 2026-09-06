@@ -80,7 +80,7 @@ const messages: Messages = {
 		title: "Франкенштейн",
 		depth: "Глубина",
 		quiescence: "Тихий поиск",
-		seed: { blank: "По умолчанию" },
+		seed: { blank: "Франкенштейн" },
 		autoplay: "Автоигра",
 		pause: "Пауза",
 		step: "Шаг",

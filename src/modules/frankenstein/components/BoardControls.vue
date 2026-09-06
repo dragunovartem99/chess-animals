@@ -69,7 +69,7 @@ async function copyWeights() {
 			class="seed"
 			@change="emit('seed', ($event.target as HTMLSelectElement).value || undefined)"
 		>
-			<option value="">{{ $t("frankenstein.seed.blank") }}</option>
+			<option value="">🧟 {{ $t("frankenstein.seed.blank") }}</option>
 			<option
 				v-for="animal in ROSTER"
 				:key="animal.definition.id"

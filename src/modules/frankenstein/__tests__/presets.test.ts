@@ -10,7 +10,7 @@ describe("blankPreset", () => {
 		const preset = blankPreset();
 
 		expect(preset.depth).toBe(DEFAULT_DEPTH);
-		expect(preset.quiescence).toBe(true);
+		expect(preset.quiescence).toBe(false);
 		const base: Record<string, number> = BASES.material;
 		for (const feature of FEATURES) {
 			expect(preset.weights[feature.key]).toBe(base[feature.key] ?? 0);
