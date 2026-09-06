@@ -90,32 +90,41 @@ async function copyWeights() {
 	<div class="actions">
 		<button
 			type="button"
+			class="emoji"
+			:title="autoplay ? $t('frankenstein.pause') : $t('frankenstein.autoplay')"
+			:aria-label="autoplay ? $t('frankenstein.pause') : $t('frankenstein.autoplay')"
 			@click="emit('toggleAutoplay')"
 		>
-			{{ autoplay ? $t("frankenstein.pause") : $t("frankenstein.autoplay") }}
+			{{ autoplay ? "⏸️" : "▶️" }}
 		</button>
 		<button
 			type="button"
-			class="secondary"
+			class="secondary emoji"
 			:disabled="autoplay"
+			:title="$t('frankenstein.step')"
+			:aria-label="$t('frankenstein.step')"
 			@click="emit('step')"
 		>
-			{{ $t("frankenstein.step") }}
+			⏭️
 		</button>
 		<button
 			type="button"
-			class="secondary"
+			class="secondary emoji"
+			:title="$t('frankenstein.reset')"
+			:aria-label="$t('frankenstein.reset')"
 			@click="emit('reset')"
 		>
-			{{ $t("frankenstein.reset") }}
+			🔄
 		</button>
 		<button
 			v-if="isDev"
 			type="button"
-			class="secondary"
+			class="secondary emoji"
+			:title="$t('frankenstein.copy')"
+			:aria-label="$t('frankenstein.copy')"
 			@click="copyWeights"
 		>
-			{{ $t("frankenstein.copy") }}
+			📋
 		</button>
 	</div>
 
@@ -139,6 +148,14 @@ async function copyWeights() {
 .preset .seed {
 	flex: 1;
 	min-width: 10rem;
+}
+
+/* Icon-only buttons: the label rides along as the tooltip and the accessible name. Square them
+   off and drop the wide text padding so the row reads as a control cluster, not four words. */
+.actions button {
+	padding: 0.4em 0.6em;
+	font-size: 1.1rem;
+	line-height: 1;
 }
 
 .label {
