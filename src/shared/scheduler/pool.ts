@@ -6,10 +6,9 @@ import type { GameReport, GameSpec } from "./types";
 
 export const WORKER_URL = new URL("./game.worker.ts", import.meta.url);
 
-// The worker entry is TypeScript; `tsx` is what compiles it, and a spawned worker does not
-// inherit its parent's loader automatically the way a `tsx`-run process does. Passing it through
-// `execArgv` covers the one case that needs it — a worker started from a plain `node`/vitest
-// process — and is harmless when `tsx` is already active.
+// Enough of a loader to compile the worker *entry*; everything the entry imports is resolved by
+// `tsImport` inside it instead, for the reason written there. Harmless when `tsx` is already
+// active, and the one thing that covers a worker started from a plain `node`/vitest process.
 export const WORKER_EXEC_ARGV = ["--import", "tsx"];
 
 // Runs every spec and returns the reports in spec order — the order is what makes a run

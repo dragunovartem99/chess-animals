@@ -1,10 +1,22 @@
 import { parentPort } from "node:worker_threads";
 
-// Explicit extensions: this file is loaded as a worker entry, resolved by the raw Node/tsx/vitest
-// loader rather than the bundler, so it does not get the extensionless resolution the rest of the
-// tree relies on.
-import { runGame } from "./runGame.ts";
+import { tsImport } from "tsx/esm/api";
+
 import type { GameSpec } from "./types.ts";
+
+// `tsImport` rather than a plain import, and it is the only reason this file is async.
+//
+// A worker inherits no loader from its parent, and `execArgv` cannot hand it a whole one. The
+// `tsx` binary gives the parent two halves — `--import loader.mjs` transforms TypeScript, and
+// `--require preflight.cjs` installs the resolver that turns `"../bots"` into `../bots/index.ts`
+// — and a worker's `execArgv` silently drops `--require`. So the entry compiled and then died on
+// the first barrel import below it (`runGame`'s `from "../bots"`, `ERR_UNSUPPORTED_DIR_IMPORT`),
+// which killed the arena the moment a game missed the result cache. `tsImport` compiles the graph
+// itself, resolution included, and needs nothing from `execArgv` at all.
+//
+// Awaited before the port is listened to, which is safe: a `MessagePort` queues what arrives
+// until the first `message` listener starts it, so no spec posted during startup is lost.
+const { runGame } = (await tsImport("./runGame.ts", import.meta.url)) as typeof import("./runGame");
 
 // Thin by design: the pool owns the thread and the queue, this owns only the pipe. Every game is
 // independent, so one message in, one report out, no state between them.
