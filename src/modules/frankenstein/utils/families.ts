@@ -1,16 +1,24 @@
 import { type Feature, FEATURES, type FeatureFamily } from "@/shared/eval";
 
-export const FAMILIES: FeatureFamily[] = ["material", "positional", "king", "behavioural", "move"];
+export const FAMILIES: FeatureFamily[] = [
+	"material",
+	"activity",
+	"safety",
+	"distance",
+	"shape",
+	"move",
+];
 
-// Families are not contiguous in registry order (`centerControl` and friends land back on
-// `positional` after `king`/`behavioural`/`move`), so the weight panel groups them itself rather
-// than relying on a single scan.
+// Families are not contiguous in registry order — order is the vector layout and may never be
+// rearranged, so `centerControl` and friends land back on `activity` after the families declared
+// between. The weight panel groups them itself rather than relying on a single scan.
 export function featuresByFamily(): Record<FeatureFamily, Feature[]> {
 	const grouped: Record<FeatureFamily, Feature[]> = {
 		material: [],
-		positional: [],
-		king: [],
-		behavioural: [],
+		activity: [],
+		safety: [],
+		distance: [],
+		shape: [],
 		move: [],
 	};
 

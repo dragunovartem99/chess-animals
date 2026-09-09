@@ -37,17 +37,24 @@ zero. The random bot is every weight at zero, where the argmax tie-break picks u
 what makes the roster extensible: **adding a heuristic is one registry entry and one extractor
 line**, and adding an animal is a data file.
 
-23 features in five families, declared once in `shared/eval/features.ts`. That single registry
+23 features in six families, declared once in `shared/eval/features.ts`. That single registry
 drives the extractor, the weight-editor sliders, the SPSA parameter space, the JSON schema for
 bot configs, and the locale files.
 
-| Family        | Count | Features, with the registry's default weight in centipawns                                                                                                              |
-| ------------- | ----: | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `material`    |     5 | one **tunable** weight per piece — `materialPawn` 100, `materialKnight` 320, `materialBishop` 330, `materialRook` 500, `materialQueen` 900                              |
-| `positional`  |     5 | `centerControl` 8, `space` 2, `hanging` −15, `mobility` 4, `centralization` 0                                                                                           |
-| `king`        |     1 | `kingDanger` −12                                                                                                                                                        |
-| `behavioural` |     8 | the animals, all default 0: `swarm`, `huddle`, `kingProximity`, `sameColorSquares`, `mirrorRanks`, `opponentMobility`, `pushDepth`, `offeredMaterial`                   |
-| `move`        |     4 | properties of the move played — `givesMate` 1, `givesCheck` 0, `givesStalemate` 0, `captureValue` 0; the two `gives*` enders are preferences in [−1, 1], not centipawns |
+A family says **what a feature measures**, not where the idea came from. That matters because the
+weight editor takes each family's slider band from it, so filing two unlike quantities together
+gives them the wrong scale — and because the pairs animals are built from should sit side by
+side: `mobility` with `opponentMobility` (the Rhino), `hanging` with `offeredMaterial` (the Hare,
+and the lab's two strongest features).
+
+| Family     | Count | Features, with the registry's default weight in centipawns                                                                                                              |
+| ---------- | ----: | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `material` |     5 | one **tunable** weight per piece — `materialPawn` 100, `materialKnight` 320, `materialBishop` 330, `materialRook` 500, `materialQueen` 900                              |
+| `activity` |     6 | reach, ground and good squares — `mobility` 4, `opponentMobility` 0, `centralization` 0, `space` 2, `centerControl` 8, `pushDepth` 0                                    |
+| `safety`   |     3 | what is about to be lost, ours minus theirs — `hanging` −15, `offeredMaterial` 0, `kingDanger` −12                                                                      |
+| `distance` |     3 | where the army stands relative to a king, negated so more is nearer — `swarm` 0, `huddle` 0, `kingProximity` 0                                                          |
+| `shape`    |     2 | whole-board properties, which read the same from either seat — `sameColorSquares` 0, `mirrorRanks` 0                                                                    |
+| `move`     |     4 | properties of the move played — `givesMate` 1, `givesCheck` 0, `givesStalemate` 0, `captureValue` 0; the two `gives*` enders are preferences in [−1, 1], not centipawns |
 
 `centralization` is a parametrised stand-in for a piece-square table: one number — how far the
 pieces stand from the rim — instead of sixty-four per role. The registry once carried a

@@ -8,8 +8,12 @@ export type SliderRange = { min: number; max: number; step: number };
 // usual range can still be entered exactly.
 export const FAMILY_RANGES: Record<FeatureFamily, SliderRange> = {
 	material: { min: -500, max: 1500, step: 10 },
-	positional: { min: -150, max: 150, step: 2 },
-	king: { min: -150, max: 150, step: 2 },
-	behavioural: { min: -400, max: 400, step: 5 },
+	activity: { min: -150, max: 150, step: 2 },
+	safety: { min: -150, max: 150, step: 2 },
+	// Wide, because a distance is measured in king moves and an animal built on one prices it
+	// against its whole material base: the Sloth huddles at 550, which the old ±400 band could
+	// not even reach.
+	distance: { min: -1000, max: 1000, step: 5 },
+	shape: { min: -400, max: 400, step: 5 },
 	move: { min: -1000, max: 1000, step: 5 },
 };

@@ -1,12 +1,24 @@
-// Where a feature comes from. The extractor walks the board once per family, and the weight
-// editor groups its sliders the same way.
+// What a feature measures — not where it came from. The weight editor groups its sliders by this
+// and takes each family's slider band from it, so a family that lumps unlike quantities together
+// gives them the wrong band.
+//
+// It used to be cut by origin instead, with a `behavioural` drawer for "the Elo World
+// strategies". That split the pairs animals are actually built from: `mobility` and
+// `opponentMobility` are one measurement taken of the two sides and are the whole of the Rhino,
+// yet sat in different families on different scales, and `hanging` and `offeredMaterial` — the
+// Hare, and the lab's two strongest features — did the same. Origin is what the comments beside
+// the entries are for.
 export type FeatureFamily =
-	// Counted from the board.
+	// What each side's pieces are worth.
 	| "material"
-	| "positional"
-	| "king"
-	// The animal in the bot: the Elo World strategies, expressed as ordinary weights.
-	| "behavioural"
+	// Reach, ground and good squares: what a side can do.
+	| "activity"
+	// What is about to be lost — ours and theirs, since every feature is a difference.
+	| "safety"
+	// Where the army stands relative to a king. The paper's distance strategies.
+	| "distance"
+	// Properties of the whole board rather than of a side, so they read the same from either seat.
+	| "shape"
 	// A property of the move that produced the position, not of the position itself.
 	| "move";
 
@@ -69,21 +81,34 @@ export const FEATURES = defineFeatures([
 	// count of the pawnless files beside him went the other way: two sweeps rated it +17 and +19,
 	// inside the noise, and nothing weighted it — `kingDanger` already reads the open line as
 	// the piece now aiming down it.
-	{ key: "kingDanger", family: "king", defaultWeight: -12 },
+	{ key: "kingDanger", family: "safety", defaultWeight: -12 },
 
-	// The animals. Every Elo World strategy is a weight here rather than a separate player class,
-	// so a bot can be one part swarm, one part material, and rated on the same scale as the rest.
-	{ key: "swarm", family: "behavioural", defaultWeight: 0 },
-	{ key: "huddle", family: "behavioural", defaultWeight: 0 },
-	{ key: "kingProximity", family: "behavioural", defaultWeight: 0 },
-	{ key: "sameColorSquares", family: "behavioural", defaultWeight: 0 },
+	// The Elo World strategies. Each is a weight here rather than a separate player class, so a
+	// bot can be one part swarm, one part material, and rated on the same scale as the rest —
+	// which is also why they are filed by what they measure like everything else, and not in a
+	// drawer of their own.
+	//
+	// All three distances are negated on the way out of the extractor, so more is nearer and a
+	// positive weight means the behaviour the key names. See `families/proximity.ts`.
+	{ key: "swarm", family: "distance", defaultWeight: 0 },
+	{ key: "huddle", family: "distance", defaultWeight: 0 },
+	{ key: "kingProximity", family: "distance", defaultWeight: 0 },
+	// Shape is a property of the whole board, not of a side, so unlike every other feature these
+	// read identically from either seat — which is why the animals on them must run at an even
+	// depth, negamax flipping a leaf's sign once per ply.
+	{ key: "sameColorSquares", family: "shape", defaultWeight: 0 },
 	// The rank-flip mirror alone — the copycat symmetry, and the only one of the three an animal
 	// has ever wanted. A pawn on e4 facing a pawn on e5 costs nothing, so maximising it answers
 	// every move with the same move.
-	{ key: "mirrorRanks", family: "behavioural", defaultWeight: 0 },
-	{ key: "opponentMobility", family: "behavioural", defaultWeight: 0 },
-	{ key: "pushDepth", family: "behavioural", defaultWeight: 0 },
-	{ key: "offeredMaterial", family: "behavioural", defaultWeight: 0 },
+	{ key: "mirrorRanks", family: "shape", defaultWeight: 0 },
+	// The same measurement `mobility` takes of our own side, kept apart so a bot can price taking
+	// the opponent's moves away differently from having moves itself — the Rhino is the pair.
+	{ key: "opponentMobility", family: "activity", defaultWeight: 0 },
+	{ key: "pushDepth", family: "activity", defaultWeight: 0 },
+	// Material a side leaves catchable, counted once per way it can be taken. `hanging` below is
+	// the same instinct as a count of undefended pieces, and the two together are the Hare — the
+	// lab's strongest pair, which is why they share a family and a slider band.
+	{ key: "offeredMaterial", family: "safety", defaultWeight: 0 },
 
 	// Properties of the move that produced the position. They are what let `cccp` and `pacifist`
 	// be weights rather than special-cased players. See `families/move.ts` for the sign
@@ -99,11 +124,11 @@ export const FEATURES = defineFeatures([
 	{ key: "givesStalemate", family: "move", defaultWeight: 0 },
 	{ key: "captureValue", family: "move", defaultWeight: 0 },
 
-	{ key: "centerControl", family: "positional", defaultWeight: 8 },
-	{ key: "space", family: "positional", defaultWeight: 2 },
-	{ key: "hanging", family: "positional", defaultWeight: -15 },
+	{ key: "centerControl", family: "activity", defaultWeight: 8 },
+	{ key: "space", family: "activity", defaultWeight: 2 },
+	{ key: "hanging", family: "safety", defaultWeight: -15 },
 
-	{ key: "mobility", family: "positional", defaultWeight: 4 },
+	{ key: "mobility", family: "activity", defaultWeight: 4 },
 
 	// A strategic stand-in for a piece-square table, role-agnostic on purpose: how far the minor
 	// and major pieces stand from the rim. It replaced twelve per-role sliders (a centralization
@@ -113,7 +138,7 @@ export const FEATURES = defineFeatures([
 	// with the rest of the pawn family: every pawn-structure weight the registry carried — passed,
 	// the lumped weakness, forwardness — measured at or below bare material in the lab, so the
 	// family is gone rather than kept as a drawer of dead sliders.
-	{ key: "centralization", family: "positional", defaultWeight: 0 },
+	{ key: "centralization", family: "activity", defaultWeight: 0 },
 ]);
 
 export const FEATURE_COUNT = FEATURES.length;
