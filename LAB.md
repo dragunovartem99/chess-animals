@@ -1,138 +1,64 @@
 # LAB.md
 
-What the bench in [`cli/lab.ts`](./cli/lab.ts) has turned up. Every candidate here is `base: "material"`,
-`depth: 2`, `temperature: 0`, one weight over the top — the shape `lab()` builds.
+What the bench in [`cli/lab.ts`](./cli/lab.ts) has measured. Re-run with
+`npm run arena -- --lab-only --seed=1`.
 
-Re-run with `npm run arena -- --lab-only --seed=1` (candidates play each other, roster left out).
+Weights are in **today's** signs: `swarm`, `huddle` and `kingProximity` were negated after these
+runs, and `kingDanger` was `kingAttackers`. Same bots, same ratings — only the number you would
+type to rebuild one has changed.
 
-Weights here are written in **today's** signs. The three distance features — `swarm`, `huddle`,
-`kingProximity` — were negated after these runs so that a positive weight means the behaviour the
-key names, so a `swarm` the run recorded as −40 is a `swarm` of 40 now. The bots and the ratings
-are unchanged; only the number you would type to rebuild one is.
+## One weight per feature, depth 2
 
-## Full registry sweep (seed 1)
+`base: "material"`, one hand-picked weight worth roughly a pawn of influence. Bare `material`
+anchors at **1460** with ±12 CIs, so a paired difference under ~35 Elo is noise. `givesMate` is
+omitted — the base pins it. Piece-value nudges were swept separately and only confirmed the frozen
+numbers.
 
-One hand-picked weight per feature (~1 pawn of influence, sign matching its meaning), rated
-lab-only against each other. `givesMate` is omitted — the material base already pins it to 1, so
-a candidate cannot move it. The five piece-value weights were swept too, as ±1-pawn nudges to the
-base, and left out of the table: they are not cut candidates, and the run only confirmed the
-frozen numbers — a rook bumped to 540 _lost_ 20 Elo, knight and queen bumps did nothing. The
-scale is self-referential and compressed; bare `material` is the anchor at **1460**, and with
-±12 CIs on every row a paired difference under ~35 Elo is noise.
+| feature (weight)                     | rating |    Δ |
+| ------------------------------------ | -----: | ---: |
+| `offeredMaterial` (−20)              |   1697 | +237 |
+| `mobility` (10) _(Spider)_           |   1653 | +193 |
+| `centralization` (8)                 |   1614 | +154 |
+| `hanging` (−100) _(Hedgehog)_        |   1590 | +130 |
+| `space` (6)                          |   1587 | +127 |
+| `swarm` (40)                         |   1561 | +101 |
+| `kingDanger` (−40)                   |   1539 |  +79 |
+| `centerControl` (30)                 |   1536 |  +76 |
+| _noise floor — below here Δ ≈ 0_     |        |      |
+| `givesCheck` (40) _(Goat)_           |   1496 |  +36 |
+| `pushDepth` (15) _(Goat)_            |   1490 |  +30 |
+| `opponentMobility` (−8)              |   1482 |  +22 |
+| `huddle` (40) _(Sloth)_              |   1482 |  +22 |
+| `givesStalemate` (−1)                |   1479 |  +19 |
+| `captureValue` (25) _(Goat)_         |   1465 |   +5 |
+| `material` (bare)                    |   1460 |    0 |
+| `mirrorRanks` (15) _(Parrot)_        |   1440 |  −20 |
+| `sameColorSquares` (15) _(Elephant)_ |   1436 |  −24 |
+| `kingProximity` (20) _(Dodo)_        |   1279 | −181 |
 
-| #   | feature (weight)                     | rating | Δ vs material |
-| --- | ------------------------------------ | -----: | ------------: |
-| 1   | `offeredMaterial` (−20)              |   1697 |          +237 |
-| 2   | `mobility` (10) _(Spider)_           |   1653 |          +193 |
-| 3   | `centralization` (8)                 |   1614 |          +154 |
-| 4   | `hanging` (−100) _(Hedgehog)_        |   1590 |          +130 |
-| 5   | `space` (6)                          |   1587 |          +127 |
-| 6   | `swarm` (40)                         |   1561 |          +101 |
-| 7   | `kingDanger` (−40)                   |   1539 |           +79 |
-| 8   | `centerControl` (30)                 |   1536 |           +76 |
-| —   | _noise floor — below here Δ ≈ 0_     |        |               |
-| 9   | `reverseStarting` (−20) _(cut)_      |   1501 |           +41 |
-| 10  | `givesCheck` (40) _(Goat)_           |   1496 |           +36 |
-| 11  | `kingPawnDistance` (−15) _(cut)_     |   1490 |           +30 |
-| 12  | `pushDepth` (15) _(Goat)_            |   1490 |           +30 |
-| 13  | `opponentMobility` (−8)              |   1482 |           +22 |
-| 14  | `huddle` (40) _(Sloth)_              |   1482 |           +22 |
-| 15  | `givesStalemate` (−1)                |   1479 |           +19 |
-| 16  | `captureValue` (25) _(Goat)_         |   1465 |            +5 |
-| —   | `material` (bare)                    |   1460 |             0 |
-| 17  | `mirrorRanks` (15) _(Parrot)_        |   1440 |           −20 |
-| 18  | `sameColorSquares` (15) _(Elephant)_ |   1436 |           −24 |
-| 19  | `kingProximity` (20)                 |   1279 |          −181 |
+- **Only the top eight beat bare material.** Dense signals that nudge almost every quiet move.
+  Below `centerControl` the field is one CI wide, ordered by luck as much as merit.
+- **Below the anchor is load-bearing, not weak.** `mirrorRanks`, `sameColorSquares` and
+  `kingProximity` _are_ the Parrot, the Elephant and the Dodo — −181 is `suicide_king` working,
+  not failing. `captureValue`, `pushDepth` and `givesCheck` are the Goat. `givesStalemate` is what
+  lets a bot tell mate from stalemate, which the paper faults `min_oppt_moves` for missing.
+- **Caveat:** one weight, hand-picked sign. A feature at the floor may be mistuned rather than
+  weak — a real verdict needs the SPSA tuner.
 
-## What sits below material
+## Two weights at depth 3
 
-Everything at or below the anchor is load-bearing and was never a "beats material" bet:
+A ply outweighs any depth-2 stack: bare `material` at depth 3 beat the best depth-2 pair 60/40 and
+a six-weight stack 70/30. Past ~4 weights the argmax gets noisier, not sharper.
 
-- **`mirrorRanks`, `sameColorSquares`, `kingProximity`** each back a paper animal — the
-  Parrot, the Elephant, and the suicide-king the roster has not drawn yet (`kingProximity` at
-  this sign _is_ `suicide_king`: −181 is the personality working, not failing). Kept for the same
-  reason `givesStalemate` is: it lets a bot tell mate from stalemate, which the paper calls out
-  `min_oppt_moves` for missing.
-- **`captureValue`, `pushDepth`, `givesCheck`** are the Goat (the paper's `cccp`), which cannot
-  be expressed without them.
+At equal depth, pairs fall into three tiers against bare `material`. **Prophylaxis is the whole
+story** — any pair holding `offeredMaterial` or `hanging` lands ~1600 and 75–82/18–25, the top
+three inside one CI. Two positional features are a tier below at ~1510 — `centralization` with
+`space`, or `mobility` with `opponentMobility` — and stack to ~nothing over one.
+`kingDanger`+`space` is the one pair that _loses_ to the anchor, 42/58.
 
-## What is working that no animal uses
+## Three weights at depth 3 + quiescence
 
-- **`swarm` (+101)** was the strongest personality in the registry with no bot on it; the Tiger
-  now carries it (with `mobility` + `space`, at depth 3 + quiescence — see the last section). The
-  roster still has the defensive half of the pair too — `huddle`, the Sloth.
-- **`kingDanger` (+79)** is the best-rated feature with no animal on it. It pairs badly with
-  `swarm` (see below — two charge-the-king signals overcommit), so its animal is a solo one.
-
-## What was cut on this evidence
-
-- **`reverseStarting` (+41)** cleared the noise floor but never earned an animal, and it walked
-  both armies against every role's home squares — the most expensive feature in the registry for
-  a result one CI above the anchor.
-- **`kingPawnDistance` (+30)** sat inside the noise band, no animal weighed it, and it cost a
-  walk of every pawn per node. Cutting it left `kingDanger` alone in its family.
-
-## Reading it
-
-- **Only the top eight beat bare material at depth 2.** `offeredMaterial`, `mobility`,
-  `centralization`, `hanging`, `space`, `swarm`, `kingDanger`, `centerControl` — dense signals
-  that nudge almost every quiet move. Below `centerControl` the whole field is one CI wide: rows
-  9–16 are statistically the same bot as the anchor, ordered by luck as much as merit.
-- **`centralization` holds its top-three place** from the last pass — the role-agnostic
-  piece-square stand-in carries strength the twelve per-role sliders it replaced never showed.
-- **Forcing and structure features fire too rarely** at depth 2 to separate from material with
-  one weight. They are kept where a specific animal needs them, not for their rating here.
-- **Caveat:** one weight per feature, and the sign hand-picked. A feature at the noise floor may
-  be mistuned rather than weak — a real verdict needs a weight sweep, which the SPSA tuner is for.
-
-## Depth 3 and two-weight combos (seed 1, lab-only)
-
-Several runs, all `base: "material"`, `temperature: 0`. Bare `material` at depth 3 is the anchor
-(1376–1410 ±30 across runs — that spread is run-to-run noise on one bot).
-
-**A ply outweighs any depth-2 feature stack.** Bare `material` at depth 3 beat every depth-2
-stack: 60/40 vs `offeredMaterial`+`mobility`, 55/45 vs a four-feature stack, 70/30 vs six. Past
-~4 weights the argmax gets noisier, not sharper — the six-stack was worst.
-
-**At equal depth (3), a prophylaxis combo is worth ~+220 Elo; a bad combo costs you.**
-Feature-disjoint pairs, H2H vs bare `material` at depth 3:
-
-| combo (weights)                        | rating | H2H           |
-| -------------------------------------- | -----: | ------------- |
-| `offeredMaterial` −20 + `mobility` 10  |   1626 | 82/18         |
-| `hanging` −100 + `centralization` 8    |   1603 | 73/27         |
-| `offeredMaterial` −20 + `hanging` −100 |   1599 | 76/24         |
-| `centralization` 8 + `space` 6         |   1522 | 70/30         |
-| `opponentMobility` −8 + `mobility` 10  |   1503 | 69/31         |
-| `kingDanger` −40 + `space` 6           |   1362 | 42/58 (loses) |
-
-- **Every combo with `offeredMaterial` or `hanging` lands ~1600** and the top three are within a
-  CI — so `offeredMaterial`+`hanging` (double "don't lose material") is as strong as the
-  `offeredMaterial`+`mobility` standout. Prophylaxis is the whole story.
-- **Two positional features are a tier below** (~1510) — real but not super-strong, and stacking
-  two of them buys ~nothing over one (a separate run had `mob`+`cent`, `space`+`cent`,
-  `ctrl`+`space` all tied with bare `centralization`).
-- **`swarm` only works solo** — `swarm`+`mobility` and `swarm`+`kingDanger` both rated below
-  the anchor; two "charge the king" signals just hang the army.
-- **`kingDanger` is already the attacker at its negative weight** — it measures danger to _our_
-  king minus danger to theirs, so `+40` would be `suicide_king`, not aggression. (These runs were
-  made when it was called `kingAttackers`; the quantity and the numbers are unchanged.)
-
-### Graduated to the roster
-
-Three of these pairs became depth-3 animals: `offeredMaterial`+`hanging` → **Hare**,
-`centralization`+`space` → **Bear**, `mobility`+`opponentMobility` → **Rhino**. On the full
-roster they rank 2nd, 3rd and 4th. First is the **Raven** — plain material at depth 3 with
-`quiescence` on, no weights — which beats the Hare ~9-in-10: resolving the capture chain past the
-leaf is worth more than any pair of weights, because the one blunder a material search makes is
-taking a piece that is recaptured. The Owl (depth 3, no quiescence, no weights) is 5th.
-
-## Depth 3 + quiescence + three-weight stacks (seed 1, lab-only)
-
-One round robin, 2,800 games, **~79 min wall** (8 bots, every game the Raven's depth-3 +
-quiescence search). All `base: "material"`, `temperature: 0`, `quiescence: true`. `lab-quiet` is
-the bare Raven build (no weights); every other candidate carries exactly three aggressive/mobile
-weights.
+2,800 games, ~79 min. `lab-quiet` is the bare Raven build.
 
 | candidate   | weights                                            |   rating | vs `lab-quiet` |
 | ----------- | -------------------------------------------------- | -------: | -------------- |
@@ -145,26 +71,31 @@ weights.
 | `lab-quiet` | —                                                  | 1284 ±25 | —              |
 | `lab-smo`   | `swarm` 40 + `mobility` 10 + `opponentMobility` −8 | 1227 ±28 | 38.5/61.5      |
 
-- **Bare quiescence is rudderless once everyone has it.** `lab-quiet` — the exact Raven build,
-  #1 on the full roster — finished **7th of 8** here. Quiescence stops you hanging to a
-  recapture; when every bot already does, knowing a good square from a bad one is all that's
-  left, and material knows nothing.
-- **`swarm` works at depth 3 once quiescence is on.** The earlier "swarm only works solo — two
-  charge-the-king signals hang the army" verdict was a _no-quiescence_ result. `lab-sms` and
-  `lab-smf` are 2nd and 3rd, both beating `lab-quiet` >4-to-1. Resolving the captures past the
-  leaf is what stops the charge being suicide.
-- **The strongest stack still carries no personality.** `lab-msc` (mobility + space +
-  centralization) tops the field and beats the best swarm bot 55/45 — real, ~2 CIs, not a rout.
-- **Doubling the king-charge still costs you.** `swarm` + `kingDanger` together (`lab-smk`,
-  `lab-skc`) sank to mid-table. One king-attack signal is a plan; two overcommit even with
-  quiescence.
-- **`opponentMobility` as a third weight is toxic here** — `lab-smo` is the only candidate
-  _below_ bare material.
-- **Caveat:** lab-only, one seed, ratings self-referential to these eight. `1738` here is not
-  `1738` on the roster.
+- **Bare quiescence is rudderless once everyone has it.** The exact Raven build, #1 on the full
+  roster, finished 7th of 8 here: knowing a good square from a bad one is all that is left, and
+  material knows nothing.
+- **`swarm` works at depth 3 once quiescence is on**, reversing the no-quiescence verdict that it
+  only works solo. Resolving the captures past the leaf is what stops the charge being suicide.
+- **Doubling the king-charge still costs you** — `swarm` + `kingDanger` sank to mid-table either
+  way. **`opponentMobility` as a third weight is toxic**, the only candidate below bare material.
+- **Caveat:** lab-only and self-referential to these eight. `1738` here is not `1738` on the
+  roster.
 
-### Graduated to the roster
+## Cut on this evidence
 
-`lab-sms` (`swarm` + `mobility` + `space`) → **Tiger** — the aggressive-mobile pick over the
-higher-rated but personality-free `lab-msc`. Placed last on the roster provisionally; a `--lab`
-run to fix its rank against the real field is still to come.
+- **`reverseStarting`** (+41) cleared the floor but never earned an animal, and walked both armies
+  against every role's home squares — the registry's most expensive feature for one CI.
+- **`kingPawnDistance`** (+30) sat inside the noise band, unweighted, at a pawn walk per node.
+
+## Unclaimed
+
+**`kingDanger`** (+79) is the best-rated feature with no animal on it. It pairs badly with
+`swarm`, so its animal is a solo one.
+
+## Graduated
+
+`offeredMaterial`+`hanging` → **Hare**, `centralization`+`space` → **Bear**,
+`mobility`+`opponentMobility` → **Rhino**, `swarm`+`mobility`+`space` → **Tiger** (chosen over the
+higher-rated but personality-free `lab-msc`). The first three rank 2nd–4th on the full roster,
+behind the **Raven** — depth 3 with quiescence and no weights — which beats the Hare ~9-in-10. The
+Tiger's rank is still provisional.
