@@ -12,9 +12,9 @@ import type { BotDefinition } from "@/shared/bots";
 // So this list is empty between experiments, and never a second roster.
 //
 // What past experiments turned up is in `../LAB.md` — a broad-feature ranking, and why
-// `hanging` became the Hedgehog, `kingAttackers` the Hawk, `mobility` the Spider.
+// `hanging` became the Hedgehog and `mobility` the Spider.
 //
-// `lab("kingatk", { kingAttackers: -40 })` is the shape — id gets the `lab-` prefix, `material`
+// `lab("kingdanger", { kingDanger: -40 })` is the shape — id gets the `lab-` prefix, `material`
 // base and depth 2 unless the third argument says otherwise. `npm run arena -- --lab-only` rates
 // the candidates against each other; `--lab` rates them alongside the roster.
 export function lab(id: string, weights: Record<string, number>, depth = 2): BotDefinition {

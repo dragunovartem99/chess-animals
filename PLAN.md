@@ -36,4 +36,4 @@ it plays near-Stockfish moves but can't stop leaning on one feature, and that le
   🐢 is free — the land Turtle is now the **Sloth** (🦥, same `huddle` weight).
 - ⬜ Each sea animal is a pair: an SF Elo target (how hard) + a feature it over-weights (how to
   beat it). E.g. Anglerfish — lures central then strikes; Pufferfish — `huddle` until provoked;
-  Electric eel — `kingAttackers`, only cares about your king.
+  Electric eel — `kingDanger`, only cares about your king.

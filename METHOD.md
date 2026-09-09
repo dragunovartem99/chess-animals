@@ -45,8 +45,8 @@ bot configs, and the locale files.
 | ------------- | ----: | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `material`    |     5 | one **tunable** weight per piece — `materialPawn` 100, `materialKnight` 320, `materialBishop` 330, `materialRook` 500, `materialQueen` 900                              |
 | `positional`  |     5 | `centerControl` 8, `space` 2, `hanging` −15, `mobility` 4, `centralization` 0                                                                                           |
-| `king`        |     1 | `kingAttackers` −12                                                                                                                                                     |
-| `behavioural` |     8 | the animals, all default 0: `swarm`, `huddle`, `kingProximity`, `sameColorSquares`, `symmetryMirrorY`, `opponentMobility`, `pushDepth`, `offeredMaterial`               |
+| `king`        |     1 | `kingDanger` −12                                                                                                                                                        |
+| `behavioural` |     8 | the animals, all default 0: `swarm`, `huddle`, `kingProximity`, `sameColorSquares`, `mirrorRanks`, `opponentMobility`, `pushDepth`, `offeredMaterial`                   |
 | `move`        |     4 | properties of the move played — `givesMate` 1, `givesCheck` 0, `givesStalemate` 0, `captureValue` 0; the two `gives*` enders are preferences in [−1, 1], not centipawns |
 
 `centralization` is a parametrised stand-in for a piece-square table: one number — how far the

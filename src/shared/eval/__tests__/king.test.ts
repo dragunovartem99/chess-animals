@@ -11,14 +11,14 @@ function read({ fen, key }: { fen: string; key: string }): number {
 
 describe("king safety in the opening position", () => {
 	it("is level", () => {
-		expect(read({ fen: INITIAL_FEN, key: "kingAttackers" })).toBe(0);
+		expect(read({ fen: INITIAL_FEN, key: "kingDanger" })).toBe(0);
 	});
 });
 
-describe("kingAttackers", () => {
+describe("kingDanger", () => {
 	it("weights a queen near the king far above a knight", () => {
-		const queen = read({ fen: "6k1/8/8/8/8/5q2/8/6K1 b - - 0 1", key: "kingAttackers" });
-		const knight = read({ fen: "6k1/8/8/8/8/4n3/8/6K1 b - - 0 1", key: "kingAttackers" });
+		const queen = read({ fen: "6k1/8/8/8/8/5q2/8/6K1 b - - 0 1", key: "kingDanger" });
+		const knight = read({ fen: "6k1/8/8/8/8/4n3/8/6K1 b - - 0 1", key: "kingDanger" });
 
 		expect(queen).toBeLessThan(knight);
 		expect(queen).toBe(-5);
@@ -26,10 +26,10 @@ describe("kingAttackers", () => {
 	});
 
 	it("counts our own king's attackers, which a negative weight then punishes", () => {
-		expect(read({ fen: "6k1/8/8/8/8/5q2/8/6K1 w - - 0 1", key: "kingAttackers" })).toBe(5);
+		expect(read({ fen: "6k1/8/8/8/8/5q2/8/6K1 w - - 0 1", key: "kingDanger" })).toBe(5);
 	});
 
 	it("ignores a piece that reaches nowhere near the king", () => {
-		expect(read({ fen: "6k1/8/8/8/8/8/8/n5K1 b - - 0 1", key: "kingAttackers" })).toBe(0);
+		expect(read({ fen: "6k1/8/8/8/8/8/8/n5K1 b - - 0 1", key: "kingDanger" })).toBe(0);
 	});
 });

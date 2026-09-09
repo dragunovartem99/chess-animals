@@ -7,9 +7,9 @@ import { featureId } from "../features";
 import type { FeatureVector } from "../vector";
 import type { EvalContext } from "./context";
 
-const KING_ATTACKERS = featureId("kingAttackers");
+const KING_DANGER = featureId("kingDanger");
 
-export const SLOTS = [KING_ATTACKERS];
+export const SLOTS = [KING_DANGER];
 
 // What a piece is worth as an attacker near the king — not what it is worth on the board. A queen
 // arriving next to the king is the whole attack; a pawn is a nuisance.
@@ -43,7 +43,8 @@ function attackersOn({ context, color }: { context: EvalContext; color: Color })
 	return attackers;
 }
 
-// Pressure around the king, ours minus theirs. A `kingPawnDistance` term sat beside this one and
+// Danger around the king, ours minus theirs — a negative weight buys safety, a positive one
+// walks the king into it. A `kingPawnDistance` term sat beside this one and
 // was cut: no animal ever weighed it, the lab rated it +30 against bare material — inside the
 // ±35 noise band — and it cost a walk of every pawn on the board per node to say it.
 export function extractKing({
@@ -53,6 +54,6 @@ export function extractKing({
 	context: EvalContext;
 	features: FeatureVector;
 }): void {
-	features[KING_ATTACKERS] =
+	features[KING_DANGER] =
 		attackersOn({ context, color: context.us }) - attackersOn({ context, color: context.them });
 }

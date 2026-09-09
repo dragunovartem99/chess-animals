@@ -59,14 +59,14 @@ describe("sameColorSquares", () => {
 
 describe("symmetry", () => {
 	it("scores the opening position as perfectly mirrored across the ranks", () => {
-		expect(read({ fen: INITIAL_FEN, key: "symmetryMirrorY" })).toBeCloseTo(0);
+		expect(read({ fen: INITIAL_FEN, key: "mirrorRanks" })).toBeCloseTo(0);
 	});
 
 	it("penalises a board that has lost its mirror", () => {
 		expect(
 			read({
 				fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBN1 w Qkq - 0 1",
-				key: "symmetryMirrorY",
+				key: "mirrorRanks",
 			})
 		).toBeLessThan(0);
 	});
@@ -74,8 +74,8 @@ describe("symmetry", () => {
 	it("reads the same for both sides, being a property of the whole board", () => {
 		const fen = "r3k3/8/8/8/8/8/8/4K2R";
 
-		expect(read({ fen: `${fen} w Kq - 0 1`, key: "symmetryMirrorY" })).toBe(
-			read({ fen: `${fen} b Kq - 0 1`, key: "symmetryMirrorY" })
+		expect(read({ fen: `${fen} w Kq - 0 1`, key: "mirrorRanks" })).toBe(
+			read({ fen: `${fen} b Kq - 0 1`, key: "mirrorRanks" })
 		);
 	});
 });

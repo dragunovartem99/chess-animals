@@ -7,9 +7,9 @@ import type { FeatureVector } from "../vector";
 import type { EvalContext } from "./context";
 
 const SAME_COLOR_SQUARES = featureId("sameColorSquares");
-const SYMMETRY_MIRROR_Y = featureId("symmetryMirrorY");
+const MIRROR_RANKS = featureId("mirrorRanks");
 
-export const SLOTS = [SAME_COLOR_SQUARES, SYMMETRY_MIRROR_Y];
+export const SLOTS = [SAME_COLOR_SQUARES, MIRROR_RANKS];
 
 const LIGHT = SquareSet.lightSquares();
 const DARK = SquareSet.darkSquares();
@@ -65,5 +65,5 @@ export function extractSymmetry({
 
 	features[SAME_COLOR_SQUARES] =
 		onOwnColor({ board, color: context.us }) - onOwnColor({ board, color: context.them });
-	features[SYMMETRY_MIRROR_Y] = -asymmetry({ board, axis: FLIP_RANKS });
+	features[MIRROR_RANKS] = -asymmetry({ board, axis: FLIP_RANKS });
 }

@@ -1,6 +1,6 @@
 import type { Animal } from "./types";
 
-// The mirror: answer a move with the same move. `symmetryMirrorY` is the negated rank-flip
+// The mirror: answer a move with the same move. `mirrorRanks` is the negated rank-flip
 // asymmetry of the whole board, so a pawn on e4 facing a pawn on e5 costs nothing and every
 // unanswered piece costs two — the Parrot maximises it by playing back whatever it was shown.
 //
@@ -23,6 +23,6 @@ export const PARROT: Animal = {
 		search: { depth: 2 },
 		temperature: 0,
 		base: "material",
-		weights: { symmetryMirrorY: 150 },
+		weights: { mirrorRanks: 150 },
 	},
 };

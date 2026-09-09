@@ -58,14 +58,18 @@ export const FEATURES = defineFeatures([
 	{ key: "materialRook", family: "material", defaultWeight: 500 },
 	{ key: "materialQueen", family: "material", defaultWeight: 900 },
 
-	// King safety is counted around the king rather than on it: what attacks the squares he stands
-	// among. A `kingRingDefenders` count sat here too and the lab rated it −46 against bare
+	// Danger around the king rather than on it: what attacks the squares he stands among, ours
+	// minus theirs — so a negative weight buys safety and a positive one is `suicide_king`. It was
+	// `kingAttackers`, which read as "attackers on our king" and left the sign to be explained
+	// every time; the quantity never changed, only the name that carries its direction.
+	//
+	// A `kingRingDefenders` count sat here too and the lab rated it −46 against bare
 	// material — defenders that are just pieces standing near the king, with no read on whether
 	// they defend anything, told the evaluation to keep its army home and lose. A `kingOpenFile`
 	// count of the pawnless files beside him went the other way: two sweeps rated it +17 and +19,
-	// inside the noise, and nothing weighted it — `kingAttackers` already reads the open line as
+	// inside the noise, and nothing weighted it — `kingDanger` already reads the open line as
 	// the piece now aiming down it.
-	{ key: "kingAttackers", family: "king", defaultWeight: -12 },
+	{ key: "kingDanger", family: "king", defaultWeight: -12 },
 
 	// The animals. Every Elo World strategy is a weight here rather than a separate player class,
 	// so a bot can be one part swarm, one part material, and rated on the same scale as the rest.
@@ -76,7 +80,7 @@ export const FEATURES = defineFeatures([
 	// The rank-flip mirror alone — the copycat symmetry, and the only one of the three an animal
 	// has ever wanted. A pawn on e4 facing a pawn on e5 costs nothing, so maximising it answers
 	// every move with the same move.
-	{ key: "symmetryMirrorY", family: "behavioural", defaultWeight: 0 },
+	{ key: "mirrorRanks", family: "behavioural", defaultWeight: 0 },
 	{ key: "opponentMobility", family: "behavioural", defaultWeight: 0 },
 	{ key: "pushDepth", family: "behavioural", defaultWeight: 0 },
 	{ key: "offeredMaterial", family: "behavioural", defaultWeight: 0 },

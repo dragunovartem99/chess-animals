@@ -23,7 +23,7 @@ scale is self-referential and compressed; bare `material` is the anchor at **146
 | 4   | `hanging` (−100) _(Hedgehog)_        |   1590 |          +130 |
 | 5   | `space` (6)                          |   1587 |          +127 |
 | 6   | `swarm` (−40)                        |   1561 |          +101 |
-| 7   | `kingAttackers` (−40) _(Hawk)_       |   1539 |           +79 |
+| 7   | `kingDanger` (−40)                   |   1539 |           +79 |
 | 8   | `centerControl` (30)                 |   1536 |           +76 |
 | —   | _noise floor — below here Δ ≈ 0_     |        |               |
 | 9   | `reverseStarting` (−20) _(cut)_      |   1501 |           +41 |
@@ -35,7 +35,7 @@ scale is self-referential and compressed; bare `material` is the anchor at **146
 | 15  | `givesStalemate` (−1)                |   1479 |           +19 |
 | 16  | `captureValue` (25) _(Goat)_         |   1465 |            +5 |
 | —   | `material` (bare)                    |   1460 |             0 |
-| 17  | `symmetryMirrorY` (15) _(Parrot)_    |   1440 |           −20 |
+| 17  | `mirrorRanks` (15) _(Parrot)_        |   1440 |           −20 |
 | 18  | `sameColorSquares` (15) _(Elephant)_ |   1436 |           −24 |
 | 19  | `kingProximity` (−20)                |   1279 |          −181 |
 
@@ -43,7 +43,7 @@ scale is self-referential and compressed; bare `material` is the anchor at **146
 
 Everything at or below the anchor is load-bearing and was never a "beats material" bet:
 
-- **`symmetryMirrorY`, `sameColorSquares`, `kingProximity`** each back a paper animal — the
+- **`mirrorRanks`, `sameColorSquares`, `kingProximity`** each back a paper animal — the
   Parrot, the Elephant, and the suicide-king the roster has not drawn yet (`kingProximity` at
   this sign _is_ `suicide_king`: −181 is the personality working, not failing). Kept for the same
   reason `givesStalemate` is: it lets a bot tell mate from stalemate, which the paper calls out
@@ -56,6 +56,8 @@ Everything at or below the anchor is load-bearing and was never a "beats materia
 - **`swarm` (+101)** was the strongest personality in the registry with no bot on it; the Tiger
   now carries it (with `mobility` + `space`, at depth 3 + quiescence — see the last section). The
   roster still has the defensive half of the pair too — `huddle`, the Sloth.
+- **`kingDanger` (+79)** is the best-rated feature with no animal on it. It pairs badly with
+  `swarm` (see below — two charge-the-king signals overcommit), so its animal is a solo one.
 
 ## What was cut on this evidence
 
@@ -63,12 +65,12 @@ Everything at or below the anchor is load-bearing and was never a "beats materia
   both armies against every role's home squares — the most expensive feature in the registry for
   a result one CI above the anchor.
 - **`kingPawnDistance` (+30)** sat inside the noise band, no animal weighed it, and it cost a
-  walk of every pawn per node. Cutting it left `kingAttackers` alone in its family.
+  walk of every pawn per node. Cutting it left `kingDanger` alone in its family.
 
 ## Reading it
 
 - **Only the top eight beat bare material at depth 2.** `offeredMaterial`, `mobility`,
-  `centralization`, `hanging`, `space`, `swarm`, `kingAttackers`, `centerControl` — dense signals
+  `centralization`, `hanging`, `space`, `swarm`, `kingDanger`, `centerControl` — dense signals
   that nudge almost every quiet move. Below `centerControl` the whole field is one CI wide: rows
   9–16 are statistically the same bot as the anchor, ordered by luck as much as merit.
 - **`centralization` holds its top-three place** from the last pass — the role-agnostic
@@ -97,7 +99,7 @@ Feature-disjoint pairs, H2H vs bare `material` at depth 3:
 | `offeredMaterial` −20 + `hanging` −100 |   1599 | 76/24         |
 | `centralization` 8 + `space` 6         |   1522 | 70/30         |
 | `opponentMobility` −8 + `mobility` 10  |   1503 | 69/31         |
-| `kingAttackers` −40 + `space` 6        |   1362 | 42/58 (loses) |
+| `kingDanger` −40 + `space` 6           |   1362 | 42/58 (loses) |
 
 - **Every combo with `offeredMaterial` or `hanging` lands ~1600** and the top three are within a
   CI — so `offeredMaterial`+`hanging` (double "don't lose material") is as strong as the
@@ -105,10 +107,11 @@ Feature-disjoint pairs, H2H vs bare `material` at depth 3:
 - **Two positional features are a tier below** (~1510) — real but not super-strong, and stacking
   two of them buys ~nothing over one (a separate run had `mob`+`cent`, `space`+`cent`,
   `ctrl`+`space` all tied with bare `centralization`).
-- **`swarm` only works solo** — `swarm`+`mobility` and `swarm`+`kingAttackers` both rated below
+- **`swarm` only works solo** — `swarm`+`mobility` and `swarm`+`kingDanger` both rated below
   the anchor; two "charge the king" signals just hang the army.
-- **`kingAttackers` is already the attacker at its negative weight** (the feature is
-  ours-minus-theirs king pressure). `+40` would be `suicide_king`, not aggression.
+- **`kingDanger` is already the attacker at its negative weight** — it measures danger to _our_
+  king minus danger to theirs, so `+40` would be `suicide_king`, not aggression. (These runs were
+  made when it was called `kingAttackers`; the quantity and the numbers are unchanged.)
 
 ### Graduated to the roster
 
@@ -126,16 +129,16 @@ quiescence search). All `base: "material"`, `temperature: 0`, `quiescence: true`
 the bare Raven build (no weights); every other candidate carries exactly three aggressive/mobile
 weights.
 
-| candidate   | weights                                                |   rating | vs `lab-quiet` |
-| ----------- | ------------------------------------------------------ | -------: | -------------- |
-| `lab-msc`   | `mobility` 10 + `space` 6 + `centralization` 8         | 1738 ±26 | 91.5/8.5       |
-| `lab-sms`   | `swarm` −40 + `mobility` 10 + `space` 6                | 1681 ±24 | 86/14          |
-| `lab-smf`   | `swarm` −40 + `mobility` 10 + `offeredMaterial` −20    | 1615 ±23 | 82/18          |
-| `lab-mks`   | `mobility` 10 + `kingAttackers` −40 + `space` 6        | 1516 ±23 | 84.5/15.5      |
-| `lab-smk`   | `swarm` −40 + `mobility` 10 + `kingAttackers` −40      | 1484 ±23 | 81.5/18.5      |
-| `lab-skc`   | `swarm` −40 + `kingAttackers` −40 + `centerControl` 30 | 1456 ±23 | 74/26          |
-| `lab-quiet` | —                                                      | 1284 ±25 | —              |
-| `lab-smo`   | `swarm` −40 + `mobility` 10 + `opponentMobility` −8    | 1227 ±28 | 38.5/61.5      |
+| candidate   | weights                                             |   rating | vs `lab-quiet` |
+| ----------- | --------------------------------------------------- | -------: | -------------- |
+| `lab-msc`   | `mobility` 10 + `space` 6 + `centralization` 8      | 1738 ±26 | 91.5/8.5       |
+| `lab-sms`   | `swarm` −40 + `mobility` 10 + `space` 6             | 1681 ±24 | 86/14          |
+| `lab-smf`   | `swarm` −40 + `mobility` 10 + `offeredMaterial` −20 | 1615 ±23 | 82/18          |
+| `lab-mks`   | `mobility` 10 + `kingDanger` −40 + `space` 6        | 1516 ±23 | 84.5/15.5      |
+| `lab-smk`   | `swarm` −40 + `mobility` 10 + `kingDanger` −40      | 1484 ±23 | 81.5/18.5      |
+| `lab-skc`   | `swarm` −40 + `kingDanger` −40 + `centerControl` 30 | 1456 ±23 | 74/26          |
+| `lab-quiet` | —                                                   | 1284 ±25 | —              |
+| `lab-smo`   | `swarm` −40 + `mobility` 10 + `opponentMobility` −8 | 1227 ±28 | 38.5/61.5      |
 
 - **Bare quiescence is rudderless once everyone has it.** `lab-quiet` — the exact Raven build,
   #1 on the full roster — finished **7th of 8** here. Quiescence stops you hanging to a
@@ -147,7 +150,7 @@ weights.
   leaf is what stops the charge being suicide.
 - **The strongest stack still carries no personality.** `lab-msc` (mobility + space +
   centralization) tops the field and beats the best swarm bot 55/45 — real, ~2 CIs, not a rout.
-- **Doubling the king-charge still costs you.** `swarm` + `kingAttackers` together (`lab-smk`,
+- **Doubling the king-charge still costs you.** `swarm` + `kingDanger` together (`lab-smk`,
   `lab-skc`) sank to mid-table. One king-attack signal is a plan; two overcommit even with
   quiescence.
 - **`opponentMobility` as a third weight is toxic here** — `lab-smo` is the only candidate
