@@ -9,7 +9,6 @@ export default {
 	materialRook: "Rook value",
 	materialQueen: "Queen value",
 	kingAttackers: "Attackers on our king",
-	kingPawnDistance: "King-to-pawn distance",
 	swarm: "Army near enemy king",
 	huddle: "Army around our king",
 	kingProximity: "King-to-king distance",

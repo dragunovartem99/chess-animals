@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { defineFeatures, FEATURES, FEATURES_BY_KEY } from "../features";
 
-const definition = { family: "material", group: "pieces", defaultWeight: 0 } as const;
+const definition = { family: "material", defaultWeight: 0 } as const;
 
 describe("defineFeatures", () => {
 	it("assigns dense ids in declaration order", () => {

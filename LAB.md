@@ -26,9 +26,9 @@ scale is self-referential and compressed; bare `material` is the anchor at **146
 | 7   | `kingAttackers` (−40) _(Hawk)_       |   1539 |           +79 |
 | 8   | `centerControl` (30)                 |   1536 |           +76 |
 | —   | _noise floor — below here Δ ≈ 0_     |        |               |
-| 9   | `reverseStarting` (−20)              |   1501 |           +41 |
+| 9   | `reverseStarting` (−20) _(cut)_      |   1501 |           +41 |
 | 10  | `givesCheck` (40) _(Goat)_           |   1496 |           +36 |
-| 11  | `kingPawnDistance` (−15)             |   1490 |           +30 |
+| 11  | `kingPawnDistance` (−15) _(cut)_     |   1490 |           +30 |
 | 12  | `pushDepth` (15) _(Goat)_            |   1490 |           +30 |
 | 13  | `opponentMobility` (−8)              |   1482 |           +22 |
 | 14  | `huddle` (−40) _(Sloth)_             |   1482 |           +22 |
@@ -56,8 +56,14 @@ Everything at or below the anchor is load-bearing and was never a "beats materia
 - **`swarm` (+101)** was the strongest personality in the registry with no bot on it; the Tiger
   now carries it (with `mobility` + `space`, at depth 3 + quiescence — see the last section). The
   roster still has the defensive half of the pair too — `huddle`, the Sloth.
-- **`reverseStarting` (+41)** clears the noise floor on its own, more than a board-flip gimmick
-  looked likely to.
+
+## What was cut on this evidence
+
+- **`reverseStarting` (+41)** cleared the noise floor but never earned an animal, and it walked
+  both armies against every role's home squares — the most expensive feature in the registry for
+  a result one CI above the anchor.
+- **`kingPawnDistance` (+30)** sat inside the noise band, no animal weighed it, and it cost a
+  walk of every pawn per node. Cutting it left `kingAttackers` alone in its family.
 
 ## Reading it
 

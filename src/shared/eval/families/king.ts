@@ -3,12 +3,13 @@ import { SquareSet } from "chessops/squareSet";
 import type { Color, Role } from "chessops/types";
 import { opposite } from "chessops/util";
 
+import { featureId } from "../features";
 import type { FeatureVector } from "../vector";
 import type { EvalContext } from "./context";
-import { KING_SLOTS, type KingCounts } from "./kingSlots";
 
-export const SLOTS = KING_SLOTS.map(([, slot]) => slot);
-import { chebyshev } from "./masks";
+const KING_ATTACKERS = featureId("kingAttackers");
+
+export const SLOTS = [KING_ATTACKERS];
 
 // What a piece is worth as an attacker near the king — not what it is worth on the board. A queen
 // arriving next to the king is the whole attack; a pawn is a nuisance.
@@ -24,10 +25,9 @@ function ringOf({ king }: { king: number }): SquareSet {
 	return kingAttacks(king).with(king);
 }
 
-function countFor({ context, color }: { context: EvalContext; color: Color }): KingCounts {
-	const { board } = context.position;
-	const king = board.kingOf(color);
-	if (king === undefined) return { attackers: 0, pawnDistance: 0 };
+function attackersOn({ context, color }: { context: EvalContext; color: Color }): number {
+	const king = context.position.board.kingOf(color);
+	if (king === undefined) return 0;
 
 	const ring = ringOf({ king });
 	const enemy = opposite(color);
@@ -40,16 +40,12 @@ function countFor({ context, color }: { context: EvalContext; color: Color }): K
 		attackers += ATTACK_VALUE[piece.role] ?? 0;
 	}
 
-	const pawns = board.pieces(color, "pawn");
-
-	let pawnDistance = 0;
-	if (pawns.nonEmpty()) {
-		pawnDistance = Math.min(...[...pawns].map((pawn) => chebyshev({ from: king, to: pawn })));
-	}
-
-	return { attackers, pawnDistance };
+	return attackers;
 }
 
+// Pressure around the king, ours minus theirs. A `kingPawnDistance` term sat beside this one and
+// was cut: no animal ever weighed it, the lab rated it +30 against bare material — inside the
+// ±35 noise band — and it cost a walk of every pawn on the board per node to say it.
 export function extractKing({
 	context,
 	features,
@@ -57,8 +53,6 @@ export function extractKing({
 	context: EvalContext;
 	features: FeatureVector;
 }): void {
-	const ours = countFor({ context, color: context.us });
-	const theirs = countFor({ context, color: context.them });
-
-	for (const [key, slot] of KING_SLOTS) features[slot] = ours[key] - theirs[key];
+	features[KING_ATTACKERS] =
+		attackersOn({ context, color: context.us }) - attackersOn({ context, color: context.them });
 }
