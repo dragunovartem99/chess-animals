@@ -5,6 +5,11 @@ What the bench in [`cli/lab.ts`](./cli/lab.ts) has turned up. Every candidate he
 
 Re-run with `npm run arena -- --lab-only --seed=1` (candidates play each other, roster left out).
 
+Weights here are written in **today's** signs. The three distance features — `swarm`, `huddle`,
+`kingProximity` — were negated after these runs so that a positive weight means the behaviour the
+key names, so a `swarm` the run recorded as −40 is a `swarm` of 40 now. The bots and the ratings
+are unchanged; only the number you would type to rebuild one is.
+
 ## Full registry sweep (seed 1)
 
 One hand-picked weight per feature (~1 pawn of influence, sign matching its meaning), rated
@@ -22,7 +27,7 @@ scale is self-referential and compressed; bare `material` is the anchor at **146
 | 3   | `centralization` (8)                 |   1614 |          +154 |
 | 4   | `hanging` (−100) _(Hedgehog)_        |   1590 |          +130 |
 | 5   | `space` (6)                          |   1587 |          +127 |
-| 6   | `swarm` (−40)                        |   1561 |          +101 |
+| 6   | `swarm` (40)                         |   1561 |          +101 |
 | 7   | `kingDanger` (−40)                   |   1539 |           +79 |
 | 8   | `centerControl` (30)                 |   1536 |           +76 |
 | —   | _noise floor — below here Δ ≈ 0_     |        |               |
@@ -31,13 +36,13 @@ scale is self-referential and compressed; bare `material` is the anchor at **146
 | 11  | `kingPawnDistance` (−15) _(cut)_     |   1490 |           +30 |
 | 12  | `pushDepth` (15) _(Goat)_            |   1490 |           +30 |
 | 13  | `opponentMobility` (−8)              |   1482 |           +22 |
-| 14  | `huddle` (−40) _(Sloth)_             |   1482 |           +22 |
+| 14  | `huddle` (40) _(Sloth)_              |   1482 |           +22 |
 | 15  | `givesStalemate` (−1)                |   1479 |           +19 |
 | 16  | `captureValue` (25) _(Goat)_         |   1465 |            +5 |
 | —   | `material` (bare)                    |   1460 |             0 |
 | 17  | `mirrorRanks` (15) _(Parrot)_        |   1440 |           −20 |
 | 18  | `sameColorSquares` (15) _(Elephant)_ |   1436 |           −24 |
-| 19  | `kingProximity` (−20)                |   1279 |          −181 |
+| 19  | `kingProximity` (20)                 |   1279 |          −181 |
 
 ## What sits below material
 
@@ -129,16 +134,16 @@ quiescence search). All `base: "material"`, `temperature: 0`, `quiescence: true`
 the bare Raven build (no weights); every other candidate carries exactly three aggressive/mobile
 weights.
 
-| candidate   | weights                                             |   rating | vs `lab-quiet` |
-| ----------- | --------------------------------------------------- | -------: | -------------- |
-| `lab-msc`   | `mobility` 10 + `space` 6 + `centralization` 8      | 1738 ±26 | 91.5/8.5       |
-| `lab-sms`   | `swarm` −40 + `mobility` 10 + `space` 6             | 1681 ±24 | 86/14          |
-| `lab-smf`   | `swarm` −40 + `mobility` 10 + `offeredMaterial` −20 | 1615 ±23 | 82/18          |
-| `lab-mks`   | `mobility` 10 + `kingDanger` −40 + `space` 6        | 1516 ±23 | 84.5/15.5      |
-| `lab-smk`   | `swarm` −40 + `mobility` 10 + `kingDanger` −40      | 1484 ±23 | 81.5/18.5      |
-| `lab-skc`   | `swarm` −40 + `kingDanger` −40 + `centerControl` 30 | 1456 ±23 | 74/26          |
-| `lab-quiet` | —                                                   | 1284 ±25 | —              |
-| `lab-smo`   | `swarm` −40 + `mobility` 10 + `opponentMobility` −8 | 1227 ±28 | 38.5/61.5      |
+| candidate   | weights                                            |   rating | vs `lab-quiet` |
+| ----------- | -------------------------------------------------- | -------: | -------------- |
+| `lab-msc`   | `mobility` 10 + `space` 6 + `centralization` 8     | 1738 ±26 | 91.5/8.5       |
+| `lab-sms`   | `swarm` 40 + `mobility` 10 + `space` 6             | 1681 ±24 | 86/14          |
+| `lab-smf`   | `swarm` 40 + `mobility` 10 + `offeredMaterial` −20 | 1615 ±23 | 82/18          |
+| `lab-mks`   | `mobility` 10 + `kingDanger` −40 + `space` 6       | 1516 ±23 | 84.5/15.5      |
+| `lab-smk`   | `swarm` 40 + `mobility` 10 + `kingDanger` −40      | 1484 ±23 | 81.5/18.5      |
+| `lab-skc`   | `swarm` 40 + `kingDanger` −40 + `centerControl` 30 | 1456 ±23 | 74/26          |
+| `lab-quiet` | —                                                  | 1284 ±25 | —              |
+| `lab-smo`   | `swarm` 40 + `mobility` 10 + `opponentMobility` −8 | 1227 ±28 | 38.5/61.5      |
 
 - **Bare quiescence is rudderless once everyone has it.** `lab-quiet` — the exact Raven build,
   #1 on the full roster — finished **7th of 8** here. Quiescence stops you hanging to a

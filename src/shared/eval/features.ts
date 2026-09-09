@@ -42,7 +42,7 @@ export function defineFeatures(definitions: readonly FeatureDefinition[]): Featu
 //
 // **Every weight is in centipawns**, and a pawn is 100. That is the whole convention, and it is
 // what makes a weight readable: `mobility: 4` says a square of activity is worth four hundredths
-// of a pawn, and `swarm: -900` says walking the army a king-move closer is worth a queen. A bot
+// of a pawn, and `swarm: 900` says walking the army a king-move closer is worth a queen. A bot
 // that wants a feature to dominate says so with a big number, not by shrinking everything else —
 // the roster used to price a pawn at 20 so that `huddle` could outweigh it, which made every
 // animal's numbers unreadable and comparable to nothing.

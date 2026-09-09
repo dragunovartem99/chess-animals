@@ -1,9 +1,9 @@
 import type { Animal } from "./types";
 
 // The paper's `suicide_king`: walk your own king at the other one and let the game come to you.
-// `kingProximity` is the raw Chebyshev distance between the two kings — the one distance feature
-// with no side subtracted from it, because it reads identically from either seat — so a negative
-// weight closes the gap.
+// `kingProximity` is the negated Chebyshev distance between the two kings — the one distance
+// feature with no side subtracted from it, because it reads identically from either seat — so a
+// positive weight closes the gap.
 //
 // **The depth must stay even.** That invariance is exactly the Parrot's problem: a feature that
 // reads the same from both seats has its sign flipped once per ply by negamax, so at an odd depth
@@ -21,6 +21,6 @@ export const DODO: Animal = {
 		id: "dodo",
 		search: { depth: 2 },
 		temperature: 0,
-		weights: { kingProximity: -10 },
+		weights: { kingProximity: 10 },
 	},
 };

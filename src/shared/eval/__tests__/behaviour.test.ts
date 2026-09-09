@@ -14,34 +14,34 @@ describe("swarm", () => {
 		expect(read({ fen: INITIAL_FEN, key: "swarm" })).toBe(0);
 	});
 
-	it("falls as our pieces close on the enemy king, which a negative weight rewards", () => {
+	it("rises as our pieces close on the enemy king, which a positive weight rewards", () => {
 		const far = read({ fen: "7k/8/8/8/8/8/8/R3K3 w - - 0 1", key: "swarm" });
 		const near = read({ fen: "7k/6R1/8/8/8/8/8/4K3 w - - 0 1", key: "swarm" });
 
-		expect(near).toBeLessThan(far);
+		expect(near).toBeGreaterThan(far);
 	});
 });
 
 describe("huddle", () => {
-	it("falls as our pieces gather around our own king", () => {
+	it("rises as our pieces gather around our own king", () => {
 		const scattered = read({ fen: "7k/8/8/8/8/8/8/R3K3 w - - 0 1", key: "huddle" });
 		const gathered = read({ fen: "7k/8/8/8/8/8/8/3RK3 w - - 0 1", key: "huddle" });
 
-		expect(gathered).toBeLessThan(scattered);
+		expect(gathered).toBeGreaterThan(scattered);
 	});
 });
 
 describe("kingProximity", () => {
-	it("is the plain distance between the kings, identical from either side", () => {
+	it("is the negated distance between the kings, identical from either side", () => {
 		const white = read({ fen: "7k/8/8/8/8/8/8/K7 w - - 0 1", key: "kingProximity" });
 		const black = read({ fen: "7k/8/8/8/8/8/8/K7 b - - 0 1", key: "kingProximity" });
 
-		expect(white).toBe(7);
-		expect(black).toBe(7);
+		expect(white).toBe(-7);
+		expect(black).toBe(-7);
 	});
 
-	it("shrinks as the kings walk together", () => {
-		expect(read({ fen: "8/8/3k4/8/3K4/8/8/8 w - - 0 1", key: "kingProximity" })).toBe(2);
+	it("rises as the kings walk together", () => {
+		expect(read({ fen: "8/8/3k4/8/3K4/8/8/8 w - - 0 1", key: "kingProximity" })).toBe(-2);
 	});
 });
 

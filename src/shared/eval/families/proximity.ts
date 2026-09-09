@@ -70,8 +70,10 @@ function meanDistances({
 	return { ours: toOurs / count, theirs: toTheirs / count };
 }
 
-// The distance strategies, all measured in king moves. `swarm` charges the enemy king with
-// everything, `huddle` builds a wall around its own. Each is one weight away from being a bot.
+// The distance strategies, all measured in king moves and all negated on the way out, so more is
+// nearer and a positive weight always means "the mover wants this" — the same convention the move
+// family holds to. `swarm` charges the enemy king with everything, `huddle` builds a wall around
+// its own. Each is one weight away from being a bot.
 export function extractProximity({
 	context,
 	features,
@@ -91,11 +93,17 @@ export function extractProximity({
 		// reversed.
 		const theirs = meanDistances({ context, color: context.them, kings });
 
-		features[SWARM] = ours.theirs - theirs.ours;
-		features[HUDDLE] = ours.ours - theirs.theirs;
+		// Negated, so the number rises as the army closes in and a *positive* weight is the
+		// charge the feature is named for. Measured as a distance these read backwards: every
+		// animal on them — the Wolf, the Sloth, the Tiger — had to write a negative weight to
+		// mean the thing the key says, and the comments above had to keep saying so.
+		features[SWARM] = theirs.ours - ours.theirs;
+		features[HUDDLE] = theirs.theirs - ours.ours;
 	}
 
 	// The two kings are the same distance apart from either side's point of view, so this one is
-	// a raw value rather than a difference — there is nothing to subtract.
-	features[KING_PROXIMITY] = chebyshev({ from: ourKing, to: theirKing });
+	// a raw value rather than a difference — there is nothing to subtract. Negated like the two
+	// above: `kingProximity` is closeness, which is what the key has always said and what a
+	// positive weight now buys.
+	features[KING_PROXIMITY] = -chebyshev({ from: ourKing, to: theirKing });
 }
