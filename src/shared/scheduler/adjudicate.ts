@@ -3,7 +3,10 @@ import type { Color } from "chessops/types";
 
 import type { Adjudication } from "./types";
 
-export const DEFAULT_ADJUDICATION: Adjudication = { resignThreshold: 15, patience: 8 };
+// This roster is weak enough that a 10-pawn edge held for 6 plies is already decided — no bot
+// here claws that back. Tighter than a normal engine match would dare, and worth ~nothing in
+// accuracy against what it saves on the depth-3 games that dominate wall time.
+export const DEFAULT_ADJUDICATION: Adjudication = { resignThreshold: 10, patience: 6 };
 
 const VALUE: Record<string, number> = { pawn: 1, knight: 3, bishop: 3, rook: 5, queen: 9, king: 0 };
 

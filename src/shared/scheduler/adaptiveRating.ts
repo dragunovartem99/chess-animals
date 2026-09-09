@@ -1,6 +1,13 @@
 import { fitBradleyTerry } from "../rating";
 import type { Matchup, RatingResult } from "../rating";
-import { allPairs, nextPairings, type Pair, pairKey, type Standing } from "./pairing";
+import {
+	decisivenessOf,
+	nextPairings,
+	type Pair,
+	pairKey,
+	seedPairs,
+	type Standing,
+} from "./pairing";
 import { ratingsSettled, standingOrder } from "./settled";
 
 export type PairCounts = { whiteWins: number; blackWins: number; draws: number };
@@ -9,6 +16,12 @@ export type PairCounts = { whiteWins: number; blackWins: number; draws: number }
 export type PairOutcome = { aWhite: PairCounts; bWhite: PairCounts };
 
 type Round = { round: number; standings: Standing[]; games: number };
+
+// A sparse first-round graph is enough to connect the fit. A rung wider than `separationZ`
+// combined SEs is confidently ordered; one tighter than `tieZ` is a coin flip not worth chasing;
+// only the band between the two earns more games. Fixed, not knobs — the arena has none.
+const SEED_DEGREE = 4;
+const BANDS = { separationZ: 1.5, tieZ: 0.5 };
 
 function add(into: Map<string, Matchup>, white: string, black: string, counts: PairCounts): number {
 	const key = `${white}>${black}`;
@@ -43,21 +56,21 @@ function foldRound({
 	return games;
 }
 
-// The arena's outer loop: seed with one round robin so the comparison graph is connected, then
-// each round refit and spend the next batch of games on the pairs that can still move the table.
-// Stops once every interval is under `targetStderr` or the order has held for `stableRounds`.
+// The arena's outer loop: seed with a sparse comparison graph so the fit is connected, then each
+// round refit and spend the next batch of games on the pairs that can still move the table. Stops
+// once every adjacent rung is separated or the order has held for `stableRounds`.
 export async function runAdaptiveRating({
 	ids,
 	playPair,
-	targetStderr = 40,
-	batchSize = ids.length,
+	// Half the field per round, capped: enough of the informative pairs to make progress, few
+	// enough that the stop condition is re-checked before the run overshoots it.
+	batchSize = Math.min(ids.length, Math.max(8, Math.round(ids.length / 2))),
 	maxRounds = 40,
-	stableRounds = 4,
+	stableRounds = 3,
 	onRound,
 }: {
 	ids: readonly string[];
 	playPair: (a: string, b: string) => Promise<PairOutcome>;
-	targetStderr?: number;
 	batchSize?: number;
 	maxRounds?: number;
 	stableRounds?: number;
@@ -68,11 +81,13 @@ export async function runAdaptiveRating({
 	const matchups = new Map<string, Matchup>();
 	const playCounts = new Map<string, number>();
 	const orderHistory: string[][] = [];
-	let pairs: Pair[] = allPairs(ids);
+	let pairs: Pair[] = seedPairs({ ids, degree: SEED_DEGREE });
 	let games = 0;
+	let rounds = 0;
 	let rating!: RatingResult;
 
 	for (let round = 0; round < maxRounds; round += 1) {
+		rounds = round + 1;
 		const outcomes = await Promise.all(pairs.map(({ a, b }) => playPair(a, b)));
 		games += foldRound({ matchups, playCounts, pairs, outcomes });
 
@@ -80,13 +95,15 @@ export async function runAdaptiveRating({
 		orderHistory.push(standingOrder(rating.players));
 		onRound?.({ round, standings: rating.players, games });
 
-		if (
-			ratingsSettled({ standings: rating.players, targetStderr, orderHistory, stableRounds })
-		) {
-			return { rating, rounds: round + 1, games, matchups: [...matchups.values()] };
-		}
-		pairs = nextPairings({ standings: rating.players, playCounts, batchSize });
+		const standings = rating.players;
+		if (ratingsSettled({ standings, ...BANDS, orderHistory, stableRounds })) break;
+		pairs = nextPairings({
+			standings,
+			playCounts,
+			batchSize,
+			decisiveness: decisivenessOf(matchups.values()),
+		});
 	}
 
-	return { rating, rounds: maxRounds, games, matchups: [...matchups.values()] };
+	return { rating, rounds, games, matchups: [...matchups.values()] };
 }

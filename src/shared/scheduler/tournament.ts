@@ -5,7 +5,7 @@ import { crossTable, type CrossTable } from "./crossTable";
 import { pairKey } from "./pairing";
 import { runGames } from "./pool";
 import { standingOrder } from "./settled";
-import { pairSpecs, type TournamentOpening, tally } from "./tournamentSpecs";
+import { pairSpecs, type SpecContext, type TournamentOpening, tally } from "./tournamentSpecs";
 import type { GameReport, GameSpec } from "./types";
 
 export type { TournamentOpening };
@@ -17,6 +17,33 @@ export type TournamentResult = {
 	rounds: number;
 };
 
+// The `playPair` the adaptive loop calls: each visit plays a fresh opening window for the pair
+// (tracked in `replays`), reports its game count to `onProgress` as it lands, and rolls the
+// results up into the white-split counts the fit needs.
+function pairPlayer({
+	context,
+	run,
+	onProgress,
+}: {
+	context: SpecContext;
+	run: (specs: GameSpec[]) => Promise<GameReport[]>;
+	onProgress?: (gamesSoFar: number) => void;
+}): (a: string, b: string) => Promise<PairOutcome> {
+	const replays = new Map<string, number>();
+	let played = 0;
+
+	return async (a, b) => {
+		const key = pairKey(a, b);
+		const replay = replays.get(key) ?? 0;
+		replays.set(key, replay + 1);
+		const entries = pairSpecs(a, b, replay, context);
+		const reports = await run(entries.map((entry) => entry.spec));
+		played += reports.length;
+		onProgress?.(played);
+		return tally(entries, reports);
+	};
+}
+
 // The arena, top to bottom: adaptive pairing over the pool, then the head-to-head grid built from
 // the games it actually played. `run` is injectable — the CLI wraps it with the result cache; a
 // test passes a synthetic one.
@@ -24,39 +51,35 @@ export async function runTournament({
 	bots,
 	openings,
 	seed = 1,
-	plyLimit = 160,
-	targetStderr = 40,
+	// Only games that reach the cap pay for it, and the no-progress rule ends most level games
+	// well before here; 120 trims the drawish tail the rule doesn't catch.
+	plyLimit = 120,
+	openingsPerVisit = 8,
 	run = (specs) => runGames({ specs }),
 	onRound,
+	onProgress,
 }: {
 	bots: readonly TournamentBot[];
 	openings: readonly TournamentOpening[];
 	seed?: number;
 	plyLimit?: number;
-	targetStderr?: number;
+	openingsPerVisit?: number;
 	run?: (specs: GameSpec[]) => Promise<GameReport[]>;
 	onRound?: (progress: { round: number; games: number }) => void;
+	// Fires mid-round as each pair's games land — the seeding round alone is a long slow silence.
+	onProgress?: (gamesSoFar: number) => void;
 }): Promise<TournamentResult> {
-	const context = {
+	const context: SpecContext = {
 		definition: new Map(bots.map((bot) => [bot.id, bot.definition])),
 		openings,
 		seed,
 		plyLimit,
-	};
-	const replays = new Map<string, number>();
-
-	const playPair = async (a: string, b: string): Promise<PairOutcome> => {
-		const key = pairKey(a, b);
-		const replay = replays.get(key) ?? 0;
-		replays.set(key, replay + 1);
-		const entries = pairSpecs(a, b, replay, context);
-		return tally(entries, await run(entries.map((entry) => entry.spec)));
+		openingsPerVisit,
 	};
 
 	const { rating, rounds, games, matchups } = await runAdaptiveRating({
 		ids: bots.map((bot) => bot.id),
-		playPair,
-		targetStderr,
+		playPair: pairPlayer({ context, run, onProgress }),
 		onRound: onRound && ((r) => onRound({ round: r.round, games: r.games })),
 	});
 

@@ -1,6 +1,14 @@
 export { createAdjudicator, DEFAULT_ADJUDICATION, materialEdge } from "./adjudicate";
 export { type PairOutcome, runAdaptiveRating } from "./adaptiveRating";
-export { allPairs, nextPairings, type Pair, pairKey, type Standing } from "./pairing";
+export {
+	allPairs,
+	decisivenessOf,
+	nextPairings,
+	type Pair,
+	pairKey,
+	seedPairs,
+	type Standing,
+} from "./pairing";
 export { ratingsSettled, standingOrder } from "./settled";
 export { createGameCache, gameKey } from "./cache";
 export { mixSeed } from "./seed";

@@ -24,8 +24,16 @@ export function runGame(spec: GameSpec): GameReport {
 		const status = gameStatus({ position, keys, plyLimit: spec.plyLimit, ply });
 		if (status.over) return { result: status.result, reason: status.reason, plies: ply };
 
-		const resigned = adjudicator.verdict(materialEdge(position));
+		const edge = materialEdge(position);
+		const resigned = adjudicator.verdict(edge);
 		if (resigned) return { result: resigned, reason: "resigned", plies: ply };
+
+		// Level material and 24 half-moves with no capture or pawn move: a position both bots have
+		// shuffled this long is a draw at the ply cap too. Guarded on level material so a slow but
+		// real win is never thrown away — only the aimless walk to ply 120 is skipped.
+		if (position.halfmoves >= 24 && Math.abs(edge) < 2) {
+			return { result: null, reason: "no-progress", plies: ply };
+		}
 
 		const bot = position.turn === "white" ? white : black;
 		const move = chooseMove({

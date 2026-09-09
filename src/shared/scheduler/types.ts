@@ -24,7 +24,7 @@ export type GameSpec = {
 	adjudication?: Adjudication;
 };
 
-export type GameReason = EndReason | "resigned";
+export type GameReason = EndReason | "resigned" | "no-progress";
 
 export type GameReport = {
 	result: GameResult;

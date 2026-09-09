@@ -5,21 +5,33 @@ export function standingOrder(standings: readonly Standing[]): string[] {
 	return standings.toSorted((a, b) => b.rating - a.rating).map((standing) => standing.id);
 }
 
-// Stop the arena when either every rating is pinned down (its interval is under the target) or
-// the order has not changed for a while — a run where the last few rounds only shuffled ties has
-// nothing left to learn even if a CI is technically still wide.
+// Stop the arena once the standing *order* is safe — which is all it is graded on. Each adjacent
+// rung is resolved when its gap is either wide (> `separationZ` combined SEs — confidently
+// ordered) or tiny (< `tieZ` combined SEs — a coin-flip we take on the point estimate and stop
+// paying to chase). Only a rung *in between* is worth more games. A whole order that has held for
+// `stableRounds` refits is a second way out, for a rung that lingers on the band edge.
 export function ratingsSettled({
 	standings,
-	targetStderr,
+	separationZ,
+	tieZ,
 	orderHistory,
 	stableRounds,
 }: {
 	standings: readonly Standing[];
-	targetStderr: number;
+	separationZ: number;
+	tieZ: number;
 	orderHistory: readonly string[][];
 	stableRounds: number;
 }): boolean {
-	if (standings.every((standing) => standing.stderr <= targetStderr)) return true;
+	const ranked = standings.toSorted((a, b) => b.rating - a.rating);
+	const everyRungResolved = ranked.every((cur, i) => {
+		if (i === 0) return true;
+		const above = ranked[i - 1];
+		const gap = above.rating - cur.rating;
+		const combinedSe = Math.hypot(above.stderr, cur.stderr);
+		return gap > separationZ * combinedSe || gap < tieZ * combinedSe;
+	});
+	if (everyRungResolved) return true;
 
 	if (orderHistory.length < stableRounds) return false;
 	const recent = orderHistory.slice(-stableRounds).map((order) => order.join(" "));

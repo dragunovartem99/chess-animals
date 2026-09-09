@@ -47,6 +47,15 @@ describe("runGame", () => {
 		expect(report).toEqual({ result: null, reason: "ply-limit", plies: 16 });
 	});
 
+	it("calls a level position both bots shuffle a draw for want of progress", () => {
+		// Kings and one minor each, no pawns: sufficient material, but neither bot can force
+		// anything. The no-progress rule ends it at 24 quiet half-moves rather than at the ply cap.
+		const report = runGame(
+			spec({ openingFen: "2bk4/8/8/8/8/8/8/2BK4 w - - 0 1", plyLimit: 200 })
+		);
+		expect(report).toEqual({ result: null, reason: "no-progress", plies: 24 });
+	});
+
 	it("adjudicates a hopeless position as a resignation", () => {
 		// Black has only a king; White a full army. The material edge never comes back under the
 		// threshold, so White wins by resignation well before the ply cap.

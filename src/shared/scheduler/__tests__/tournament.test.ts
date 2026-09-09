@@ -48,7 +48,6 @@ describe("runTournament", () => {
 			openings: OPENINGS,
 			seed: 1,
 			run: fakeRun,
-			targetStderr: 45,
 		});
 
 		const byRating = result.rating.players
@@ -57,8 +56,10 @@ describe("runTournament", () => {
 		expect(byRating).toEqual(["wolf", "fox", "cat", "donkey"]);
 		expect(result.crossTable.rows.map((row) => row.id)).toEqual(byRating);
 
-		const totals = result.crossTable.rows.map((row) => row.points);
-		expect(totals).toEqual(totals.toSorted((a, b) => b - a));
+		// Adaptive, sparse pairing gives bots unequal game counts, so raw points don't trend
+		// monotonically down the table — but the per-game score does.
+		const perGame = result.crossTable.rows.map((row) => row.points / row.games);
+		expect(perGame[0]).toBeGreaterThan(perGame.at(-1)!);
 	});
 
 	it("is a pure function of the seed", async () => {
