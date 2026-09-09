@@ -13,7 +13,6 @@ export default {
 	swarm: "Army near enemy king",
 	huddle: "Army around our king",
 	kingProximity: "King-to-king distance",
-	reverseStarting: "March to mirrored setup",
 	sameColorSquares: "Pieces on own colour",
 	symmetryMirrorY: "Mirrored ranks",
 	opponentMobility: "Opponent's reach",

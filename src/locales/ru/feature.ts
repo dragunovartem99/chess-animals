@@ -12,7 +12,6 @@ export default {
 	swarm: "Армия у вражеского короля",
 	huddle: "Армия у своего короля",
 	kingProximity: "Расстояние между королями",
-	reverseStarting: "Фигуры на старте соперника",
 	sameColorSquares: "Фигуры на своем цвете",
 	symmetryMirrorY: "Фигуры друг напротив друга",
 	opponentMobility: "Подвижность соперника",

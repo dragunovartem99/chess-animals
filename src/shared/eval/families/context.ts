@@ -32,11 +32,10 @@ export type EvalContext = {
 	// Whether a slot's weight is non-zero for the bot being scored — the same question
 	// `createExtractor` asks of a whole family, asked of one feature.
 	//
-	// Family granularity is not always enough. `reverseStarting` walks both armies against every
-	// role's home squares, while the features beside it in the same family cost a few bitboard
-	// operations. An animal that names one of the proximity features was paying for all of them,
-	// and the expensive one dominated its search. A cheap feature is not worth a branch; one that
-	// walks the board is.
+	// Family granularity is not always enough. `swarm` and `huddle` walk both armies against the
+	// kings, while `kingProximity` beside them in the same family is one Chebyshev call. An animal
+	// that names only `kingProximity` was paying for the army walk too. A cheap feature is not
+	// worth a branch; one that walks the board is.
 	weighs: (slot: number) => boolean;
 };
 

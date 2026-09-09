@@ -76,7 +76,6 @@ export const FEATURES = defineFeatures([
 	{ key: "swarm", family: "behavioural", group: "distance", defaultWeight: 0 },
 	{ key: "huddle", family: "behavioural", group: "distance", defaultWeight: 0 },
 	{ key: "kingProximity", family: "behavioural", group: "distance", defaultWeight: 0 },
-	{ key: "reverseStarting", family: "behavioural", group: "distance", defaultWeight: 0 },
 	{ key: "sameColorSquares", family: "behavioural", group: "shape", defaultWeight: 0 },
 	// The rank-flip mirror alone — the copycat symmetry, and the only one of the three an animal
 	// has ever wanted. A pawn on e4 facing a pawn on e5 costs nothing, so maximising it answers
