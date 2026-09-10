@@ -20,6 +20,13 @@ function kingCentrality({ context, color }: { context: EvalContext; color: Color
 	return total;
 }
 
+// `passedSpan` builds its mask from scratch, which is fine once and not per pawn per node — the
+// table is what kept this feature from being the costliest term in a full extraction.
+const PASSED_SPAN = {
+	white: Array.from({ length: 64 }, (_, square) => passedSpan({ color: "white", square })),
+	black: Array.from({ length: 64 }, (_, square) => passedSpan({ color: "black", square })),
+};
+
 // A side's passed pawns, each by how far it has run — so a passer is worth more the nearer it is to
 // queening, and a pawn an enemy pawn can still stop or take is worth nothing here.
 function passers({ context, color }: { context: EvalContext; color: Color }): number {
@@ -28,7 +35,7 @@ function passers({ context, color }: { context: EvalContext; color: Color }): nu
 	let total = 0;
 
 	for (const square of board.pieces(color, "pawn")) {
-		if (!passedSpan({ color, square }).intersects(enemyPawns)) {
+		if (!PASSED_SPAN[color][square].intersects(enemyPawns)) {
 			total += relativeRank({ color, square });
 		}
 	}
