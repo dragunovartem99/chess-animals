@@ -31,4 +31,5 @@ export default {
 	castled: "King castled",
 	kingActivity: "Active king in the endgame",
 	passedPawnPush: "Passed pawns pushed in the endgame",
+	attackEnemyPawns: "Enemy pawns under attack in the endgame",
 };

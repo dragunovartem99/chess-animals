@@ -171,6 +171,10 @@ export const FEATURES = defineFeatures([
 	// in one narrower shape: silent in the middlegame, where the lab found the old term at or below
 	// bare material, and live only once the pieces are off. Opt-in, and on probation like it.
 	{ key: "passedPawnPush", family: "activity", defaultWeight: 0 },
+
+	// Enemy pawns we attack minus ours they attack, scaled by how little material is left — the
+	// endgame's "go after their pawns". Opt-in, phase-shaped in `families/endgame.ts`.
+	{ key: "attackEnemyPawns", family: "activity", defaultWeight: 0 },
 ]);
 
 export const FEATURE_COUNT = FEATURES.length;

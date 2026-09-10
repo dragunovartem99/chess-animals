@@ -9,8 +9,9 @@ import { centrality } from "./placement";
 
 const KING_ACTIVITY = featureId("kingActivity");
 const PASSED_PAWN_PUSH = featureId("passedPawnPush");
+const ATTACK_ENEMY_PAWNS = featureId("attackEnemyPawns");
 
-export const SLOTS = [KING_ACTIVITY, PASSED_PAWN_PUSH];
+export const SLOTS = [KING_ACTIVITY, PASSED_PAWN_PUSH, ATTACK_ENEMY_PAWNS];
 
 function kingCentrality({ context, color }: { context: EvalContext; color: Color }): number {
 	let total = 0;
@@ -33,6 +34,14 @@ function passers({ context, color }: { context: EvalContext; color: Color }): nu
 	}
 
 	return total;
+}
+
+// Enemy pawns a side attacks with anything, pawns and king included — a pawn ending is won by
+// eating pawns, and the king does most of the eating.
+function pawnsHit({ context, color }: { context: EvalContext; color: Color }): number {
+	const enemyPawns = context.position.board.pieces(opposite(color), "pawn");
+
+	return context.attacksBy[color].intersect(enemyPawns).size();
 }
 
 // Endgame principles. Each value is scaled by `1 - phase` here, inside the extractor, so it is
@@ -61,6 +70,15 @@ export function extractEndgame({
 	if (context.weighs(PASSED_PAWN_PUSH)) {
 		features[PASSED_PAWN_PUSH] =
 			(passers({ context, color: context.us }) - passers({ context, color: context.them })) *
+			late;
+	}
+
+	// Not a walk of its own, but the first read of `attacksBy` is what triggers the context's —
+	// a bot on `kingActivity` alone must not pay for it.
+	if (context.weighs(ATTACK_ENEMY_PAWNS)) {
+		features[ATTACK_ENEMY_PAWNS] =
+			(pawnsHit({ context, color: context.us }) -
+				pawnsHit({ context, color: context.them })) *
 			late;
 	}
 }

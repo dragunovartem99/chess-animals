@@ -56,3 +56,25 @@ describe("passedPawnPush", () => {
 		expect(read({ fen, key: "passedPawnPush" })).toBeCloseTo(5);
 	});
 });
+
+describe("attackEnemyPawns", () => {
+	it("is silent with every piece on the board", () => {
+		expect(read({ fen: INITIAL_FEN, key: "attackEnemyPawns" })).toBe(0);
+	});
+
+	it("counts the enemy pawns a king attacks in a bare ending, from either seat", () => {
+		// White king on c4 hits the d3 pawn; the pawn hits c2 and e2, where there is nothing.
+		expect(read({ fen: "4k3/8/8/8/2K5/3p4/8/8 w - - 0 1", key: "attackEnemyPawns" })).toBe(1);
+		expect(read({ fen: "4k3/8/8/8/2K5/3p4/8/8 b - - 0 1", key: "attackEnemyPawns" })).toBe(-1);
+	});
+
+	it("is level when the pawns attack each other", () => {
+		expect(read({ fen: "4k3/8/8/8/3p4/4P3/8/4K3 w - - 0 1", key: "attackEnemyPawns" })).toBe(0);
+	});
+
+	it("fades in as material comes off", () => {
+		// The rook hits a7 up the open file; one rook on is phase 2/24.
+		const fen = "4k3/pp6/8/8/8/8/6PP/R3K3 w - - 0 1";
+		expect(read({ fen, key: "attackEnemyPawns" })).toBeCloseTo(11 / 12);
+	});
+});

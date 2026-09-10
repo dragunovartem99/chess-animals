@@ -18,7 +18,8 @@ import { FEATURES } from "../features";
 
 // A spread wide enough that every feature has somewhere to fire: a middlegame, a broken pawn
 // structure, an exposed king, a promotion, a mate in one, a position where castling is legal, one
-// where a queen is out before the pieces, and one where only one side has castled.
+// where a queen is out before the pieces, one where only one side has castled, and a rook against
+// pawns.
 const CORPUS = [
 	INITIAL_FEN,
 	"r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
@@ -33,6 +34,7 @@ const CORPUS = [
 	"r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R w KQkq - 0 1",
 	"4k3/8/8/8/8/8/8/2B1KB2 w - - 0 1",
 	"4k3/8/8/8/P7/P7/8/4K3 w - - 0 1",
+	"4k3/pp6/8/8/8/8/6PP/R3K3 w - - 0 1",
 ];
 
 // The two game-enders are preferences, not extracted features: nothing ever writes them into a

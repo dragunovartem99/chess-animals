@@ -30,4 +30,5 @@ export default {
 	castled: "Король за рокировкой",
 	kingActivity: "Активный король в эндшпиле",
 	passedPawnPush: "Проходные пешки в эндшпиле",
+	attackEnemyPawns: "Атака чужих пешек в эндшпиле",
 };
