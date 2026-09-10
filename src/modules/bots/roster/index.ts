@@ -49,14 +49,14 @@ import { WOLF } from "./wolf";
 // own colour, the Dove refuses to fight at all, and the Dodo runs its king at yours.
 //
 // The two-feature animals are depth 3 and pair two weights the lab rated together: the Hare
-// (`offeredMaterial` + `hanging`) is second overall, the Bear (`centralization` + `space`) and
-// the Rhino (`mobility` + `opponentMobility`) next, all three above the plain Owl — two heuristics
+// (`offeredMaterial` + `hanging`) is third overall, the Rhino (`mobility` + `opponentMobility`)
+// and the Bear (`centralization` + `space`) next, all three above the plain Owl — two heuristics
 // and depth 3 beat one more ply with none, but not the Raven's quiescence.
 //
-// The Tiger is the exception: depth 3, quiescence on *and* three aggressive-mobile weights
-// (`swarm` + `mobility` + `space`). Once every bot has quiescence, bare material has no idea what
-// a good square is — the lab-only run had the Tiger's build beating the Raven's 86-14. Placed
-// last provisionally; a `--lab` roster run to fix its exact rank is still pending.
+// The Tiger is the exception: depth 3, quiescence on *and* two aggressive-mobile weights
+// (`swarm` + `mobility`). Once every bot has quiescence, bare material has no idea what a good
+// square is — the full-roster arena puts the Tiger top by a distance (~2630), beating the Raven
+// ~7-in-8.
 export const ROSTER: Animal[] = [
 	DOVE,
 	LEMMING,
@@ -73,8 +73,8 @@ export const ROSTER: Animal[] = [
 	SPIDER,
 	FOX,
 	OWL,
-	RHINO,
 	BEAR,
+	RHINO,
 	HARE,
 	RAVEN,
 	TIGER,
