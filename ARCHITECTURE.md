@@ -123,7 +123,7 @@ means, and the half no depth-2 animal is going to follow up on.
 Mate is the one thing that is **not** a term in the dot product. `terminalScore` replaces the
 evaluation of a finished game with `MATE_SCORE - ply`, scaled by `givesMate` — a preference in
 [-1, 1] where +1 chases mate, -1 flees it and 0 cannot see one, in which case the position is
-evaluated like any other. `givesStalemate` works the same way on the same scale. Adding mate to
+evaluated like any other. Adding mate to
 the evaluation instead, as a weight of 100000, was wrong twice over: every mate scored the same
 whatever its distance, and the leaf of a slow mate then collected plies of positional bonus on
 top of it, so every animal in the roster walked past a mate in one.

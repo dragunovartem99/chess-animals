@@ -73,7 +73,7 @@ export function negamax(frame: Frame): number {
 
 	const moves = legalMoves(position);
 	// No moves means the game is over here — mate or stalemate. Hand the check state to the
-	// evaluation so `terminalScore` runs one of the two probes rather than both.
+	// evaluation so `terminalScore` skips the mate probe on a stalemate.
 	if (moves.length === 0)
 		return leaf.evaluate({ position, played: frame.played, ply, inCheck: position.isCheck() });
 

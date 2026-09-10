@@ -19,7 +19,6 @@ export default {
 	offeredMaterial: "Material left hanging",
 	givesMate: "Move gives mate",
 	givesCheck: "Move gives check",
-	givesStalemate: "Move gives stalemate",
 	captureValue: "Captured piece value",
 	centerControl: "Centre control",
 	space: "Space in enemy half",
@@ -31,5 +30,4 @@ export default {
 	castled: "King castled",
 	kingActivity: "Active king in the endgame",
 	passedPawnPush: "Passed pawns pushed in the endgame",
-	attackEnemyPawns: "Enemy pawns under attack in the endgame",
 };

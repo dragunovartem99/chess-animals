@@ -37,10 +37,10 @@ const CORPUS = [
 	"4k3/pp6/8/8/8/8/6PP/R3K3 w - - 0 1",
 ];
 
-// The two game-enders are preferences, not extracted features: nothing ever writes them into a
-// vector, because `terminalTerm` scores a finished game instead of the extractor describing one.
-// `terminal.test.ts` is what holds them to firing.
-const NOT_EXTRACTED = new Set(["givesMate", "givesStalemate"]);
+// `givesMate` is a preference, not an extracted feature: nothing ever writes it into a vector,
+// because `terminalTerm` scores a finished game instead of the extractor describing one.
+// `terminal.test.ts` is what holds it to firing.
+const NOT_EXTRACTED = new Set(["givesMate"]);
 
 // Every family's declared slots, by the name the extractor knows it under.
 const DECLARED = {

@@ -18,7 +18,6 @@ export default {
 	offeredMaterial: "Наши фигуры под боем",
 	givesMate: "Ход ставит мат",
 	givesCheck: "Ход дает шах",
-	givesStalemate: "Ход ставит пат",
 	captureValue: "Ценность взятой фигуры",
 	centerControl: "Контроль центра",
 	space: "Место на чужой половине",
@@ -30,5 +29,4 @@ export default {
 	castled: "Король за рокировкой",
 	kingActivity: "Активный король в эндшпиле",
 	passedPawnPush: "Проходные пешки в эндшпиле",
-	attackEnemyPawns: "Атака чужих пешек в эндшпиле",
 };

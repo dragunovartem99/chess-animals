@@ -29,7 +29,6 @@ numbers.
 | `pushDepth` (15) _(Goat)_            |   1490 |  +30 |
 | `opponentMobility` (−8)              |   1482 |  +22 |
 | `huddle` (40) _(Sloth)_              |   1482 |  +22 |
-| `givesStalemate` (−1)                |   1479 |  +19 |
 | `captureValue` (25) _(Goat)_         |   1465 |   +5 |
 | `material` (bare)                    |   1460 |    0 |
 | `mirrorRanks` (15) _(Parrot)_        |   1440 |  −20 |
@@ -40,8 +39,7 @@ numbers.
   Below `centerControl` the field is one CI wide, ordered by luck as much as merit.
 - **Below the anchor is load-bearing, not weak.** `mirrorRanks`, `sameColorSquares` and
   `kingProximity` _are_ the Parrot, the Elephant and the Dodo — −181 is `suicide_king` working,
-  not failing. `captureValue`, `pushDepth` and `givesCheck` are the Goat. `givesStalemate` is what
-  lets a bot tell mate from stalemate, which the paper faults `min_oppt_moves` for missing.
+  not failing. `captureValue`, `pushDepth` and `givesCheck` are the Goat.
 - **Caveat:** one weight, hand-picked sign. A feature at the floor may be mistuned rather than
   weak — a real verdict needs the SPSA tuner.
 

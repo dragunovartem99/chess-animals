@@ -59,8 +59,8 @@ export function defineFeatures(definitions: readonly FeatureDefinition[]): Featu
 // the roster used to price a pawn at 20 so that `huddle` could outweigh it, which made every
 // animal's numbers unreadable and comparable to nothing.
 //
-// The two game-enders are the only exception: they are preferences in [-1, 1], because what they
-// price is not worth a number of pawns. See `terminal.ts`.
+// `givesMate` is the only exception: it is a preference in [-1, 1], because what it prices is not
+// worth a number of pawns. See `terminal.ts`.
 export const FEATURES = defineFeatures([
 	// Piece values are features rather than constants, so a bot can be given its own — one that
 	// thinks a rook is worth two knights is one number away.
@@ -113,15 +113,15 @@ export const FEATURES = defineFeatures([
 	// Properties of the move that produced the position. They are what let `cccp` and `pacifist`
 	// be weights rather than special-cased players. See `families/move.ts` for the sign
 	// convention: a positive weight always means "the mover wants this".
-	// The two game-enders are **preferences in [-1, 1]**, not scores: +1 chases it, -1 flees it,
-	// 0 cannot see it. They are the only weights that are not centipawns, because the thing they
-	// price is not worth a number of pawns — see `terminal.ts`.
+	// `givesMate` is a **preference in [-1, 1]**, not a score: +1 chases mate, -1 flees it, 0
+	// cannot see it. It is the only weight that is not centipawns, because the thing it prices is
+	// not worth a number of pawns — see `terminal.ts`.
+	//
+	// A `givesStalemate` preference sat beside it on the same scale, for the paper's complaint that
+	// `min_oppt_moves` cannot tell mate from stalemate. No animal ever wanted to, and the lab put it
+	// at +19 — inside the noise — so it went.
 	{ key: "givesMate", family: "move", defaultWeight: 1 },
 	{ key: "givesCheck", family: "move", defaultWeight: 0 },
-	// The paper calls out `min_oppt_moves` for not telling mate from stalemate "despite these
-	// having very different results". A separate preference is what lets a bot tell them apart —
-	// and lets one that would rather draw say so.
-	{ key: "givesStalemate", family: "move", defaultWeight: 0 },
 	{ key: "captureValue", family: "move", defaultWeight: 0 },
 
 	{ key: "centerControl", family: "activity", defaultWeight: 8 },
@@ -172,9 +172,9 @@ export const FEATURES = defineFeatures([
 	// bare material, and live only once the pieces are off. Opt-in, and on probation like it.
 	{ key: "passedPawnPush", family: "activity", defaultWeight: 0 },
 
-	// Enemy pawns we attack minus ours they attack, scaled by how little material is left — the
-	// endgame's "go after their pawns". Opt-in, phase-shaped in `families/endgame.ts`.
-	{ key: "attackEnemyPawns", family: "activity", defaultWeight: 0 },
+	// An `attackEnemyPawns` term — enemy pawns we attack minus ours they attack, faded in the same
+	// way — landed with these two and was dropped unused: the Camel, the one endgame animal, never
+	// took it, and no animal had an idea it was the whole of.
 ]);
 
 export const FEATURE_COUNT = FEATURES.length;

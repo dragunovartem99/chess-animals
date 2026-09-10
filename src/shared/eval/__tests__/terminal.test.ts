@@ -59,12 +59,12 @@ describe("terminalScore", () => {
 		expect(near).toBeLessThan(far);
 	});
 
-	it("prices a stalemate on the same scale, for a bot that has an opinion about one", () => {
-		const position = positionFromFen(STALEMATED);
-
-		expect(terminalScore({ position, weights: weights({ givesMate: 1 }) })).toBeUndefined();
-		expect(terminalScore({ position, weights: weights({ givesStalemate: 1 }) })).toBe(
-			-MATE_SCORE
-		);
+	it("is nothing in a stalemate, which evaluates like any other position", () => {
+		expect(
+			terminalScore({
+				position: positionFromFen(STALEMATED),
+				weights: weights({ givesMate: 1 }),
+			})
+		).toBeUndefined();
 	});
 });

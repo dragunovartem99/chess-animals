@@ -4,7 +4,6 @@ import { featureId } from "./features";
 import type { WeightVector } from "./vector";
 
 const GIVES_MATE = featureId("givesMate");
-const GIVES_STALEMATE = featureId("givesStalemate");
 
 // The unit a game-ending position is scored in, and the reason `givesMate` is a preference in
 // [-1, 1] rather than a number somebody has to guess. It only has to sit clear of the range an
@@ -28,9 +27,7 @@ export type TerminalTerm = { id: number; value: number };
 // like any other. That last case is the paper's `random_move`, and it is why this returns
 // `undefined` instead of zero: an indifferent bot must still evaluate the position normally.
 //
-// Stalemate is scored on the same scale on purpose. `min_oppt_moves` squeezes towards both and
-// the paper calls out that it cannot tell them apart; here +1 wants the stalemate as much as the
-// mate, and -1 dreads it as much as being mated.
+// Stalemate is not scored here, so it evaluates like any other position.
 export function terminalTerm({
 	position,
 	weights,
@@ -40,20 +37,15 @@ export function terminalTerm({
 	position: Chess;
 	weights: WeightVector;
 	ply?: number;
-	// What the caller already knows about `position.isCheck()`, if anything. A mate needs a check
-	// and a stalemate needs its absence, so a known answer skips a `checkmate`/`stalemate` probe
-	// (each of which recomputes the checkers and scans for a legal move) that can only come back
-	// false. `undefined` means "not known" — both probes run, as before.
+	// What the caller already knows about `position.isCheck()`, if anything. A mate needs a check,
+	// so a known `false` skips a `checkmate` probe (which recomputes the checkers and scans for a
+	// legal move) that can only come back false. `undefined` means "not known" — the probe runs.
 	inCheck?: boolean;
 }): TerminalTerm | undefined {
-	// The weight is checked before the position: `isStalemate` walks for a legal move, and a bot
-	// that does not care about stalemate should not pay for that on every node of every search.
+	// The weight is checked before the position: `isCheckmate` walks for a legal move, and a bot
+	// that cannot see mate should not pay for that on every node of every search.
 	if (weights[GIVES_MATE] !== 0 && inCheck !== false && position.isCheckmate()) {
 		return { id: GIVES_MATE, value: -(MATE_SCORE - ply) };
-	}
-
-	if (weights[GIVES_STALEMATE] !== 0 && inCheck !== true && position.isStalemate()) {
-		return { id: GIVES_STALEMATE, value: -(MATE_SCORE - ply) };
 	}
 
 	return undefined;

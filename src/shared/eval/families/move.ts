@@ -44,9 +44,9 @@ export function extractMoveFeatures({
 }): void {
 	if (!played) return;
 
-	// Only `isCheck`, which is one attack test. Mate and stalemate are scored by `terminalTerm`
-	// before extraction is ever reached, so asking about them here would be both redundant and,
-	// in `isStalemate`'s case, a walk for a legal move on every quiet node of every search.
+	// Only `isCheck`, which is one attack test. Mate is scored by `terminalTerm` before extraction
+	// is ever reached, and asking about a game's end here would be a walk for a legal move on
+	// every quiet node of every search.
 	if (position.isCheck()) features[GIVES_CHECK] = -1;
 
 	const captured = capturedRole(played);

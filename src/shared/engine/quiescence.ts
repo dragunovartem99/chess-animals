@@ -96,8 +96,8 @@ function quiesceNode({ deps, budget, position, played, ply, alpha, beta }: Desce
 	const { descend, evaluate, exhausted, worth } = deps;
 
 	// One `isCheck` for the node: `checked` is the position's own state, `inCheck` is that gated by
-	// the evasion budget. Handing `checked` to `evaluate` lets `terminalScore` skip a mate/stalemate
-	// probe that the check state already answers.
+	// the evasion budget. Handing `checked` to `evaluate` lets `terminalScore` skip a mate probe
+	// that the check state already answers.
 	const checked = position.isCheck();
 	const inCheck = budget > 0 && checked;
 	const standPat = evaluate({ position, played, ply, inCheck: checked });

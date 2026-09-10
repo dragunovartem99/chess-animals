@@ -47,14 +47,14 @@ gives them the wrong scale — and because the pairs animals are built from shou
 side: `mobility` with `opponentMobility` (the Spider and the Snake), `hanging` with `offeredMaterial` (the Hare,
 and the lab's two strongest features).
 
-| Family     | Count | Features, with the registry's default weight in centipawns                                                                                                              |
-| ---------- | ----: | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `material` |     5 | one **tunable** weight per piece — `materialPawn` 100, `materialKnight` 320, `materialBishop` 330, `materialRook` 500, `materialQueen` 900                              |
-| `activity` |     6 | reach, ground and good squares — `mobility` 4, `opponentMobility` 0, `centralization` 0, `space` 2, `centerControl` 8, `pushDepth` 0                                    |
-| `safety`   |     3 | what is about to be lost, ours minus theirs — `hanging` −15, `offeredMaterial` 0, `kingDanger` −12                                                                      |
-| `distance` |     3 | where the army stands relative to a king, negated so more is nearer — `swarm` 0, `huddle` 0, `kingProximity` 0                                                          |
-| `shape`    |     2 | whole-board properties, which read the same from either seat — `sameColorSquares` 0, `mirrorRanks` 0                                                                    |
-| `move`     |     4 | properties of the move played — `givesMate` 1, `givesCheck` 0, `givesStalemate` 0, `captureValue` 0; the two `gives*` enders are preferences in [−1, 1], not centipawns |
+| Family     | Count | Features, with the registry's default weight in centipawns                                                                                 |
+| ---------- | ----: | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `material` |     5 | one **tunable** weight per piece — `materialPawn` 100, `materialKnight` 320, `materialBishop` 330, `materialRook` 500, `materialQueen` 900 |
+| `activity` |     6 | reach, ground and good squares — `mobility` 4, `opponentMobility` 0, `centralization` 0, `space` 2, `centerControl` 8, `pushDepth` 0       |
+| `safety`   |     3 | what is about to be lost, ours minus theirs — `hanging` −15, `offeredMaterial` 0, `kingDanger` −12                                         |
+| `distance` |     3 | where the army stands relative to a king, negated so more is nearer — `swarm` 0, `huddle` 0, `kingProximity` 0                             |
+| `shape`    |     2 | whole-board properties, which read the same from either seat — `sameColorSquares` 0, `mirrorRanks` 0                                       |
+| `move`     |     3 | properties of the move played — `givesMate` 1, `givesCheck` 0, `captureValue` 0; `givesMate` is a preference in [−1, 1], not centipawns    |
 
 `centralization` is a parametrised stand-in for a piece-square table: one number — how far the
 pieces stand from the rim — instead of sixty-four per role. The registry once carried a
@@ -88,8 +88,8 @@ price a pawn at 20 so `huddle` could outweigh it, and the result was five animal
 could not be compared with each other or with anything a player knows. Multiplying a whole vector
 by a constant changes no move an argmax bot plays, so this cost nothing to fix.
 
-The two game-enders are the only exception, and are preferences in [-1, 1]: what they price is
-not worth a number of pawns.
+`givesMate` is the only exception, and is a preference in [-1, 1]: what it prices is not worth a
+number of pawns.
 
 ## One vector, not three
 
