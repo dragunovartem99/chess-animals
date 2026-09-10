@@ -7,7 +7,7 @@ import type { Animal } from "./types";
 //
 // On `material` at 10 a square of activity is worth a tenth of a pawn: the arena rates the whole
 // 6–15 range flat and above the Hedgehog, so 10 is the round middle of a plateau, not a peak.
-// Depth 2, temp 0. No other animal reads mobility.
+// Depth 2. The Tiger carries the same weight on a deeper search.
 export const SPIDER: Animal = {
 	emoji: "🕷️",
 	tint: "#5f5a54",

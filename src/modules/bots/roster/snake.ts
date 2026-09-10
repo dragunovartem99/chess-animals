@@ -7,8 +7,8 @@ import type { Animal } from "./types";
 // It replaced the Rhino, which paired this with `mobility` and was already mostly a squeeze: the
 // two terms net out at ten points per square of its own against eighteen per square of yours.
 // Dropping the first leaves the one instinct, frees the Spider's weight, and keeps the lab's
-// rating — at -10 it sits a step above the Owl and below the Bear. Heavier weights sank it onto
-// the Owl.
+// rating — at -10 it sits a step above the Owl, level with the Bear. Heavier weights sank it
+// onto the Owl.
 export const SNAKE: Animal = {
 	emoji: "🐍",
 	tint: "#5b7a3a",

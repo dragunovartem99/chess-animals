@@ -50,10 +50,9 @@ import { WOLF } from "./wolf";
 // Lemming reads the same `offeredMaterial` with the sign flipped and hands everything over, the
 // Spider gives every piece the most squares it can reach, the Hippo holds the centre, the Eagle
 // watches it from a distance and lands just below the Hippo, the Hedgehog grabs everything and
-// hangs nothing, the Wolf charges the whole army at the enemy king (at -400 it overcommits — the
-// earlier Wolf tuned nearer -200), the Sloth pulls it all home, the Goat chases checks and
-// captures, the Parrot mirrors the board, the Elephant keeps to its own colour, the Dove refuses
-// to fight at all, and the Dodo runs its king at yours.
+// hangs nothing, the Wolf charges the whole army at the enemy king, the Sloth pulls it all home,
+// the Elephant keeps to its own colour, the Parrot mirrors the board, the Goat chases checks and
+// captures, the Dove refuses to fight at all, and the Dodo runs its king at yours.
 //
 // The depth-3 animals without quiescence sit above the plain Owl: the Snake on one weight
 // (`opponentMobility`), the Bear (`centralization` + `space`) and the Hare (`offeredMaterial` +
@@ -77,18 +76,18 @@ export const ROSTER: Animal[] = [
 	DODO,
 	GOAT,
 	PARROT,
-	SLOTH,
 	ELEPHANT,
+	SLOTH,
 	WOLF,
 	MONKEY,
 	EAGLE,
 	HIPPO,
-	HEDGEHOG,
 	SPIDER,
+	HEDGEHOG,
 	FOX,
 	OWL,
-	SNAKE,
 	BEAR,
+	SNAKE,
 	HARE,
 	CAMEL,
 	RAVEN,
