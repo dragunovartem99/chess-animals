@@ -55,9 +55,9 @@ import { WOLF } from "./wolf";
 // captures, the Dove refuses to fight at all, and the Dodo runs its king at yours.
 //
 // The depth-3 animals without quiescence sit above the plain Owl: the Snake on one weight
-// (`opponentMobility`), the Bear (`centralization` + `space`) and the Hare (`offeredMaterial` +
-// `hanging`) on two the lab rated together — an idea and depth 3 beat one more ply with none, but
-// not the Raven's quiescence.
+// (`opponentMobility`), the Bear (`centralization` + `space`, with a little `castled`) and the
+// Hare (`offeredMaterial` + `hanging`) on pairs the lab rated together — an idea and depth 3 beat
+// one more ply with none, but not the Raven's quiescence.
 //
 // The Camel is the one animal whose idea waits for the ending: its king and passed pawns count
 // for nothing until the pieces come off. On depth 2 with quiescence — a ply short of the Raven —
@@ -87,8 +87,8 @@ export const ROSTER: Animal[] = [
 	HEDGEHOG,
 	FOX,
 	OWL,
-	BEAR,
 	SNAKE,
+	BEAR,
 	HARE,
 	CAMEL,
 	RAVEN,
