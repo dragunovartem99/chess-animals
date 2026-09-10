@@ -48,11 +48,12 @@ import { WOLF } from "./wolf";
 //
 // The one-idea animals are a tour of the registry: the Fox never leaves a piece catchable, the
 // Lemming reads the same `offeredMaterial` with the sign flipped and hands everything over, the
-// Spider gives every piece the most squares it can reach, the Hippo holds the centre, the Eagle
-// watches it from a distance and lands just below the Hippo, the Hedgehog grabs everything and
-// hangs nothing, the Wolf charges the whole army at the enemy king, the Sloth pulls it all home,
-// the Elephant keeps to its own colour, the Parrot mirrors the board, the Goat chases checks and
-// captures, the Dove refuses to fight at all, and the Dodo runs its king at yours.
+// Hippo holds the centre, the Eagle watches it from a distance and lands just below the Hippo,
+// the Hedgehog grabs everything and hangs nothing, the Wolf charges the whole army at the enemy
+// king, the Sloth pulls it all home, the Elephant keeps to its own colour, the Parrot mirrors the
+// board, the Spider gives every piece the most squares it can reach — at depth 1, a ply short of
+// the rest, which is what drops it below the Parrot — the Goat chases checks and captures, the
+// Dove refuses to fight at all, and the Dodo runs its king at yours.
 //
 // The depth-3 animals without quiescence sit above the plain Owl: the Snake on one weight
 // (`opponentMobility`), the Bear (`centralization` + `space`, with a little `castled`) and the
@@ -76,6 +77,7 @@ export const ROSTER: Animal[] = [
 	DONKEY,
 	DODO,
 	GOAT,
+	SPIDER,
 	PARROT,
 	ELEPHANT,
 	SLOTH,
@@ -83,7 +85,6 @@ export const ROSTER: Animal[] = [
 	MONKEY,
 	EAGLE,
 	HIPPO,
-	SPIDER,
 	HEDGEHOG,
 	FOX,
 	OWL,
