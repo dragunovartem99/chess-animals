@@ -165,6 +165,12 @@ export const FEATURES = defineFeatures([
 	// inside its extractor (`families/endgame.ts`), which is the one kind of phase-awareness the
 	// single weight vector allows.
 	{ key: "kingActivity", family: "activity", defaultWeight: 0 },
+
+	// Our passed pawns weighted by how far they have run, minus theirs, scaled by how little
+	// material is left — "push the passers". It is the removed pawn family's `passed` coming back
+	// in one narrower shape: silent in the middlegame, where the lab found the old term at or below
+	// bare material, and live only once the pieces are off. Opt-in, and on probation like it.
+	{ key: "passedPawnPush", family: "activity", defaultWeight: 0 },
 ]);
 
 export const FEATURE_COUNT = FEATURES.length;
