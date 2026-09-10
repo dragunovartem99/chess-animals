@@ -18,48 +18,65 @@ export type SpsaResult = {
 	scores: number[];
 };
 
+type SpsaRun = {
+	iterations: number;
+	config: SpsaConfig;
+	rng: Rng;
+	evaluate: (candidate: number[]) => Promise<number>;
+	clamp: (candidate: number[]) => number[];
+	onStep?: (step: SpsaStep) => void;
+	best: { theta: number[]; score: number };
+	scores: number[];
+};
+
+// Recursive rather than a `for` with an `await` inside: each step moves from the point the
+// previous one reached, so the iterations are sequential by nature — the recursion says so,
+// where a loop would read as a batch that was accidentally serialised.
+async function iterate({
+	run,
+	current,
+	iteration,
+}: {
+	run: SpsaRun;
+	current: number[];
+	iteration: number;
+}): Promise<number[]> {
+	if (iteration >= run.iterations) return current;
+
+	const { clamp } = run;
+	const { ak, ck } = spsaGains(run.config, iteration);
+	const delta = rademacher({ size: current.length, rng: run.rng });
+	const plus = clamp(current.map((value, i) => value + ck * delta[i]));
+	const minus = clamp(current.map((value, i) => value - ck * delta[i]));
+
+	const [scorePlus, scoreMinus] = await Promise.all([run.evaluate(plus), run.evaluate(minus)]);
+	const slope = (scorePlus - scoreMinus) / (2 * ck);
+
+	if (scorePlus > run.best.score) run.best = { theta: plus, score: scorePlus };
+	if (scoreMinus > run.best.score) run.best = { theta: minus, score: scoreMinus };
+
+	const score = (scorePlus + scoreMinus) / 2;
+	run.scores.push(score);
+	run.onStep?.({ iteration, score, ak, ck });
+
+	const next = clamp(current.map((value, i) => value + ak * slope * delta[i]));
+	return iterate({ run, current: next, iteration: iteration + 1 });
+}
+
 // Simultaneous Perturbation Stochastic Approximation, ascending: `evaluate` returns a score to be
 // maximised (a gauntlet result), and every iteration costs exactly two evaluations regardless of
 // the parameter count. `evaluate` is expected to be paired — the same opponents, openings and
 // seeds for both probes — so `score₊ − score₋` is a low-variance difference.
 export async function runSpsa({
 	theta,
-	iterations,
-	config,
-	rng,
-	evaluate,
 	clamp = (value) => value,
-	onStep,
-}: {
+	...rest
+}: Omit<SpsaRun, "clamp" | "best" | "scores"> & {
 	theta: readonly number[];
-	iterations: number;
-	config: SpsaConfig;
-	rng: Rng;
-	evaluate: (candidate: number[]) => Promise<number>;
 	clamp?: (candidate: number[]) => number[];
-	onStep?: (step: SpsaStep) => void;
 }): Promise<SpsaResult> {
-	let current = clamp([...theta]);
-	let best = { theta: current, score: -Infinity };
-	const scores: number[] = [];
-
-	for (let iteration = 0; iteration < iterations; iteration += 1) {
-		const { ak, ck } = spsaGains(config, iteration);
-		const delta = rademacher({ size: current.length, rng });
-		const plus = clamp(current.map((value, i) => value + ck * delta[i]));
-		const minus = clamp(current.map((value, i) => value - ck * delta[i]));
-
-		const [scorePlus, scoreMinus] = await Promise.all([evaluate(plus), evaluate(minus)]);
-		const slope = (scorePlus - scoreMinus) / (2 * ck);
-		current = clamp(current.map((value, i) => value + ak * slope * delta[i]));
-
-		if (scorePlus > best.score) best = { theta: plus, score: scorePlus };
-		if (scoreMinus > best.score) best = { theta: minus, score: scoreMinus };
-
-		const score = (scorePlus + scoreMinus) / 2;
-		scores.push(score);
-		onStep?.({ iteration, score, ak, ck });
-	}
-
-	return { theta: current, best, scores };
+	const start = clamp([...theta]);
+	const run: SpsaRun = { ...rest, clamp, best: { theta: start, score: -Infinity }, scores: [] };
+	const final = await iterate({ run, current: start, iteration: 0 });
+	return { theta: final, best: run.best, scores: run.scores };
 }
