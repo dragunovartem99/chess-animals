@@ -100,6 +100,11 @@ and the sandbox applied one vector to all three. It was three times the configur
 blend cache in the evaluator and a phase axis in the tuner, all to express something nothing
 expressed. It is gone. A bot is what its file says, once.
 
+Per-feature phase shaping inside an extractor is fine; what is gone is phase-paired weight vectors.
+The eval context carries one `phase` scalar, and an endgame feature scales its own _value_ by it —
+the same kind of shaping as `swarm` being negated on the way out — so it is still one weight per
+feature, one vector, one dot product.
+
 ## Why sampling matters
 
 `temperature: 0` is a strict argmax. Above zero, the move is a softmax sample over the scores.

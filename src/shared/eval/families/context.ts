@@ -29,6 +29,9 @@ export type EvalContext = {
 	// Squares each side attacks with anything at all, pawns and king included. Defence is
 	// membership in your own set, so this is what tells a hanging piece from a defended one.
 	attacksBy: ByColor<SquareSet>;
+	// How much non-pawn material is left, 1 at the start down to 0 with bare kings and pawns. It is
+	// a scalar a feature may shape its own value by, never a second weight vector — see METHOD.md.
+	phase: number;
 	// Whether a slot's weight is non-zero for the bot being scored — the same question
 	// `createExtractor` asks of a whole family, asked of one feature.
 	//
@@ -38,6 +41,17 @@ export type EvalContext = {
 	// worth a branch; one that walks the board is.
 	weighs: (slot: number) => boolean;
 };
+
+// Minor pieces count 1, a rook 2, a queen 4 — the usual phase units, 24 in the opening position.
+// Capped so an extra promoted queen does not read as "earlier than the start".
+const FULL_PHASE = 24;
+
+function phaseOf(position: Chess): number {
+	const { knight, bishop, rook, queen } = position.board;
+	const units = knight.size() + bishop.size() + rook.size() * 2 + queen.size() * 4;
+
+	return Math.min(units, FULL_PHASE) / FULL_PHASE;
+}
 
 function walkBoard(position: Chess): AttackMaps {
 	const reach: PieceReach[] = [];
@@ -87,6 +101,7 @@ class LazyContext implements EvalContext {
 	readonly them: Color;
 	readonly weighs: (slot: number) => boolean;
 	#maps: AttackMaps | undefined;
+	#phase: number | undefined;
 
 	constructor({ position, weighs }: { position: Chess; weighs: (slot: number) => boolean }) {
 		this.position = position;
@@ -109,6 +124,10 @@ class LazyContext implements EvalContext {
 
 	get attacksBy(): ByColor<SquareSet> {
 		return this.#walked.attacksBy;
+	}
+
+	get phase(): number {
+		return (this.#phase ??= phaseOf(this.position));
 	}
 }
 
