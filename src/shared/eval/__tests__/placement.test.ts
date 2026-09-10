@@ -83,3 +83,24 @@ describe("earlyQueen", () => {
 		expect(read({ fen, key: "earlyQueen" })).toBe(0);
 	});
 });
+
+describe("castled", () => {
+	it("is 0 in the opening, where both sides can still castle", () => {
+		expect(read({ fen: INITIAL_FEN, key: "castled" })).toBe(0);
+	});
+
+	it("scores a castled king over one that still has its rights, from either seat", () => {
+		// Black castled short; White on e1 with both rights.
+		const white = "r4rk1/pppq1ppp/2n2n2/3pp3/3PP3/2N2N2/PPPQ1PPP/R3K2R w KQ - 0 1";
+		const black = "r4rk1/pppq1ppp/2n2n2/3pp3/3PP3/2N2N2/PPPQ1PPP/R3K2R b KQ - 0 1";
+
+		expect(read({ fen: white, key: "castled" })).toBe(-1);
+		expect(read({ fen: black, key: "castled" })).toBe(1);
+	});
+
+	it("marks a central king with its rights spent down a full step below one that has them", () => {
+		// White tucked on g1; Black stuck on e8 with no rights left.
+		expect(read({ fen: "4k3/8/8/8/8/8/8/6K1 w - - 0 1", key: "castled" })).toBe(2);
+		expect(read({ fen: "4k3/8/8/8/8/8/8/4K2R w K - 0 1", key: "castled" })).toBe(1);
+	});
+});

@@ -1,20 +1,27 @@
+import type { Board } from "chessops/board";
+import type { Castles } from "chessops/chess";
+import { SquareSet } from "chessops/squareSet";
 import type { Color } from "chessops/types";
 import { squareFile, squareRank } from "chessops/util";
 
 import { featureId } from "../features";
 import type { FeatureVector } from "../vector";
 import type { EvalContext } from "./context";
-import { relativeRank } from "./masks";
+import { FILES, relativeRank } from "./masks";
 
 const CENTRALIZATION = featureId("centralization");
 const DEVELOPMENT = featureId("development");
 const EARLY_QUEEN = featureId("earlyQueen");
+const CASTLED = featureId("castled");
 
-export const SLOTS = [CENTRALIZATION, DEVELOPMENT, EARLY_QUEEN];
+export const SLOTS = [CENTRALIZATION, DEVELOPMENT, EARLY_QUEEN, CASTLED];
 
 // Files a piece starts its game on, from either side: knights b/g, bishops c/f, the queen d.
 const HOME_FILE = { knight: [1, 6], bishop: [2, 5] } as const;
 const QUEEN_FILE = 3;
+
+// The a–c and g–h files: where a castled king ends up, or the corner beside it.
+const WINGS = [0, 1, 2, 6, 7].reduce((mask, file) => mask.union(FILES[file]), SquareSet.empty());
 
 // On its own back rank and on one of its starting files — the square a piece has not moved from.
 function atHome({
@@ -27,6 +34,25 @@ function atHome({
 	files: readonly number[];
 }): boolean {
 	return relativeRank({ color, square }) === 0 && files.includes(squareFile(square));
+}
+
+// Three states from the position alone, since the move history is not on hand: +1 with the king
+// tucked on a wing of its own back rank, 0 while a right still lets it get there, -1 once the
+// rights are spent and it is stuck in the middle. A king that walked to g1 by hand counts as
+// castled — the shelter is the point, not the move that bought it.
+function castledState({
+	board,
+	castles,
+	color,
+}: {
+	board: Board;
+	castles: Castles;
+	color: Color;
+}): number {
+	const backrank = SquareSet.backrank(color);
+	if (board.pieces(color, "king").intersects(WINGS.intersect(backrank))) return 1;
+
+	return castles.castlingRights.intersects(backrank) ? 0 : -1;
 }
 
 // 0 on the rim, 6 on one of the four central squares. Cheaper than a table and, unlike one,
@@ -50,13 +76,15 @@ export function extractPlacement({
 	context: EvalContext;
 	features: FeatureVector;
 }): void {
-	const { board } = context.position;
+	const { board, castles } = context.position;
 	let central = 0;
+	let castled = 0;
 	let developed = 0;
 	let earlyQueen = 0;
 
 	for (const color of [context.us, context.them]) {
 		const sign = color === context.us ? 1 : -1;
+		castled += sign * castledState({ board, castles, color });
 
 		for (const role of ["knight", "bishop", "rook", "queen"] as const) {
 			for (const square of board.pieces(color, role)) central += sign * centrality(square);
@@ -87,4 +115,5 @@ export function extractPlacement({
 	// Negative default: a minor left behind the queen is a fault, and the weight's sign says so —
 	// the family band stays "reach, ground and good squares", cf. `hanging` living in `safety`.
 	features[EARLY_QUEEN] = earlyQueen;
+	features[CASTLED] = castled;
 }

@@ -16,12 +16,13 @@ import { SLOTS as SYMMETRY } from "../families/symmetry";
 import { FEATURES } from "../features";
 
 // A spread wide enough that every feature has somewhere to fire: a middlegame, a broken pawn
-// structure, an exposed king, a promotion, a mate in one, a position where castling is legal, and
-// one where a queen is out before the pieces.
+// structure, an exposed king, a promotion, a mate in one, a position where castling is legal, one
+// where a queen is out before the pieces, and one where only one side has castled.
 const CORPUS = [
 	INITIAL_FEN,
 	"r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
 	"rnb1kbnr/pppp1ppp/8/4p3/6Pq/5P2/PPPPP2P/RNBQKBNR w KQkq - 1 3",
+	"r4rk1/pppq1ppp/2n2n2/3pp3/3PP3/2N2N2/PPPQ1PPP/R3K2R w KQ - 0 1",
 	"4k3/8/8/4p3/1P1p4/8/2P5/4K3 w - - 0 1",
 	"6k1/5ppp/8/8/8/8/5PPP/R5K1 w - - 0 1",
 	"7k/3P4/8/8/8/8/8/4K3 w - - 0 1",

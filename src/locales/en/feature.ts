@@ -28,4 +28,5 @@ export default {
 	centralization: "Pieces off the rim",
 	development: "Minors off the back rank",
 	earlyQueen: "Queen out before the minors",
+	castled: "King castled",
 };
