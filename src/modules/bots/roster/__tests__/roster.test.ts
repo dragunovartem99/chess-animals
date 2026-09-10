@@ -64,8 +64,8 @@ describe("Donkey", () => {
 // The Dove and the Lemming are the paper's `pacifist` and `generous`: they decline every capture
 // or force every capture, and the arena rates both well below the Donkey (Dove 89, Lemming 466,
 // Donkey 620). They are the exception to "every animal beats uniform random" — they are the two
-// that don't, and the test holds them to that. The Mouse joins them on purpose: it is the
-// Donkey minus its minor pieces, so it losing to random play is the placement, not a bug. The Dodo
+// that don't, and the test holds them to that. The Mouse joins them on purpose: it is tuned to sit
+// between the two, so it losing to random play is the placement, not a bug. The Dodo
 // (`suicide_king`) is not an exception: a king in the open is real pressure and it beats the
 // Donkey like the rest.
 const BELOW_DONKEY = ["dove", "mouse", "lemming"];

@@ -1,13 +1,15 @@
 import type { Animal } from "./types";
 
-// Keeps its knights and bishops at home and otherwise moves at random — the Donkey that never
-// gets its pieces out. `development` is our developed minors minus theirs, so a negative weight
-// is the one animal that reads it backwards: every move off the back rank is a move it refuses.
+// Runs into its hole and stays there: `castled` pays it to tuck its king away, `offeredMaterial`
+// to keep every piece out of reach, and a negative `captureValue` makes it flinch from a fight.
+// The one animal that reads `castled`.
 //
-// It used to flinch from captures as well, with a temperature to let it sometimes take one. With
-// the temperature gone that build is a strict refusal and rates level with the Dove; a hiding
-// variant (`offeredMaterial` on top) rated level with the Lemming. `development` alone lands it
-// between the Lemming and the Donkey, which is the gap the roster had room for.
+// The flinch is the calibration. At depth 1 with no base, a refusal heavier than the hiding
+// terms is the Dove's never-take-anything and rates on it; lighter, and the hiding outbids it
+// often enough that it takes what is offered and climbs onto the Lemming. At -40 it is refused
+// most of the time and taken when leaving it would put a piece in reach — which the lab put a
+// little past the middle of the Dove-to-Lemming gap. (It once hit that gap with a temperature
+// instead; the temperature is gone.)
 //
 // No base, and no `givesMate`: it cannot see a mate either way.
 export const MOUSE: Animal = {
@@ -16,6 +18,6 @@ export const MOUSE: Animal = {
 	definition: {
 		id: "mouse",
 		search: { depth: 1 },
-		weights: { development: -60 },
+		weights: { castled: 100, captureValue: -40, offeredMaterial: -20 },
 	},
 };
