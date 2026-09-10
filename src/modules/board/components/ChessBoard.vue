@@ -45,7 +45,14 @@ const config = useBoardConfig({
 	onMove: play,
 });
 
-useChessground({ element, config });
+const api = useChessground({ element, config });
+
+// Chessground has already moved the pawn by the time the picker opens, and the FEN it was given
+// has not changed, so no watcher will redraw it: the position has to be put back by hand.
+function cancel() {
+	pending.value = undefined;
+	api.value?.set(config.value);
+}
 
 // Reuse the parse `useBoardConfig` already did rather than parsing the FEN a second time here —
 // only the promotion picker reads it, for the colour of the pieces it offers.
@@ -62,7 +69,7 @@ const turn = computed(() => config.value.turnColor ?? "white");
 			v-if="pending"
 			:color="turn"
 			@pick="promote"
-			@cancel="pending = undefined"
+			@cancel="cancel"
 		/>
 	</div>
 </template>
