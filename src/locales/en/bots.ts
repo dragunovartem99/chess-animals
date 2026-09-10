@@ -49,6 +49,11 @@ export default {
 		name: "Owl",
 		description: "Looks a long way ahead — then just plays the most sensible move.",
 	},
+	camel: {
+		name: "Camel",
+		description:
+			"Saves its strength for the long walk. When the board empties, its king marches out.",
+	},
 	raven: {
 		name: "Raven",
 		description: "Waits for the fight to finish, then eats only what is really free.",

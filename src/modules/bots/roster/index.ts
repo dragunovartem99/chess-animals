@@ -1,4 +1,5 @@
 import { BEAR } from "./bear";
+import { CAMEL } from "./camel";
 import { DODO } from "./dodo";
 import { DONKEY } from "./donkey";
 import { DOVE } from "./dove";
@@ -58,6 +59,10 @@ import { WOLF } from "./wolf";
 // and the Bear (`centralization` + `space`) next, all three above the plain Owl — two heuristics
 // and depth 3 beat one more ply with none, but not the Raven's quiescence.
 //
+// The Camel is the one animal whose idea waits for the ending: its king and passed pawns count
+// for nothing until the pieces come off. On depth 2 with quiescence — a ply short of the Raven —
+// it lands between the Hare and the Raven.
+//
 // The Tiger is the exception: depth 3, quiescence on *and* two aggressive-mobile weights
 // (`swarm` + `mobility`). Once every bot has quiescence, bare material has no idea what a good
 // square is — the full-roster arena puts the Tiger top by a distance (~2630), beating the Raven
@@ -83,6 +88,7 @@ export const ROSTER: Animal[] = [
 	BEAR,
 	RHINO,
 	HARE,
+	CAMEL,
 	RAVEN,
 	TIGER,
 ];
