@@ -37,7 +37,7 @@ zero. The random bot is every weight at zero, where the argmax tie-break picks u
 what makes the roster extensible: **adding a heuristic is one registry entry and one extractor
 line**, and adding an animal is a data file.
 
-23 features in six families, declared once in `shared/eval/features.ts`. That single registry
+27 features in six families, declared once in `shared/eval/features.ts`. That single registry
 drives the extractor, the weight-editor sliders, the SPSA parameter space, the JSON schema for
 bot configs, and the locale files.
 
@@ -47,22 +47,20 @@ gives them the wrong scale — and because the pairs animals are built from shou
 side: `mobility` with `opponentMobility` (the Spider and the Snake), `hanging` with `offeredMaterial` (the Hare,
 and the lab's two strongest features).
 
-| Family     | Count | Features, with the registry's default weight in centipawns                                                                                 |
-| ---------- | ----: | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| `material` |     5 | one **tunable** weight per piece — `materialPawn` 100, `materialKnight` 320, `materialBishop` 330, `materialRook` 500, `materialQueen` 900 |
-| `activity` |     6 | reach, ground and good squares — `mobility` 4, `opponentMobility` 0, `centralization` 0, `space` 2, `centerControl` 8, `pushDepth` 0       |
-| `safety`   |     3 | what is about to be lost, ours minus theirs — `hanging` −15, `offeredMaterial` 0, `kingDanger` −12                                         |
-| `distance` |     3 | where the army stands relative to a king, negated so more is nearer — `swarm` 0, `huddle` 0, `kingProximity` 0                             |
-| `shape`    |     2 | whole-board properties, which read the same from either seat — `sameColorSquares` 0, `mirrorRanks` 0                                       |
-| `move`     |     3 | properties of the move played — `givesMate` 1, `givesCheck` 0, `captureValue` 0; `givesMate` is a preference in [−1, 1], not centipawns    |
+| Family     | Count | Features, with the registry's default weight in centipawns                                                                                                                                                                   |
+| ---------- | ----: | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `material` |     5 | one **tunable** weight per piece — `materialPawn` 100, `materialKnight` 320, `materialBishop` 330, `materialRook` 500, `materialQueen` 900                                                                                   |
+| `activity` |    11 | reach, ground and good squares — `mobility` 4, `opponentMobility` 0, `centralization` 0, `space` 2, `centerControl` 8, `pushDepth` 0, `development` 15, `earlyQueen` −10, `castled` 40, `kingActivity` 0, `passedPawnPush` 0 |
+| `safety`   |     3 | what is about to be lost, ours minus theirs — `hanging` −15, `offeredMaterial` 0, `kingDanger` −12                                                                                                                           |
+| `distance` |     3 | where the army stands relative to a king, negated so more is nearer — `swarm` 0, `huddle` 0, `kingProximity` 0                                                                                                               |
+| `shape`    |     2 | whole-board properties, which read the same from either seat — `sameColorSquares` 0, `mirrorRanks` 0                                                                                                                         |
+| `move`     |     3 | properties of the move played — `givesMate` 1, `givesCheck` 0, `captureValue` 0; `givesMate` is a preference in [−1, 1], not centipawns                                                                                      |
 
-`centralization` is a parametrised stand-in for a piece-square table: one number — how far the
-pieces stand from the rim — instead of sixty-four per role. The registry once carried a
-centralization _and_ an advancement weight _per role_, then two role-agnostic ones; the lab rated
-the per-role sliders as noise and, on a second pass, rated every pawn-structure weight the
-registry had (passed pawns, a lumped weakness, pawn advancement) at or below bare material — so
-the whole `pawns` family is gone rather than kept as dead sliders. A knight wanting the centre and
-a rook wanting the seventh come out of the one `centralization` number.
+`centralization` is a stand-in for a piece-square table: one number — how far the pieces stand
+from the rim — instead of sixty-four per role. The lab rated per-role sliders as noise and every
+middlegame pawn-structure weight at or below bare material, so neither is in the registry;
+`passedPawnPush` is the one piece of pawn structure kept, and only in the endgame. What each
+candidate measured is in [LAB.md](./LAB.md).
 
 The `move` family is why `cccp` and `pacifist` need no special casing — "prefer checks", "never
 capture" are weights like any other.
@@ -83,27 +81,21 @@ it. Changing a base means changing every bot that names it; the safe move is to 
 A weight is centipawns per unit of its feature, and a pawn is 100 — the currency a chess player
 already thinks in. `mobility: 4` is four hundredths of a pawn per square of activity;
 `swarm: 900` is a queen per king-move the army closes. A bot that wants one idea to dominate
-says so with a big number on that idea, never by shrinking everything else: the roster used to
-price a pawn at 20 so `huddle` could outweigh it, and the result was five animals whose numbers
-could not be compared with each other or with anything a player knows. Multiplying a whole vector
-by a constant changes no move an argmax bot plays, so this cost nothing to fix.
+says so with a big number on that idea, never by shrinking everything else — shrinking a pawn
+makes a bot's numbers comparable to nothing a player knows.
 
 `givesMate` is the only exception, and is a preference in [-1, 1]: what it prices is not worth a
 number of pawns.
 
 ## One vector, not three
 
-A bot is a single weight vector. It used to carry three — opening, middlegame and endgame,
-interpolated along a phase axis — so that it could value a rook differently late than early. No
-animal ever used it: every definition wrote only the middlegame set and inherited the other two,
-and the sandbox applied one vector to all three. It was three times the configuration surface, a
-blend cache in the evaluator and a phase axis in the tuner, all to express something nothing
-expressed. It is gone. A bot is what its file says, once.
+A bot is a single weight vector — no opening, middlegame and endgame sets interpolated along a
+phase axis. That was tried; no animal used it, and it tripled the configuration surface.
 
-Per-feature phase shaping inside an extractor is fine; what is gone is phase-paired weight vectors.
-The eval context carries one `phase` scalar, and an endgame feature scales its own _value_ by it —
-the same kind of shaping as `swarm` being negated on the way out — so it is still one weight per
-feature, one vector, one dot product.
+Per-feature phase shaping inside an extractor is fine; what is ruled out is phase-paired weight
+vectors. The eval context carries one `phase` scalar, and an endgame feature (`kingActivity`,
+`passedPawnPush`) scales its own _value_ by it — the same kind of shaping as `swarm` being negated
+on the way out — so it is still one weight per feature, one vector, one dot product.
 
 ## Why there is no sampling
 
@@ -111,10 +103,8 @@ A bot always plays its argmax. Ties between equal moves are broken by a seeded s
 and every pairing is played over the opening set, so two deterministic bots do not replay one game
 — that is where a result's variety comes from.
 
-There was a `temperature`: a softmax sample over the scores, for the paper's weighted-sampling
-players. Only one animal ever used it, and only to weaken itself, which a weight says just as well
-without throwing evaluation away at random. It is gone, and with it the need for the search to
-report every non-best move exactly.
+There is no softmax `temperature`: the one animal that used it did so only to weaken itself,
+which a weight says just as well without throwing evaluation away at random.
 
 Everything random comes from one seeded xorshift128, per game. A tournament replays exactly.
 
@@ -130,17 +120,16 @@ with. Standard errors from the inverse Hessian diagonal give the confidence inte
 scheduler needs.
 
 **Markov champion** — the paper's trophy transition matrix, power-iterated to its stationary
-distribution. Shipped alongside the MLE as a second opinion, because the paper shows the two
-disagree in interesting places (`same_color`).
+distribution. Implemented and tested as a second opinion, because the paper shows the two
+disagree in interesting places (`same_color`); the arena does not print it yet.
 
 ## Buying speed instead of games
 
-The target is a 12-bot pool ranked to ±40 Elo in **under 30 seconds** on 8 cores. Four choices
-get there:
+The roster is 24 bots, rated together on every run. Four choices keep that cheap:
 
 1. **Whole games run inside a worker.** The runner is a dev CLI: a Node `worker_threads` worker
    takes `{ white, black, openingFen, seed, plyLimit }` and returns a result — no per-move round
-   trip. Pool size is `availableParallelism()`.
+   trip. Pool size is `availableParallelism() − 1`.
 2. **Paired openings.** Every opening is played twice with colours swapped, from ~50 curated
    balanced positions. A bot that only wins as White scores what it deserves.
 3. **Common random numbers.** Two candidates are compared over the same openings with the same
@@ -167,19 +156,19 @@ a noisy signal usable. Target: a useful run in 1–2 minutes.
   round-trips; `fitBradleyTerry` recovering known ratings from a synthetic matrix and staying
   stable under deliberately imbalanced pair counts; `markovChampion` on a matrix with a known
   stationary distribution.
-- **Golden games** — fixed pair + fixed seed + fixed opening → a committed PGN fixture. Any eval
-  change that shifts a game shows up as a diff, which is the cheapest possible regression net for
-  a heuristic engine.
 - **Determinism** — the same tournament seed twice gives an identical rating table.
-- **Behavioural sanity** — the Wolf beats the Donkey well over 90% of paired games; the Dove and
-  the Lemming (the paper's `pacifist` and `generous`) are the two animals the Donkey itself
-  beats. **Matching the paper's ordering is the strongest signal the features are right**, and it
-  is the check that would actually catch a wrong sign.
-- **Performance** — `npm run bench` reports extraction cost; the suite asserts it under the 60 µs
-  guard, and a full 12-bot ranking under the 30 s budget.
+- **Behavioural sanity** — every animal with a positional idea outscores the Donkey; the Dove,
+  the Lemming (the paper's `pacifist` and `generous`) and the Mouse are the ones the Donkey
+  beats, and the Dodo edges it. **Matching the paper's ordering is the strongest signal the
+  features are right**, and it is the check that would actually catch a wrong sign.
+- **Performance** — `npm run bench` reports extraction and search cost; the suite holds
+  extraction under a 60 µs guard and a depth-2 search pass under 40 ms.
 
 ## Designed for, not built
 
+- **Golden games** — fixed pair + fixed seed + fixed opening → a committed PGN fixture. Any eval
+  change that shifts a game shows up as a diff, the cheapest regression net for a heuristic
+  engine.
 - **Opening book** — the curated JSON set sits behind a `probe(fen)` interface a Polyglot `.bin`
   reader can implement later. `probe(fen)` is in place; the `bot.useBook` flag is not wired yet.
 - **Endgame tablebase** — `probe(fen) → { wdl, dtz, moves }`, simplest backing being lichess's

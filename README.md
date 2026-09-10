@@ -45,20 +45,18 @@ Linting and formatting via [oxlint](https://oxc.rs)/[oxfmt](https://oxc.rs), typ
 | ------------------------------------ | ------------------------------------------------------------------------ |
 | [ARCHITECTURE.md](./ARCHITECTURE.md) | how the app is built — layout, modules, the eval, the engine, deployment |
 | [METHOD.md](./METHOD.md)             | what it measures — the paper, the feature vector, rating, tuning         |
+| [LAB.md](./LAB.md)                   | what each candidate feature measured against bare material               |
 | [CLAUDE.md](./CLAUDE.md)             | code conventions this repo holds itself to                               |
-| [PLAN.md](./PLAN.md)                 | the commit ladder — what has landed and what lands next                  |
+| [PLAN.md](./PLAN.md)                 | what lands next                                                          |
 
 ## Where it stands
 
-Built: the feature evaluation, negamax search with quiescence, the UCI codec and worker client,
-the board, `/play` with a per-feature breakdown of what the bot sees, `/frankenstein` as a live
-weight-and-depth sandbox, and the dev CLIs — `npm run arena` (paired openings, Bradley-Terry
-ratings with confidence intervals, a worker pool running whole games, adaptive pairing) and
-`npm run tune` (SPSA against a gauntlet). The roster is listed weakest first, in the order the
-arena rated them.
+24 animals, rated by the arena from the Dove (~200) to the Tiger (~2600) and listed weakest
+first. Built: the feature evaluation, negamax search with quiescence, the UCI codec and worker
+client, `/play` with a per-feature breakdown of what the bot sees, `/frankenstein` as a live
+weight-and-depth sandbox, `/about`, and the dev CLIs `npm run arena` and `npm run tune`.
 
-Next, per [PLAN.md](./PLAN.md): golden-game fixtures, the about page, and a tablebase probe
-interface.
+Next, per [PLAN.md](./PLAN.md): golden-game fixtures and a tablebase probe interface.
 
 ## Credit
 

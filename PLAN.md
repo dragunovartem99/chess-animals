@@ -31,8 +31,7 @@ it plays near-Stockfish moves but can't stop leaning on one feature, and that le
 - ⬜ Personality via the existing feature registry: bias SF's root-move scores by the animal's
   weights _before_ `pick_best`, with a blend strength λ on the definition. Low λ = a strong bot
   with a tic; high λ = it follows its instinct into a losing plan the player learns to force.
-- ⬜ Emoji budget is tight (~12–15 clean: 🐟🐠🐡🦈🦑🦐🦞🦀🐬🐳🐋🦭🪼). No seahorse emoji exists.
-  🐢 is free — the land Turtle is now the **Sloth** (🦥, same `huddle` weight).
+- ⬜ Emoji budget is tight (~12–15 clean: 🐟🐠🐡🦈🦑🦐🦞🦀🐬🐳🐋🦭🪼🐢). No seahorse emoji exists.
 - ⬜ Each sea animal is a pair: an SF Elo target (how hard) + a feature it over-weights (how to
   beat it). E.g. Anglerfish — lures central then strikes; Pufferfish — `huddle` until provoked;
   Electric eel — `kingDanger`, only cares about your king.
