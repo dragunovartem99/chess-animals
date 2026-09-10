@@ -68,9 +68,9 @@ export default {
 		description:
 			"Takes the middle first. Then, slow and heavy, it comes for the rest of the board.",
 	},
-	rhino: {
-		name: "Rhino",
-		description: "Spreads out over the whole board and squeezes you into a corner.",
+	snake: {
+		name: "Snake",
+		description: "Wraps around your pieces and squeezes. Soon they have nowhere left to go.",
 	},
 	lion: {
 		name: "Lion",

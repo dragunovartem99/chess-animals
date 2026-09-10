@@ -44,7 +44,7 @@ bot configs, and the locale files.
 A family says **what a feature measures**, not where the idea came from. That matters because the
 weight editor takes each family's slider band from it, so filing two unlike quantities together
 gives them the wrong scale — and because the pairs animals are built from should sit side by
-side: `mobility` with `opponentMobility` (the Rhino), `hanging` with `offeredMaterial` (the Hare,
+side: `mobility` with `opponentMobility` (the Spider and the Snake), `hanging` with `offeredMaterial` (the Hare,
 and the lab's two strongest features).
 
 | Family     | Count | Features, with the registry's default weight in centipawns                                                                                                              |

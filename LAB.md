@@ -95,7 +95,7 @@ three inside one CI. Two positional features are a tier below at ~1510 — `cent
 ## Graduated
 
 `offeredMaterial`+`hanging` → **Hare**, `centralization`+`space` → **Bear**,
-`mobility`+`opponentMobility` → **Rhino**, `swarm`+`mobility`+`space` → **Tiger** (chosen over the
+`mobility`+`opponentMobility` → **Rhino** (since cut to `opponentMobility` alone, the **Snake**), `swarm`+`mobility`+`space` → **Tiger** (chosen over the
 higher-rated but personality-free `lab-msc`). The first three rank 2nd–4th on the full roster,
 behind the **Raven** — depth 3 with quiescence and no weights — which beats the Hare ~9-in-10. The
 Tiger's rank is still provisional.
