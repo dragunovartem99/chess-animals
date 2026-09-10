@@ -57,7 +57,7 @@ function castledState({
 
 // 0 on the rim, 6 on one of the four central squares. Cheaper than a table and, unlike one,
 // tunable with a single number.
-function centrality(square: number): number {
+export function centrality(square: number): number {
 	const file = squareFile(square);
 	const rank = squareRank(square);
 

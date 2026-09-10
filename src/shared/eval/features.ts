@@ -158,6 +158,13 @@ export const FEATURES = defineFeatures([
 	// Also `activity`, also no phase gate: by the endgame both sides have spent their rights and
 	// the difference is usually 0 again.
 	{ key: "castled", family: "activity", defaultWeight: 40 },
+
+	// Our king's distance from the rim minus theirs, scaled by how little material is left — the
+	// endgame's "activate the king". Unlike the whole-board `kingProximity` it is a real
+	// side-to-move difference, so it needs no even depth. Opt-in, like `swarm`: it is phase-shaped
+	// inside its extractor (`families/endgame.ts`), which is the one kind of phase-awareness the
+	// single weight vector allows.
+	{ key: "kingActivity", family: "activity", defaultWeight: 0 },
 ]);
 
 export const FEATURE_COUNT = FEATURES.length;

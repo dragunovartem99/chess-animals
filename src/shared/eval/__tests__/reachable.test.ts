@@ -6,6 +6,7 @@ import { createExtractor, type Extractor, type ExtractFrame } from "../extract";
 import { extractFeatures } from "../extract";
 import { SLOTS as AGGRESSION } from "../families/aggression";
 import { SLOTS as CONTROL } from "../families/control";
+import { SLOTS as ENDGAME } from "../families/endgame";
 import { SLOTS as KING } from "../families/king";
 import { SLOTS as MATERIAL } from "../families/material";
 import { SLOTS as MOBILITY } from "../families/mobility";
@@ -49,6 +50,7 @@ const DECLARED = {
 	proximity: PROXIMITY,
 	symmetry: SYMMETRY,
 	aggression: AGGRESSION,
+	endgame: ENDGAME,
 	move: MOVE,
 };
 

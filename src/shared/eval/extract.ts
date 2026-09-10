@@ -3,6 +3,7 @@ import type { Chess } from "chessops/chess";
 import { extractAggression, SLOTS as AGGRESSION } from "./families/aggression";
 import { createContext } from "./families/context";
 import { extractControl, SLOTS as CONTROL } from "./families/control";
+import { extractEndgame, SLOTS as ENDGAME } from "./families/endgame";
 import { extractKing, SLOTS as KING } from "./families/king";
 import { extractMaterial, SLOTS as MATERIAL } from "./families/material";
 import { extractMobility, SLOTS as MOBILITY } from "./families/mobility";
@@ -24,6 +25,7 @@ const BOARD_FAMILIES = [
 	{ slots: PROXIMITY, run: extractProximity },
 	{ slots: SYMMETRY, run: extractSymmetry },
 	{ slots: AGGRESSION, run: extractAggression },
+	{ slots: ENDGAME, run: extractEndgame },
 ] as const;
 
 // `played` is the move that produced `position` and the position it came from, which the
@@ -47,7 +49,7 @@ export type Extractor = (frame: ExtractFrame) => FeatureVector;
 // reads worse and is deliberate: a loop over the table is one call site with ten targets, and it
 // measured three times slower than ten call sites with one target each. A search uses
 // `createExtractor`, which runs few enough families for that not to matter; this is the path that
-// runs all eight, so it pays for none of the indirection.
+// runs all nine, so it pays for none of the indirection.
 export function extractFeatures({ position, played, into }: ExtractFrame): FeatureVector {
 	const features = into ?? createFeatureVector();
 	if (into) into.fill(0);
@@ -62,6 +64,7 @@ export function extractFeatures({ position, played, into }: ExtractFrame): Featu
 	extractProximity({ context, features });
 	extractSymmetry({ context, features });
 	extractAggression({ context, features });
+	extractEndgame({ context, features });
 	extractMoveFeatures({ position, played, features });
 
 	return features;

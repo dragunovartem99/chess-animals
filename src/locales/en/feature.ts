@@ -29,4 +29,5 @@ export default {
 	development: "Minors off the back rank",
 	earlyQueen: "Queen out before the minors",
 	castled: "King castled",
+	kingActivity: "Active king in the endgame",
 };
