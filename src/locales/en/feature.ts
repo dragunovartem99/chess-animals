@@ -26,4 +26,5 @@ export default {
 	hanging: "Undefended pieces",
 	mobility: "Our pieces' reach",
 	centralization: "Pieces off the rim",
+	development: "Minors off the back rank",
 };

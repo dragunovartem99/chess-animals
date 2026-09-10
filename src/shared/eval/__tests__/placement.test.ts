@@ -37,3 +37,27 @@ describe("centralization", () => {
 		expect(black).toBe(white);
 	});
 });
+
+describe("development", () => {
+	it("is level in the opening, where nothing has moved", () => {
+		expect(read({ fen: INITIAL_FEN, key: "development" })).toBe(0);
+	});
+
+	it("counts our knights and bishops off the back rank minus theirs", () => {
+		// White has a knight and a bishop out (2); Black only one knight (1); Black to move.
+		const fen = "r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/3P1N2/PPP2PPP/RNBQK2R b KQkq - 0 4";
+		expect(read({ fen, key: "development" })).toBe(1 - 2);
+	});
+
+	it("ignores rooks, queens, kings and pawns", () => {
+		const fen = "4k3/8/8/8/3P4/Q7/8/R3K2R w KQ - 0 1";
+		expect(read({ fen, key: "development" })).toBe(0);
+	});
+
+	it("flips sign with the side to move", () => {
+		const white = "rnbqkbnr/pppp1ppp/8/4p3/8/5N2/PPPPPPPP/RNBQKB1R b KQkq - 1 2";
+		const black = "rnbqkb1r/pppppppp/5n2/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 1 2";
+		expect(read({ fen: white, key: "development" })).toBe(-1);
+		expect(read({ fen: black, key: "development" })).toBe(-1);
+	});
+});

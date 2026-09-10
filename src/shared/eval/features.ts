@@ -139,6 +139,12 @@ export const FEATURES = defineFeatures([
 	// the lumped weakness, forwardness — measured at or below bare material in the lab, so the
 	// family is gone rather than kept as a drawer of dead sliders.
 	{ key: "centralization", family: "activity", defaultWeight: 0 },
+
+	// Our knights and bishops off the back rank minus theirs — a plain count of developed minors.
+	// It joins `activity` rather than a family of its own: "reach, ground and good squares" covers
+	// getting a piece into play, and there is no game-phase mechanism to gate it because the
+	// quantity decays to ~0 on its own once both sides' minors are out or traded.
+	{ key: "development", family: "activity", defaultWeight: 15 },
 ]);
 
 export const FEATURE_COUNT = FEATURES.length;
