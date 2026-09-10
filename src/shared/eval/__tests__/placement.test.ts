@@ -61,3 +61,25 @@ describe("development", () => {
 		expect(read({ fen: black, key: "development" })).toBe(-1);
 	});
 });
+
+describe("earlyQueen", () => {
+	it("is 0 in the opening, where no queen has moved", () => {
+		expect(read({ fen: INITIAL_FEN, key: "earlyQueen" })).toBe(0);
+	});
+
+	it("counts the minors left at home behind a queen that is already out", () => {
+		// Black queen on h4, all four black minors still home; White to move.
+		const fen = "rnb1kbnr/pppp1ppp/8/4p3/6Pq/5P2/PPPPP2P/RNBQKBNR w KQkq - 1 3";
+		expect(read({ fen, key: "earlyQueen" })).toBe(-4);
+	});
+
+	it("is 0 once the queen is traded off, however undeveloped the minors", () => {
+		const fen = "rnb1kbnr/pppp1ppp/8/4p3/8/8/PPPP1PPP/RNB1KBNR w KQkq - 0 3";
+		expect(read({ fen, key: "earlyQueen" })).toBe(0);
+	});
+
+	it("is 0 once the minors behind the early queen have developed", () => {
+		const fen = "r3k2r/ppp2ppp/2npbn2/4p2q/6P1/2NPBN2/PPP2P1P/R2QK2R w KQkq - 0 1";
+		expect(read({ fen, key: "earlyQueen" })).toBe(0);
+	});
+});

@@ -145,6 +145,12 @@ export const FEATURES = defineFeatures([
 	// getting a piece into play, and there is no game-phase mechanism to gate it because the
 	// quantity decays to ~0 on its own once both sides' minors are out or traded.
 	{ key: "development", family: "activity", defaultWeight: 15 },
+
+	// Our minors still on their home square while our queen is already out (and not traded), minus
+	// theirs — the queen-before-the-pieces mistake, as a positive count the negative default
+	// punishes. Also `activity`, also no phase gate: it falls to 0 on its own once the minors
+	// develop or the queen comes home.
+	{ key: "earlyQueen", family: "activity", defaultWeight: -10 },
 ]);
 
 export const FEATURE_COUNT = FEATURES.length;
