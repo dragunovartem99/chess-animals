@@ -8,7 +8,11 @@ import type { Animal } from "./types";
 // by a distance, beating the Raven's bare build ~7-in-8.
 //
 // Distinct from the Wolf, which is `swarm` alone at 400 and overcommits: the Tiger's charge is
-// a tenth of the weight and braced by `mobility`, so it presses without throwing the army away.
+// a fifteenth of the weight and braced by `mobility`, so it presses without throwing the army away.
+//
+// `earlyQueen` at -40 keeps the queen home until the minors are out — the charge used to lead with
+// it. Rating-neutral; over twenty openings against the Owl it cut queen moves made with two minors
+// still home from 37 to 4.
 export const TIGER: Animal = {
 	emoji: "🐅",
 	tint: "#db7f2b",
@@ -16,6 +20,6 @@ export const TIGER: Animal = {
 		id: "tiger",
 		search: { depth: 3, quiescence: true },
 		base: "material",
-		weights: { swarm: 40, mobility: 10 },
+		weights: { swarm: 40, mobility: 10, earlyQueen: -40 },
 	},
 };

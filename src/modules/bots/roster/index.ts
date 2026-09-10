@@ -64,10 +64,11 @@ import { WOLF } from "./wolf";
 // it lands between the Hare and the Raven.
 //
 // The Tiger is the exception: depth 3, quiescence on *and* two aggressive-mobile weights
-// (`swarm` + `mobility`). Once every bot has quiescence, bare material has no idea what a good
-// square is — the full-roster arena puts the Tiger top by a distance (~2630), beating the Raven
-// ~7-in-8. The Lion is the Raven's search with `kingDanger` + `development` — it develops, then
-// aims at your king — and lands near the middle of the gap between the two.
+// (`swarm` + `mobility`), with an `earlyQueen` penalty so the charge waits for the minors. Once
+// every bot has quiescence, bare material has no idea what a good square is — the full-roster
+// arena puts the Tiger top by a distance, beating the Raven ~7-in-8. The Lion is the Raven's
+// search with `kingDanger` + `development` — it develops, then aims at your king, and like the
+// Tiger it keeps its queen home until then — and lands near the middle of the gap between the two.
 export const ROSTER: Animal[] = [
 	DOVE,
 	LEMMING,
