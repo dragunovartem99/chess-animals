@@ -7,11 +7,10 @@ function delay(ms: number): Promise<void> {
 }
 
 // Runs `step` repeatedly, pausing between moves so a game is watchable rather than instant, until
-// `stop()` is called, a step reports nothing happened, or `isOver()` turns true. The loop's exit
-// check goes through `isRunning`, a function call rather than a bare variable read, on purpose:
-// the token it closes over is reassigned by `start`/`stop`, calls the linter's static
-// "loop condition never changes" check cannot see through — which is exactly the point, since
-// those calls happen from outside this async function's own frame.
+// `stop()` is called, a step reports nothing happened, or `isOver()` turns true. Each move
+// schedules the next by recursing rather than looping: moves are sequential by nature, and the
+// token check at the top of every call is what lets `start`/`stop` — reassigning it from outside
+// this frame — end a run between two moves.
 export function createAutoplayLoop({
 	step,
 	isOver,
@@ -20,15 +19,17 @@ export function createAutoplayLoop({
 	isOver: () => boolean;
 }) {
 	let token: symbol | undefined;
-	const isRunning = (candidate: symbol) => token === candidate;
 
 	async function run(candidate: symbol): Promise<void> {
-		while (isRunning(candidate) && !isOver()) {
-			const moved = await step();
-			if (!moved) break;
-			await delay(AUTOPLAY_DELAY_MS);
+		if (token !== candidate) return;
+
+		const moved = !isOver() && (await step());
+		if (!moved) {
+			if (token === candidate) token = undefined;
+			return;
 		}
-		if (isRunning(candidate)) token = undefined;
+		await delay(AUTOPLAY_DELAY_MS);
+		return run(candidate);
 	}
 
 	return {
