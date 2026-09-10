@@ -71,6 +71,11 @@ export default {
 		name: "Rhino",
 		description: "Spreads out over the whole board and squeezes you into a corner.",
 	},
+	lion: {
+		name: "Lion",
+		description:
+			"Wakes up all its pieces first, then circles your king. It pounces only when it's sure.",
+	},
 	tiger: {
 		name: "Tiger",
 		description:

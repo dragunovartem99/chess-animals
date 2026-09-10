@@ -11,6 +11,7 @@ import { HARE } from "./hare";
 import { HEDGEHOG } from "./hedgehog";
 import { HIPPO } from "./hippo";
 import { LEMMING } from "./lemming";
+import { LION } from "./lion";
 import { MONKEY } from "./monkey";
 import { MOUSE } from "./mouse";
 import { OWL } from "./owl";
@@ -66,7 +67,8 @@ import { WOLF } from "./wolf";
 // The Tiger is the exception: depth 3, quiescence on *and* two aggressive-mobile weights
 // (`swarm` + `mobility`). Once every bot has quiescence, bare material has no idea what a good
 // square is — the full-roster arena puts the Tiger top by a distance (~2630), beating the Raven
-// ~7-in-8.
+// ~7-in-8. The Lion is the Raven's search with `kingDanger` + `development` — it develops, then
+// aims at your king — and lands near the middle of the gap between the two.
 export const ROSTER: Animal[] = [
 	DOVE,
 	MOUSE,
@@ -90,6 +92,7 @@ export const ROSTER: Animal[] = [
 	HARE,
 	CAMEL,
 	RAVEN,
+	LION,
 	TIGER,
 ];
 
