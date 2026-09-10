@@ -8,6 +8,10 @@ export default {
 		name: "Dove",
 		description: "Won't check, won't take, won't land the mate. It loses very politely.",
 	},
+	mouse: {
+		name: "Mouse",
+		description: "Hides in its hole and hardly comes out. It won't bite, even for a crumb.",
+	},
 	lemming: {
 		name: "Lemming",
 		description: "Hands you its pieces, biggest first. Then hands you the rest, too.",

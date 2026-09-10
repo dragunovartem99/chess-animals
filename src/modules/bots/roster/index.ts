@@ -10,6 +10,7 @@ import { HEDGEHOG } from "./hedgehog";
 import { HIPPO } from "./hippo";
 import { LEMMING } from "./lemming";
 import { MONKEY } from "./monkey";
+import { MOUSE } from "./mouse";
 import { OWL } from "./owl";
 import { PARROT } from "./parrot";
 import { RAVEN } from "./raven";
@@ -27,7 +28,9 @@ import { WOLF } from "./wolf";
 // which declines every check and capture) and the Lemming (`generous`, which forces them), and
 // the arena has the Donkey beating both badly. The Dodo (`suicide_king`, which walks its king at
 // the enemy) lands just above the Donkey instead: a king in the open is real pressure. All three
-// still lose to every animal with an actual positional idea.
+// still lose to every animal with an actual positional idea. The Mouse fills the gap between the
+// Dove and the Lemming: it keeps its minors home and shies from captures, and its temperature is
+// set to land it there rather than to break repetition.
 //
 // The calibration animals read no personality feature — they are the scale, not filler. The
 // Donkey moves at random; the Monkey is plain material at depth 2, the Owl the same at depth 3.
@@ -59,6 +62,7 @@ import { WOLF } from "./wolf";
 // ~7-in-8.
 export const ROSTER: Animal[] = [
 	DOVE,
+	MOUSE,
 	LEMMING,
 	DONKEY,
 	DODO,
