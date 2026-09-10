@@ -10,7 +10,8 @@ export default {
 	},
 	mouse: {
 		name: "Mouse",
-		description: "Hides in its hole and hardly comes out. It won't bite, even for a crumb.",
+		description:
+			"Its knights and bishops never leave the hole. Everything else just scurries about.",
 	},
 	lemming: {
 		name: "Lemming",

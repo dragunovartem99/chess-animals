@@ -32,8 +32,7 @@ import { WOLF } from "./wolf";
 // the arena has the Donkey beating both badly. The Dodo (`suicide_king`, which walks its king at
 // the enemy) lands just above the Donkey instead: a king in the open is real pressure. All three
 // still lose to every animal with an actual positional idea. The Mouse fills the gap between the
-// Dove and the Lemming: it keeps its minors home and shies from captures, and its temperature is
-// set to land it there rather than to break repetition.
+// Lemming and the Donkey: it moves at random like the Donkey but never develops a minor piece.
 //
 // The calibration animals read no personality feature — they are the scale, not filler. The
 // Donkey moves at random; the Monkey is plain material at depth 2, the Owl the same at depth 3.
@@ -71,8 +70,8 @@ import { WOLF } from "./wolf";
 // aims at your king — and lands near the middle of the gap between the two.
 export const ROSTER: Animal[] = [
 	DOVE,
-	MOUSE,
 	LEMMING,
+	MOUSE,
 	DONKEY,
 	DODO,
 	GOAT,
