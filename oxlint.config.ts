@@ -21,5 +21,11 @@ export default defineConfig({
 				"vitest/no-conditional-in-test": "off",
 			},
 		},
+		{
+			// A locale file is a flat dictionary: it grows one entry per animal and per UI string, and
+			// splitting the roster across files by line count would only scatter one list.
+			files: ["src/locales/**"],
+			rules: { "max-lines": "off" },
+		},
 	],
 });
