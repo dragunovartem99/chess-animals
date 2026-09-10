@@ -6,11 +6,10 @@ import type { Animal } from "./types";
 // move. Weak the way a small animal is, not the way the Dove and the Lemming are: it neither
 // refuses a fight nor hands anything over, it just never comes out into the open.
 //
-// No base, so a capture is only ever taken by accident. At depth 1 it sat on the Lemming whatever
-// the two numbers were — the rim and the cramp saturate, and it moved at random among the most
-// cramped moves. Depth 3 is the lever: it looks ahead to keep the opponent roomy as well as itself
-// cramped, and that lands it midway between the Dove and the Lemming. Both features are
-// side-relative, so an odd depth reads them the right way round.
+// No base and depth 1, so among the moves that keep it cramped it moves at random, and a capture
+// is only ever taken by accident. It rates level with the Lemming whatever the two numbers are —
+// the rim and the cramp saturate. Depth 3 dropped it midway to the Dove, but at a search cost
+// that made it the slowest animal to test for no idea it did not already have.
 //
 // No `givesMate`: it cannot see a mate either way.
 export const MOUSE: Animal = {
@@ -18,7 +17,7 @@ export const MOUSE: Animal = {
 	tint: "#9e9aa6",
 	definition: {
 		id: "mouse",
-		search: { depth: 3 },
+		search: { depth: 1 },
 		weights: { centralization: -20, mobility: -10 },
 	},
 };
