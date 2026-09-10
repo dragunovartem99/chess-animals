@@ -14,7 +14,7 @@ import { ROSTER, ROSTER_BY_ID } from "../index";
 
 // `playPair` wants only the parts of a bot that play; the id is the arena's business.
 function playable(config: BotConfig) {
-	return { weights: config.weights, search: config.search, temperature: config.temperature };
+	return { weights: config.weights, search: config.search };
 }
 
 describe("the roster", () => {
@@ -33,7 +33,6 @@ describe("the roster", () => {
 			position,
 			weights: bot.weights,
 			search: bot.search,
-			temperature: bot.temperature,
 			rng: createRng(animal.definition.id),
 		});
 
@@ -52,7 +51,6 @@ describe("Donkey", () => {
 						position,
 						weights: bot.weights,
 						search: bot.search,
-						temperature: bot.temperature,
 						rng: createRng(seed),
 					})!
 				)

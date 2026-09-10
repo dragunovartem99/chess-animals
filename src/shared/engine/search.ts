@@ -99,8 +99,8 @@ function scoreRootMove({
 //
 // `prune` narrows the window as the best root score rises, the way a normal engine always would.
 // It is off by default because a non-best move then comes back as a bound rather than a value,
-// and the policy samples across those scores at non-zero temperature — a bound would distort the
-// distribution. A caller taking only the argmax reads `best` instead, which no bound can reach.
+// and a caller reading every score — a test holding the pruned search to a full one — needs them
+// exact. The policy always prunes and reads `best`, which no bound can reach.
 //
 // `rng` shuffles the order the moves are searched in, which is the whole of a bot's tie-break.
 // Without one the root is deterministic and `best` is the first of the equals in generated order.

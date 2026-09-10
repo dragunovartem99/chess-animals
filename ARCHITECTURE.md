@@ -142,8 +142,8 @@ onto. Hashes rather than the exact FEN `repetitionKey` the game-level rule uses,
 per node is what the search cannot afford; the hash is only computed once `halfmoves` says a
 repetition is reachable at all, which is most of why knowing about draws costs 2–4%.
 
-`policy.ts` turns those scores into a move: `temperature: 0` is a strict argmax with a seeded
-tie-break, above it a softmax sample. All randomness comes from `createRng` — xorshift128, seeded
+`policy.ts` turns those scores into a move: always the argmax, with the tie between equal moves
+broken by a seeded shuffle of the root. All randomness comes from `createRng` — xorshift128, seeded
 per game — so a game replays exactly from its seed.
 
 ### Everything speaks UCI

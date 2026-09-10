@@ -40,7 +40,6 @@ export function runGame(spec: GameSpec): GameReport {
 			position,
 			weights: bot.weights,
 			search: bot.search,
-			temperature: bot.temperature,
 			rng,
 			repetition,
 		});

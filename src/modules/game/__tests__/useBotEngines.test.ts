@@ -12,7 +12,6 @@ const DONKEY: Animal = {
 	definition: {
 		id: "donkey",
 		search: { depth: 1 },
-		temperature: 0,
 		weights: { materialPawn: 100, materialKnight: 300 },
 	},
 };
@@ -23,7 +22,6 @@ const WOLF: Animal = {
 	definition: {
 		id: "wolf",
 		search: { depth: 1 },
-		temperature: 0,
 		weights: { materialQueen: 900, givesMate: 100000 },
 	},
 };

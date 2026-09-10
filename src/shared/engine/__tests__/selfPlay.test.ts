@@ -19,7 +19,7 @@ describe("a bot playing itself", () => {
 		let ply = 0;
 
 		while (!gameStatus({ position, keys, plyLimit: 300, ply }).over) {
-			const move = chooseMove({ position, weights, search: GREEDY, temperature: 30, rng });
+			const move = chooseMove({ position, weights, search: GREEDY, rng });
 			expect(move).toBeDefined();
 			expect(legalMoves(position).some((legal) => makeUci(legal) === makeUci(move!))).toBe(
 				true

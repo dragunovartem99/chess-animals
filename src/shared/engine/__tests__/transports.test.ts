@@ -9,7 +9,6 @@ import { createLocalTransport, createWorkerTransport } from "../transports";
 const DONKEY: BotDefinition = {
 	id: "donkey",
 	search: { depth: 1 },
-	temperature: 0,
 	weights: { materialPawn: 100, materialKnight: 300 },
 };
 

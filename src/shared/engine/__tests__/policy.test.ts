@@ -30,7 +30,6 @@ function best({ fen, weights }: { fen: string; weights: ReturnType<typeof onlyWe
 		position: positionFromFen(fen),
 		weights,
 		search: GREEDY,
-		temperature: 0,
 		rng: createRng(1),
 	});
 
@@ -85,7 +84,6 @@ describe("chooseMove", () => {
 			position,
 			weights,
 			search: GREEDY,
-			temperature: 0,
 			rng: createRng(1),
 		})!;
 
@@ -107,7 +105,6 @@ describe("chooseMove edge cases", () => {
 				position,
 				weights: defaultishWeights(),
 				search: GREEDY,
-				temperature: 0,
 				rng: createRng(1),
 			})
 		).toBeUndefined();

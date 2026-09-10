@@ -15,7 +15,6 @@ export const LEMMING: Animal = {
 	definition: {
 		id: "lemming",
 		search: { depth: 1 },
-		temperature: 0,
 		weights: { offeredMaterial: 100 },
 	},
 };

@@ -19,7 +19,6 @@ export function buildEngine({
 	const definition: BotDefinition = {
 		id: ENGINE_NAME,
 		search: { depth, quiescence },
-		temperature: 0,
 		// Spread into a plain object: `weights` is a Vue-reactive proxy, and `postMessage`'s
 		// structured clone cannot serialise one — only the values it wraps.
 		weights: { ...weights },

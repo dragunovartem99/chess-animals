@@ -90,7 +90,7 @@ watch(
 		if (!animal) return;
 
 		// The move list, not just the FEN: the engine rebuilds the repetition history from it, so
-		// without it a temperature-0 bot-vs-bot game is blind to threefold and can only end at the
+		// without it a bot-vs-bot game is blind to threefold and can only end at the
 		// ply cap.
 		const answer = await engines.askForMove({
 			animal,

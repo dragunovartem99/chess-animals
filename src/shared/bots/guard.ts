@@ -40,10 +40,6 @@ export function assertBotDefinition(value: unknown): asserts value is BotDefinit
 		fail({ id, problem: "search.depth must be a whole number of at least 1" });
 	}
 
-	if (typeof candidate.temperature !== "number" || candidate.temperature < 0) {
-		fail({ id, problem: "temperature must be zero or more" });
-	}
-
 	const { base } = candidate;
 	if (base !== undefined && (typeof base !== "string" || !(base in BASES))) {
 		fail({ id, problem: `unknown base "${String(base)}"` });

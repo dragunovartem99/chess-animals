@@ -20,7 +20,6 @@ export const DODO: Animal = {
 	definition: {
 		id: "dodo",
 		search: { depth: 2 },
-		temperature: 0,
 		weights: { kingProximity: 10 },
 	},
 };

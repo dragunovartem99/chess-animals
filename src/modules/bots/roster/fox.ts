@@ -10,7 +10,6 @@ export const FOX: Animal = {
 	definition: {
 		id: "fox",
 		search: { depth: 2 },
-		temperature: 0,
 		base: "material",
 		weights: { offeredMaterial: -30 },
 	},

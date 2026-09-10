@@ -9,7 +9,6 @@ export const OWL: Animal = {
 	definition: {
 		id: "owl",
 		search: { depth: 3 },
-		temperature: 0,
 		base: "material",
 		weights: {},
 	},

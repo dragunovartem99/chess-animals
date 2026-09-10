@@ -19,7 +19,6 @@ export const DOVE: Animal = {
 	definition: {
 		id: "dove",
 		search: { depth: 1 },
-		temperature: 0,
 		weights: {
 			givesMate: -1,
 			givesCheck: -1000,

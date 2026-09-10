@@ -9,7 +9,6 @@ export const ELEPHANT: Animal = {
 	definition: {
 		id: "elephant",
 		search: { depth: 2 },
-		temperature: 0,
 		base: "material",
 		weights: { sameColorSquares: 100 },
 	},

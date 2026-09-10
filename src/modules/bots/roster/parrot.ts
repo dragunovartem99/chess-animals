@@ -21,7 +21,6 @@ export const PARROT: Animal = {
 	definition: {
 		id: "parrot",
 		search: { depth: 2 },
-		temperature: 0,
 		base: "material",
 		weights: { mirrorRanks: 150 },
 	},

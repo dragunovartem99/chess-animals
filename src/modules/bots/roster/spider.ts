@@ -14,7 +14,6 @@ export const SPIDER: Animal = {
 	definition: {
 		id: "spider",
 		search: { depth: 2 },
-		temperature: 0,
 		base: "material",
 		weights: { mobility: 10 },
 	},

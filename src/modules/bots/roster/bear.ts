@@ -11,7 +11,6 @@ export const BEAR: Animal = {
 	definition: {
 		id: "bear",
 		search: { depth: 3 },
-		temperature: 0,
 		base: "material",
 		weights: { centralization: 8, space: 6 },
 	},

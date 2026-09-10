@@ -14,7 +14,7 @@ import { createRng } from "../engine/rng";
 import type { SearchOptions } from "../engine/search";
 import type { WeightVector } from "../eval";
 
-export type TestBot = { weights: WeightVector; search: SearchOptions; temperature?: number };
+export type TestBot = { weights: WeightVector; search: SearchOptions };
 
 function points({ result, color }: { result: GameResult; color: Color }): number {
 	if (result === null) return 0.5;
@@ -52,7 +52,6 @@ export function playGame({
 			position,
 			weights: bot.weights,
 			search: bot.search,
-			temperature: bot.temperature ?? 0,
 			rng,
 			repetition,
 		});

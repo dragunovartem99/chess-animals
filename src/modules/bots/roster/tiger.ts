@@ -15,7 +15,6 @@ export const TIGER: Animal = {
 	definition: {
 		id: "tiger",
 		search: { depth: 3, quiescence: true },
-		temperature: 0,
 		base: "material",
 		weights: { swarm: 40, mobility: 10 },
 	},

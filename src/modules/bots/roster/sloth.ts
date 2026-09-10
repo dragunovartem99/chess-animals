@@ -16,7 +16,6 @@ export const SLOTH: Animal = {
 	definition: {
 		id: "sloth",
 		search: { depth: 2 },
-		temperature: 0,
 		base: "material",
 		weights: { huddle: 550 },
 	},

@@ -12,7 +12,6 @@ import type { BotDefinition } from "../../bots";
 const bot = (id: string, weight: number): BotDefinition => ({
 	id,
 	search: { depth: 1 },
-	temperature: 0,
 	weights: { materialPawn: weight },
 });
 

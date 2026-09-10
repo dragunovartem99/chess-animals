@@ -10,7 +10,6 @@ export const HEDGEHOG: Animal = {
 	definition: {
 		id: "hedgehog",
 		search: { depth: 2 },
-		temperature: 0,
 		base: "material",
 		weights: { hanging: -100 },
 	},

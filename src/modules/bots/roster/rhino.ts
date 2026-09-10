@@ -11,7 +11,6 @@ export const RHINO: Animal = {
 	definition: {
 		id: "rhino",
 		search: { depth: 3 },
-		temperature: 0,
 		base: "material",
 		weights: { mobility: 10, opponentMobility: -8 },
 	},

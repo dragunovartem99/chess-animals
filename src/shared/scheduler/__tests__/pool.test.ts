@@ -12,13 +12,11 @@ const WORKER_TIMEOUT = 60_000;
 const A: BotDefinition = {
 	id: "a",
 	search: { depth: 1 },
-	temperature: 30,
 	weights: { materialPawn: 20, materialKnight: 60, captureValue: 6 },
 };
 const B: BotDefinition = {
 	id: "b",
 	search: { depth: 1 },
-	temperature: 30,
 	weights: { mobility: 5, swarm: -20 },
 };
 

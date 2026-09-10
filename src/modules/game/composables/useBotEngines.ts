@@ -23,7 +23,7 @@ function spawnEngine(animal: Animal): UciEngineClient {
 
 // A fresh seed per game, because the engine's default is the bot's own id: without this every
 // game starts from the same rng state and a bot answers a given opponent identically forever.
-// The seed only breaks ties while `temperature` is zero, but it is the game's seed either way.
+// The seed only breaks ties between equal moves, but that is all the variety a bot has.
 async function reseed(engines: Map<string, UciEngineClient>): Promise<void> {
 	await Promise.all(
 		[...engines.values()].map((engine) => {

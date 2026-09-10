@@ -12,7 +12,6 @@ export const RAVEN: Animal = {
 	definition: {
 		id: "raven",
 		search: { depth: 3, quiescence: true },
-		temperature: 0,
 		base: "material",
 		weights: {},
 	},

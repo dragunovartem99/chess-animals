@@ -11,7 +11,6 @@ export const HARE: Animal = {
 	definition: {
 		id: "hare",
 		search: { depth: 3 },
-		temperature: 0,
 		base: "material",
 		weights: { offeredMaterial: -20, hanging: -100 },
 	},

@@ -7,13 +7,12 @@ import type { GameReport, GameSpec } from "../../scheduler";
 const candidate: BotDefinition = {
 	id: "cand",
 	search: { depth: 1 },
-	temperature: 0,
 	weights: { materialPawn: 20, swarm: -10 },
 };
 
 const opponent = (id: string): { id: string; definition: BotDefinition } => ({
 	id,
-	definition: { id, search: { depth: 1 }, temperature: 0, weights: {} },
+	definition: { id, search: { depth: 1 }, weights: {} },
 });
 
 const openings = [

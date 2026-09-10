@@ -12,13 +12,12 @@ const TARGET: Record<string, number> = { swarm: -180, materialPawn: 20, material
 const detuned: BotDefinition = {
 	id: BOT_ID,
 	search: { depth: 1 },
-	temperature: 0,
 	weights: { swarm: 100, materialPawn: 8, materialKnight: 30 },
 };
 
 const opponent = (id: string): { id: string; definition: BotDefinition } => ({
 	id,
-	definition: { id, search: { depth: 1 }, temperature: 0, weights: {} },
+	definition: { id, search: { depth: 1 }, weights: {} },
 });
 
 const openings = Array.from({ length: 4 }, (_, i) => ({ id: `op${i}`, fen: `fen-${i}` }));

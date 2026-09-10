@@ -16,7 +16,6 @@ export const MOUSE: Animal = {
 	definition: {
 		id: "mouse",
 		search: { depth: 1 },
-		temperature: 0,
 		weights: { development: -60 },
 	},
 };

@@ -11,12 +11,6 @@ export function describeOptions(config: BotConfig): UciResponse[] {
 		{ type: "option", name: "Depth", optionType: "spin", default: String(config.search.depth) },
 		{
 			type: "option",
-			name: "Temperature",
-			optionType: "string",
-			default: String(config.temperature),
-		},
-		{
-			type: "option",
 			name: "Quiescence",
 			optionType: "check",
 			default: String(config.search.quiescence ?? false),
@@ -70,8 +64,6 @@ export function applyOption({
 			return usable && number >= 1
 				? { ...config, search: { ...config.search, depth: Math.floor(number) } }
 				: config;
-		case "Temperature":
-			return usable && number >= 0 ? { ...config, temperature: number } : config;
 		case "Quiescence":
 			return { ...config, search: { ...config.search, quiescence: value === "true" } };
 		case "NodeLimit":

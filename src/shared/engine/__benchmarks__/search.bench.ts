@@ -18,10 +18,9 @@ const weights = onlyWeights({
 	materialQueen: 900,
 });
 
-// `prune` is what an argmax bot (`temperature: 0`, the whole roster) actually runs, and it runs
-// it with an rng, whose shuffled root is where its tie-break lives — so the argmax pass carries
-// one too, or it would be timing a path no bot takes. The unpruned pass is what a sampling bot
-// pays and the contrast worth watching.
+// `prune` is what every bot actually runs, and it runs it with an rng, whose shuffled root is
+// where its tie-break lives — so the pruned pass carries one too, or it would be timing a path no
+// bot takes. The unpruned pass is the full-window baseline the pruning is measured against.
 // One rng for the whole run: reseeding per search would time `createRng` as much as the search.
 const shuffling = createRng(1);
 const rngFor = (prune: boolean) => (prune ? shuffling : undefined);

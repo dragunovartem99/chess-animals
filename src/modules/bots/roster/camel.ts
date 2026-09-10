@@ -14,7 +14,6 @@ export const CAMEL: Animal = {
 	definition: {
 		id: "camel",
 		search: { depth: 2, quiescence: true },
-		temperature: 0,
 		base: "material",
 		weights: { passedPawnPush: 12, kingActivity: 20 },
 	},

@@ -10,16 +10,14 @@ const PAWN = featureId("materialPawn");
 const base: BotDefinition = {
 	id: "wolf",
 	search: { depth: 2 },
-	temperature: 5,
 	weights: { swarm: -12 },
 };
 
 describe("compileBot", () => {
-	it("carries the search and temperature through untouched", () => {
+	it("carries the search through untouched", () => {
 		const bot = compileBot(base);
 
 		expect(bot.search).toEqual({ depth: 2 });
-		expect(bot.temperature).toBe(5);
 	});
 
 	it("puts each named weight in its own slot", () => {

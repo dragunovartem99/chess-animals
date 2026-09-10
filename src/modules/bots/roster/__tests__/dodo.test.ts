@@ -22,7 +22,6 @@ function move({ depth, seed }: { depth: number; seed: number }): string {
 			position: positionFromFen(KINGS_APART),
 			weights: bot.weights,
 			search: { ...bot.search, depth },
-			temperature: bot.temperature,
 			rng: createRng(seed),
 		})!
 	);

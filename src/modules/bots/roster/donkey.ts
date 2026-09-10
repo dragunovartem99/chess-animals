@@ -11,7 +11,6 @@ export const DONKEY: Animal = {
 	definition: {
 		id: "donkey",
 		search: { depth: 1 },
-		temperature: 0,
 		weights: {},
 	},
 };

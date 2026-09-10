@@ -11,9 +11,6 @@ import type { BaseName } from "./bases";
 export type BotDefinition = {
 	id: string;
 	search: SearchOptions;
-	// How many points of evaluation the bot will throw away when picking a move. Zero is a strict
-	// argmax; the paper's weighted-sampling players live above it.
-	temperature: number;
 	// The starting point the weights are written over — piece values and mate-awareness, usually.
 	// Omitted means `zero`: a bot that names no base is exactly what its weights say and nothing
 	// else, which is what the paper's `random_move` needs.
@@ -28,6 +25,5 @@ export type BotDefinition = {
 export type BotConfig = {
 	id: string;
 	search: SearchOptions;
-	temperature: number;
 	weights: WeightVector;
 };

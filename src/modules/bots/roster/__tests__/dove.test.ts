@@ -18,7 +18,6 @@ function reply({ fen, seed }: { fen: string; seed: number }): string {
 			position: positionFromFen(fen),
 			weights: bot.weights,
 			search: bot.search,
-			temperature: bot.temperature,
 			rng: createRng(seed),
 		})!
 	);

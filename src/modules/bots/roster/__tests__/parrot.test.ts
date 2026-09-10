@@ -34,7 +34,6 @@ function answers({
 			position,
 			weights: bot.weights,
 			search: { ...bot.search, depth },
-			temperature: bot.temperature,
 			rng,
 		})!;
 

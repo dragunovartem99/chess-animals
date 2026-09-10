@@ -6,7 +6,6 @@ import type { BotDefinition } from "../types";
 const VALID: BotDefinition = {
 	id: "swarm-wolf",
 	search: { depth: 1 },
-	temperature: 0,
 	weights: { swarm: -12 },
 };
 
@@ -16,8 +15,8 @@ describe("assertBotDefinition", () => {
 	});
 
 	it("names the bot in the error, since a roster fails one file at a time", () => {
-		expect(() => assertBotDefinition({ ...VALID, temperature: -1 })).toThrow(
-			'invalid bot "swarm-wolf": temperature must be zero or more'
+		expect(() => assertBotDefinition({ ...VALID, search: { depth: 0 } })).toThrow(
+			'invalid bot "swarm-wolf": search.depth must be a whole number of at least 1'
 		);
 	});
 

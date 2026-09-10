@@ -15,7 +15,6 @@ export const GOAT: Animal = {
 		id: "goat",
 		// Depth 1: the strategy is a priority over the moves in front of it, not a plan.
 		search: { depth: 1 },
-		temperature: 0,
 		// No material base: it never once notices what it is losing.
 		base: "mate",
 		weights: {

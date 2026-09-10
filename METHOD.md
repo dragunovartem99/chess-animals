@@ -105,14 +105,16 @@ The eval context carries one `phase` scalar, and an endgame feature scales its o
 the same kind of shaping as `swarm` being negated on the way out — so it is still one weight per
 feature, one vector, one dot product.
 
-## Why sampling matters
+## Why there is no sampling
 
-`temperature: 0` is a strict argmax. Above zero, the move is a softmax sample over the scores.
+A bot always plays its argmax. Ties between equal moves are broken by a seeded shuffle of the root,
+and every pairing is played over the opening set, so two deterministic bots do not replay one game
+— that is where a result's variety comes from.
 
-This is not only for reproducing the paper's weighted-sampling players. A fully deterministic bot
-plays the same game against itself every time and draws by repetition — the paper hit exactly
-this with `first_move` and `reverse_starting`. Temperature is what makes a self-play result
-informative.
+There was a `temperature`: a softmax sample over the scores, for the paper's weighted-sampling
+players. Only one animal ever used it, and only to weaken itself, which a weight says just as well
+without throwing evaluation away at random. It is gone, and with it the need for the search to
+report every non-best move exactly.
 
 Everything random comes from one seeded xorshift128, per game. A tournament replays exactly.
 

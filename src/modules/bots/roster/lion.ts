@@ -16,7 +16,6 @@ export const LION: Animal = {
 	definition: {
 		id: "lion",
 		search: { depth: 3, quiescence: true },
-		temperature: 0,
 		base: "material",
 		weights: { kingDanger: -40, development: 20 },
 	},

@@ -15,17 +15,10 @@ import type { BotDefinition } from "@/shared/bots";
 // `hanging` became the Hedgehog and `mobility` the Spider.
 //
 // `lab("kingdanger", { kingDanger: -40 })` is the shape — id gets the `lab-` prefix, `material`
-// base and depth 2 unless the third argument says otherwise. The fourth argument stages a
-// candidate with a `temperature`, for weak deterministic builds that would otherwise draw
-// themselves by repetition. `npm run arena -- --lab-only` rates the candidates against each
-// other; `--lab` rates them alongside the roster.
-export function lab(
-	id: string,
-	weights: Record<string, number>,
-	depth = 2,
-	temperature = 0
-): BotDefinition {
-	return { id: `lab-${id}`, search: { depth }, temperature, base: "material", weights };
+// base and depth 2 unless the third argument says otherwise. `npm run arena -- --lab-only` rates
+// the candidates against each other; `--lab` rates them alongside the roster.
+export function lab(id: string, weights: Record<string, number>, depth = 2): BotDefinition {
+	return { id: `lab-${id}`, search: { depth }, base: "material", weights };
 }
 
 // The Raven's shape — depth 3, quiescence on, `material` base — with a weight stack over the top,
@@ -35,7 +28,6 @@ export function labQ(id: string, weights: Record<string, number>): BotDefinition
 	return {
 		id: `lab-${id}`,
 		search: { depth: 3, quiescence: true },
-		temperature: 0,
 		base: "material",
 		weights,
 	};

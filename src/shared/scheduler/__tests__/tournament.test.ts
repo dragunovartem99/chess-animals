@@ -11,7 +11,6 @@ const bot = (id: string): TournamentBot => ({
 	definition: {
 		id,
 		search: { depth: 1 },
-		temperature: 0,
 		weights: {},
 	} satisfies BotDefinition,
 });

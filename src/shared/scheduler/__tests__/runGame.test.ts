@@ -9,14 +9,12 @@ import { positionFromFen } from "../../chess";
 const HUNTER: BotDefinition = {
 	id: "hunter",
 	search: { depth: 1 },
-	temperature: 40,
 	weights: { materialPawn: 20, materialKnight: 60, materialRook: 100, captureValue: 8 },
 };
 
 const DRIFTER: BotDefinition = {
 	id: "drifter",
 	search: { depth: 1 },
-	temperature: 40,
 	weights: { mobility: 4, centralization: 3 },
 };
 

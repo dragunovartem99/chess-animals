@@ -8,7 +8,6 @@ import { createLocalTransport } from "../transports";
 const WOLF: BotDefinition = {
 	id: "wolf",
 	search: { depth: 1 },
-	temperature: 0,
 	weights: { swarm: -12, givesMate: 100000, materialQueen: 180 },
 };
 
@@ -75,7 +74,7 @@ describe("the engine over UCI", () => {
 
 	it("replays exactly after ucinewgame, from the seed it was given", async () => {
 		const play = async () => {
-			const engine = connect({ ...WOLF, temperature: 500 });
+			const engine = connect();
 			await engine.init();
 			engine.setOption({ name: "Seed", value: "fixed" });
 			await engine.newGame();

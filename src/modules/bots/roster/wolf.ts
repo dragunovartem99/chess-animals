@@ -10,7 +10,6 @@ export const WOLF: Animal = {
 	definition: {
 		id: "wolf",
 		search: { depth: 2 },
-		temperature: 0,
 		base: "material",
 		weights: { swarm: 400 },
 	},

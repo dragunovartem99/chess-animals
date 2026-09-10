@@ -3,7 +3,7 @@ import { INITIAL_FEN } from "chessops/fen";
 
 import type { BotConfig } from "../bots";
 import { afterMove, createRepetition, positionFromFen, type Repetition } from "../chess";
-import { pickMove, scoreMoves } from "./policy";
+import { scoreMoves } from "./policy";
 import type { Rng } from "./rng";
 import type { SearchOptions } from "./search";
 import { fromUci, toUci } from "./uci/moves";
@@ -75,17 +75,10 @@ export function findBestMove({
 }): UciResponse[] {
 	const search = withLimits({ search: config.search, limits });
 
-	// One search, then sample from it. Scoring the moves and then asking the policy to score them
-	// again would double the cost of every move the engine plays.
-	const root = scoreMoves({
-		position,
-		weights: config.weights,
-		search,
-		temperature: config.temperature,
-		rng,
-		repetition,
-	});
-	const move = pickMove({ root, temperature: config.temperature, rng });
+	// The search rather than `chooseMove`: the score it played on is reported alongside the move,
+	// and asking the policy for the move and then for the scores would search twice.
+	const root = scoreMoves({ position, weights: config.weights, search, rng, repetition });
+	const move = root.best;
 
 	// `0000` is UCI's null move, which is what an engine says when it has nothing to play. Better
 	// than silence: a caller waiting on `bestmove` would otherwise wait forever.

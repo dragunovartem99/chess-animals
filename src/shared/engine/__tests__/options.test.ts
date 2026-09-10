@@ -9,7 +9,6 @@ const SWARM = featureId("swarm");
 const config = compileBot({
 	id: "wolf",
 	search: { depth: 1 },
-	temperature: 0,
 	weights: { swarm: -12 },
 });
 
@@ -22,7 +21,7 @@ describe("describeOptions", () => {
 			(option) => option.type === "option" && option.name
 		);
 
-		expect(names).toEqual(["Depth", "Temperature", "Quiescence", "NodeLimit", "Seed"]);
+		expect(names).toEqual(["Depth", "Quiescence", "NodeLimit", "Seed"]);
 	});
 });
 
@@ -59,7 +58,6 @@ describe("applyOption", () => {
 	it("ignores what it cannot use rather than breaking the engine", () => {
 		for (const option of [
 			{ name: "Depth", value: "0" },
-			{ name: "Temperature", value: "-1" },
 			{ name: "swrm", value: "1" },
 			{ name: "swarm", value: "not a number" },
 			{ name: "Threads", value: "8" },

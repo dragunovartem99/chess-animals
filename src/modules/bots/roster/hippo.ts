@@ -9,7 +9,6 @@ export const HIPPO: Animal = {
 	definition: {
 		id: "hippo",
 		search: { depth: 2 },
-		temperature: 0,
 		base: "material",
 		weights: { centralization: 20 },
 	},

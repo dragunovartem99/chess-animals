@@ -10,7 +10,6 @@ export const MONKEY: Animal = {
 	definition: {
 		id: "monkey",
 		search: { depth: 2 },
-		temperature: 0,
 		base: "material",
 		weights: {},
 	},
