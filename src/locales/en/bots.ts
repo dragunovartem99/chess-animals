@@ -37,6 +37,10 @@ export default {
 		name: "Elephant",
 		description: "Only ever steps on squares of its own color. Every piece, every move.",
 	},
+	eagle: {
+		name: "Eagle",
+		description: "Watches the middle of the board from up high. Nothing lands there unseen.",
+	},
 	hippo: {
 		name: "Hippo",
 		description: "Wades into the middle of the board and never leaves. That's home now.",

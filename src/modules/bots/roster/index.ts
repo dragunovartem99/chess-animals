@@ -2,6 +2,7 @@ import { BEAR } from "./bear";
 import { DODO } from "./dodo";
 import { DONKEY } from "./donkey";
 import { DOVE } from "./dove";
+import { EAGLE } from "./eagle";
 import { ELEPHANT } from "./elephant";
 import { FOX } from "./fox";
 import { GOAT } from "./goat";
@@ -45,11 +46,12 @@ import { WOLF } from "./wolf";
 //
 // The one-idea animals are a tour of the registry: the Fox never leaves a piece catchable, the
 // Lemming reads the same `offeredMaterial` with the sign flipped and hands everything over, the
-// Spider gives every piece the most squares it can reach, the Hippo holds the centre, the
-// Hedgehog grabs everything and hangs nothing, the Wolf charges the whole army at the enemy king
-// (at -400 it overcommits — the earlier Wolf tuned nearer -200), the Sloth pulls it all home,
-// the Goat chases checks and captures, the Parrot mirrors the board, the Elephant keeps to its
-// own colour, the Dove refuses to fight at all, and the Dodo runs its king at yours.
+// Spider gives every piece the most squares it can reach, the Hippo holds the centre, the Eagle
+// watches it from a distance and lands just below the Hippo, the Hedgehog grabs everything and
+// hangs nothing, the Wolf charges the whole army at the enemy king (at -400 it overcommits — the
+// earlier Wolf tuned nearer -200), the Sloth pulls it all home, the Goat chases checks and
+// captures, the Parrot mirrors the board, the Elephant keeps to its own colour, the Dove refuses
+// to fight at all, and the Dodo runs its king at yours.
 //
 // The two-feature animals are depth 3 and pair two weights the lab rated together: the Hare
 // (`offeredMaterial` + `hanging`) is third overall, the Rhino (`mobility` + `opponentMobility`)
@@ -72,6 +74,7 @@ export const ROSTER: Animal[] = [
 	ELEPHANT,
 	WOLF,
 	MONKEY,
+	EAGLE,
 	HIPPO,
 	HEDGEHOG,
 	SPIDER,
