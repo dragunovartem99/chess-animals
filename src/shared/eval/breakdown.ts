@@ -1,10 +1,8 @@
 import type { Chess } from "chessops/chess";
 
-import { extractFeatures } from "./extract";
-import type { PlayedMove } from "./families/move";
 import { type FeatureFamily, FEATURES } from "./features";
 import { terminalTerm } from "./terminal";
-import type { WeightVector } from "./vector";
+import type { FeatureVector, WeightVector } from "./vector";
 
 export type Contribution = {
 	key: string;
@@ -48,9 +46,9 @@ function contribution({
 // score this position at, which is what makes this a debugging tool rather than an illustration:
 // if the bot plays a move this panel cannot explain, the panel is wrong, not the bot.
 //
-// `played` is the move that produced the position. Without it every move-level feature reads
-// zero, and a checkmate renders as an ordinary quiet position with a mildly bad score — the one
-// term that decided the game missing from the one panel meant to explain it.
+// `features` are the position's, read from the side to move with the move that produced it — the
+// wasm engine's `extract`. Without that move every move-level feature reads zero, and a capture
+// renders as a quiet position; the caller is the one who knows it.
 //
 // Everything comes out **White-relative**, the way an engine reports a score: positive means
 // White stands better, whoever happens to be on move. Internally the evaluation is written from
@@ -62,27 +60,25 @@ function contribution({
 export function explainPosition({
 	position,
 	weights,
-	played,
+	features,
 }: {
 	position: Chess;
 	weights: WeightVector;
-	played?: PlayedMove;
+	features: FeatureVector;
 }): Breakdown {
 	const sign = position.turn === "white" ? 1 : -1;
 
 	// A game-ending position is scored by one term that replaces the evaluation, so the panel
 	// shows that one term rather than a table of contributions the search never added up.
-	const terminal = terminalTerm({ position, weights: weights });
+	const terminal = terminalTerm({ position, weights });
 	if (terminal) {
-		const row = contribution({ ...terminal, weights: weights, sign });
+		const row = contribution({ ...terminal, weights, sign });
 
 		return { total: row.points, rows: [row] };
 	}
 
-	const features = extractFeatures({ position, played });
-
 	const rows = FEATURES.map((feature) =>
-		contribution({ id: feature.id, value: features[feature.id], weights: weights, sign })
+		contribution({ id: feature.id, value: features[feature.id], weights, sign })
 	)
 		.filter((row) => row.weight !== 0)
 		.toSorted((left, right) => Math.abs(right.points) - Math.abs(left.points));

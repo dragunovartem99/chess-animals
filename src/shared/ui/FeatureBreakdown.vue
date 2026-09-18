@@ -3,6 +3,7 @@ import type { Chess } from "chessops/chess";
 import { computed } from "vue";
 
 import { explainPosition, type PlayedMove, type WeightVector } from "../eval";
+import { playedGame, useWasmEngine } from "../wasm";
 
 const props = defineProps<{
 	position: Chess;
@@ -17,14 +18,24 @@ const props = defineProps<{
 const pawns = (points: number) =>
 	`${points > 0 ? "+" : points < 0 ? "\u2212" : ""}${(Math.abs(points) / 100).toFixed(2)}`;
 
-const breakdown = computed(() =>
-	explainPosition({ position: props.position, weights: props.weights, played: props.played })
-);
+const engine = useWasmEngine();
+
+// Nothing until the engine has loaded, rather than a table the search would not agree with.
+const breakdown = computed(() => {
+	if (!engine.value) return undefined;
+
+	const { position, weights, played } = props;
+	const features = engine.value.extract(playedGame({ position, played }));
+	return explainPosition({ position, weights, features });
+});
 const format = (value: number) => (Number.isInteger(value) ? String(value) : value.toFixed(1));
 </script>
 
 <template>
-	<section class="breakdown">
+	<section
+		v-if="breakdown"
+		class="breakdown"
+	>
 		<h2>{{ $t("game.breakdown.title", { name }) }}</h2>
 		<p class="perspective">{{ $t("game.breakdown.absolute") }}</p>
 		<p class="total">

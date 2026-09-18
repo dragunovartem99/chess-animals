@@ -1,3 +1,4 @@
+import type { Chess } from "chessops/chess";
 import { INITIAL_FEN } from "chessops/fen";
 import { describe, expect, it } from "vitest";
 
@@ -5,8 +6,27 @@ import { afterMove, legalMoves, positionFromFen } from "../../chess";
 import { evaluatePosition } from "../../engine";
 import { toUci } from "../../engine/uci/moves";
 import { onlyWeights } from "../../test-support/weights";
+import { loadEngine, playedGame } from "../../wasm";
 import { explainPosition } from "../breakdown";
+import type { PlayedMove } from "../families/move";
 import { MATE_SCORE } from "../terminal";
+import type { WeightVector } from "../vector";
+
+const engine = await loadEngine();
+
+// The panel's own path: the features from wasm, then the breakdown over them.
+function explain({
+	position,
+	weights,
+	played,
+}: {
+	position: Chess;
+	weights: WeightVector;
+	played?: PlayedMove;
+}) {
+	const features = engine.extract(playedGame({ position, played }));
+	return explainPosition({ position, weights, features });
+}
 
 const MATERIAL = onlyWeights({ materialQueen: 900, materialRook: 500, materialPawn: 100 });
 
@@ -19,7 +39,7 @@ describe("explainPosition", () => {
 		]) {
 			const position = positionFromFen(fen);
 
-			expect(explainPosition({ position, weights: MATERIAL }).total).toBeCloseTo(
+			expect(explain({ position, weights: MATERIAL }).total).toBeCloseTo(
 				evaluatePosition({ position, weights: MATERIAL }),
 				3
 			);
@@ -27,7 +47,7 @@ describe("explainPosition", () => {
 	});
 
 	it("leaves out features the bot has switched off", () => {
-		const rows = explainPosition({
+		const rows = explain({
 			position: positionFromFen(INITIAL_FEN),
 			weights: MATERIAL,
 		}).rows;
@@ -41,7 +61,7 @@ describe("explainPosition", () => {
 
 	it("puts the term that matters most first", () => {
 		const position = positionFromFen("4k3/8/8/3q4/8/8/8/3RK3 w - - 0 1");
-		const [first] = explainPosition({ position, weights: MATERIAL }).rows;
+		const [first] = explain({ position, weights: MATERIAL }).rows;
 
 		expect(first.key).toBe("materialQueen");
 		expect(first.points).toBe(-900);
@@ -60,8 +80,8 @@ describe("the move that produced the position", () => {
 		)!;
 		const position = afterMove({ position: parent, move });
 
-		const withMove = explainPosition({ position, weights, played: { parent, move } });
-		const without = explainPosition({ position, weights });
+		const withMove = explain({ position, weights, played: { parent, move } });
+		const without = explain({ position, weights });
 
 		// White delivered the mate, so White-relative it is a large positive — and it is the
 		// only row, because a mate replaces the evaluation instead of joining it.
@@ -83,7 +103,7 @@ describe("the move that produced the position", () => {
 
 		// `evaluatePosition` scores from the side to move — Black, who has just been mated — so the
 		// White-relative total the panel shows is its negation.
-		expect(explainPosition({ position, weights, played }).total).toBeCloseTo(
+		expect(explain({ position, weights, played }).total).toBeCloseTo(
 			-evaluatePosition({ position, played, weights }),
 			3
 		);
@@ -96,11 +116,11 @@ describe("the sign convention", () => {
 	const board = "4k3/8/8/3q4/8/8/8/3RK3";
 
 	it("reads the same for a position whoever is to move", () => {
-		const white = explainPosition({
+		const white = explain({
 			position: positionFromFen(`${board} w - - 0 1`),
 			weights: MATERIAL,
 		});
-		const black = explainPosition({
+		const black = explain({
 			position: positionFromFen(`${board} b - - 0 1`),
 			weights: MATERIAL,
 		});
@@ -111,22 +131,19 @@ describe("the sign convention", () => {
 	it("is negative when Black is the one who is better", () => {
 		// Black is a queen up for a rook.
 		expect(
-			explainPosition({ position: positionFromFen(`${board} w - - 0 1`), weights: MATERIAL })
-				.total
+			explain({ position: positionFromFen(`${board} w - - 0 1`), weights: MATERIAL }).total
 		).toBeLessThan(0);
 	});
 
 	it("is positive when White is better", () => {
 		const position = positionFromFen("3qk3/8/8/8/8/8/8/3RK3 b - - 0 1");
 
-		expect(
-			explainPosition({ position, weights: onlyWeights({ materialRook: 500 }) }).total
-		).toBe(500);
+		expect(explain({ position, weights: onlyWeights({ materialRook: 500 }) }).total).toBe(500);
 	});
 
 	it("flips the feature readings too, so value times weight still gives points", () => {
 		const position = positionFromFen(`${board} b - - 0 1`);
-		const [row] = explainPosition({ position, weights: MATERIAL }).rows;
+		const [row] = explain({ position, weights: MATERIAL }).rows;
 
 		expect(row.value * row.weight).toBeCloseTo(row.points, 3);
 	});
