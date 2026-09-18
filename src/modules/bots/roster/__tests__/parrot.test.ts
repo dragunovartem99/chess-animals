@@ -1,19 +1,16 @@
 import { INITIAL_FEN } from "chessops/fen";
-import { makeUci, parseUci } from "chessops/util";
 import { describe, expect, it } from "vitest";
 
 import { compileBot } from "@/shared/bots";
-import { positionFromFen } from "@/shared/chess";
-import { chooseMove } from "@/shared/engine";
-import { createRng } from "@/shared/engine/rng";
+import { seedState } from "@/shared/engine";
+import { engine } from "@/shared/test-support/wasm";
 
 import { ROSTER_BY_ID } from "../index";
 
 const PARROT = ROSTER_BY_ID.get("parrot")!.definition;
 
-// Play a line against the Parrot and collect what it answered each move with. Through
-// `chooseMove` and a seed, which is the path the app plays on: pruned, and with the tie between
-// equally good moves broken by the rng.
+// Play a line against the Parrot and collect what it answered each move with — the path the app
+// plays on: the game replayed from its moves, and one tie-break stream carried through it.
 function answers({
 	white,
 	depth,
@@ -24,28 +21,31 @@ function answers({
 	seed?: number;
 }): string[] {
 	const bot = compileBot(PARROT);
-	const position = positionFromFen(INITIAL_FEN);
-	const rng = createRng(seed);
+	const options = { ...bot.search, depth };
+	const moves: string[] = [];
 	const replies: string[] = [];
+	let rngState = seedState(seed);
 
 	for (const move of white) {
-		position.play(parseUci(move)!);
-		const reply = chooseMove({
-			position,
+		moves.push(move);
+		const found = engine.search({
+			fen: INITIAL_FEN,
+			moves,
 			weights: bot.weights,
-			search: { ...bot.search, depth },
-			rng,
-		})!;
-
-		replies.push(makeUci(reply));
-		position.play(reply);
+			options,
+			rngState,
+		});
+		rngState = found.rngState!;
+		replies.push(found.best!);
+		moves.push(found.best!);
 	}
 
 	return replies;
 }
 
-// Ten plies of the Giuoco Piano, which the Parrot has an answer to at every one of them.
-const WHITE = ["e2e4", "g1f3", "f1c4", "d2d3", "b1c3", "e1g1", "c1g5", "d1d2", "a2a3", "h2h3"];
+// Ten plies of the Giuoco Piano, which the Parrot has an answer to at every one of them. Castling
+// is the king taking its rook on both sides, the form the engine replays.
+const WHITE = ["e2e4", "g1f3", "f1c4", "d2d3", "b1c3", "e1h1", "c1g5", "d1d2", "a2a3", "h2h3"];
 const MIRRORED = ["e7e5", "g8f6", "f8c5", "d7d6", "b8c6", "e8h8", "c8g4", "d8d7", "a7a6", "h7h6"];
 
 describe("the Parrot", () => {

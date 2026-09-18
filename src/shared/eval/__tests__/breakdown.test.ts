@@ -3,16 +3,13 @@ import { INITIAL_FEN } from "chessops/fen";
 import { describe, expect, it } from "vitest";
 
 import { afterMove, legalMoves, positionFromFen } from "../../chess";
-import { evaluatePosition } from "../../engine";
 import { toUci } from "../../engine/uci/moves";
+import { extract } from "../../test-support/wasm";
 import { onlyWeights } from "../../test-support/weights";
-import { loadEngine, playedGame } from "../../wasm";
 import { explainPosition } from "../breakdown";
-import type { PlayedMove } from "../families/move";
+import type { PlayedMove } from "../played";
 import { MATE_SCORE } from "../terminal";
 import type { WeightVector } from "../vector";
-
-const engine = await loadEngine();
 
 // The panel's own path: the features from wasm, then the breakdown over them.
 function explain({
@@ -24,8 +21,14 @@ function explain({
 	weights: WeightVector;
 	played?: PlayedMove;
 }) {
-	const features = engine.extract(playedGame({ position, played }));
-	return explainPosition({ position, weights, features });
+	return explainPosition({ position, weights, features: extract({ position, played }) });
+}
+
+// What the engine scores the position at from the side to move: its features times the weights,
+// the dot `evaluate_features` takes.
+function engineScore({ position, weights }: { position: Chess; weights: WeightVector }) {
+	const features = extract({ position });
+	return weights.reduce((total, weight, slot) => total + features[slot] * weight, 0);
 }
 
 const MATERIAL = onlyWeights({ materialQueen: 900, materialRook: 500, materialPawn: 100 });
@@ -40,7 +43,7 @@ describe("explainPosition", () => {
 			const position = positionFromFen(fen);
 
 			expect(explain({ position, weights: MATERIAL }).total).toBeCloseTo(
-				evaluatePosition({ position, weights: MATERIAL }),
+				engineScore({ position, weights: MATERIAL }),
 				3
 			);
 		}
@@ -91,22 +94,6 @@ describe("the move that produced the position", () => {
 		// The mate is a property of the position, not of the move that produced it, so the panel
 		// still reports it when it was not told which move was played.
 		expect(without.rows.map((row) => row.key)).toEqual(["givesMate"]);
-	});
-
-	it("still sums to what the search would score", () => {
-		const parent = positionFromFen("6k1/5ppp/8/8/8/8/8/R5K1 w - - 0 1");
-		const move = legalMoves(parent).find(
-			(candidate) => toUci({ position: parent, move: candidate }) === "a1a8"
-		)!;
-		const position = afterMove({ position: parent, move });
-		const played = { parent, move };
-
-		// `evaluatePosition` scores from the side to move — Black, who has just been mated — so the
-		// White-relative total the panel shows is its negation.
-		expect(explain({ position, weights, played }).total).toBeCloseTo(
-			-evaluatePosition({ position, played, weights }),
-			3
-		);
 	});
 });
 

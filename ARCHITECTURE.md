@@ -52,19 +52,20 @@ own lazy chunk.
 One flat area per folder, each with its own `index.ts`, and deliberately **no root barrel**.
 `shared/` depends on nothing else in the repo.
 
-| Area           | What it holds                                                                                                                                               |
-| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `chess`        | chessops wrappers — FEN in/out, legal moves, `afterMove`, the search's per-ply scratch positions, repetition keys and hashes, and game-over detection       |
-| `eval`         | the feature registry, the extractor and its families, feature and weight vectors, terminal scoring, the White-relative breakdown — the heart of the project |
-| `engine`       | negamax search, move ordering, quiescence, the move policy, the seeded RNG, the UCI codec, the engine client and its transports                             |
-| `game`         | `useGame` — one game with its move list and repetition history, owned by whichever view mounts it (`/play`, `/frankenstein`)                                |
-| `ui`           | the Vue components both game views share — `SegmentedTabs` and the `FeatureBreakdown` table                                                                 |
-| `bots`         | `BotDefinition` (JSON on disk) and `BotConfig` (compiled), the frozen weight bases, the guard, and `compileBot` between them                                |
-| `openings`     | the curated paired opening set (JSON), `probe(fen)`, and the colour-swapped schedule                                                                        |
-| `rating`       | Bradley–Terry MLE with a white advantage and Rao–Kupper draw term, CIs from the Hessian, and the Markov champion iteration                                  |
-| `scheduler`    | the pure `runGame`, a `worker_threads` pool, the result cache, adaptive pairing, and `runTournament` over all of it                                         |
-| `tuner`        | SPSA — the decaying gain sequences, the Rademacher perturbation, the ascent loop, and the bot-weights ↔ parameter-vector mapping                            |
-| `test-support` | fixtures and helpers shared by specs — component mounting, played games, weight vectors, a fake worker                                                      |
+| Area           | What it holds                                                                                                                                  |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `chess`        | chessops wrappers — FEN in/out, legal moves, `afterMove`, repetition keys and hashes, and game-over detection                                  |
+| `eval`         | the feature registry, feature and weight vectors, the mate term, the White-relative breakdown — what a bot is, where `engine/` is what it does |
+| `engine`       | the seeded RNG, the UCI codec, the UCI engine over a `goSearch`, the engine client and its transports                                          |
+| `wasm`         | the binding to `engine/build/engine.wasm` — loading, the linear-memory arena, `search`/`extract`/`perft`, and the `goSearch` over it           |
+| `game`         | `useGame` — one game with its move list and repetition history, owned by whichever view mounts it (`/play`, `/frankenstein`)                   |
+| `ui`           | the Vue components both game views share — `SegmentedTabs` and the `FeatureBreakdown` table                                                    |
+| `bots`         | `BotDefinition` (JSON on disk) and `BotConfig` (compiled), the frozen weight bases, the guard, and `compileBot` between them                   |
+| `openings`     | the curated paired opening set (JSON), `probe(fen)`, and the colour-swapped schedule                                                           |
+| `rating`       | Bradley–Terry MLE with a white advantage and Rao–Kupper draw term, CIs from the Hessian, and the Markov champion iteration                     |
+| `scheduler`    | the pure `runGame`, a `worker_threads` pool, the result cache, adaptive pairing, and `runTournament` over all of it                            |
+| `tuner`        | SPSA — the decaying gain sequences, the Rademacher perturbation, the ascent loop, and the bot-weights ↔ parameter-vector mapping               |
+| `test-support` | fixtures and helpers shared by specs — the wasm engine, component mounting, played games, weight vectors, a fake worker                        |
 
 `shared/bots` sits below both `eval` and `engine` in the dependency order rather than beside the
 roster, because the worker and the cache key need to read a bot definition without pulling a Vue
@@ -72,27 +73,40 @@ component in with it.
 
 ## The evaluation
 
-`shared/eval/extract.ts` reads the features off one position in a single walk of the board, in
-`createContext`, which hands each family the piece list with its attack sets worked out once;
-the families then do index and bitboard arithmetic only. Reading all fifty-odd measures
-**~18 µs**, with a 60 µs regression guard asserted in the suite.
+Search and evaluation are C compiled to WebAssembly, in `engine/`: freestanding clang
+`--target=wasm32`, no libc and no Emscripten, so the module is tens of KB with no JS glue and
+`WebAssembly.instantiate` loads it straight from a worker. The same sources build natively for
+the C suite under ASan + UBSan and llvm-cov, and for `npm run engine:bench`. chessops stays for
+everything that is not the hot path: the board's legal destinations, FEN/SAN/PGN, and the
+game-level outcome and repetition in `useGame` and `runGame`.
 
-That walk is **lazy**, because it is most of the cost and most bots never need it: `reach`,
-`pawnAttacks` and `attacksBy` are prototype getters that call `attacks` on all thirty-two men the
-first time one of them is read, and never if none is. A material-only evaluation went 5.3 µs a
-node to 0.4. (Prototype getters, not accessors in an object literal — those are own properties
-built per instance and cost more than the walk they were meant to avoid.)
+The registry is still TS and still the single source. `cli/featuresHeader.ts` generates
+`engine/include/feature_ids.h` from `features.ts` — the ids, and the keys the bench prints — and a
+spec fails while the committed header is stale. A feature is one C function in
+`engine/src/eval/`, entered in the `EXTRACTORS` table by its id; the files group them by what they
+read, for the reader only.
 
-A search does not read all fifty-odd. A weight of zero cannot change a score, so `liveSlots`
-reads the bot's weight vector once per `go` and `createExtractor` runs only
-the families that union touches — the dot product then walks the same list instead of multiplying
-fifty-odd zeros. An animal names a handful of features, which is **~3 µs** a node and a 3–5×
-faster search; `cccp` reads only the move and never builds the context at all; the random mover
-extracts nothing. Each family declares the slots it writes next to its extractor, and the suite
-holds every family to writing exactly those.
+A search does not read every feature. A weight of zero cannot change a score, so `evaluator`
+reads the bot's weights once per search and keeps the slots it weighs with their extractors, and a
+node runs exactly those — a material-only node is a few nanoseconds, where running every feature
+is ~380 ns. What more than one feature reads, the attack maps, sits in a lazy context whose walk
+runs the first time a feature asks and never if none does. `npm run engine:bench` prints the
+cost of each feature on top of that walk.
 
 Everything is from the **side to move's** perspective, so no evaluation code is colour-specific
 and a bot plays the same way with either colour.
+
+Mate is the one thing that is **not** a term in the dot product. `terminal_score` replaces the
+evaluation of a finished game with `MATE_SCORE - ply`, scaled by `givesMate` — a preference in
+[-1, 1] where +1 chases mate, -1 flees it and 0 cannot see one, in which case the position is
+evaluated like any other. Adding mate to the evaluation instead, as a weight of 100000, was wrong
+twice over: every mate scored the same whatever its distance, and the leaf of a slow mate then
+collected plies of positional bonus on top of it, so every animal in the roster walked past a
+mate in one.
+
+The breakdown panel reads the same features: `playedGame` hands the engine the position and the
+move that produced it, `extract` returns the vector, and `explainPosition` turns it into
+White-relative rows that sum to what the search scores.
 
 Feature keys are what a bot config stores, what a UCI `setoption` names, and what the locale
 files key their labels on. Ids are assigned from registry order and never stored, so appending a
@@ -100,59 +114,43 @@ feature is safe and reordering one is not.
 
 ## The engine
 
-Two searches stand side by side until cutover. The browser's `uciEngine` worker and the arena's
-game workers — so the tuner's games too — search in C compiled to wasm (`engine/`, bound in
-`shared/wasm/`), handed to `createUciEngine` and `runGame` as a `goSearch`; the tests still call
-the TS search below, which is also the oracle the C one is held to. What follows describes the TS
-search.
+The browser's `uciEngine` worker, the breakdown panel and the arena's game workers — so the
+tuner's games too — all load the one module. It is called coarsely, never per node:
+`search({ fen, moves, weights, options, rngState })` returns the move, its score, the node count
+and the advanced random state; C replays the move history into its own Zobrist stack, so it sees
+every repetition the game has been through. UCI parsing, transports and workers stay TS and stay
+thin, handing the search to `createUciEngine` and `runGame` as a `goSearch`.
 
-`searchRoot` is negamax with alpha-beta, and `leaf.ts` is what happens once it stops descending —
-the evaluation, quiescence and the node budget, which is a property of leaves because a leaf is
-the only thing that spends one. `depth` comes from the bot, `quiescence` extends past
-the last ply along captures, and `nodeLimit` caps the work one move may cost (reaching it stops
-the search going deeper rather than corrupting the result). Depth 1 short-circuits to scoring
-every legal move.
+The search is fail-soft alpha-beta with PVS and iterative deepening to the bot's depth. A
+transposition table orders moves only — the table move first, never a cutoff, so a repetition
+cannot make a score depend on the path — then MVV-LVA captures and killers. Null move, LMR,
+futility and razoring are **out**: they assume a sane evaluation, and an animal's is not; a
+Sloth's `huddle` score is exactly what null move would mis-prune. `nodeLimit` plays the best move
+of the last depth it finished.
 
-Captures it cannot afford are not searched at all. If the standing score plus the piece on offer
-plus a two-pawn margin still fails to reach `alpha`, the capture is skipped — a pawn is not worth
-looking at while a rook down. The piece is priced from the bot's _own_ material and `captureValue`
-weights, so a Snake that thinks a rook beats a queen prunes by its own values and a bot weighing
-no material at all gets a bound of zero, which is the truth: captures cannot move a score that
-does not count them. The margin is the wager, since a capture moves mobility and king safety too
-and nothing bounds those; it is worth about 15% of a search with quiescence on.
+Quiescence stands pat and searches captures, promotions and en passant — and in check every
+evasion, since the side to move may not decline. A capture that could not lift the standing score
+to `alpha` even with the piece free and a two-pawn margin is skipped, the piece priced at the
+bot's _own_ material and `captureValue` weights: a bot weighing no material gets a bound of zero,
+which is the truth.
 
-Quiescence stands pat and then searches captures — except in check, where there is nothing to
-stand on: the side to move may not decline, so **every** evasion is searched, not only the ones
-that capture. That extension is worth one check per line (`EVASION_BUDGET`); unbounded, a
-checking sequence never shrinks the move list and the benchmark ran 2.5× slower. Quiet moves that
-_give_ check are not searched at all — the other half of what "quiescence with checks" usually
-means, and the half no depth-2 animal is going to follow up on.
+A repetition (twofold inside the tree), the fifty-move rule, insufficient material and stalemate
+all score a flat zero before the position is evaluated. Zero is the honest price of splitting the
+point, because every feature is a difference between the sides; without it a bot two queens up
+would shuffle back into a position it had already drawn twice.
 
-Mate is the one thing that is **not** a term in the dot product. `terminalScore` replaces the
-evaluation of a finished game with `MATE_SCORE - ply`, scaled by `givesMate` — a preference in
-[-1, 1] where +1 chases mate, -1 flees it and 0 cannot see one, in which case the position is
-evaluated like any other. Adding mate to
-the evaluation instead, as a weight of 100000, was wrong twice over: every mate scored the same
-whatever its distance, and the leaf of a slow mate then collected plies of positional bonus on
-top of it, so every animal in the roster walked past a mate in one.
+A move is always the argmax, the tie between equal moves broken by a shuffle of the root from
+xorshift128. The stream's state crosses every search and comes back advanced, so one stream runs
+through a whole game and it replays exactly from its seed.
 
-A draw is the other thing the search must see for itself, and the one it used to be blind to.
-`createDrawTest` scores a repetition, the fifty-move rule and insufficient material at a flat
-zero, before the position is evaluated and before its moves are generated — the game does not go
-on from there. Unlike mate this is not a preference: zero is the honest price of splitting the
-point, because every feature is a difference between the sides, so a level position already scores
-near it. Without it a bot two queens up would shuffle back into a position it had already drawn
-twice and score it as winning.
-
-The history comes from whoever owns the game — `runGame` in the arena, `position … moves` over
-UCI — as a `Repetition`, a stack of 64-bit position hashes the search pushes its own ancestors
-onto. Hashes rather than the exact FEN `repetitionKey` the game-level rule uses, because a string
-per node is what the search cannot afford; the hash is only computed once `halfmoves` says a
-repetition is reachable at all, which is most of why knowing about draws costs 2–4%.
-
-`policy.ts` turns those scores into a move: always the argmax, with the tie between equal moves
-broken by a seeded shuffle of the root. All randomness comes from `createRng` — xorshift128, seeded
-per game — so a game replays exactly from its seed.
+C17, `-O3 -flto`, clang-tidy and clang-format in `lint:check` and `format:check`, and the
+100-line rule per file. No allocation after init: move lists live on the stack, the undo record
+per ply, and the tables are built once. The C suite checks move generation and perft against
+chessops fixtures, the search against itself — PVS equal to alpha-beta equal to plain minimax,
+deepening equal to a fixed depth — and every feature and every roster animal's score against
+`features.txt` and `evals.txt`, the TS code's answers frozen when it was retired. The bench prints
+a **signature**, the total nodes over the roster: a speed-only change leaves it alone, and a
+commit that moves it says why.
 
 ### Everything speaks UCI
 

@@ -13,13 +13,8 @@ export const MATE_SCORE = 100_000;
 export type TerminalTerm = { id: number; value: number };
 
 // Mate is not a heuristic, so it is not a term in the dot product: it **replaces** the evaluation
-// rather than adding to it.
-//
-// Adding was the bug. Every mate scored the same 100000 whatever its distance, and the leaf of a
-// mate-in-3 then collected three plies of positional bonus on top, so every animal in the roster
-// walked past a mate in one to play a slower one. Both halves are fixed here: the score decays
-// with `ply`, so the shortest mate wins, and nothing else is added to it, so no bonus can outbid
-// it.
+// rather than adding to it — the engine's `terminal_score`, read here at the root the breakdown
+// explains, where no ply has decayed it.
 //
 // `value` is in the side to move's frame like every other feature — the side that is mated is the
 // one on move — and multiplying by the weight puts the sign the right way round: a preference of
@@ -31,40 +26,13 @@ export type TerminalTerm = { id: number; value: number };
 export function terminalTerm({
 	position,
 	weights,
-	ply = 0,
-	inCheck,
 }: {
 	position: Chess;
 	weights: WeightVector;
-	ply?: number;
-	// What the caller already knows about `position.isCheck()`, if anything. A mate needs a check,
-	// so a known `false` skips a `checkmate` probe (which recomputes the checkers and scans for a
-	// legal move) that can only come back false. `undefined` means "not known" — the probe runs.
-	inCheck?: boolean;
 }): TerminalTerm | undefined {
-	// The weight is checked before the position: `isCheckmate` walks for a legal move, and a bot
-	// that cannot see mate should not pay for that on every node of every search.
-	if (weights[GIVES_MATE] !== 0 && inCheck !== false && position.isCheckmate()) {
-		return { id: GIVES_MATE, value: -(MATE_SCORE - ply) };
+	if (weights[GIVES_MATE] !== 0 && position.isCheckmate()) {
+		return { id: GIVES_MATE, value: -MATE_SCORE };
 	}
 
 	return undefined;
-}
-
-// What the search scores a game-ending position at, or `undefined` if this position does not end
-// the game — or ends it in a way this bot has no opinion about.
-export function terminalScore({
-	position,
-	weights,
-	ply = 0,
-	inCheck,
-}: {
-	position: Chess;
-	weights: WeightVector;
-	ply?: number;
-	inCheck?: boolean;
-}): number | undefined {
-	const term = terminalTerm({ position, weights, ply, inCheck });
-
-	return term && term.value * weights[term.id];
 }

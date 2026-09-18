@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import type { BotDefinition } from "../../bots";
 import { compileBot } from "../../bots";
+import { goSearch } from "../../test-support/wasm";
 import { createTestWorker } from "../../test-support/worker";
 import { createUciClient } from "../client";
 import { createLocalTransport, createWorkerTransport } from "../transports";
@@ -61,6 +62,7 @@ describe("the local transport", () => {
 		const transport = createLocalTransport({
 			config: compileBot(DONKEY),
 			name: "Test Donkey",
+			goSearch,
 		});
 		transport.subscribe((line) => lines.push(line));
 

@@ -3,8 +3,8 @@
 
 #include "eval.h"
 
-// One function per registry entry, grouped in files by the TS family file each mirrors — the
-// grouping is for the reader; `EXTRACTORS` is what the evaluator sees.
+// One function per registry entry, grouped in files by what they read — the grouping is for the
+// reader; `EXTRACTORS` is what the evaluator sees.
 float extract_material_pawn(EvalContext *ctx);
 float extract_material_knight(EvalContext *ctx);
 float extract_material_bishop(EvalContext *ctx);

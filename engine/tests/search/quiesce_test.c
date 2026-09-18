@@ -97,9 +97,9 @@ TEST(delta_pruning_saves_nodes) {
 	CHECK(pruned.best == full.best && pruned.score == full.score);
 }
 
-// The root's tie-break, against `chooseMove` with every weight at zero — every move ties, so the
-// move is the first of the shuffle — and the stream is left where the TS one is.
-TEST(shuffles_the_root_as_the_ts_search_does) {
+// The root's tie-break with every weight at zero — every move ties, so the move is the first of
+// the shuffle — pinned to what the TS search played, and the stream left where it left it.
+TEST(shuffles_the_root_as_pinned) {
 	static const char *const CASES[][3] = {
 	    {"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", "c2c4", "847933"},
 	    {"r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1", "e5c6", "439744"},

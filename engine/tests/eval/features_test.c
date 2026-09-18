@@ -19,7 +19,8 @@ static uint32_t bits_of(float value) {
 }
 
 // One line of `fixtures/features.txt`: the position a move was played from, the move (`-` at a
-// root) and the TS extractor's features for the position after, as float32 bits.
+// root) and the features of the position after, as float32 bits — the TS extractor's, frozen
+// when it was retired.
 static void check_line(char *line) {
 	char *uci = strchr(line, ';');
 	char *values = uci == NULL ? NULL : strchr(uci + 1, ';');
@@ -51,9 +52,9 @@ static void check_line(char *line) {
 	}
 }
 
-// Every slot of every line, the move family's included: C and TS read the same position the same
-// way down to the last bit.
-TEST(features_equal_the_ts_extractor_to_the_bit) {
+// Every slot of every line, the move features included: a change to what a feature reads fails
+// here, down to the last bit, until the fixture is changed with it.
+TEST(features_equal_the_frozen_fixture_to_the_bit) {
 	static char line[1024];
 	FILE *file = fopen("tests/fixtures/features.txt", "r");
 	CHECK(file != NULL);

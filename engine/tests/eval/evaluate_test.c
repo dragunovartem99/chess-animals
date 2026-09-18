@@ -47,9 +47,9 @@ static void check_sample(char *line) {
 	}
 }
 
-// Every animal on the roster, on every sample, mates included: C scores a position exactly as
-// `evaluatePosition` does, down to the last bit of the double.
-TEST(evaluate_equals_evaluate_position_for_every_roster_bot) {
+// Every animal on the roster, on every sample, mates included: a position scores exactly what the
+// frozen fixture says, down to the last bit of the double.
+TEST(evaluate_equals_the_frozen_scores_for_every_roster_bot) {
 	static char line[8192];
 	FILE *file = fopen("tests/fixtures/evals.txt", "r");
 	CHECK(file != NULL);

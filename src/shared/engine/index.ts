@@ -1,13 +1,8 @@
 export { type BestMove, createUciClient, type UciEngineClient, type UciTransport } from "./client";
 export { applyOption, describeOptions } from "./options";
 export { createLocalTransport, createWorkerTransport } from "./transports";
-export { type GoRequest, type GoResult, type GoSearch, searchInTs } from "./goSearch";
+export { type GoRequest, type GoResult, type GoSearch, type SearchOptions } from "./goSearch";
 export { createUciEngine } from "./uciEngine";
-export { createEvaluator, evaluatePosition, type PositionEvaluator } from "./evaluate";
-export { orderMoves } from "./ordering";
-export { createQuiescence } from "./quiescence";
-export { chooseMove, scoreMoves } from "./policy";
-export { type RootSearch, type ScoredMove, searchRoot, type SearchOptions } from "./search";
 export { createRng, type Rng, seedState } from "./rng";
 export {
 	parseCommand,

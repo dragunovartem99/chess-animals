@@ -9,7 +9,7 @@ static Square king_of(const EvalContext *ctx, Color color) {
 }
 
 // An army's mean distance to a king, in king moves — the mean, not the total, so a side ahead in
-// material does not read as the worse swarmer. A double divided once, as the TS number is. An
+// material does not read as the worse swarmer. A double divided once, as the frozen fixture was. An
 // army always holds its king, so the mean never divides by zero.
 static double mean_distance(const EvalContext *ctx, Color army, Color king) {
 	Square target = king_of(ctx, king);

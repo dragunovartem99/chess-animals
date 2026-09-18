@@ -2,7 +2,7 @@ import { INITIAL_FEN } from "chessops/fen";
 import { describe, expect, it } from "vitest";
 
 import { positionFromFen } from "../../chess";
-import { extractFeatures } from "../extract";
+import { extract as extractFeatures } from "../../test-support/wasm";
 import { featureId } from "../features";
 
 function read({ fen, key }: { fen: string; key: string }): number {

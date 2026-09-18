@@ -1,10 +1,8 @@
-import { makeUci } from "chessops/util";
 import { describe, expect, it } from "vitest";
 
 import { compileBot } from "@/shared/bots";
 import { positionFromFen } from "@/shared/chess";
-import { chooseMove } from "@/shared/engine";
-import { createRng } from "@/shared/engine/rng";
+import { bestMove } from "@/shared/test-support/wasm";
 
 import { ROSTER_BY_ID } from "../index";
 
@@ -17,14 +15,12 @@ const KINGS_APART = "4k3/8/8/8/8/8/P7/K7 w - - 0 1";
 function move({ depth, seed }: { depth: number; seed: number }): string {
 	const bot = compileBot(DODO);
 
-	return makeUci(
-		chooseMove({
-			position: positionFromFen(KINGS_APART),
-			weights: bot.weights,
-			search: { ...bot.search, depth },
-			rng: createRng(seed),
-		})!
-	);
+	return bestMove({
+		position: positionFromFen(KINGS_APART),
+		weights: bot.weights,
+		search: { ...bot.search, depth },
+		seed,
+	})!;
 }
 
 describe("the Dodo", () => {

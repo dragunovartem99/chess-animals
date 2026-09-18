@@ -21,8 +21,8 @@ static int king_centrality(const Position *pos, Color color) {
 
 // Each difference is scaled by `1 - phase`, silent while the pieces are on — and not worked out
 // then, which is most of a middlegame search. The product is taken in double and rounded once, as
-// the TS number is on its way into the vector; a silent feature reads +0, never the -0 a negative
-// difference times zero would give.
+// the frozen fixture was; a silent feature reads +0, never the -0 a negative difference times
+// zero would give.
 float extract_king_activity(EvalContext *ctx) {
 	const Position *pos = ctx->pos;
 	double late = 1 - eval_phase(pos);

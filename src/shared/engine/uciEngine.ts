@@ -2,13 +2,13 @@ import { INITIAL_FEN } from "chessops/fen";
 
 import type { BotConfig } from "../bots";
 import { createRepetition, positionFromFen } from "../chess";
-import { type GoSearch, searchInTs } from "./goSearch";
+import type { GoSearch } from "./goSearch";
 import { applyOption, describeOptions } from "./options";
 import { seedState } from "./rng";
 import type { GoLimits, UciCommand, UciResponse } from "./uci/types";
 import { findBestMove, type Replayed, replay } from "./uciMoves";
 
-export type UciEngineState = { config: BotConfig; name: string; goSearch?: GoSearch };
+export type UciEngineState = { config: BotConfig; name: string; goSearch: GoSearch };
 
 // The board and the game behind it travel together, because `position` is the one command that
 // sets both and `go` is the one that needs both.
@@ -29,7 +29,7 @@ function identify({ config, name }: { config: BotConfig; name: string }): UciRes
 // One bot, driven by UCI commands. It holds no worker, no timers and no I/O: a command goes in,
 // a list of responses comes out. That is what lets the whole protocol be tested without spawning
 // anything, and what lets the same code run in a worker, on the main thread, or in a test.
-export function createUciEngine({ config, name, goSearch = searchInTs }: UciEngineState) {
+export function createUciEngine({ config, name, goSearch }: UciEngineState) {
 	let current = config;
 	let seed: number | string = config.id;
 	let game = startpos();

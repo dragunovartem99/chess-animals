@@ -34,11 +34,11 @@ score = dot(features(position, move), weights);
 A personality is nothing but a weight vector. `swarm` is not a special case in the engine — it is
 a positive weight on a feature that measures distance to the enemy king, with everything else at
 zero. The random bot is every weight at zero, where the argmax tie-break picks uniformly. That is
-what makes the roster extensible: **adding a heuristic is one registry entry and one extractor
-line**, and adding an animal is a data file.
+what makes the roster extensible: **adding a heuristic is one registry entry and one C
+function**, and adding an animal is a data file.
 
 27 features in six families, declared once in `shared/eval/features.ts`. That single registry
-drives the extractor, the weight-editor sliders, the SPSA parameter space, the JSON schema for
+drives the engine's feature ids, the weight-editor sliders, the SPSA parameter space, the JSON schema for
 bot configs, and the locale files.
 
 A family says **what a feature measures**, not where the idea came from. That matters because the
@@ -152,7 +152,7 @@ a noisy signal usable. Target: a useful run in 1–2 minutes.
 
 ## How we know it works
 
-- **Unit** — the extractor against hand-checked FENs; the UCI codec's
+- **Unit** — every feature against hand-checked FENs, and bit for bit against a frozen corpus; the UCI codec's
   round-trips; `fitBradleyTerry` recovering known ratings from a synthetic matrix and staying
   stable under deliberately imbalanced pair counts; `markovChampion` on a matrix with a known
   stationary distribution.
@@ -161,8 +161,8 @@ a noisy signal usable. Target: a useful run in 1–2 minutes.
   the Lemming (the paper's `pacifist` and `generous`) and the Mouse are the ones the Donkey
   beats, and the Dodo edges it. **Matching the paper's ordering is the strongest signal the
   features are right**, and it is the check that would actually catch a wrong sign.
-- **Performance** — `npm run bench` reports extraction and search cost; the suite holds
-  extraction under a 60 µs guard and a depth-2 search pass under 40 ms.
+- **Performance** — `npm run engine:bench` reports the cost of each feature and a search
+  signature, `npm run bench` the search through wasm; the suite holds a depth-3 pass under 20 ms.
 
 ## Designed for, not built
 

@@ -1,6 +1,5 @@
 export { type Breakdown, type Contribution, explainPosition } from "./breakdown";
-export { createExtractor, type ExtractFrame, extractFeatures } from "./extract";
-export type { PlayedMove } from "./families/move";
+export type { PlayedMove } from "./played";
 export {
 	defineFeatures,
 	type Feature,
@@ -12,14 +11,11 @@ export {
 	featureId,
 } from "./features";
 export {
-	createFeatureVector,
 	defaultRecord,
 	defaultWeights,
-	dot,
 	type FeatureVector,
-	liveSlots,
 	recordFromWeights,
 	type WeightVector,
 	weightsFromRecord,
 } from "./vector";
-export { MATE_SCORE, type TerminalTerm, terminalScore, terminalTerm } from "./terminal";
+export { MATE_SCORE, type TerminalTerm, terminalTerm } from "./terminal";

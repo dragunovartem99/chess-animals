@@ -2,7 +2,7 @@ import { makeUci } from "chessops/util";
 import { describe, expect, it } from "vitest";
 
 import { afterMove, legalMoves, positionFromFen } from "../../chess";
-import { extractFeatures } from "../extract";
+import { extract as extractFeatures } from "../../test-support/wasm";
 import { featureId } from "../features";
 
 function afterUci({ fen, uci, key }: { fen: string; uci: string; key: string }): number {

@@ -1,10 +1,8 @@
-import { makeUci } from "chessops/util";
 import { describe, expect, it } from "vitest";
 
 import { compileBot } from "@/shared/bots";
 import { positionFromFen } from "@/shared/chess";
-import { chooseMove } from "@/shared/engine";
-import { createRng } from "@/shared/engine/rng";
+import { bestMove } from "@/shared/test-support/wasm";
 
 import { ROSTER_BY_ID } from "../index";
 
@@ -13,14 +11,12 @@ const LEMMING = ROSTER_BY_ID.get("lemming")!.definition;
 function move({ fen, seed }: { fen: string; seed: number }): string {
 	const bot = compileBot(LEMMING);
 
-	return makeUci(
-		chooseMove({
-			position: positionFromFen(fen),
-			weights: bot.weights,
-			search: bot.search,
-			rng: createRng(seed),
-		})!
-	);
+	return bestMove({
+		position: positionFromFen(fen),
+		weights: bot.weights,
+		search: bot.search,
+		seed,
+	})!;
 }
 
 describe("the Lemming", () => {

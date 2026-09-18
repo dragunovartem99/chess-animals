@@ -19,7 +19,7 @@ typedef struct {
 // side to move: the whole evaluation is written from that seat, so no feature is colour-specific.
 // `played` is NULL at a root, where the move features read zero.
 //
-// The attack maps are lazy, as in TS: most features only count men or read their squares, so the
+// The attack maps are lazy: most features only count men or read their squares, so the
 // walk that fills them runs only when a feature first asks, through `eval_walk`.
 typedef struct {
 	const Position *pos;
@@ -44,12 +44,12 @@ void eval_walk(EvalContext *ctx);
 double eval_phase(const Position *pos);
 
 // chessops's `capturedRole`: the role on the target square, or the pawn an en passant capture
-// takes. Castling is king-takes-rook, so it reads the mover's own rook — a quirk the TS feature
-// has too, kept until both are fixed together.
+// takes. Castling is king-takes-rook, so it reads the mover's own rook — a quirk the frozen
+// fixture has too, kept until `captureValue` is fixed for castling.
 Played played_move(const Position *parent, Move move);
 
-// One feature, from the side to move's seat. Float rather than double because the TS vector is a
-// Float32Array, and a bit-identical feature is rounded where it is.
+// One feature, from the side to move's seat. Float rather than double: the fixtures and the TS
+// `FeatureVector` are float32, and a bit-identical feature is rounded where they are.
 typedef float (*Extractor)(EvalContext *ctx);
 
 // The extractor for each slot. A bot runs only the ones it weighs, so a feature is one function

@@ -37,7 +37,7 @@ TEST(reads_the_phase_from_the_pieces_left) {
 	      eval_phase(&pos) == 1.0);
 }
 
-// A perfect mirror is `-asymmetry` of zero in TS, which a Float32Array keeps as -0. The fixture
+// A perfect mirror is `-asymmetry` of zero, which the TS extractor wrote as -0. The fixture
 // has no such position — every line comes a move after one — so this pins the sign bit here.
 TEST(reads_a_perfect_mirror_as_negative_zero) {
 	Position pos;

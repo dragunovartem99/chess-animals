@@ -3,10 +3,11 @@ import { nextTick } from "vue";
 
 import { loadEngine, playedGame, useWasmEngine } from "..";
 import { afterMove, positionFromFen } from "../../chess";
-import { extractFeatures, featureId } from "../../eval";
+import { featureId } from "../../eval";
 
 const engine = await loadEngine();
 const CAPTURE_VALUE = featureId("captureValue");
+const GIVES_CHECK = featureId("givesCheck");
 
 describe("playedGame", () => {
 	it("is the position alone when no move produced it", () => {
@@ -24,15 +25,16 @@ describe("playedGame", () => {
 		expect(() => engine.extract(game)).not.toThrow();
 	});
 
-	it("reads what the TS extractor reads, the move's features included", () => {
+	it("carries the move, so its features read", () => {
 		const parent = positionFromFen("4k3/8/8/3p4/4P3/8/8/4K3 w - - 0 1");
 		const move = { from: 28, to: 35 };
 		const position = afterMove({ position: parent, move });
 		const played = { parent, move };
 		const features = engine.extract(playedGame({ position, played }));
 
-		expect(features).toEqual(extractFeatures({ position, played }));
 		expect(features[CAPTURE_VALUE]).toBe(-1);
+		expect(features[GIVES_CHECK]).toBe(0);
+		expect(engine.extract(playedGame({ position }))[CAPTURE_VALUE]).toBe(0);
 	});
 });
 

@@ -2,6 +2,7 @@ import { compileBot, type BotDefinition } from "../bots";
 import { parseCommand } from "../engine/uci/parseCommand";
 import { serializeResponse } from "../engine/uci/serialize";
 import { createUciEngine } from "../engine/uciEngine";
+import { goSearch } from "./wasm";
 
 // The `uciEngine` worker without a thread: the same first-message-is-the-bot protocol, delivering
 // responses to its listeners synchronously. It is what lets a test drive `createWorkerTransport`
@@ -16,6 +17,7 @@ export function createTestWorker(): Worker {
 				engine = createUciEngine({
 					config: compileBot(data.definition),
 					name: data.name,
+					goSearch,
 				});
 				return;
 			}

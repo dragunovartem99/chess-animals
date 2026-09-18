@@ -13,8 +13,8 @@ const WOLF: BotDefinition = {
 	weights: { swarm: -12, givesMate: 100000, materialQueen: 180 },
 };
 
-// Every move ties, so each `go` plays the first of its shuffle: a bestmove that matches the TS
-// search's is the stream matching, draw for draw.
+// Every move ties, so each `go` plays the first of its shuffle: the bestmoves are the stream,
+// draw for draw.
 const DONKEY: BotDefinition = { id: "donkey", search: { depth: 1 }, weights: {} };
 
 function bestmoves(engine: ReturnType<typeof createUciEngine>, lines: string[][]): string[] {
@@ -40,17 +40,17 @@ describe("go through wasm", () => {
 		expect(replay({ moves: [...moves, best] }).moves).toHaveLength(moves.length + 1);
 	});
 
-	it("carries the tie-break stream from one go to the next exactly as the TS search does", () => {
+	// Pinned to what the TS search played before it was retired: a stream carried wrong from one
+	// `go` to the next changes every move after the first.
+	it("carries the tie-break stream from one go to the next", () => {
 		const lines = [[], ["e2e4"], ["e2e4", "c7c5"], ["e2e4", "c7c5", "g1f3"]];
-		const config = compileBot(DONKEY);
-		const ts = createUciEngine({ config, name: "donkey" });
-		const inWasm = createUciEngine({
-			config,
+		const engine = createUciEngine({
+			config: compileBot(DONKEY),
 			name: "donkey",
 			goSearch: createWasmGoSearch(wasm),
 		});
 
-		expect(bestmoves(inWasm, lines)).toEqual(bestmoves(ts, lines));
+		expect(bestmoves(engine, lines)).toEqual(["g1f3", "h7h5", "e1e2", "b8c6"]);
 	});
 
 	it("reads the engine's king-takes-rook castling back as the king's own move", () => {

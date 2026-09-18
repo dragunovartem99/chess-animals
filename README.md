@@ -25,16 +25,17 @@ npm install
 npm run dev
 ```
 
-| Command                             | What it does                                                       |
-| ----------------------------------- | ------------------------------------------------------------------ |
-| `npm run dev` / `build` / `preview` | Vite dev server / type-checked production build / preview of it    |
-| `npm test` / `test:coverage`        | C tests under ASan + UBSan, then Vitest / both with 90% coverage   |
-| `npm run bench`                     | feature-extraction and search cost, held under guards by the suite |
-| `npm run arena`                     | dev CLI: rate the roster over the paired opening set               |
-| `npm run tune -- <botId>`           | dev CLI: SPSA-tune one bot's weights against the roster            |
-| `npm run lint` / `format`           | oxlint + clang-tidy / oxfmt + clang-format (`:check` don't write)  |
-| `npm run types:check`               | `vue-tsc` type-check                                               |
-| `npm run engine:corpus`             | regenerate the C engine's chessops fixture corpus                  |
+| Command                             | What it does                                                            |
+| ----------------------------------- | ----------------------------------------------------------------------- |
+| `npm run dev` / `build` / `preview` | Vite dev server / type-checked production build / preview of it         |
+| `npm test` / `test:coverage`        | C tests under ASan + UBSan, then Vitest / both with 90% coverage        |
+| `npm run bench`                     | search cost through wasm, held under a guard by the suite               |
+| `npm run engine:bench`              | the C engine natively: perft, each feature's cost, the search signature |
+| `npm run arena`                     | dev CLI: rate the roster over the paired opening set                    |
+| `npm run tune -- <botId>`           | dev CLI: SPSA-tune one bot's weights against the roster                 |
+| `npm run lint` / `format`           | oxlint + clang-tidy / oxfmt + clang-format (`:check` don't write)       |
+| `npm run types:check`               | `vue-tsc` type-check                                                    |
+| `npm run engine:corpus`             | regenerate the C engine's chessops fixture corpus                       |
 
 Linting and formatting via [oxlint](https://oxc.rs)/[oxfmt](https://oxc.rs), type-checking via
 `vue-tsc`, tests via Vitest. CI runs all of them plus the build on every pull request;
@@ -53,7 +54,7 @@ Linting and formatting via [oxlint](https://oxc.rs)/[oxfmt](https://oxc.rs), typ
 ## Where it stands
 
 24 animals, rated by the arena from the Dove (~200) to the Tiger (~2600) and listed weakest
-first. Built: the feature evaluation, negamax search with quiescence, the UCI codec and worker
+first. Built: the feature evaluation and a PVS search with quiescence in C compiled to wasm, the UCI codec and worker
 client, `/play` with a per-feature breakdown of what the bot sees, `/frankenstein` as a live
 weight-and-depth sandbox, `/about`, and the dev CLIs `npm run arena` and `npm run tune`.
 

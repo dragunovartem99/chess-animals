@@ -37,6 +37,5 @@ static int on_own_colour(EvalContext *ctx, Color color) {
 // Shape, not strength.
 float extract_same_color_squares(EvalContext *ctx) { return side_difference(ctx, on_own_colour); }
 
-// Negated after the conversion, so a perfect mirror reads -0 as the TS `-asymmetry(...)` does,
-// and the bits still match.
+// Negated after the conversion, so a perfect mirror reads -0, as the frozen fixture has it.
 float extract_mirror_ranks(EvalContext *ctx) { return -(float)asymmetry(ctx->pos); }

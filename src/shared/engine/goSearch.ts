@@ -1,32 +1,30 @@
 import type { NormalMove } from "chessops/types";
 
 import type { WeightVector } from "../eval";
-import { scoreMoves } from "./policy";
-import { createRng } from "./rng";
-import type { SearchOptions } from "./search";
 import type { Replayed } from "./uciMoves";
+
+export type SearchOptions = {
+	depth: number;
+	// Extend past the last ply along captures, so the search does not stop in the middle of a
+	// trade and report the half of it that suits it.
+	quiescence?: boolean;
+	// A ceiling on how much work one move may cost. Reaching it does not corrupt the result: the
+	// search plays the best move of the last depth it finished.
+	nodeLimit?: number;
+};
 
 export type GoRequest = {
 	game: Replayed;
 	weights: WeightVector;
 	search: SearchOptions;
 	// Where the bot's tie-break stream stands. It crosses the call as these four words and comes
-	// back advanced, so a search in wasm and one in TS draw the same stream the same way.
+	// back advanced, so one stream runs through a whole game however many searches it takes.
 	rngState: Uint32Array;
 };
 
 export type GoResult = { move?: NormalMove; score: number; rngState: Uint32Array };
 
-// What `go` searches with. A parameter of the UCI engine rather than a call inside it: the worker
-// passes the wasm search, and a test or the in-thread transport keeps the TS one, until cutover
-// deletes it.
+// What `go` searches with — the wasm engine's, from `createWasmGoSearch`. A parameter rather than
+// a call inside the UCI engine because loading the module is async and a command is not: whoever
+// owns the thread loads it once and hands it in.
 export type GoSearch = (request: GoRequest) => GoResult;
-
-export const searchInTs: GoSearch = ({ game, weights, search, rngState }) => {
-	const rng = createRng(rngState);
-	const { position, repetition } = game;
-	const root = scoreMoves({ position, weights, search, rng, repetition });
-	const score = Math.max(...root.scored.map((entry) => entry.score));
-
-	return { move: root.best, score, rngState: rng.state() };
-};

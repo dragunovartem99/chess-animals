@@ -2,30 +2,44 @@ import { INITIAL_FEN } from "chessops/fen";
 import { makeUci } from "chessops/util";
 import { describe, expect, it } from "vitest";
 
-import { afterMove, gameStatus, legalMoves, positionFromFen, repetitionKey } from "../../chess";
+import {
+	afterMove,
+	createRepetition,
+	gameStatus,
+	legalMoves,
+	positionFromFen,
+	repetitionKey,
+} from "../../chess";
+import { seedState } from "../../engine";
+import { goSearch } from "../../test-support/wasm";
 import { defaultishWeights } from "../../test-support/weights";
-import { chooseMove } from "../policy";
-import { createRng } from "../rng";
 
 const GREEDY = { depth: 1 };
 
 describe("a bot playing itself", () => {
 	it("plays a legal game through to a finish", () => {
 		const weights = defaultishWeights({ givesMate: 100000 });
-		const rng = createRng("self-play");
+		let rngState = seedState("self-play");
 
 		let position = positionFromFen(INITIAL_FEN);
+		const repetition = createRepetition();
+		const moves: string[] = [];
 		const keys: string[] = [];
 		let ply = 0;
 
 		while (!gameStatus({ position, keys, plyLimit: 300, ply }).over) {
-			const move = chooseMove({ position, weights, search: GREEDY, rng });
+			const game = { position, repetition, fen: INITIAL_FEN, moves };
+			const found = goSearch({ game, weights, search: GREEDY, rngState });
+			const { move } = found;
+			rngState = found.rngState;
 			expect(move).toBeDefined();
 			expect(legalMoves(position).some((legal) => makeUci(legal) === makeUci(move!))).toBe(
 				true
 			);
 
 			keys.push(repetitionKey(position));
+			repetition.push(position);
+			moves.push(makeUci(move!));
 			position = afterMove({ position, move: move! });
 			ply += 1;
 		}

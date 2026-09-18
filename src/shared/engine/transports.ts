@@ -1,5 +1,6 @@
 import type { BotConfig } from "../bots";
 import type { UciTransport } from "./client";
+import type { GoSearch } from "./goSearch";
 import { parseCommand } from "./uci/parseCommand";
 import { serializeResponse } from "./uci/serialize";
 import { createUciEngine } from "./uciEngine";
@@ -26,11 +27,13 @@ export function createWorkerTransport({ worker }: { worker: Worker }): UciTransp
 export function createLocalTransport({
 	config,
 	name,
+	goSearch,
 }: {
 	config: BotConfig;
 	name: string;
+	goSearch: GoSearch;
 }): UciTransport {
-	const engine = createUciEngine({ config, name });
+	const engine = createUciEngine({ config, name, goSearch });
 	const handlers: ((line: string) => void)[] = [];
 
 	return {

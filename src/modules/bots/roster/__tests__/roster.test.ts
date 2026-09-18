@@ -4,11 +4,10 @@ import { describe, expect, it } from "vitest";
 
 import { type BotConfig, assertBotDefinition, compileBot } from "@/shared/bots";
 import { legalMoves, positionFromFen } from "@/shared/chess";
-import { chooseMove, searchRoot } from "@/shared/engine";
-import { createRng } from "@/shared/engine/rng";
 import { featureId } from "@/shared/eval";
 import { openings } from "@/shared/openings";
 import { playPair } from "@/shared/test-support/play";
+import { bestMove } from "@/shared/test-support/wasm";
 
 import { ROSTER, ROSTER_BY_ID } from "../index";
 
@@ -29,14 +28,14 @@ describe("the roster", () => {
 	it.each(ROSTER)("$definition.id plays a legal move from the opening position", (animal) => {
 		const position = positionFromFen(INITIAL_FEN);
 		const bot = compileBot(animal.definition);
-		const move = chooseMove({
+		const move = bestMove({
 			position,
 			weights: bot.weights,
 			search: bot.search,
-			rng: createRng(animal.definition.id),
+			seed: animal.definition.id,
 		});
 
-		expect(legalMoves(position).some((legal) => makeUci(legal) === makeUci(move!))).toBe(true);
+		expect(legalMoves(position).map((legal) => makeUci(legal))).toContain(move);
 	});
 });
 
@@ -46,14 +45,7 @@ describe("Donkey", () => {
 		const bot = compileBot(ROSTER_BY_ID.get("donkey")!.definition);
 		const picks = new Set(
 			Array.from({ length: 200 }, (_, seed) =>
-				makeUci(
-					chooseMove({
-						position,
-						weights: bot.weights,
-						search: bot.search,
-						rng: createRng(seed),
-					})!
-				)
+				bestMove({ position, weights: bot.weights, search: bot.search, seed })
 			)
 		);
 
@@ -139,16 +131,11 @@ describe("a mate in one", () => {
 	const MATE_IN_ONE = "7k/8/8/8/8/8/5Q2/6RK w - - 0 1";
 	const IMMEDIATE = ["f2h2", "f2h4"];
 
-	function bestFrom(config: BotConfig): string {
+	function bestFrom(config: BotConfig): string | undefined {
 		const position = positionFromFen(MATE_IN_ONE);
-		const { scored } = searchRoot({
-			position,
-			weights: config.weights,
-			options: { ...config.search, depth: 3 },
-		});
-		const best = scored.reduce((left, right) => (right.score > left.score ? right : left));
+		const search = { ...config.search, depth: 3 };
 
-		return makeUci(best.move);
+		return bestMove({ position, weights: config.weights, search });
 	}
 
 	// A positive `givesMate` chases the mate; a negative one flees it. Everything that chases must

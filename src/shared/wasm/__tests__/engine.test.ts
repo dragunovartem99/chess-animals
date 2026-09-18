@@ -1,14 +1,11 @@
 import { readFile } from "node:fs/promises";
 
-import { INITIAL_FEN, makeFen } from "chessops/fen";
-import { makeUci } from "chessops/util";
+import { INITIAL_FEN } from "chessops/fen";
 import { describe, expect, it } from "vitest";
 
 import { createEngine, loadEngine } from "..";
-import { afterMove, legalMoves, positionFromFen } from "../../chess";
-import { createRng, searchRoot, seedState } from "../../engine";
-import { extractFeatures, FEATURE_COUNT, MATE_SCORE } from "../../eval";
-import { BENCHMARK_POSITIONS } from "../../eval/__benchmarks__/positions";
+import { createRng, seedState } from "../../engine";
+import { FEATURE_COUNT, MATE_SCORE } from "../../eval";
 import { onlyWeights } from "../../test-support/weights";
 
 const engine = await loadEngine();
@@ -98,21 +95,6 @@ describe("the wasm engine", () => {
 			/per feature/u
 		);
 	});
-
-	// Every feature bit for bit, with the move that produced the position read as the TS family
-	// reads it — castling included, as the king taking its rook.
-	it("extracts what the TS extractor does", () => {
-		for (const fen of BENCHMARK_POSITIONS) {
-			const parent = positionFromFen(fen);
-			expect(engine.extract({ fen })).toEqual(extractFeatures({ position: parent }));
-
-			for (const move of legalMoves(parent)) {
-				const position = afterMove({ position: parent, move });
-				const expected = extractFeatures({ position, played: { parent, move } });
-				expect(engine.extract({ fen, moves: [makeUci(move)] })).toEqual(expected);
-			}
-		}
-	});
 });
 
 describe("the wasm search", () => {
@@ -153,20 +135,30 @@ describe("the wasm search", () => {
 		expect(engine.search({ fen, weights: MATERIAL, options }).nodes).toBeLessThanOrEqual(50);
 	});
 
-	// Every move ties, so the move is the first of the shuffle, and the stream comes back exactly
-	// where the TS search leaves it.
+	// Every move ties, so the move is the first of the shuffle: pinned, move and stream, to what the
+	// TS search played before it was retired, so the tie-break a game replays by cannot drift.
 	it("shuffles the root from the state it is handed and hands it back advanced", () => {
-		for (const [index, fen] of BENCHMARK_POSITIONS.slice(0, 3).entries()) {
+		const CASES = [
+			[INITIAL_FEN, "g2g4", 200_264],
+			[
+				"r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
+				"c4f7",
+				294_622,
+			],
+			[
+				"r2q1rk1/pp1nbppp/2p1pn2/3p4/2PP4/2N1PN2/PPQ1BPPP/R1B2RK1 w - - 0 10",
+				"c2d2",
+				914_175,
+			],
+		] as const;
+
+		for (const [index, [fen, best, next]] of CASES.entries()) {
 			const weights = new Float32Array(FEATURE_COUNT);
 			const rngState = seedState(index + 1);
 			const result = engine.search({ fen, weights, options: { depth: 1 }, rngState });
-			const rng = createRng(index + 1);
-			const position = positionFromFen(fen);
-			const ts = searchRoot({ position, weights, options: { depth: 1 }, prune: true, rng });
 
-			expect(result.best).toBe(makeUci(ts.best!));
-			expect(createRng(result.rngState!).int(1e6)).toBe(rng.int(1e6));
-			expect(makeFen(position.toSetup())).toBe(fen);
+			expect(result.best).toBe(best);
+			expect(createRng(result.rngState!).int(1e6)).toBe(next);
 		}
 	});
 });

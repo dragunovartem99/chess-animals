@@ -2,6 +2,7 @@ import { INITIAL_FEN } from "chessops/fen";
 import { describe, expect, it } from "vitest";
 
 import { type BotDefinition, compileBot } from "../../bots";
+import { goSearch } from "../../test-support/wasm";
 import { createUciClient } from "../client";
 import { createLocalTransport } from "../transports";
 
@@ -13,7 +14,11 @@ const WOLF: BotDefinition = {
 
 function connect(definition = WOLF) {
 	return createUciClient({
-		transport: createLocalTransport({ config: compileBot(definition), name: "Test Wolf" }),
+		transport: createLocalTransport({
+			config: compileBot(definition),
+			name: "Test Wolf",
+			goSearch,
+		}),
 	});
 }
 

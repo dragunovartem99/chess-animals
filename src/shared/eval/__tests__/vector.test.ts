@@ -1,24 +1,7 @@
 import { describe, expect, it } from "vitest";
 
-import { positionFromFen } from "../../chess";
-import { extractFeatures } from "../extract";
-import { FEATURE_COUNT, FEATURES_BY_KEY, featureId } from "../features";
-import {
-	createFeatureVector,
-	defaultWeights,
-	dot,
-	recordFromWeights,
-	weightsFromRecord,
-} from "../vector";
-
-describe("createFeatureVector", () => {
-	it("is one slot per registered feature, zeroed", () => {
-		const vector = createFeatureVector();
-
-		expect(vector).toHaveLength(FEATURE_COUNT);
-		expect([...vector].every((value) => value === 0)).toBe(true);
-	});
-});
+import { FEATURES_BY_KEY } from "../features";
+import { defaultWeights, recordFromWeights, weightsFromRecord } from "../vector";
 
 describe("weightsFromRecord", () => {
 	it("leaves unnamed features at zero, so appending a feature cannot rewrite a saved bot", () => {
@@ -49,32 +32,5 @@ describe("recordFromWeights", () => {
 		const record = { mobility: 42 };
 
 		expect(recordFromWeights(weightsFromRecord(record))).toEqual(record);
-	});
-});
-
-describe("dot", () => {
-	it("sums the products over the slots it is given", () => {
-		const features = Float32Array.from([1, 2, 3]);
-		const weights = Float32Array.from([10, 20, 30]);
-
-		expect(dot({ features, weights, slots: [0, 1, 2] })).toBe(140);
-	});
-
-	// The slot list is what a bot weighs, so anything outside it is weighted zero by definition
-	// and adds nothing — skipping it is an optimisation, never a change of score.
-	it("ignores everything outside them, which is weighted zero anyway", () => {
-		const features = Float32Array.from([1, 2, 3]);
-		const weights = Float32Array.from([10, 0, 30]);
-
-		expect(dot({ features, weights, slots: [0, 2] })).toBe(100);
-	});
-
-	it("scores a real position against real weights", () => {
-		const weights = weightsFromRecord({ materialQueen: 10 });
-		const features = extractFeatures({
-			position: positionFromFen("4k3/8/8/8/8/8/8/3QK3 w - - 0 1"),
-		});
-
-		expect(dot({ features, weights, slots: [featureId("materialQueen")] })).toBe(10);
 	});
 });

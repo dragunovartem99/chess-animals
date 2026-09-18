@@ -33,8 +33,8 @@ typedef struct {
 Evaluator evaluator(const float *weights);
 
 // `dot`, for a caller that has already ruled the position out as mate: each live feature times its
-// weight, summed in slot order in double — the TS order and precision, so the same float32
-// features give the same bits.
+// weight, summed in slot order in double, so a score is the same bits whichever features a bot
+// weighs beside it.
 double evaluate_features(const Evaluator *eval, const Position *pos, const Played *played);
 
 // What the position is worth to the side to move: the terminal score if there is one, the dot

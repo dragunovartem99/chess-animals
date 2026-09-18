@@ -23,7 +23,8 @@ typedef struct {
 // was actually read rather than passing on an empty file.
 int corpus_each(void (*check)(const CorpusLine *line));
 
-// One roster animal, from a `bot` line of `fixtures/evals.txt`.
+// One roster animal, from a `bot` line of `fixtures/evals.txt` — the roster as it stood when the
+// fixture was frozen, which is what its scores were computed with.
 typedef struct {
 	bool quiescence;
 	float weights[FEATURE_COUNT];
