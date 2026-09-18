@@ -20,7 +20,7 @@
 		"arena": "tsx cli/arena.ts",
 		"bench": "vitest bench --run",
 		"build": "make -sC engine wasm && tsx cli/og.ts && vue-tsc -b --noEmit && vite build",
-		"dev": "vite",
+		"dev": "make -sC engine wasm && vite",
 		"engine:bench": "make -sC engine bench",
 		"engine:corpus": "tsx cli/corpus.ts",
 		"engine:features": "tsx cli/featuresHeader.ts",
