@@ -34,6 +34,15 @@ Bitboard castling_dests(const Position *pos, const MoveContext *ctx);
 // ascending, promotions as Q N R B — into `moves`, which holds MAX_MOVES. Returns the count.
 int generate_moves(const Position *pos, Move *moves);
 
+// `generate_moves` split in two, each part in its order: the moves that change the material —
+// captures, en passant, promotions — and the rest. A search that cuts on a capture never lists
+// the quiet moves, and quiescence never lists them at all.
+int generate_noisy(const Position *pos, Move *moves);
+int generate_quiet(const Position *pos, Move *moves);
+
+// Whether `generate_moves` would list `move`.
+bool is_legal_move(const Position *pos, Move move);
+
 // Whether `generate_moves` would return any move, without listing them: the leaf only needs to
 // tell mate and stalemate from a position that plays on, and nearly every position does.
 bool has_legal_move(const Position *pos);

@@ -42,8 +42,13 @@ double no_moves_score(const Search *search, const Position *pos, Node node, bool
 // Whether the move takes a man — the rook a castling king "takes" is its own, so it does not.
 bool is_capture(const Position *pos, Move move);
 
-// Moves `move` to the front, the rest keeping their order; nothing when it is not in the list.
-void promote_move(Move *moves, int count, Move move);
+// What a move sorts by among its stage's moves, the higher first. Noisy: MVV-LVA, promotions by
+// what the pawn becomes. Quiet: the ply's killers, then `cutoffs`.
+int noisy_priority(const Position *pos, Move move);
+int quiet_priority(const Search *search, const Position *pos, Move move, int ply);
+
+// A quiet move refuted the node: it becomes the ply's first killer and gains on `cutoffs`.
+void record_cutoff(Search *search, const Position *pos, Move move, int ply, int depth);
 
 void table_clear(Table *table);
 // MOVE_NONE when the position is not in the table.
@@ -57,8 +62,8 @@ static inline bool exhausted(Search *search) {
 	return search->aborted;
 }
 
-// Sorts `moves` best-first in place: captures and promotions by MVV-LVA, then the ply's killers,
-// then the rest in generated order. Stable, so equals keep chessops's order.
+// Quiescence's order, the main search's picker aside: captures and promotions by MVV-LVA, then the
+// ply's killers, then the rest in generated order. Stable, so equals keep chessops's order.
 void order_moves(const Search *search, const Position *pos, Move *moves, int count, int ply);
 
 // The next double above `value`. Scores are doubles, so there is no `alpha + 1`: a null window is

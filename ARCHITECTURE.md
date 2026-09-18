@@ -123,10 +123,12 @@ thin, handing the search to `createUciEngine` and `runGame` as a `goSearch`.
 
 The search is fail-soft alpha-beta with PVS and iterative deepening to the bot's depth. A
 transposition table orders moves only — the table move first, never a cutoff, so a repetition
-cannot make a score depend on the path — then MVV-LVA captures and killers. Null move, LMR,
-futility and razoring are **out**: they assume a sane evaluation, and an animal's is not; a
-Sloth's `huddle` score is exactly what null move would mis-prune. `nodeLimit` plays the best move
-of the last depth it finished.
+cannot make a score depend on the path — then captures by MVV-LVA, then the quiet moves by
+killers and a depth-squared history table. The stages are generated lazily, so a node that cuts
+on a capture never lists its quiet moves, and quiescence out of check lists only the noisy ones.
+Null move, LMR, futility and razoring are **out**: they assume a sane evaluation, and an animal's
+is not; a Sloth's `huddle` score is exactly what null move would mis-prune. `nodeLimit` plays the
+best move of the last depth it finished.
 
 Quiescence stands pat and searches captures, promotions and en passant — and in check every
 evasion, since the side to move may not decline. A capture that could not lift the standing score

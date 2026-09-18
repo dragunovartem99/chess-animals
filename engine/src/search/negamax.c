@@ -8,6 +8,7 @@
 #include "move.h"
 #include "movegen.h"
 #include "node.h"
+#include "picker.h"
 #include "position.h"
 #include "search.h"
 
@@ -22,13 +23,6 @@ double no_moves_score(const Search *search, const Position *pos, Node node, bool
 		return score;
 	}
 	return evaluate_features(&search->eval, pos, node.played);
-}
-
-static void record_killer(Search *search, Move move, int ply) {
-	if (search->killers[ply][0] != move) {
-		search->killers[ply][1] = search->killers[ply][0];
-		search->killers[ply][0] = move;
-	}
 }
 
 double search_child(Search *search, Position *pos, Node child, int depth, double alpha, double beta,
@@ -57,44 +51,42 @@ double search_node(Search *search, Position *pos, Node node, int depth, double a
 		return 0;
 	}
 	search->nodes++;
-	Move moves[MAX_MOVES];
-	int count = generate_moves(pos, moves);
-	if (count == 0) {
-		return no_moves_score(search, pos, node, move_context(pos).checkers != 0);
-	}
-	order_moves(search, pos, moves, count, node.ply);
-	if (search->table != NULL) {
-		promote_move(moves, count, table_move(search->table, pos->hash));
-	}
+	Picker picker;
+	picker_start(&picker, search->table != NULL ? table_move(search->table, pos->hash) : MOVE_NONE,
+	             node.ply);
 	double best = -__builtin_inf();
-	Move best_move = moves[0];
+	Move best_move = MOVE_NONE;
 	history_push(search->history, pos->hash);
-	for (int index = 0; index < count; index++) {
-		Played played = played_move(pos, moves[index]);
+	for (Move move; (move = picker_next(&picker, search, pos)) != MOVE_NONE;) {
+		Played played = played_move(pos, move);
 		Undo undo;
-		position_make(pos, moves[index], &undo);
+		position_make(pos, move, &undo);
 		Node child = {.played = &played, .ply = node.ply + 1};
 		double floor = alpha > best ? alpha : best;
-		double score = search_child(search, pos, child, depth - 1, floor, beta, index == 0);
-		position_unmake(pos, moves[index], &undo);
+		double score =
+		    search_child(search, pos, child, depth - 1, floor, beta, best_move == MOVE_NONE);
+		position_unmake(pos, move, &undo);
 		// An aborted child's score is whatever the search was holding when it stopped: nothing
-		// is learnt from it, not a killer and not a table entry.
+		// is learnt from it, not a cutoff and not a table entry.
 		if (search->aborted) {
 			history_pop(search->history);
 			return 0;
 		}
-		if (score > best) {
+		if (score > best || best_move == MOVE_NONE) {
 			best = score;
-			best_move = moves[index];
+			best_move = move;
 		}
 		if (best >= beta) {
-			if (!is_capture(pos, moves[index]) && move_promotion(moves[index]) == PAWN) {
-				record_killer(search, moves[index], node.ply);
+			if (!is_capture(pos, move) && move_promotion(move) == PAWN) {
+				record_cutoff(search, pos, move, node.ply, depth);
 			}
 			break;
 		}
 	}
 	history_pop(search->history);
+	if (best_move == MOVE_NONE) {
+		return no_moves_score(search, pos, node, move_context(pos).checkers != 0);
+	}
 	if (search->table != NULL) {
 		table_store(search->table, pos->hash, best_move);
 	}

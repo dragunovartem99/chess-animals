@@ -2,6 +2,7 @@
 
 #include "attacks.h"
 #include "bitboard.h"
+#include "move.h"
 #include "movegen.h"
 #include "position.h"
 
@@ -93,4 +94,21 @@ Bitboard legal_dests(const Position *pos, const MoveContext *ctx, Square from) {
 	// already asked the only question that matters for it.
 	bool ep = piece_role(piece) == PAWN && can_capture_ep(pos, ctx, from);
 	return ep ? dests | square_bb(pos->ep) : dests;
+}
+
+// What a list would hold, asked of one move — the table's move is played before any list exists.
+bool is_legal_move(const Position *pos, Move move) {
+	Square from = move_from(move);
+	Square to = move_to(move);
+	Piece piece = pos->board[from];
+	if (piece == PIECE_NONE || piece_color(piece) != pos->turn) {
+		return false;
+	}
+	MoveContext ctx = move_context(pos);
+	if (!bb_has(legal_dests(pos, &ctx, from), to)) {
+		return false;
+	}
+	bool promoting = piece_role(piece) == PAWN && (square_rank(to) == 0 || square_rank(to) == 7);
+	Role promotion = move_promotion(move);
+	return promoting ? promotion >= KNIGHT && promotion <= QUEEN : promotion == PAWN;
 }

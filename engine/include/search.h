@@ -38,6 +38,10 @@ typedef struct {
 	double worth[ROLE_COUNT];
 	// The last two quiet moves that refuted a sibling at each ply.
 	Move killers[MAX_PLY][2];
+	// The history heuristic: by side to move, from and to, how much a quiet move has refuted
+	// anywhere in the tree, depth squared per cutoff, so a refutation near the root outweighs one
+	// at the leaves. It orders the quiet moves the killers do not.
+	int32_t cutoffs[COLOR_COUNT][SQUARE_COUNT][SQUARE_COUNT];
 	// NULL for a single pass at the full depth.
 	Table *table;
 	uint64_t nodes;

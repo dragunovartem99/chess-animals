@@ -1,4 +1,5 @@
 #include <stdbool.h>
+#include <stdint.h>
 
 #include "bitboard.h"
 #include "move.h"
@@ -10,6 +11,10 @@
 
 // Every capture and promotion sorts above every killer, and a killer above any other quiet move.
 enum { NOISY = 1000, FIRST_KILLER = 500, SECOND_KILLER = 499 };
+
+// Past it every entry is halved, so the scores stay far below the killers' priorities and the
+// older cutoffs fade against the newer.
+enum { CUTOFF_CEILING = 1 << 24 };
 
 bool is_capture(const Position *pos, Move move) {
 	Piece target = pos->board[move_to(move)];
@@ -23,7 +28,7 @@ bool is_capture(const Position *pos, Move move) {
 
 // Most valuable victim, least valuable attacker — take the queen with the pawn before the pawn
 // with the queen — and a promotion priced by what the pawn becomes.
-static int priority(const Search *search, const Position *pos, Move move, int ply) {
+int noisy_priority(const Position *pos, Move move) {
 	Role promotion = move_promotion(move);
 	int score = promotion == PAWN ? 0 : NOISY + 10 * classical_value(promotion);
 	if (is_capture(pos, move)) {
@@ -32,6 +37,41 @@ static int priority(const Search *search, const Position *pos, Move move, int pl
 		Role attacker = piece_role(pos->board[move_from(move)]);
 		return score + NOISY + 10 * classical_value(taken) - classical_value(attacker);
 	}
+	return score;
+}
+
+int quiet_priority(const Search *search, const Position *pos, Move move, int ply) {
+	if (move == search->killers[ply][0]) {
+		return INT32_MAX;
+	}
+	if (move == search->killers[ply][1]) {
+		return INT32_MAX - 1;
+	}
+	return search->cutoffs[pos->turn][move_from(move)][move_to(move)];
+}
+
+void record_cutoff(Search *search, const Position *pos, Move move, int ply, int depth) {
+	if (search->killers[ply][0] != move) {
+		search->killers[ply][1] = search->killers[ply][0];
+		search->killers[ply][0] = move;
+	}
+	int32_t *score = &search->cutoffs[pos->turn][move_from(move)][move_to(move)];
+	*score += depth * depth;
+	if (*score <= CUTOFF_CEILING) {
+		return;
+	}
+	for (int color = 0; color < COLOR_COUNT; color++) {
+		for (int from = 0; from < SQUARE_COUNT; from++) {
+			for (int to = 0; to < SQUARE_COUNT; to++) {
+				search->cutoffs[color][from][to] /= 2;
+			}
+		}
+	}
+}
+
+// Quiescence's order, where in check the evasions mix noisy and quiet moves in one list.
+static int priority(const Search *search, const Position *pos, Move move, int ply) {
+	int score = noisy_priority(pos, move);
 	if (score != 0) {
 		return score;
 	}
@@ -60,18 +100,4 @@ void order_moves(const Search *search, const Position *pos, Move *moves, int cou
 		moves[slot + 1] = move;
 		priorities[slot + 1] = value;
 	}
-}
-
-void promote_move(Move *moves, int count, Move move) {
-	int index = 0;
-	while (index < count && moves[index] != move) {
-		index++;
-	}
-	if (index == count) {
-		return;
-	}
-	for (; index > 0; index--) {
-		moves[index] = moves[index - 1];
-	}
-	moves[0] = move;
 }

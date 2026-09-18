@@ -16,10 +16,9 @@ types, lint, tests, build.
 What is left of the move to C. How it is built is in
 [ARCHITECTURE.md](./ARCHITECTURE.md#the-engine); what it replaced is in the history.
 
-| Commit                                             | Contents                                                                 | Green when                                                           |
-| -------------------------------------------------- | ------------------------------------------------------------------------ | -------------------------------------------------------------------- |
-| ⬜ `engine: stage generation and history ordering` | Captures before quiets, history heuristic                                | Games identical, bench signature drops, Mnps reported in the message |
-| ⬜ `eval: stop scoring castling as a rook capture` | chessops encodes castling king-takes-rook, so `captureValue` pays for it | Castling reads 0; arena re-run                                       |
+| Commit                                             | Contents                                                                 | Green when                     |
+| -------------------------------------------------- | ------------------------------------------------------------------------ | ------------------------------ |
+| ⬜ `eval: stop scoring castling as a rook capture` | chessops encodes castling king-takes-rook, so `captureValue` pays for it | Castling reads 0; arena re-run |
 
 ## Outside v1
 

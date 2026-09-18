@@ -97,3 +97,30 @@ TEST(finds_a_move_past_a_boxed_king) {
 	CHECK(has_move("3R2k1/5ppp/8/8/8/8/3r1PPP/6K1 b - - 0 1"));
 	CHECK(!has_move("4R2k/6pp/6N1/n7/8/8/8/K7 b - - 0 1"));
 }
+
+// Merged back by from-square, the two halves are the full list, order included: each half keeps
+// chessops's order, and a move lands in exactly one of them.
+static void splits_the_list(const CorpusLine *line) {
+	Move all[MAX_MOVES];
+	Move noisy[MAX_MOVES];
+	Move quiet[MAX_MOVES];
+	Position pos;
+	CHECK(position_from_fen(&pos, line->before));
+	int count = generate_moves(&pos, all);
+	int noisy_count = generate_noisy(&pos, noisy);
+	int quiet_count = generate_quiet(&pos, quiet);
+	CHECK(noisy_count + quiet_count == count);
+	int from_noisy = 0;
+	int from_quiet = 0;
+	for (int index = 0; index < count; index++) {
+		if (from_noisy < noisy_count && noisy[from_noisy] == all[index]) {
+			from_noisy++;
+		} else if (from_quiet < quiet_count && quiet[from_quiet] == all[index]) {
+			from_quiet++;
+		}
+		CHECK(is_legal_move(&pos, all[index]));
+	}
+	CHECK(from_noisy == noisy_count && from_quiet == quiet_count);
+}
+
+TEST(splits_the_list_into_noisy_and_quiet_moves) { CHECK(corpus_each(splits_the_list) > 1000); }

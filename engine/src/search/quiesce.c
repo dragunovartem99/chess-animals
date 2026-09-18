@@ -16,18 +16,6 @@
 // large behavioural weights will now and then have a line pruned it would have liked.
 static const double DELTA_MARGIN = 200;
 
-// Captures, en passant and promotions: the moves that change the material, and so the ones a
-// leaf must not stop in the middle of. Kept in place, in generated order.
-static int keep_noisy(const Position *pos, Move *moves, int count) {
-	int kept = 0;
-	for (int index = 0; index < count; index++) {
-		if (is_capture(pos, moves[index]) || move_promotion(moves[index]) != PAWN) {
-			moves[kept++] = moves[index];
-		}
-	}
-	return kept;
-}
-
 // A capture that could not lift the standing score to `alpha` even with the man free is not
 // searched. Never a promotion, which wins a queen on top of whatever it takes.
 static bool hopeless(const Search *search, const Position *pos, Move move, double stand,
@@ -55,9 +43,11 @@ double quiesce(Search *search, Position *pos, Node node, double alpha, double be
 		return has_legal_move(pos) ? evaluate_features(&search->eval, pos, node.played)
 		                           : no_moves_score(search, pos, node, in_check);
 	}
+	// Out of check only the moves that change the material are searched, so only they are listed;
+	// an empty list is then a stalemate only when no quiet move exists either.
 	Move moves[MAX_MOVES];
-	int count = generate_moves(pos, moves);
-	if (count == 0) {
+	int count = in_check ? generate_moves(pos, moves) : generate_noisy(pos, moves);
+	if (count == 0 && (in_check || !has_legal_move(pos))) {
 		return no_moves_score(search, pos, node, in_check);
 	}
 	double stand = -__builtin_inf();
@@ -66,7 +56,6 @@ double quiesce(Search *search, Position *pos, Node node, double alpha, double be
 		if (stand >= beta) {
 			return stand;
 		}
-		count = keep_noisy(pos, moves, count);
 	}
 	order_moves(search, pos, moves, count, node.ply);
 	double best = stand;

@@ -10,13 +10,30 @@
 // Queen first, as chessops's `legalMoves` expands them.
 static const Role PROMOTIONS[4] = {QUEEN, KNIGHT, ROOK, BISHOP};
 
-int generate_moves(const Position *pos, Move *moves) {
+// Which of a man's destinations change the material: a man taken, en passant, a promotion. The
+// castling king's own rook is not one of them.
+static Bitboard noisy_dests(const Position *pos, Square from, Bitboard dests, Bitboard last_rank) {
+	Bitboard taken = dests & pos->colors[opposite(pos->turn)];
+	if (piece_role(pos->board[from]) != PAWN) {
+		return taken;
+	}
+	Bitboard ep = pos->ep == SQUARE_NONE ? 0 : square_bb(pos->ep);
+	return taken | (dests & (last_rank | ep));
+}
+
+typedef enum { ALL, NOISY, QUIET } Kind;
+
+static int generate(const Position *pos, Move *moves, Kind kind) {
 	MoveContext ctx = move_context(pos);
 	Bitboard last_rank = pos->turn == WHITE ? 0xff00000000000000U : 0xffU;
 	int count = 0;
 	for (Bitboard ours = pos->colors[pos->turn]; ours != 0;) {
 		Square from = bb_pop(&ours);
 		Bitboard dests = legal_dests(pos, &ctx, from);
+		if (kind != ALL) {
+			Bitboard noisy = noisy_dests(pos, from, dests, last_rank);
+			dests = kind == NOISY ? noisy : dests & ~noisy;
+		}
 		Bitboard promoting = piece_role(pos->board[from]) == PAWN ? dests & last_rank : 0;
 		while (dests != 0) {
 			Square to = bb_pop(&dests);
@@ -31,6 +48,10 @@ int generate_moves(const Position *pos, Move *moves) {
 	}
 	return count;
 }
+
+int generate_moves(const Position *pos, Move *moves) { return generate(pos, moves, ALL); }
+int generate_noisy(const Position *pos, Move *moves) { return generate(pos, moves, NOISY); }
+int generate_quiet(const Position *pos, Move *moves) { return generate(pos, moves, QUIET); }
 
 // The king first: it is the man likeliest to have a move and the only one that can answer double
 // check, so most positions are settled by the first question.
