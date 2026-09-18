@@ -1,8 +1,10 @@
 #ifndef ENGINE_TESTS_CORPUS_H
 #define ENGINE_TESTS_CORPUS_H
 
+#include <stdbool.h>
 #include <stdint.h>
 
+#include "feature_ids.h"
 #include "move.h"
 #include "movegen.h"
 #include "position.h"
@@ -20,5 +22,14 @@ typedef struct {
 // Calls `check` once per line and returns how many there were, so a spec can assert the fixture
 // was actually read rather than passing on an empty file.
 int corpus_each(void (*check)(const CorpusLine *line));
+
+// One roster animal, from a `bot` line of `fixtures/evals.txt`.
+typedef struct {
+	bool quiescence;
+	float weights[FEATURE_COUNT];
+} CorpusBot;
+
+// The roster in order, at most `max` of it. Returns how many animals there were.
+int corpus_bots(CorpusBot *bots, int max);
 
 #endif

@@ -51,6 +51,10 @@ double evaluate(const Evaluator *eval, const Position *pos, const Played *played
 	if (terminal_score(pos, eval->weights, ply, &score)) {
 		return score;
 	}
+	return evaluate_features(eval, pos, played);
+}
+
+double evaluate_features(const Evaluator *eval, const Position *pos, const Played *played) {
 	float features[FEATURE_COUNT];
 	extract_features(pos, played, features);
 	return eval_dot(features, eval->weights, eval->slots, eval->count);

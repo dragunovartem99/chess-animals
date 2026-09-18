@@ -105,17 +105,16 @@ sets for it.
 - Targets, to be confirmed by the first real numbers: perft ≥ 50 Mnps in wasm, and ≥ 10× today's
   depth-3 search pass.
 
-| Commit                                             | Contents                                                                                                 | Green when                                                              |
-| -------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
-| ⬜ `engine: add alpha-beta and quiescence`         | PVS, MVV-LVA + killers, qsearch with en passant/promotions/evasions, delta pruning, draws, shuffled root | Mate-in-N suite; equal to minimax and to plain alpha-beta on the corpus |
-| ⬜ `engine: add iterative deepening and the tt`    | ID to the bot's depth, TT-move ordering, `nodeLimit` returns the last iteration                          | Same move and score as fixed depth without the TT; fewer nodes          |
-| ⬜ `engine: add the bench binary`                  | Positions, Mnps, per-family ns, signature, CPW perft at depth 5                                          | `npm run engine:bench` prints a stable signature                        |
-| ⬜ `engine: add the wasm api and ts binding`       | `shared/wasm/`: loader for worker and node, typed `search` / `extract`                                   | vitest drives the wasm build; TS vs wasm side by side in bench          |
-| ⬜ `engine: route uci search through wasm`         | `createUciEngine` calls wasm; arena workers load it; golden games regenerated                            | Arena re-run; every animal checked against its rating slot              |
-| ⬜ `eval: read the breakdown from wasm`            | `FeatureBreakdown` extracts through wasm                                                                 | Breakdown tests unchanged                                               |
-| ⬜ `engine: retire the ts search and extractor`    | Freeze oracle outputs to JSON, delete TS search/eval, update ARCHITECTURE                                | Differential tests run against the frozen fixtures; coverage holds      |
-| ⬜ `engine: stage generation and history ordering` | Captures before quiets, history heuristic                                                                | Games identical, bench signature drops, Mnps reported in the message    |
-| ⬜ `eval: stop scoring castling as a rook capture` | chessops encodes castling king-takes-rook, so `captureValue` pays for it                                 | Castling reads 0; arena re-run                                          |
+| Commit                                             | Contents                                                                        | Green when                                                           |
+| -------------------------------------------------- | ------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| ⬜ `engine: add iterative deepening and the tt`    | ID to the bot's depth, TT-move ordering, `nodeLimit` returns the last iteration | Same move and score as fixed depth without the TT; fewer nodes       |
+| ⬜ `engine: add the bench binary`                  | Positions, Mnps, per-family ns, signature, CPW perft at depth 5                 | `npm run engine:bench` prints a stable signature                     |
+| ⬜ `engine: add the wasm api and ts binding`       | `shared/wasm/`: loader for worker and node, typed `search` / `extract`          | vitest drives the wasm build; TS vs wasm side by side in bench       |
+| ⬜ `engine: route uci search through wasm`         | `createUciEngine` calls wasm; arena workers load it; golden games regenerated   | Arena re-run; every animal checked against its rating slot           |
+| ⬜ `eval: read the breakdown from wasm`            | `FeatureBreakdown` extracts through wasm                                        | Breakdown tests unchanged                                            |
+| ⬜ `engine: retire the ts search and extractor`    | Freeze oracle outputs to JSON, delete TS search/eval, update ARCHITECTURE       | Differential tests run against the frozen fixtures; coverage holds   |
+| ⬜ `engine: stage generation and history ordering` | Captures before quiets, history heuristic                                       | Games identical, bench signature drops, Mnps reported in the message |
+| ⬜ `eval: stop scoring castling as a rook capture` | chessops encodes castling king-takes-rook, so `captureValue` pays for it        | Castling reads 0; arena re-run                                       |
 
 ## Outside v1
 

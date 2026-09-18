@@ -34,6 +34,9 @@ typedef struct {
 
 Evaluator evaluator(const float *weights);
 
+// The dot alone, for a caller that has already ruled the position out as mate.
+double evaluate_features(const Evaluator *eval, const Position *pos, const Played *played);
+
 // What the position is worth to the side to move: the terminal score if there is one, the dot
 // otherwise. `played` is NULL at a root, as for `extract_features`.
 double evaluate(const Evaluator *eval, const Position *pos, const Played *played, int ply);

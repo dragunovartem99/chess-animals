@@ -1,9 +1,11 @@
 #include <stddef.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "corpus.h"
+#include "feature_ids.h"
 #include "harness.h"
 
 // Copies the text up to `separator` into `field`, and returns what follows it.
@@ -38,6 +40,28 @@ int corpus_each(void (*check)(const CorpusLine *line)) {
 			check(&line);
 			count++;
 		}
+	}
+	(void)fclose(file);
+	return count;
+}
+
+int corpus_bots(CorpusBot *bots, int max) {
+	FILE *file = fopen("tests/fixtures/evals.txt", "r");
+	CHECK(file != NULL);
+	if (file == NULL) {
+		return 0;
+	}
+	static char text[8192];
+	int count = 0;
+	while (count < max && fgets(text, sizeof text, file) != NULL && strncmp(text, "bot;", 4) == 0) {
+		char *flag = strchr(text + 4, ';') + 1;
+		bots[count].quiescence = *flag == '1';
+		char *values = flag + 2;
+		for (int slot = 0; slot < FEATURE_COUNT; slot++) {
+			uint32_t bits = (uint32_t)strtoul(values, &values, 16);
+			memcpy(&bots[count].weights[slot], &bits, sizeof bits);
+		}
+		count++;
 	}
 	(void)fclose(file);
 	return count;

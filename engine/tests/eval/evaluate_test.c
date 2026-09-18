@@ -5,6 +5,7 @@
 #include <string.h>
 
 #include "bitboard.h"
+#include "corpus.h"
 #include "eval.h"
 #include "evaluate.h"
 #include "feature_ids.h"
@@ -14,24 +15,13 @@
 
 enum { MAX_BOTS = 64 };
 
-static float weights[MAX_BOTS][FEATURE_COUNT];
+static CorpusBot roster[MAX_BOTS];
 static int bots;
 
 static uint64_t bits_of(double value) {
 	uint64_t bits = 0;
 	memcpy(&bits, &value, sizeof bits);
 	return bits;
-}
-
-// `bot;<id>;<weights>`: one animal's compiled weights, as float32 bits in slot order.
-static void read_bot(char *line) {
-	char *values = strchr(strchr(line, ';') + 1, ';') + 1;
-	CHECK(bots < MAX_BOTS);
-	for (int slot = 0; slot < FEATURE_COUNT; slot++) {
-		uint32_t bits = (uint32_t)strtoul(values, &values, 16);
-		memcpy(&weights[bots][slot], &bits, sizeof bits);
-	}
-	bots++;
 }
 
 // `<parent>;<uci or ->;<scores>`: the position after the move, scored by every animal in turn.
@@ -51,7 +41,7 @@ static void check_sample(char *line) {
 		position_make(&pos, played.move, &undo);
 	}
 	for (int bot = 0; bot < bots; bot++) {
-		Evaluator eval = evaluator(weights[bot]);
+		Evaluator eval = evaluator(roster[bot].weights);
 		uint64_t expected = strtoull(scores, &scores, 16);
 		CHECK(bits_of(evaluate(&eval, &pos, root ? NULL : &played, 0)) == expected);
 	}
@@ -64,11 +54,9 @@ TEST(evaluate_equals_evaluate_position_for_every_roster_bot) {
 	FILE *file = fopen("tests/fixtures/evals.txt", "r");
 	CHECK(file != NULL);
 	int samples = 0;
-	bots = 0;
+	bots = corpus_bots(roster, MAX_BOTS);
 	while (file != NULL && fgets(line, sizeof line, file) != NULL) {
-		if (strncmp(line, "bot;", 4) == 0) {
-			read_bot(line);
-		} else {
+		if (strncmp(line, "bot;", 4) != 0) {
 			check_sample(line);
 			samples++;
 		}
