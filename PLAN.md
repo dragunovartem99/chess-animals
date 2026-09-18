@@ -107,7 +107,6 @@ sets for it.
 
 | Commit                                             | Contents                                                                                                 | Green when                                                              |
 | -------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
-| ⬜ `engine: add draw detection`                    | Repetition stack, fifty-move, insufficient material                                                      | Agrees with `createDrawTest` on the corpus                              |
 | ⬜ `engine: add the eval context and material`     | Lazy attack maps, `features.h` codegen, differential harness, first family                               | Material slots bit-identical to the TS extractor                        |
 | ⬜ `engine: port the <family> family` × 9          | One commit per family: placement → endgame, then move                                                    | That family's slots bit-identical on the corpus                         |
 | ⬜ `engine: add terminal scoring and the dot`      | `terminalScore`, `liveSlots`, dot in slot order                                                          | `evaluatePosition` identical for every roster bot                       |
