@@ -4,6 +4,7 @@
 
 #include "bitboard.h"
 #include "fen.h"
+#include "movegen.h"
 #include "position.h"
 
 static const Bitboard BACK_RANKS = 0xff000000000000ffU;
@@ -81,8 +82,8 @@ static char *write_board(const Position *pos, char *out) {
 	return out;
 }
 
-// The counters are clamped as `makeFen(position.toSetup())` clamps them: halfmoves to 150,
-// fullmoves to 1..9999.
+// Written as `makeFen(position.toSetup())` writes it: en passant only when a capture onto it is
+// legal, halfmoves clamped to 150 and fullmoves to 1..9999.
 void position_to_fen(const Position *pos, char *out) {
 	out = write_board(pos, out);
 	*out++ = pos->turn == WHITE ? 'w' : 'b';
@@ -94,11 +95,12 @@ void position_to_fen(const Position *pos, char *out) {
 	*out = '-';
 	out += pos->castling == 0;
 	*out++ = ' ';
-	if (pos->ep == SQUARE_NONE) {
+	Square ep = legal_ep_square(pos);
+	if (ep == SQUARE_NONE) {
 		*out++ = '-';
 	} else {
-		*out++ = (char)('a' + square_file(pos->ep));
-		*out++ = (char)('1' + square_rank(pos->ep));
+		*out++ = (char)('a' + square_file(ep));
+		*out++ = (char)('1' + square_rank(ep));
 	}
 	*out++ = ' ';
 	out = write_number(out, pos->halfmoves < 150 ? pos->halfmoves : 150);

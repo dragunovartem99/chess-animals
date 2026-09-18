@@ -2,7 +2,7 @@
 
 #include "attacks.h"
 #include "bitboard.h"
-#include "movegen.h"
+#include "tables.h"
 
 Magic bishop_magics[SQUARE_COUNT];
 Magic rook_magics[SQUARE_COUNT];

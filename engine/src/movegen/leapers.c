@@ -1,6 +1,6 @@
 #include "attacks.h"
 #include "bitboard.h"
-#include "movegen.h"
+#include "tables.h"
 
 Bitboard knight_table[SQUARE_COUNT];
 Bitboard king_table[SQUARE_COUNT];

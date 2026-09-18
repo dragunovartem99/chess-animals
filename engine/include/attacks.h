@@ -21,6 +21,8 @@ extern Magic rook_magics[SQUARE_COUNT];
 extern Bitboard knight_table[SQUARE_COUNT];
 extern Bitboard king_table[SQUARE_COUNT];
 extern Bitboard pawn_table[COLOR_COUNT][SQUARE_COUNT];
+extern Bitboard line_table[SQUARE_COUNT][SQUARE_COUNT];
+extern Bitboard between_table[SQUARE_COUNT][SQUARE_COUNT];
 
 // Builds the tables; `engine_init` calls it once, before any lookup.
 void attacks_init(void);
@@ -43,6 +45,13 @@ static inline Bitboard king_attacks(Square square) { return king_table[square]; 
 static inline Bitboard pawn_attacks(Color color, Square square) {
 	return pawn_table[color][square];
 }
+
+// chessops's `ray`: the whole line through two squares, edge to edge, or empty when they share
+// none. What a pinned piece may still move along.
+static inline Bitboard line(Square a, Square b) { return line_table[a][b]; }
+
+// chessops's `between`: the squares strictly between two on a line, empty when they share none.
+static inline Bitboard between(Square a, Square b) { return between_table[a][b]; }
 
 // chessops's `attacks(piece, square, occupied)`: what the piece attacks from the square, whether
 // or not it stands there.

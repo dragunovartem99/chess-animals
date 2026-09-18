@@ -1,5 +1,5 @@
-#ifndef ENGINE_MOVEGEN_MOVEGEN_H
-#define ENGINE_MOVEGEN_MOVEGEN_H
+#ifndef ENGINE_MOVEGEN_TABLES_H
+#define ENGINE_MOVEGEN_TABLES_H
 
 #include "bitboard.h"
 
@@ -19,5 +19,6 @@ static inline Bitboard step_bb(Square square, Step step) {
 
 void leapers_init(void);
 void magics_init(void);
+void lines_init(void);
 
 #endif

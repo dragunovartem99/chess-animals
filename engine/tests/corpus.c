@@ -1,16 +1,17 @@
+#include <stddef.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "corpus.h"
 #include "harness.h"
-#include "move.h"
-#include "position.h"
 
 // Copies the text up to `separator` into `field`, and returns what follows it.
 static char *take_field(char *text, char separator, char *field, size_t size) {
-	char *end = strchr(text, separator);
-	CHECK(end != NULL && (size_t)(end - text) < size);
-	if (end == NULL || (size_t)(end - text) >= size) {
+	char *end = text == NULL ? NULL : strchr(text, separator);
+	bool fits = end != NULL && (size_t)(end - text) < size;
+	CHECK(fits);
+	if (!fits) {
 		return NULL;
 	}
 	memcpy(field, text, (size_t)(end - text));
@@ -24,14 +25,16 @@ int corpus_each(void (*check)(const CorpusLine *line)) {
 	if (file == NULL) {
 		return 0;
 	}
+	static CorpusLine line;
+	static char text[sizeof line + 32];
 	int count = 0;
-	char text[FEN_MAX * 2 + UCI_MAX + 4];
 	while (fgets(text, sizeof text, file) != NULL) {
-		CorpusLine line;
 		char *rest = take_field(text, ';', line.before, sizeof line.before);
-		rest = rest ? take_field(rest, ';', line.uci, sizeof line.uci) : NULL;
-		rest = rest ? take_field(rest, '\n', line.after, sizeof line.after) : NULL;
+		rest = take_field(rest, ';', line.uci, sizeof line.uci);
+		rest = take_field(rest, ';', line.after, sizeof line.after);
+		rest = take_field(rest, ';', line.legal, sizeof line.legal);
 		if (rest != NULL) {
+			line.perft2 = strtoull(rest, NULL, 10);
 			check(&line);
 			count++;
 		}

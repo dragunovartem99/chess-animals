@@ -58,7 +58,13 @@ TEST(drops_an_en_passant_square_no_pawn_passed) {
 	check_rewrites("4k3/8/8/4P3/8/8/8/4K3 w - e6 0 1", "4k3/8/8/4P3/8/8/8/4K3 w - - 0 1");
 	check_rewrites("4k3/8/8/4p3/8/8/8/4K3 w - e3 0 1", "4k3/8/8/4p3/8/8/8/4K3 w - - 0 1");
 	check_rewrites("4k3/4p3/8/4p3/8/8/8/4K3 w - e6 0 1", "4k3/4p3/8/4p3/8/8/8/4K3 w - - 0 1");
-	check_rewrites("4k3/8/8/8/4P3/8/8/4K3 b - e3 0 1", "4k3/8/8/8/4P3/8/8/4K3 b - e3 0 1");
+}
+
+TEST(writes_en_passant_only_when_the_capture_is_legal) {
+	check_rewrites("4k3/8/8/8/4P3/8/8/4K3 b - e3 0 1", "4k3/8/8/8/4P3/8/8/4K3 b - - 0 1");
+	check_round_trip("4k3/8/8/8/3pP3/8/8/4K3 b - e3 0 1");
+	// The capture would lift both pawns off the fourth rank and bare the king to the rook.
+	check_rewrites("8/8/8/8/k2pP2R/8/8/4K3 b - e3 0 1", "8/8/8/8/k2pP2R/8/8/4K3 b - - 0 1");
 }
 
 TEST(rejects_malformed_fens) {

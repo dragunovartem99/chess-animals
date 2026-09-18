@@ -7,3 +7,4 @@ coverage/
 arena-results.json
 *-tuned.json
 engine/build/
+*.profraw

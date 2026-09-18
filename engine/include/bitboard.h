@@ -9,7 +9,8 @@
 typedef uint64_t Bitboard;
 typedef uint8_t Square;
 typedef enum { WHITE, BLACK } Color;
-typedef enum { PAWN, KNIGHT, BISHOP, ROOK, QUEEN, KING } Role;
+// NO_ROLE is what an empty square holds.
+typedef enum { NO_ROLE = -1, PAWN, KNIGHT, BISHOP, ROOK, QUEEN, KING } Role;
 
 enum { SQUARE_COUNT = 64, COLOR_COUNT = 2, ROLE_COUNT = 6 };
 

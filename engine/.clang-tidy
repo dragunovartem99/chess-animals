@@ -1,6 +1,7 @@
 # Off, each for cause: swappable parameters and short names are what chess code is made of
 # (from, to, sq), magic numbers are its tables, `rank * 8 + file` needs no parentheses to be
-# read, and the insecure-API check demands C11 Annex K `_s` functions no libc here ships.
+# read, the insecure-API check demands C11 Annex K `_s` functions no libc here ships, and a
+# game-tree search is recursion by definition.
 Checks: >
     -*,
     bugprone-*,
@@ -14,6 +15,7 @@ Checks: >
     -readability-identifier-length,
     -readability-magic-numbers,
     -readability-math-missing-parentheses,
+    -misc-no-recursion,
     -clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling
 WarningsAsErrors: "*"
 HeaderFilterRegex: "engine/(include|src|tests)/"
