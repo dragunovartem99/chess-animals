@@ -16,4 +16,5 @@ void extract_features(const Position *pos, float *features) {
 	extract_proximity(&ctx, features);
 	extract_symmetry(&ctx, features);
 	extract_aggression(&ctx, features);
+	extract_endgame(&ctx, features);
 }
