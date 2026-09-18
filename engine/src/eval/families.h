@@ -7,5 +7,6 @@
 // extractor's order.
 void extract_material(EvalContext *ctx, float *features);
 void extract_placement(EvalContext *ctx, float *features);
+void extract_king(EvalContext *ctx, float *features);
 
 #endif

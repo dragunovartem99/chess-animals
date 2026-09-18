@@ -107,7 +107,7 @@ sets for it.
 
 | Commit                                             | Contents                                                                                                 | Green when                                                              |
 | -------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
-| ⬜ `engine: port the <family> family` × 8          | One commit per family: king → endgame, then move                                                         | That family's slots bit-identical on the corpus                         |
+| ⬜ `engine: port the <family> family` × 7          | One commit per family: mobility → endgame, then move                                                     | That family's slots bit-identical on the corpus                         |
 | ⬜ `engine: add terminal scoring and the dot`      | `terminalScore`, `liveSlots`, dot in slot order                                                          | `evaluatePosition` identical for every roster bot                       |
 | ⬜ `engine: add alpha-beta and quiescence`         | PVS, MVV-LVA + killers, qsearch with en passant/promotions/evasions, delta pruning, draws, shuffled root | Mate-in-N suite; equal to minimax and to plain alpha-beta on the corpus |
 | ⬜ `engine: add iterative deepening and the tt`    | ID to the bot's depth, TT-move ordering, `nodeLimit` returns the last iteration                          | Same move and score as fixed depth without the TT; fewer nodes          |
