@@ -39,6 +39,7 @@ next in [PLAN.md](./PLAN.md).
 - DO keep coverage over the 90% threshold on `shared/` and on modules' `utils/`/`composables/` — the rest is excluded from the numbers deliberately, so what is counted is code a test can actually reach
 - DO extract pure decision logic out of I/O-heavy code so tests need no mocking
 - DO seed anything random and assert the sequence — a flaky engine test is worse than no test
+- DO keep the engine suite in seconds. It runs under ASan + UBSan at `-O1`, several times slower than `-O2`, so time an expensive test in an `-O2` scratch build under a short `timeout` before adding it. Order a test oracle's moves (it changes speed, never the result), keep minimax out of quiescence, and search each animal with its own settings — quiescence on weights it was never meant for prunes nothing
 
 ## Commits
 
