@@ -9,4 +9,5 @@ void extract_features(const Position *pos, float *features) {
 	}
 	EvalContext ctx = eval_context(pos);
 	extract_material(&ctx, features);
+	extract_placement(&ctx, features);
 }

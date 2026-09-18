@@ -6,5 +6,6 @@
 // One per TS family, each writing only its own slots — `extract_features` calls them in the TS
 // extractor's order.
 void extract_material(EvalContext *ctx, float *features);
+void extract_placement(EvalContext *ctx, float *features);
 
 #endif

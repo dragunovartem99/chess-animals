@@ -11,9 +11,10 @@
 
 // The slots whose family has been ported. A family's commit appends its slots here, and from
 // then on every one of them must equal the TS extractor's to the bit.
-static const int PORTED[] = {FEATURE_MATERIAL_PAWN, FEATURE_MATERIAL_KNIGHT,
-                             FEATURE_MATERIAL_BISHOP, FEATURE_MATERIAL_ROOK,
-                             FEATURE_MATERIAL_QUEEN};
+static const int PORTED[] = {
+    FEATURE_MATERIAL_PAWN, FEATURE_MATERIAL_KNIGHT, FEATURE_MATERIAL_BISHOP,
+    FEATURE_MATERIAL_ROOK, FEATURE_MATERIAL_QUEEN,  FEATURE_CENTRALIZATION,
+    FEATURE_DEVELOPMENT,   FEATURE_EARLY_QUEEN,     FEATURE_CASTLED};
 
 static uint32_t bits_of(float value) {
 	uint32_t bits = 0;
