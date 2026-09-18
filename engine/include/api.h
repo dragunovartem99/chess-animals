@@ -16,7 +16,7 @@
 
 ENGINE_EXPORT(abi_version) uint32_t abi_version(void);
 
-// Builds every table the engine reads — Zobrist keys now, attack tables next. Called once, before
+// Builds every table the engine reads — Zobrist keys and attack tables. Called once, before
 // anything else; the build does no allocation, so this is the only setup there is.
 ENGINE_EXPORT(engine_init) void engine_init(void);
 

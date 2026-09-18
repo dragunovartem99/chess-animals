@@ -107,7 +107,6 @@ sets for it.
 
 | Commit                                             | Contents                                                                                                 | Green when                                                              |
 | -------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
-| ⬜ `engine: add attack tables`                     | Magics, leaper and pawn tables                                                                           | Equal to chessops `attacks` for every square over sampled occupancy     |
 | ⬜ `engine: add legal move generation and perft`   | Check/pin-mask legal gen in chessops order, perft, legal-only ep in FEN out                              | CPW perft numbers; move lists equal `legalMoves` on the corpus          |
 | ⬜ `engine: add draw detection`                    | Repetition stack, fifty-move, insufficient material                                                      | Agrees with `createDrawTest` on the corpus                              |
 | ⬜ `engine: add the eval context and material`     | Lazy attack maps, `features.h` codegen, differential harness, first family                               | Material slots bit-identical to the TS extractor                        |
