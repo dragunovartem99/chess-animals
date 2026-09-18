@@ -14,5 +14,6 @@ void extract_proximity(EvalContext *ctx, float *features);
 void extract_symmetry(EvalContext *ctx, float *features);
 void extract_aggression(EvalContext *ctx, float *features);
 void extract_endgame(EvalContext *ctx, float *features);
+void extract_move(const Position *pos, const Played *played, float *features);
 
 #endif

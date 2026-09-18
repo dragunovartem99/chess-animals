@@ -5,6 +5,7 @@
 
 #include "bitboard.h"
 #include "feature_ids.h"
+#include "move.h"
 #include "position.h"
 
 // What more than one family reads, worked out once per position — `createContext`. `us` is the
@@ -33,9 +34,21 @@ void eval_walk(EvalContext *ctx);
 // rook 2, a queen 4, out of 24, capped so an extra queen does not read as earlier than the start.
 double eval_phase(const Position *pos);
 
-// Every feature ported so far, from the side to move's seat, into `features` (FEATURE_COUNT
-// floats, zeroed first). Float rather than double because the TS vector is a Float32Array, and a
-// feature that is bit-identical to it has to be rounded where it is.
-void extract_features(const Position *pos, float *features);
+// `PlayedMove`: the move that produced a position, and the role it took — read off the parent
+// before the move is made, since the search makes and unmakes rather than keeping the parent.
+typedef struct {
+	Move move;
+	Role captured;
+} Played;
+
+// chessops's `capturedRole`: the role on the target square, or the pawn an en passant capture
+// takes. Castling is king-takes-rook, so it reads the mover's own rook — a quirk the TS feature
+// has too, kept until both are fixed together.
+Played played_move(const Position *parent, Move move);
+
+// Every feature, from the side to move's seat, into `features` (FEATURE_COUNT floats, zeroed
+// first). `played` is NULL at a root, where the move family reads zero. Float rather than double
+// because the TS vector is a Float32Array, and a bit-identical feature is rounded where it is.
+void extract_features(const Position *pos, const Played *played, float *features);
 
 #endif

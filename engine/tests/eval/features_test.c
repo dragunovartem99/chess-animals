@@ -1,28 +1,16 @@
+#include <stdbool.h>
+#include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
+#include "bitboard.h"
 #include "eval.h"
 #include "feature_ids.h"
 #include "harness.h"
 #include "move.h"
 #include "position.h"
-
-// The slots whose family has been ported. A family's commit appends its slots here, and from
-// then on every one of them must equal the TS extractor's to the bit.
-static const int PORTED[] = {FEATURE_MATERIAL_PAWN,   FEATURE_MATERIAL_KNIGHT,
-                             FEATURE_MATERIAL_BISHOP, FEATURE_MATERIAL_ROOK,
-                             FEATURE_MATERIAL_QUEEN,  FEATURE_CENTRALIZATION,
-                             FEATURE_DEVELOPMENT,     FEATURE_EARLY_QUEEN,
-                             FEATURE_CASTLED,         FEATURE_KING_DANGER,
-                             FEATURE_MOBILITY,        FEATURE_CENTER_CONTROL,
-                             FEATURE_SPACE,           FEATURE_HANGING,
-                             FEATURE_SWARM,           FEATURE_HUDDLE,
-                             FEATURE_KING_PROXIMITY,  FEATURE_SAME_COLOR_SQUARES,
-                             FEATURE_MIRROR_RANKS,    FEATURE_OPPONENT_MOBILITY,
-                             FEATURE_PUSH_DEPTH,      FEATURE_OFFERED_MATERIAL,
-                             FEATURE_KING_ACTIVITY,   FEATURE_PASSED_PAWN_PUSH};
 
 static uint32_t bits_of(float value) {
 	uint32_t bits = 0;
@@ -45,7 +33,11 @@ static void check_line(char *line) {
 	CHECK(position_from_fen(&pos, line));
 	Move move = MOVE_NONE;
 	Undo undo;
-	if (strcmp(uci, "-") != 0 && move_from_uci(uci, &move)) {
+	Played played = {.move = MOVE_NONE, .captured = NO_ROLE};
+	bool root = strcmp(uci, "-") == 0;
+	CHECK(root || move_from_uci(uci, &move));
+	if (!root) {
+		played = played_move(&pos, move);
 		position_make(&pos, move, &undo);
 	}
 	uint32_t expected[FEATURE_COUNT];
@@ -53,13 +45,15 @@ static void check_line(char *line) {
 		expected[slot] = (uint32_t)strtoul(values, &values, 16);
 	}
 	float features[FEATURE_COUNT];
-	extract_features(&pos, features);
-	for (size_t index = 0; index < sizeof PORTED / sizeof PORTED[0]; index++) {
-		CHECK(bits_of(features[PORTED[index]]) == expected[PORTED[index]]);
+	extract_features(&pos, root ? NULL : &played, features);
+	for (int slot = 0; slot < FEATURE_COUNT; slot++) {
+		CHECK(bits_of(features[slot]) == expected[slot]);
 	}
 }
 
-TEST(ported_features_equal_the_ts_extractor_to_the_bit) {
+// Every slot of every line, the move family's included: C and TS read the same position the same
+// way down to the last bit.
+TEST(features_equal_the_ts_extractor_to_the_bit) {
 	static char line[1024];
 	FILE *file = fopen("tests/fixtures/features.txt", "r");
 	CHECK(file != NULL);

@@ -3,7 +3,7 @@
 #include "feature_ids.h"
 #include "position.h"
 
-void extract_features(const Position *pos, float *features) {
+void extract_features(const Position *pos, const Played *played, float *features) {
 	for (int slot = 0; slot < FEATURE_COUNT; slot++) {
 		features[slot] = 0;
 	}
@@ -17,4 +17,5 @@ void extract_features(const Position *pos, float *features) {
 	extract_symmetry(&ctx, features);
 	extract_aggression(&ctx, features);
 	extract_endgame(&ctx, features);
+	extract_move(pos, played, features);
 }

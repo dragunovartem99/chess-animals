@@ -1,4 +1,5 @@
 #include <math.h>
+#include <stddef.h>
 
 #include "bitboard.h"
 #include "eval.h"
@@ -42,6 +43,6 @@ TEST(reads_a_perfect_mirror_as_negative_zero) {
 	Position pos;
 	float features[FEATURE_COUNT];
 	CHECK(position_from_fen(&pos, "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"));
-	extract_features(&pos, features);
+	extract_features(&pos, NULL, features);
 	CHECK(features[FEATURE_MIRROR_RANKS] == 0 && signbit(features[FEATURE_MIRROR_RANKS]));
 }
