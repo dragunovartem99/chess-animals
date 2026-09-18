@@ -21,6 +21,7 @@
 		"bench": "vitest bench --run",
 		"build": "make -sC engine wasm && tsx cli/og.ts && vue-tsc -b --noEmit && vite build",
 		"dev": "vite",
+		"engine:corpus": "tsx cli/corpus.ts",
 		"format": "oxfmt --write && make -sC engine format",
 		"format:check": "oxfmt --check && make -sC engine format-check",
 		"lint": "oxlint --fix && make -sC engine lint",

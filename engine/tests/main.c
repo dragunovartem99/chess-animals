@@ -1,5 +1,6 @@
 #include <stdio.h>
 
+#include "api.h"
 #include "harness.h"
 
 static Test *tests;
@@ -16,6 +17,7 @@ void harness_fail(Failure failure) {
 }
 
 int main(void) {
+	engine_init();
 	int count = 0;
 	for (Test *test = tests; test; test = test->next) {
 		test->run();

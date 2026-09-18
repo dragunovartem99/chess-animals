@@ -34,6 +34,7 @@ npm run dev
 | `npm run tune -- <botId>`           | dev CLI: SPSA-tune one bot's weights against the roster            |
 | `npm run lint` / `format`           | oxlint + clang-tidy / oxfmt + clang-format (`:check` don't write)  |
 | `npm run types:check`               | `vue-tsc` type-check                                               |
+| `npm run engine:corpus`             | regenerate the C engine's chessops fixture corpus                  |
 
 Linting and formatting via [oxlint](https://oxc.rs)/[oxfmt](https://oxc.rs), type-checking via
 `vue-tsc`, tests via Vitest. CI runs all of them plus the build on every pull request;
