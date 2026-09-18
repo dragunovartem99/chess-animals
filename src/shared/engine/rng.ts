@@ -11,7 +11,10 @@ const UINT32 = 2 ** 32;
 
 // Mixes an arbitrary seed into four well-spread words. xorshift128 is all-zero-absorbing — seeded
 // with zeros it returns zero forever — so the state is nudged off zero before it is used.
-function seedState(seed: number | string): Uint32Array {
+//
+// Exported because the wasm search draws from the same stream: its state goes across the boundary
+// as these four words and comes back advanced, never as a second seed.
+export function seedState(seed: number | string): Uint32Array {
 	let hash = typeof seed === "number" ? seed >>> 0 : 2166136261;
 
 	if (typeof seed === "string") {
@@ -35,8 +38,11 @@ function seedState(seed: number | string): Uint32Array {
 
 // xorshift128: four words of state, no multiplications in the hot path, and a period long enough
 // that a tournament will never wrap. Every game seeds its own, so a whole run replays exactly.
-export function createRng(seed: number | string): Rng {
-	const state = seedState(seed);
+//
+// A `Uint32Array` is a state rather than a seed — one the wasm search handed back — and the
+// stream carries on from it. It is copied, so the caller's words never move under it.
+export function createRng(seed: number | string | Uint32Array): Rng {
+	const state = seed instanceof Uint32Array ? Uint32Array.from(seed) : seedState(seed);
 
 	function next(): number {
 		const first = state[0];

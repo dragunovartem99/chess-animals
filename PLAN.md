@@ -107,7 +107,6 @@ sets for it.
 
 | Commit                                             | Contents                                                                      | Green when                                                           |
 | -------------------------------------------------- | ----------------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| ⬜ `engine: add the wasm api and ts binding`       | `shared/wasm/`: loader for worker and node, typed `search` / `extract`        | vitest drives the wasm build; TS vs wasm side by side in bench       |
 | ⬜ `engine: route uci search through wasm`         | `createUciEngine` calls wasm; arena workers load it; golden games regenerated | Arena re-run; every animal checked against its rating slot           |
 | ⬜ `eval: read the breakdown from wasm`            | `FeatureBreakdown` extracts through wasm                                      | Breakdown tests unchanged                                            |
 | ⬜ `engine: retire the ts search and extractor`    | Freeze oracle outputs to JSON, delete TS search/eval, update ARCHITECTURE     | Differential tests run against the frozen fixtures; coverage holds   |
