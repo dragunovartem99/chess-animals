@@ -1,17 +1,12 @@
-import { attacks } from "chessops/attacks";
 import type { Chess } from "chessops/chess";
 import { SquareSet } from "chessops/squareSet";
-import { type ByColor, type Color, COLORS, type Piece, ROLES } from "chessops/types";
+import type { ByColor, Color, Piece } from "chessops/types";
 import { opposite } from "chessops/util";
+
+import { type AttackMaps, walkBoard } from "./walk";
 
 // One piece on the board, with the squares it attacks already worked out.
 export type PieceReach = { square: number; piece: Piece; reach: SquareSet };
-
-type AttackMaps = {
-	reach: PieceReach[];
-	pawnAttacks: ByColor<SquareSet>;
-	attacksBy: ByColor<SquareSet>;
-};
 
 // Everything more than one family needs, computed once per position rather than once per family.
 // `us` is always the side to move: the whole evaluation is written from that perspective, so no
@@ -51,38 +46,6 @@ function phaseOf(position: Chess): number {
 	const units = knight.size() + bishop.size() + rook.size() * 2 + queen.size() * 4;
 
 	return Math.min(units, FULL_PHASE) / FULL_PHASE;
-}
-
-function walkBoard(position: Chess): AttackMaps {
-	const reach: PieceReach[] = [];
-	const attacksBy = { white: SquareSet.empty(), black: SquareSet.empty() };
-	const pawnAttacks = { white: SquareSet.empty(), black: SquareSet.empty() };
-
-	// Walked a colour and a role at a time off the bitboards that already separate them. The
-	// board's own iterator works the other way round — it resolves every square's colour and role
-	// by scanning eight sets, and hands back a fresh pair and a fresh `Piece` for each — which is
-	// sixty-odd objects a node for facts that are one intersection away. The `Piece` here is
-	// shared by every man of its kind, which nothing downstream may mutate and nothing does.
-	for (const color of COLORS) {
-		const ours = position.board[color];
-
-		for (const role of ROLES) {
-			const piece: Piece = { color, role };
-
-			for (const square of position.board[role].intersect(ours)) {
-				const squares = attacks(piece, square, position.board.occupied);
-
-				reach.push({ square, piece, reach: squares });
-				attacksBy[color] = attacksBy[color].union(squares);
-
-				// `attacks` for a pawn is exactly its capture squares, so the pawn map falls out
-				// of the same call rather than needing a second one.
-				if (role === "pawn") pawnAttacks[color] = pawnAttacks[color].union(squares);
-			}
-		}
-	}
-
-	return { reach, pawnAttacks, attacksBy };
 }
 
 // The walk is deferred because it is the expensive half and most bots never ask for it: it calls
