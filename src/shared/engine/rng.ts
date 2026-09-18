@@ -5,6 +5,8 @@ export type Rng = {
 	int: (bound: number) => number;
 	// A uniform element of a non-empty array.
 	pick: <T>(items: readonly T[]) => T;
+	// A copy of the four words the stream stands at, for `createRng` to carry on from.
+	state: () => Uint32Array;
 };
 
 const UINT32 = 2 ** 32;
@@ -70,5 +72,5 @@ export function createRng(seed: number | string | Uint32Array): Rng {
 		return items[int(items.length)];
 	}
 
-	return { float, int, pick };
+	return { float, int, pick, state: () => state.slice() };
 }

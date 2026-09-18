@@ -99,6 +99,11 @@ feature is safe and reordering one is not.
 
 ## The engine
 
+Two searches stand side by side until cutover. The browser's `uciEngine` worker searches in C
+compiled to wasm (`engine/`, bound in `shared/wasm/`), handed to `createUciEngine` as its
+`goSearch`; the arena, the tuner and the tests still call the TS search below, which is also the
+oracle the C one is held to. What follows describes the TS search.
+
 `searchRoot` is negamax with alpha-beta, and `leaf.ts` is what happens once it stops descending —
 the evaluation, quiescence and the node budget, which is a property of leaves because a leaf is
 the only thing that spends one. `depth` comes from the bot, `quiescence` extends past

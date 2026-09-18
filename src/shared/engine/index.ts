@@ -1,6 +1,7 @@
 export { type BestMove, createUciClient, type UciEngineClient, type UciTransport } from "./client";
 export { applyOption, describeOptions } from "./options";
 export { createLocalTransport, createWorkerTransport } from "./transports";
+export { type GoRequest, type GoResult, type GoSearch, searchInTs } from "./goSearch";
 export { createUciEngine } from "./uciEngine";
 export { createEvaluator, evaluatePosition, type PositionEvaluator } from "./evaluate";
 export { orderMoves } from "./ordering";
