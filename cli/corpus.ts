@@ -2,6 +2,7 @@ import { writeFileSync } from "node:fs";
 
 import { attackLines } from "./corpus/attacks";
 import { drawLines } from "./corpus/draws";
+import { evalLines } from "./corpus/evals";
 import { featureLines } from "./corpus/features";
 import { moveLines } from "./corpus/moves";
 
@@ -12,6 +13,7 @@ const FIXTURES: [string, () => string[]][] = [
 	["attacks.txt", attackLines],
 	["draws.txt", drawLines],
 	["features.txt", featureLines],
+	["evals.txt", evalLines],
 ];
 
 for (const [name, lines] of FIXTURES) {
