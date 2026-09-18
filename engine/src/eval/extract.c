@@ -12,4 +12,5 @@ void extract_features(const Position *pos, float *features) {
 	extract_placement(&ctx, features);
 	extract_king(&ctx, features);
 	extract_mobility(&ctx, features);
+	extract_control(&ctx, features);
 }
