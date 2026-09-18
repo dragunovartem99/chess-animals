@@ -17,14 +17,6 @@ int live_slots(const float *weights, int *slots) {
 	return count;
 }
 
-double eval_dot(const float *features, const float *weights, const int *slots, int count) {
-	double total = 0;
-	for (int index = 0; index < count; index++) {
-		total += (double)features[slots[index]] * (double)weights[slots[index]];
-	}
-	return total;
-}
-
 bool terminal_score(const Position *pos, const float *weights, int ply, double *score) {
 	// The weight first: proving mate means generating moves, and a bot that cannot see mate should
 	// not pay for that at every node.
@@ -43,6 +35,9 @@ bool terminal_score(const Position *pos, const float *weights, int ply, double *
 Evaluator evaluator(const float *weights) {
 	Evaluator eval = {.weights = weights};
 	eval.count = live_slots(weights, eval.slots);
+	for (int index = 0; index < eval.count; index++) {
+		eval.extractors[index] = EXTRACTORS[eval.slots[index]];
+	}
 	return eval;
 }
 
@@ -55,7 +50,11 @@ double evaluate(const Evaluator *eval, const Position *pos, const Played *played
 }
 
 double evaluate_features(const Evaluator *eval, const Position *pos, const Played *played) {
-	float features[FEATURE_COUNT];
-	extract_features(pos, played, features);
-	return eval_dot(features, eval->weights, eval->slots, eval->count);
+	EvalContext ctx = eval_context(pos, played);
+	double total = 0;
+	for (int index = 0; index < eval->count; index++) {
+		float feature = eval->extractors[index](&ctx);
+		total += (double)feature * (double)eval->weights[eval->slots[index]];
+	}
+	return total;
 }

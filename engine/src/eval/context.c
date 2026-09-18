@@ -5,12 +5,13 @@
 #include "eval.h"
 #include "position.h"
 
-EvalContext eval_context(const Position *pos) {
-	return (EvalContext){.pos = pos, .us = pos->turn, .them = opposite(pos->turn)};
+EvalContext eval_context(const Position *pos, const Played *played) {
+	return (EvalContext){
+	    .pos = pos, .played = played, .us = pos->turn, .them = opposite(pos->turn)};
 }
 
 // A colour at a time, pawns first, so the pawn map is the running union once the pawns are done —
-// the same order `walkBoard` takes, and the order families read `reach` in.
+// the same order `walkBoard` takes, and the order features read `reach` in.
 void eval_walk(EvalContext *ctx) {
 	if (ctx->walked) {
 		return;

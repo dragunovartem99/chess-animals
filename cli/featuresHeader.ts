@@ -18,6 +18,10 @@ function constantName(key: string): string {
 
 export function renderFeaturesHeader(): string {
 	const entries = FEATURES.map((feature) => `\t${constantName(feature.key)} = ${feature.id},`);
+	// Four spaces, not a tab: clang-format indents an initializer as a continuation.
+	const keys = FEATURES.map(
+		(feature) => `    [${constantName(feature.key)}] = "${feature.key}",`
+	);
 
 	return [
 		"// Generated from src/shared/eval/features.ts by `npm run engine:features` — do not edit.",
@@ -28,6 +32,11 @@ export function renderFeaturesHeader(): string {
 		"enum {",
 		...entries,
 		`\tFEATURE_COUNT = ${FEATURES.length}`,
+		"};",
+		"",
+		"// The registry keys in slot order, for output that names a feature.",
+		"static const char *const FEATURE_KEYS[FEATURE_COUNT] = {",
+		...keys,
 		"};",
 		"",
 		"#endif",

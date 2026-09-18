@@ -1,7 +1,6 @@
 #include "bitboard.h"
 #include "eval.h"
-#include "families.h"
-#include "feature_ids.h"
+#include "extractors.h"
 #include "position.h"
 
 static const Bitboard DARK_SQUARES = 0xaa55aa55aa55aa55U;
@@ -30,16 +29,14 @@ static int asymmetry(const Position *pos) {
 }
 
 // Men standing on squares of their own colour: White on light, Black on dark.
-static int on_own_colour(const Position *pos, Color color) {
+static int on_own_colour(EvalContext *ctx, Color color) {
 	Bitboard own = color == WHITE ? ~DARK_SQUARES : DARK_SQUARES;
-	return bb_count(pos->colors[color] & own);
+	return bb_count(ctx->pos->colors[color] & own);
 }
 
-// `extractSymmetry`: shape, not strength. The mirror is negated after the conversion, so a
-// perfect mirror reads -0 as the TS `-asymmetry(...)` does, and the bits still match.
-void extract_symmetry(EvalContext *ctx, float *features) {
-	const Position *pos = ctx->pos;
-	features[FEATURE_SAME_COLOR_SQUARES] =
-	    (float)(on_own_colour(pos, ctx->us) - on_own_colour(pos, ctx->them));
-	features[FEATURE_MIRROR_RANKS] = -(float)asymmetry(pos);
-}
+// Shape, not strength.
+float extract_same_color_squares(EvalContext *ctx) { return side_difference(ctx, on_own_colour); }
+
+// Negated after the conversion, so a perfect mirror reads -0 as the TS `-asymmetry(...)` does,
+// and the bits still match.
+float extract_mirror_ranks(EvalContext *ctx) { return -(float)asymmetry(ctx->pos); }

@@ -12,8 +12,8 @@ static const char *const START = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w 
 TEST(walks_the_board_only_when_asked) {
 	Position pos;
 	CHECK(position_from_fen(&pos, START));
-	EvalContext ctx = eval_context(&pos);
-	CHECK(!ctx.walked && ctx.us == WHITE && ctx.them == BLACK);
+	EvalContext ctx = eval_context(&pos, NULL);
+	CHECK(!ctx.walked && ctx.played == NULL && ctx.us == WHITE && ctx.them == BLACK);
 	eval_walk(&ctx);
 	CHECK(ctx.walked);
 	// Every square of the second and third ranks, and the first but its corners, which nothing

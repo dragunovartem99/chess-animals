@@ -100,9 +100,10 @@ TEST(walks_only_the_weighted_slots) {
 	Evaluator eval = evaluator(bot);
 	CHECK(eval.count == 2);
 	CHECK(eval.slots[0] == FEATURE_MATERIAL_PAWN && eval.slots[1] == FEATURE_MATERIAL_QUEEN);
-	float features[FEATURE_COUNT] = {0};
-	features[FEATURE_MATERIAL_PAWN] = 2;
-	features[FEATURE_MATERIAL_ROOK] = 100;
-	features[FEATURE_MATERIAL_QUEEN] = -1;
-	CHECK(eval_dot(features, bot, eval.slots, eval.count) == -7);
+	CHECK(eval.extractors[0] == EXTRACTORS[FEATURE_MATERIAL_PAWN] &&
+	      eval.extractors[1] == EXTRACTORS[FEATURE_MATERIAL_QUEEN]);
+	// Two pawns up, a queen down and a rook up: the rook is not weighed, so it is not counted.
+	Position pos;
+	CHECK(position_from_fen(&pos, "3qk3/8/8/8/8/8/PP6/R3K3 w - - 0 1"));
+	CHECK(evaluate_features(&eval, &pos, NULL) == -7);
 }

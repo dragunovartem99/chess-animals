@@ -1,7 +1,6 @@
 #include "bitboard.h"
 #include "eval.h"
-#include "families.h"
-#include "feature_ids.h"
+#include "extractors.h"
 #include "masks.h"
 #include "position.h"
 
@@ -20,16 +19,24 @@ static int king_centrality(const Position *pos, Color color) {
 	return centrality(bb_first(pos->roles[KING] & pos->colors[color]));
 }
 
-// `extractEndgame`: each difference scaled by `1 - phase`, silent while the pieces are on. The
-// product is taken in double and rounded once, as the TS number is on its way into the vector.
-void extract_endgame(EvalContext *ctx, float *features) {
+// Each difference is scaled by `1 - phase`, silent while the pieces are on — and not worked out
+// then, which is most of a middlegame search. The product is taken in double and rounded once, as
+// the TS number is on its way into the vector; a silent feature reads +0, never the -0 a negative
+// difference times zero would give.
+float extract_king_activity(EvalContext *ctx) {
 	const Position *pos = ctx->pos;
 	double late = 1 - eval_phase(pos);
 	if (late == 0) {
-		return;
+		return 0;
 	}
-	int king = king_centrality(pos, ctx->us) - king_centrality(pos, ctx->them);
-	int passed = passers(pos, ctx->us) - passers(pos, ctx->them);
-	features[FEATURE_KING_ACTIVITY] = (float)(king * late);
-	features[FEATURE_PASSED_PAWN_PUSH] = (float)(passed * late);
+	return (float)((king_centrality(pos, ctx->us) - king_centrality(pos, ctx->them)) * late);
+}
+
+float extract_passed_pawn_push(EvalContext *ctx) {
+	const Position *pos = ctx->pos;
+	double late = 1 - eval_phase(pos);
+	if (late == 0) {
+		return 0;
+	}
+	return (float)((passers(pos, ctx->us) - passers(pos, ctx->them)) * late);
 }

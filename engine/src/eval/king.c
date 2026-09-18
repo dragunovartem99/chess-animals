@@ -1,8 +1,7 @@
 #include "attacks.h"
 #include "bitboard.h"
 #include "eval.h"
-#include "families.h"
-#include "feature_ids.h"
+#include "extractors.h"
 #include "position.h"
 
 // What a man is worth as an attacker near the king, not on the board: a queen arriving is the
@@ -24,9 +23,8 @@ static int attackers_on(EvalContext *ctx, Color color) {
 	return attackers;
 }
 
-// `extractKing`: danger around our king minus around theirs.
-void extract_king(EvalContext *ctx, float *features) {
+// `kingDanger`: danger around our king minus around theirs.
+float extract_king_danger(EvalContext *ctx) {
 	eval_walk(ctx);
-	features[FEATURE_KING_DANGER] =
-	    (float)(attackers_on(ctx, ctx->us) - attackers_on(ctx, ctx->them));
+	return side_difference(ctx, attackers_on);
 }

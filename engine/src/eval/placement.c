@@ -2,8 +2,7 @@
 
 #include "bitboard.h"
 #include "eval.h"
-#include "families.h"
-#include "feature_ids.h"
+#include "extractors.h"
 #include "masks.h"
 #include "position.h"
 
@@ -12,7 +11,8 @@ static const Bitboard WINGS = 0xc7c7c7c7c7c7c7c7U;
 
 // +1 with the king tucked on a wing of its own back rank, 0 while a right still lets it get
 // there, -1 once the rights are spent with it stuck in the middle.
-static int castled_state(const Position *pos, Color color) {
+static int castled_state(EvalContext *ctx, Color color) {
+	const Position *pos = ctx->pos;
 	Bitboard king = pos->roles[KING] & pos->colors[color];
 	if ((king & WINGS & back_rank(color)) != 0) {
 		return 1;
@@ -22,16 +22,25 @@ static int castled_state(const Position *pos, Color color) {
 	return (pos->castling & rights) != 0 ? 0 : -1;
 }
 
-static int total_centrality(Bitboard squares) {
+// How far the pieces stand from the rim; pawns and the king are not pieces here.
+static int total_centrality(EvalContext *ctx, Color color) {
+	const Position *pos = ctx->pos;
 	int total = 0;
-	while (squares != 0) {
-		total += centrality(bb_pop(&squares));
+	for (Bitboard men = pos->colors[color] & ~(pos->roles[PAWN] | pos->roles[KING]); men != 0;) {
+		total += centrality(bb_pop(&men));
 	}
 	return total;
 }
 
+static int developed(EvalContext *ctx, Color color) {
+	const Position *pos = ctx->pos;
+	Bitboard minors = pos->colors[color] & (pos->roles[KNIGHT] | pos->roles[BISHOP]);
+	return bb_count(minors & ~back_rank(color));
+}
+
 // A queen off her home square but still on the board jumped each of her minors left at home.
-static int early_queen(const Position *pos, Color color) {
+static int early_queen(EvalContext *ctx, Color color) {
+	const Position *pos = ctx->pos;
 	Bitboard ours = pos->colors[color];
 	Bitboard queens = ours & pos->roles[QUEEN];
 	Square home = color == WHITE ? 3 : 59;
@@ -44,25 +53,7 @@ static int early_queen(const Position *pos, Color color) {
 	       bb_count(ours & pos->roles[BISHOP] & bishops_home);
 }
 
-// `extractPlacement`: each of the four is the side to move's count minus the opponent's.
-void extract_placement(EvalContext *ctx, float *features) {
-	const Position *pos = ctx->pos;
-	int central = 0;
-	int developed = 0;
-	int queen_early = 0;
-	int castled = 0;
-	for (int side = 0; side < 2; side++) {
-		Color color = side == 0 ? ctx->us : ctx->them;
-		int sign = side == 0 ? 1 : -1;
-		Bitboard ours = pos->colors[color];
-		Bitboard minors = ours & (pos->roles[KNIGHT] | pos->roles[BISHOP]);
-		castled += sign * castled_state(pos, color);
-		central += sign * total_centrality(ours & ~(pos->roles[PAWN] | pos->roles[KING]));
-		developed += sign * bb_count(minors & ~back_rank(color));
-		queen_early += sign * early_queen(pos, color);
-	}
-	features[FEATURE_CENTRALIZATION] = (float)central;
-	features[FEATURE_DEVELOPMENT] = (float)developed;
-	features[FEATURE_EARLY_QUEEN] = (float)queen_early;
-	features[FEATURE_CASTLED] = (float)castled;
-}
+float extract_centralization(EvalContext *ctx) { return side_difference(ctx, total_centrality); }
+float extract_development(EvalContext *ctx) { return side_difference(ctx, developed); }
+float extract_early_queen(EvalContext *ctx) { return side_difference(ctx, early_queen); }
+float extract_castled(EvalContext *ctx) { return side_difference(ctx, castled_state); }

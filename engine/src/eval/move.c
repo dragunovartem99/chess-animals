@@ -2,8 +2,7 @@
 
 #include "bitboard.h"
 #include "eval.h"
-#include "families.h"
-#include "feature_ids.h"
+#include "extractors.h"
 #include "move.h"
 #include "movegen.h"
 #include "position.h"
@@ -19,18 +18,28 @@ Played played_move(const Position *parent, Move move) {
 	return (Played){.move = move, .captured = en_passant ? PAWN : NO_ROLE};
 }
 
-// `extractMoveFeatures`: what the move did, negated into the frame of the side now to move, so a
-// positive weight always means the mover wants it.
-void extract_move(const Position *pos, const Played *played, float *features) {
-	if (played == NULL) {
-		return;
+// What the move did, negated into the frame of the side now to move, so a positive weight always
+// means the mover wants it. Each reads zero at a root, where no move was played.
+float extract_gives_check(EvalContext *ctx) {
+	const Position *pos = ctx->pos;
+	if (ctx->played == NULL) {
+		return 0;
 	}
-	Square king = bb_first(pos->roles[KING] & pos->colors[pos->turn]);
+	Square king = bb_first(pos->roles[KING] & pos->colors[ctx->us]);
 	Bitboard occupied = pos->colors[WHITE] | pos->colors[BLACK];
-	if (attackers_to(pos, king, opposite(pos->turn), occupied) != 0) {
-		features[FEATURE_GIVES_CHECK] = -1;
+	return attackers_to(pos, king, ctx->them, occupied) != 0 ? -1 : 0;
+}
+
+float extract_capture_value(EvalContext *ctx) {
+	if (ctx->played == NULL || ctx->played->captured == NO_ROLE) {
+		return 0;
 	}
-	if (played->captured != NO_ROLE) {
-		features[FEATURE_CAPTURE_VALUE] = (float)-classical_value(played->captured);
-	}
+	return (float)-classical_value(ctx->played->captured);
+}
+
+// Always zero: a mate replaces the evaluation in `terminal_score` rather than joining the dot, and
+// the slot exists only to carry the weight that signs it.
+float extract_gives_mate(EvalContext *ctx) {
+	(void)ctx;
+	return 0;
 }

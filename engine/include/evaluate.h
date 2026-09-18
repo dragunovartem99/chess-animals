@@ -15,26 +15,26 @@ enum { MATE_SCORE = 100000 };
 // Returns the count. A zero weight cannot change a score, so the dot walks only these.
 int live_slots(const float *weights, int *slots);
 
-// `dot`: the features times the weights, summed in slot order in double — the TS order and
-// precision, so the same float32 inputs give the same bits.
-double eval_dot(const float *features, const float *weights, const int *slots, int count);
-
 // `terminalScore`: a mate **replaces** the evaluation rather than joining it, decaying with `ply`
 // so the shortest mate wins, and signed by the `givesMate` preference. False — score untouched —
 // when the position is not mate, or the bot has no opinion on mate and must evaluate it normally.
 // Stalemate is not scored here.
 bool terminal_score(const Position *pos, const float *weights, int ply, double *score);
 
-// `createEvaluator`: one bot's weights and the slots it reads, worked out once per search.
+// `createEvaluator`: one bot's weights, the slots it reads and their extractors, worked out once
+// per search — so a node runs exactly the features the bot weighs, with no weight tested per node.
 typedef struct {
 	const float *weights;
 	int slots[FEATURE_COUNT];
+	Extractor extractors[FEATURE_COUNT];
 	int count;
 } Evaluator;
 
 Evaluator evaluator(const float *weights);
 
-// The dot alone, for a caller that has already ruled the position out as mate.
+// `dot`, for a caller that has already ruled the position out as mate: each live feature times its
+// weight, summed in slot order in double — the TS order and precision, so the same float32
+// features give the same bits.
 double evaluate_features(const Evaluator *eval, const Position *pos, const Played *played);
 
 // What the position is worth to the side to move: the terminal score if there is one, the dot

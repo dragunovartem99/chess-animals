@@ -34,4 +34,35 @@ enum {
 	FEATURE_COUNT = 27
 };
 
+// The registry keys in slot order, for output that names a feature.
+static const char *const FEATURE_KEYS[FEATURE_COUNT] = {
+    [FEATURE_MATERIAL_PAWN] = "materialPawn",
+    [FEATURE_MATERIAL_KNIGHT] = "materialKnight",
+    [FEATURE_MATERIAL_BISHOP] = "materialBishop",
+    [FEATURE_MATERIAL_ROOK] = "materialRook",
+    [FEATURE_MATERIAL_QUEEN] = "materialQueen",
+    [FEATURE_KING_DANGER] = "kingDanger",
+    [FEATURE_SWARM] = "swarm",
+    [FEATURE_HUDDLE] = "huddle",
+    [FEATURE_KING_PROXIMITY] = "kingProximity",
+    [FEATURE_SAME_COLOR_SQUARES] = "sameColorSquares",
+    [FEATURE_MIRROR_RANKS] = "mirrorRanks",
+    [FEATURE_OPPONENT_MOBILITY] = "opponentMobility",
+    [FEATURE_PUSH_DEPTH] = "pushDepth",
+    [FEATURE_OFFERED_MATERIAL] = "offeredMaterial",
+    [FEATURE_GIVES_MATE] = "givesMate",
+    [FEATURE_GIVES_CHECK] = "givesCheck",
+    [FEATURE_CAPTURE_VALUE] = "captureValue",
+    [FEATURE_CENTER_CONTROL] = "centerControl",
+    [FEATURE_SPACE] = "space",
+    [FEATURE_HANGING] = "hanging",
+    [FEATURE_MOBILITY] = "mobility",
+    [FEATURE_CENTRALIZATION] = "centralization",
+    [FEATURE_DEVELOPMENT] = "development",
+    [FEATURE_EARLY_QUEEN] = "earlyQueen",
+    [FEATURE_CASTLED] = "castled",
+    [FEATURE_KING_ACTIVITY] = "kingActivity",
+    [FEATURE_PASSED_PAWN_PUSH] = "passedPawnPush",
+};
+
 #endif

@@ -1,7 +1,6 @@
 #include "bitboard.h"
 #include "eval.h"
-#include "families.h"
-#include "feature_ids.h"
+#include "extractors.h"
 #include "position.h"
 
 // Destination squares, not legal moves — pins go unresolved. Pawns and the king are left out: a
@@ -17,8 +16,8 @@ static int count_moves(EvalContext *ctx, Color color) {
 	return total;
 }
 
-// `extractMobility`: our squares to go to minus theirs.
-void extract_mobility(EvalContext *ctx, float *features) {
+// `mobility`: our squares to go to minus theirs.
+float extract_mobility(EvalContext *ctx) {
 	eval_walk(ctx);
-	features[FEATURE_MOBILITY] = (float)(count_moves(ctx, ctx->us) - count_moves(ctx, ctx->them));
+	return side_difference(ctx, count_moves);
 }

@@ -29,9 +29,8 @@ NATIVE_FLAGS := -O1 -g -fno-omit-frame-pointer -fsanitize=address,undefined \
 # Bulk memory lowers the struct copies clang turns into memcpy calls to `memory.copy`, so the
 # module needs no libc symbol to link.
 # What the wasm build is optimised to, without the sanitizers that would make the numbers
-# meaningless. The bench reads the roster through the test fixtures and times the eval families
-# one by one, so it sees `tests/` and the families' private header.
-BENCH_FLAGS := -O3 -flto -Itests -Isrc/eval
+# meaningless. The bench reads the roster through the test fixtures, so it sees `tests/`.
+BENCH_FLAGS := -O3 -flto -Itests
 # The stack is raised from wasm-ld's 64 KB: a node holds a move list and its priorities, a
 # quiescence line runs to MAX_PLY, and overflowing it corrupts the statics below it silently.
 WASM_FLAGS := --target=wasm32 -O3 -flto -nostdlib -mbulk-memory -Wl,--no-entry -Wl,--lto-O3 \
@@ -84,7 +83,7 @@ format-check:
 
 # Tests are exempt from the line limit, as the TS specs are: a spec is a flat list of cases.
 lint:
-	$(TIDY) --quiet $(SRC) $(TESTS) $(BENCH) -- $(CFLAGS) -Itests -Isrc/eval
+	$(TIDY) --quiet $(SRC) $(TESTS) $(BENCH) -- $(CFLAGS) -Itests
 	awk -v MAX=100 -f scripts/max-lines.awk $(shell find include src -name '*.[ch]')
 
 clean:
