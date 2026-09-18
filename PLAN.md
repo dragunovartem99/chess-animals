@@ -107,7 +107,6 @@ sets for it.
 
 | Commit                                             | Contents                                                                                                 | Green when                                                              |
 | -------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
-| ⬜ `engine: add bitboards and the rng`             | Core helpers, xorshift128                                                                                | The stream matches `createRng` for fixed seeds                          |
 | ⬜ `engine: add position, fen and zobrist`         | Bitboards + mailbox, FEN in/out, make/unmake, incremental hash                                           | FEN round-trips the corpus; the make/unmake/hash invariants hold        |
 | ⬜ `engine: add attack tables`                     | Magics, leaper and pawn tables                                                                           | Equal to chessops `attacks` for every square over sampled occupancy     |
 | ⬜ `engine: add legal move generation and perft`   | Check/pin-mask legal gen in chessops order, perft                                                        | CPW perft numbers; move lists equal `legalMoves` on the corpus          |

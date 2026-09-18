@@ -56,7 +56,7 @@ test: $(BUILD)/tests
 
 coverage: test
 	$(PROFDATA) merge -sparse $(BUILD)/tests.profraw -o $(BUILD)/tests.profdata
-	$(COV) report $(BUILD)/tests -instr-profile=$(BUILD)/tests.profdata src \
+	$(COV) report $(BUILD)/tests -instr-profile=$(BUILD)/tests.profdata src include \
 		| awk -v MIN=90 -f scripts/coverage.awk
 
 format:
