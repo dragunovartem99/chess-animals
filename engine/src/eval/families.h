@@ -10,5 +10,6 @@ void extract_placement(EvalContext *ctx, float *features);
 void extract_king(EvalContext *ctx, float *features);
 void extract_mobility(EvalContext *ctx, float *features);
 void extract_control(EvalContext *ctx, float *features);
+void extract_proximity(EvalContext *ctx, float *features);
 
 #endif

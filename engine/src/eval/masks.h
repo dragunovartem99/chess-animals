@@ -16,4 +16,13 @@ static inline int centrality(Square square) {
 	return (file < 7 - file ? file : 7 - file) + (rank < 7 - rank ? rank : 7 - rank);
 }
 
+// King-move distance: the steps a king needs between two squares.
+static inline int chebyshev(Square from, Square to) {
+	int files = square_file(from) - square_file(to);
+	int ranks = square_rank(from) - square_rank(to);
+	files = files < 0 ? -files : files;
+	ranks = ranks < 0 ? -ranks : ranks;
+	return files > ranks ? files : ranks;
+}
+
 #endif
