@@ -10,7 +10,7 @@ import { loadPieceUris } from "./og/pieces";
 import { renderOg } from "./og/render";
 
 // `tsx cli/og.ts` — render the social preview card to `public/og.png`, run from `npm run build`
-// so a deploy always ships the current roster. One image for the whole site: GitHub Pages serves
+// so a deploy always ships the current roster. One image for the whole site: the server serves
 // a single shell, so per-route cards would need prerendering the SPA doesn't do.
 
 const chips = await Promise.all(

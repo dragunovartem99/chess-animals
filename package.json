@@ -2,7 +2,7 @@
 	"name": "chess-animals",
 	"private": true,
 	"description": "Every animal plays chess its own strange way. Can you beat one?",
-	"homepage": "https://github.com/dragunovartem99/chess-animals#readme",
+	"homepage": "https://chess-animals.com/",
 	"bugs": {
 		"url": "https://github.com/dragunovartem99/chess-animals/issues",
 		"email": "dragunovartem99@gmail.com"
