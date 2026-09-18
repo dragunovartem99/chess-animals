@@ -12,5 +12,6 @@ void extract_mobility(EvalContext *ctx, float *features);
 void extract_control(EvalContext *ctx, float *features);
 void extract_proximity(EvalContext *ctx, float *features);
 void extract_symmetry(EvalContext *ctx, float *features);
+void extract_aggression(EvalContext *ctx, float *features);
 
 #endif

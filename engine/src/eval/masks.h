@@ -16,6 +16,11 @@ static inline int centrality(Square square) {
 	return (file < 7 - file ? file : 7 - file) + (rank < 7 - rank ? rank : 7 - rank);
 }
 
+// The rank a square sits on, counted from `color`'s own back rank.
+static inline int relative_rank(Color color, Square square) {
+	return color == WHITE ? square_rank(square) : 7 - square_rank(square);
+}
+
 // King-move distance: the steps a king needs between two squares.
 static inline int chebyshev(Square from, Square to) {
 	int files = square_file(from) - square_file(to);
