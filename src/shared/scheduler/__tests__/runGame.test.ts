@@ -5,6 +5,9 @@ import { createAdjudicator, materialEdge, runGame } from "..";
 import type { GameSpec } from "..";
 import type { BotDefinition } from "../../bots";
 import { positionFromFen } from "../../chess";
+import { createWasmGoSearch, loadEngine } from "../../wasm";
+
+const goSearch = createWasmGoSearch(await loadEngine());
 
 const HUNTER: BotDefinition = {
 	id: "hunter",
@@ -27,39 +30,40 @@ const spec = (over: Partial<GameSpec> = {}): GameSpec => ({
 	...over,
 });
 
+const play = (over: Partial<GameSpec> = {}) => runGame({ spec: spec(over), goSearch });
+
 describe("runGame", () => {
 	it("is a pure function of the spec", () => {
-		expect(runGame(spec())).toEqual(runGame(spec()));
+		expect(play()).toEqual(play());
 	});
 
 	it("changes with the seed", () => {
-		const a = runGame(spec({ seed: 1 }));
-		const b = runGame(spec({ seed: 2 }));
+		const a = play({ seed: 1 });
+		const b = play({ seed: 2 });
 		expect(
 			[a, b].some((report) => report.plies !== a.plies || report.result !== a.result)
 		).toBe(true);
 	});
 
 	it("stops at the ply cap and calls it a draw", () => {
-		const report = runGame(spec({ plyLimit: 16 }));
+		const report = play({ plyLimit: 16 });
 		expect(report).toEqual({ result: null, reason: "ply-limit", plies: 16 });
 	});
 
 	it("calls a level position both bots shuffle a draw for want of progress", () => {
 		// Kings and one minor each, no pawns: sufficient material, but neither bot can force
 		// anything. The no-progress rule ends it at 24 quiet half-moves rather than at the ply cap.
-		const report = runGame(
-			spec({ openingFen: "2bk4/8/8/8/8/8/8/2BK4 w - - 0 1", plyLimit: 200 })
-		);
+		const report = play({ openingFen: "2bk4/8/8/8/8/8/8/2BK4 w - - 0 1", plyLimit: 200 });
 		expect(report).toEqual({ result: null, reason: "no-progress", plies: 24 });
 	});
 
 	it("adjudicates a hopeless position as a resignation", () => {
 		// Black has only a king; White a full army. The material edge never comes back under the
 		// threshold, so White wins by resignation well before the ply cap.
-		const report = runGame(
-			spec({ openingFen: "4k3/8/8/8/8/8/PPPPPPPP/RNBQKBNR w KQ - 0 1", plyLimit: 200 })
-		);
+		const report = play({
+			openingFen: "4k3/8/8/8/8/8/PPPPPPPP/RNBQKBNR w KQ - 0 1",
+			plyLimit: 200,
+		});
 		expect(report.result).toBe("white");
 		expect(report.reason).toBe("resigned");
 		expect(report.plies).toBeLessThan(200);

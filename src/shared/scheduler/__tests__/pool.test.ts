@@ -4,6 +4,10 @@ import { runGames, runGamesSerially } from "..";
 import type { GameSpec } from "..";
 import type { BotDefinition } from "../../bots";
 import { openings } from "../../openings";
+import { createWasmGoSearch, loadEngine } from "../../wasm";
+
+// The search the workers play with, so the serial run is the same games.
+const goSearch = createWasmGoSearch(await loadEngine());
 
 // Every case spawns a `worker_threads` pool that compiles its TypeScript entry on start, which
 // the default 5 s test timeout does not allow for — especially under coverage.
@@ -45,7 +49,7 @@ describe("runGames", () => {
 		async () => {
 			const batch = specs(24);
 			expect(await runGames({ specs: batch, concurrency: 4 })).toEqual(
-				runGamesSerially(batch)
+				runGamesSerially({ specs: batch, goSearch })
 			);
 		},
 		WORKER_TIMEOUT

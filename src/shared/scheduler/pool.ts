@@ -1,6 +1,7 @@
 import { availableParallelism } from "node:os";
 import { Worker } from "node:worker_threads";
 
+import type { GoSearch } from "../engine";
 import { runGame } from "./runGame";
 import type { GameReport, GameSpec } from "./types";
 
@@ -65,7 +66,14 @@ export async function runGames({
 }
 
 // The same contract without threads — for a handful of games, a test, or a debugger. Kept here
-// so callers depend on one module whether or not they want a pool.
-export function runGamesSerially(specs: readonly GameSpec[]): GameReport[] {
-	return specs.map((spec) => runGame(spec));
+// so callers depend on one module whether or not they want a pool. The caller brings the search,
+// as the worker does, so the two play the same games.
+export function runGamesSerially({
+	specs,
+	goSearch,
+}: {
+	specs: readonly GameSpec[];
+	goSearch: GoSearch;
+}): GameReport[] {
+	return specs.map((spec) => runGame({ spec, goSearch }));
 }

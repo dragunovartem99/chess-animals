@@ -17,10 +17,15 @@ import type { GameSpec } from "./types.ts";
 // Awaited before the port is listened to, which is safe: a `MessagePort` queues what arrives
 // until the first `message` listener starts it, so no spec posted during startup is lost.
 const { runGame } = (await tsImport("./runGame.ts", import.meta.url)) as typeof import("./runGame");
+const wasm = (await tsImport("../wasm/index.ts", import.meta.url)) as typeof import("../wasm");
+
+// One engine per worker, loaded before the first game: its tables are built once and every game
+// on this thread reuses them.
+const goSearch = wasm.createWasmGoSearch(await wasm.loadEngine());
 
 // Thin by design: the pool owns the thread and the queue, this owns only the pipe. Every game is
 // independent, so one message in, one report out, no state between them.
 if (parentPort) {
 	const post = parentPort.postMessage.bind(parentPort);
-	parentPort.on("message", (spec: GameSpec) => post(runGame(spec)));
+	parentPort.on("message", (spec: GameSpec) => post(runGame({ spec, goSearch })));
 }

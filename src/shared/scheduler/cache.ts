@@ -2,6 +2,7 @@ import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
+import { ENGINE_URL } from "../wasm";
 import type { GameReport, GameSpec } from "./types";
 
 // A stable JSON string: object keys sorted at every level, so two specs that differ only in
@@ -39,12 +40,23 @@ export function gameKey(spec: GameSpec): string {
 	return digest;
 }
 
+// The first bytes of the engine's digest. A game depends on the search as much as on its spec, and
+// the spec does not say which build played it.
+function engineDigest(): string {
+	return createHash("sha256").update(readFileSync(ENGINE_URL)).digest("hex").slice(0, 16);
+}
+
 // A content-addressed store of finished games on disk. A re-run after adding or retuning one bot
 // hits the cache for every game that bot is not in and only replays the rest.
-export function createGameCache({ dir }: { dir: string }): {
+//
+// Kept per engine build, in a directory named by its digest: a rebuilt engine starts empty
+// rather than reading back games another search played. Even a speed-only build starts over,
+// which costs one cold run and never returns a stale result.
+export function createGameCache({ dir: parent }: { dir: string }): {
 	get: (spec: GameSpec) => GameReport | undefined;
 	set: (spec: GameSpec, report: GameReport) => void;
 } {
+	const dir = join(parent, engineDigest());
 	mkdirSync(dir, { recursive: true });
 
 	return {

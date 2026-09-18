@@ -36,7 +36,8 @@ lives in `shared/rating`, `shared/scheduler` and `shared/tuner` as pure function
 thin Node shell (run with `tsx`) over a `worker_threads` pool. `npm run arena` rates the whole
 roster over the paired opening set, printing the rating table and cross-table and writing
 `arena-results.json`; the same `--seed=` reproduces it exactly, and the result cache means a new
-bot only replays its own games. `npm run tune -- <botId>` runs SPSA on one bot's weights against
+bot only replays its own games. The cache is kept per `engine.wasm` build, so a rebuilt engine
+replays everything once. `npm run tune -- <botId>` runs SPSA on one bot's weights against
 the rest of the roster as a gauntlet, printing the score each iteration and writing
 `<botId>-tuned.json` if the run improved it.
 
@@ -99,10 +100,11 @@ feature is safe and reordering one is not.
 
 ## The engine
 
-Two searches stand side by side until cutover. The browser's `uciEngine` worker searches in C
-compiled to wasm (`engine/`, bound in `shared/wasm/`), handed to `createUciEngine` as its
-`goSearch`; the arena, the tuner and the tests still call the TS search below, which is also the
-oracle the C one is held to. What follows describes the TS search.
+Two searches stand side by side until cutover. The browser's `uciEngine` worker and the arena's
+game workers — so the tuner's games too — search in C compiled to wasm (`engine/`, bound in
+`shared/wasm/`), handed to `createUciEngine` and `runGame` as a `goSearch`; the tests still call
+the TS search below, which is also the oracle the C one is held to. What follows describes the TS
+search.
 
 `searchRoot` is negamax with alpha-beta, and `leaf.ts` is what happens once it stops descending —
 the evaluation, quiescence and the node budget, which is a property of leaves because a leaf is

@@ -6,4 +6,4 @@ export {
 	type WasmEngine,
 } from "./engine";
 export { createWasmGoSearch } from "./goSearch";
-export { loadEngine } from "./load";
+export { ENGINE_URL, loadEngine } from "./load";

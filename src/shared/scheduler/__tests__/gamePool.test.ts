@@ -4,6 +4,10 @@ import { createGamePool, runGamesSerially } from "..";
 import type { GameSpec } from "..";
 import type { BotDefinition } from "../../bots";
 import { openings } from "../../openings";
+import { createWasmGoSearch, loadEngine } from "../../wasm";
+
+// The search the workers play with, so the serial run is the same games.
+const goSearch = createWasmGoSearch(await loadEngine());
 
 // Spawns a `worker_threads` pool that compiles its TypeScript entry on start — well over the
 // default 5 s test timeout, especially under coverage.
@@ -43,7 +47,7 @@ describe("createGamePool", () => {
 				const batches = [specs(6), specs(8), specs(4)];
 				const results = await Promise.all(batches.map((batch) => pool.run(batch)));
 				batches.forEach((batch, i) => {
-					expect(results[i]).toEqual(runGamesSerially(batch));
+					expect(results[i]).toEqual(runGamesSerially({ specs: batch, goSearch }));
 				});
 			} finally {
 				await pool.close();
@@ -58,7 +62,7 @@ describe("createGamePool", () => {
 			const pool = createGamePool({ concurrency: 4 });
 			try {
 				const batch = specs(20);
-				expect(await pool.run(batch)).toEqual(runGamesSerially(batch));
+				expect(await pool.run(batch)).toEqual(runGamesSerially({ specs: batch, goSearch }));
 			} finally {
 				await pool.close();
 			}

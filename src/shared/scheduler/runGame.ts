@@ -1,16 +1,22 @@
+import { makeUci } from "chessops/util";
+
 import { compileBot } from "../bots";
 import { afterMove, createRepetition, gameStatus, positionFromFen, repetitionKey } from "../chess";
-import { chooseMove, createRng } from "../engine";
+import { type GoSearch, seedState } from "../engine";
 import { createAdjudicator, DEFAULT_ADJUDICATION, materialEdge } from "./adjudicate";
 import type { GameReport, GameSpec } from "./types";
 
 // One game, start to finish, as a pure function of its spec — same seed, same opening, same
-// result, every time and on any thread. The scheduler's worker is a one-line wrapper around this;
-// the arena's reproducibility rests on it.
-export function runGame(spec: GameSpec): GameReport {
+// result, every time and on any thread. The scheduler's worker is a thin wrapper around this; the
+// arena's reproducibility rests on it.
+//
+// `goSearch` is the search both bots play with — the wasm engine's in the arena, handed in rather
+// than loaded here because loading it is async and a game is not. Both bots draw on one tie-break
+// stream, which crosses each search as its state and comes back advanced.
+export function runGame({ spec, goSearch }: { spec: GameSpec; goSearch: GoSearch }): GameReport {
 	const white = compileBot(spec.white);
 	const black = compileBot(spec.black);
-	const rng = createRng(spec.seed);
+	let rngState = seedState(spec.seed);
 	const adjudicator = createAdjudicator(spec.adjudication ?? DEFAULT_ADJUDICATION);
 
 	let position = positionFromFen(spec.openingFen);
@@ -18,6 +24,8 @@ export function runGame(spec: GameSpec): GameReport {
 	// threefold rule, and hashes the search can test a node against without building a string.
 	const keys: string[] = [];
 	const repetition = createRepetition();
+	// The game as the wasm engine replays it for itself, from the opening.
+	const moves: string[] = [];
 	let ply = 0;
 
 	for (;;) {
@@ -36,19 +44,17 @@ export function runGame(spec: GameSpec): GameReport {
 		}
 
 		const bot = position.turn === "white" ? white : black;
-		const move = chooseMove({
-			position,
-			weights: bot.weights,
-			search: bot.search,
-			rng,
-			repetition,
-		});
+		const game = { position, repetition, fen: spec.openingFen, moves };
+		const found = goSearch({ game, weights: bot.weights, search: bot.search, rngState });
+		const { move } = found;
+		rngState = found.rngState;
 		// `gameStatus` has already ruled out mate and stalemate, so a missing move here would be a
 		// bug in the policy, not a game end — fail loudly rather than record a phantom draw.
 		if (!move) throw new Error(`no move for ${bot.id} at ply ${ply}`);
 
 		keys.push(repetitionKey(position));
 		repetition.push(position);
+		moves.push(makeUci(move));
 		position = afterMove({ position, move });
 		ply += 1;
 	}

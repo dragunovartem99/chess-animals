@@ -105,13 +105,12 @@ sets for it.
 - Targets, to be confirmed by the first real numbers: perft ≥ 50 Mnps in wasm, and ≥ 10× today's
   depth-3 search pass.
 
-| Commit                                             | Contents                                                                                                                                                       | Green when                                                           |
-| -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| ⬜ `engine: route the arena through wasm`          | The web app already searches in wasm; `runGame` still calls the TS `chooseMove`. Arena workers load the module and search through it; golden games regenerated | Arena re-run; every animal checked against its rating slot           |
-| ⬜ `eval: read the breakdown from wasm`            | `FeatureBreakdown` extracts through wasm                                                                                                                       | Breakdown tests unchanged                                            |
-| ⬜ `engine: retire the ts search and extractor`    | Freeze oracle outputs to JSON, delete TS search/eval, update ARCHITECTURE                                                                                      | Differential tests run against the frozen fixtures; coverage holds   |
-| ⬜ `engine: stage generation and history ordering` | Captures before quiets, history heuristic                                                                                                                      | Games identical, bench signature drops, Mnps reported in the message |
-| ⬜ `eval: stop scoring castling as a rook capture` | chessops encodes castling king-takes-rook, so `captureValue` pays for it                                                                                       | Castling reads 0; arena re-run                                       |
+| Commit                                             | Contents                                                                  | Green when                                                           |
+| -------------------------------------------------- | ------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| ⬜ `eval: read the breakdown from wasm`            | `FeatureBreakdown` extracts through wasm                                  | Breakdown tests unchanged                                            |
+| ⬜ `engine: retire the ts search and extractor`    | Freeze oracle outputs to JSON, delete TS search/eval, update ARCHITECTURE | Differential tests run against the frozen fixtures; coverage holds   |
+| ⬜ `engine: stage generation and history ordering` | Captures before quiets, history heuristic                                 | Games identical, bench signature drops, Mnps reported in the message |
+| ⬜ `eval: stop scoring castling as a rook capture` | chessops encodes castling king-takes-rook, so `captureValue` pays for it  | Castling reads 0; arena re-run                                       |
 
 ## Outside v1
 
