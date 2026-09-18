@@ -35,7 +35,8 @@ static SearchResult run(const char *fen, const float *weights, int depth, bool q
 	Position pos;
 	CHECK(position_from_fen(&pos, fen));
 	history.length = 0;
-	search_init(&search, weights, &history, quiescence);
+	search_init(&search,
+	            (SearchConfig){.weights = weights, .history = &history, .quiescence = quiescence});
 	return search_root(&search, &pos, depth, NULL);
 }
 
@@ -103,7 +104,8 @@ TEST(steers_into_a_repetition_when_it_is_losing) {
 	CHECK(position_from_fen(&pos, "4k3/8/8/8/8/8/8/R3K3 b - - 10 20"));
 	Move move = MOVE_NONE;
 	CHECK(move_from_uci("e8d7", &move));
-	search_init(&search, material(1), &history, false);
+	search_init(&search,
+	            (SearchConfig){.weights = material(1), .history = &history, .quiescence = false});
 	history.length = 0;
 	position_make(&pos, move, &undo);
 	history_push(&history, pos.hash);

@@ -32,7 +32,8 @@ static SearchResult run(const char *fen, int depth, bool quiescence) {
 	Position pos;
 	CHECK(position_from_fen(&pos, fen));
 	history.length = 0;
-	search_init(&search, material(), &history, quiescence);
+	search_init(&search, (SearchConfig){
+	                         .weights = material(), .history = &history, .quiescence = quiescence});
 	return search_root(&search, &pos, depth, NULL);
 }
 
@@ -71,7 +72,8 @@ TEST(prices_captures_by_the_bot_own_weights) {
 	weights[FEATURE_MATERIAL_PAWN] = 100;
 	weights[FEATURE_MATERIAL_QUEEN] = -900;
 	weights[FEATURE_CAPTURE_VALUE] = 5;
-	search_init(&search, weights, &history, true);
+	search_init(&search,
+	            (SearchConfig){.weights = weights, .history = &history, .quiescence = true});
 	CHECK(search.worth[PAWN] == 105 && search.worth[KNIGHT] == 15);
 	CHECK(search.worth[QUEEN] == 945 && search.worth[KING] == __builtin_inf());
 }
@@ -85,7 +87,8 @@ TEST(delta_pruning_saves_nodes) {
 	Position pos;
 	CHECK(position_from_fen(&pos, fen));
 	history.length = 0;
-	search_init(&search, material(), &history, true);
+	search_init(&search,
+	            (SearchConfig){.weights = material(), .history = &history, .quiescence = true});
 	for (Role role = PAWN; role < KING; role++) {
 		search.worth[role] = __builtin_inf();
 	}
@@ -108,7 +111,8 @@ TEST(shuffles_the_root_as_the_ts_search_does) {
 		CHECK(position_from_fen(&pos, CASES[index][0]));
 		Rng rng = rng_seed(SEEDS[index]);
 		history.length = 0;
-		search_init(&search, ZERO, &history, false);
+		search_init(&search,
+		            (SearchConfig){.weights = ZERO, .history = &history, .quiescence = false});
 		char uci[UCI_MAX];
 		move_to_uci(search_root(&search, &pos, 1, &rng).best, uci);
 		CHECK(strcmp(uci, CASES[index][1]) == 0);

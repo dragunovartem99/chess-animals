@@ -45,6 +45,9 @@ static bool hopeless(const Search *search, const Position *pos, Move move, doubl
 // budget: out of check every move takes a man, and a run of checks ends in a repetition, which the
 // draw test catches, or at MAX_PLY. Without quiescence this is only the leaf.
 double quiesce(Search *search, Position *pos, Node node, double alpha, double beta) {
+	if (exhausted(search)) {
+		return 0;
+	}
 	search->nodes++;
 	Move moves[MAX_MOVES];
 	int count = generate_moves(pos, moves);
@@ -66,7 +69,7 @@ double quiesce(Search *search, Position *pos, Node node, double alpha, double be
 	order_moves(search, pos, moves, count, node.ply);
 	double best = stand;
 	history_push(search->history, pos->hash);
-	for (int index = 0; index < count && best < beta; index++) {
+	for (int index = 0; index < count && best < beta && !search->aborted; index++) {
 		double floor = alpha > best ? alpha : best;
 		if (!in_check && hopeless(search, pos, moves[index], stand, floor)) {
 			continue;

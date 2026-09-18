@@ -1,4 +1,5 @@
 #include <stdbool.h>
+#include <stddef.h>
 
 #include "bitboard.h"
 #include "draw.h"
@@ -36,7 +37,7 @@ double search_child(Search *search, Position *pos, Node child, int depth, double
 		return -search_node(search, pos, child, depth, -beta, -alpha);
 	}
 	double score = -search_node(search, pos, child, depth, -next_up(alpha), -alpha);
-	if (score > alpha && score < beta) {
+	if (score > alpha && score < beta && !search->aborted) {
 		score = -search_node(search, pos, child, depth, -beta, -alpha);
 	}
 	return score;
@@ -52,6 +53,9 @@ double search_node(Search *search, Position *pos, Node node, int depth, double a
 	if (depth <= 0) {
 		return quiesce(search, pos, node, alpha, beta);
 	}
+	if (exhausted(search)) {
+		return 0;
+	}
 	search->nodes++;
 	Move moves[MAX_MOVES];
 	int count = generate_moves(pos, moves);
@@ -59,7 +63,11 @@ double search_node(Search *search, Position *pos, Node node, int depth, double a
 		return no_moves_score(search, pos, node, move_context(pos).checkers != 0);
 	}
 	order_moves(search, pos, moves, count, node.ply);
+	if (search->table != NULL) {
+		promote_move(moves, count, table_move(search->table, pos->hash));
+	}
 	double best = -__builtin_inf();
+	Move best_move = moves[0];
 	history_push(search->history, pos->hash);
 	for (int index = 0; index < count; index++) {
 		Played played = played_move(pos, moves[index]);
@@ -69,7 +77,16 @@ double search_node(Search *search, Position *pos, Node node, int depth, double a
 		double floor = alpha > best ? alpha : best;
 		double score = search_child(search, pos, child, depth - 1, floor, beta, index == 0);
 		position_unmake(pos, moves[index], &undo);
-		best = score > best ? score : best;
+		// An aborted child's score is whatever the search was holding when it stopped: nothing
+		// is learnt from it, not a killer and not a table entry.
+		if (search->aborted) {
+			history_pop(search->history);
+			return 0;
+		}
+		if (score > best) {
+			best = score;
+			best_move = moves[index];
+		}
 		if (best >= beta) {
 			if (!is_capture(pos, moves[index]) && move_promotion(moves[index]) == PAWN) {
 				record_killer(search, moves[index], node.ply);
@@ -78,5 +95,8 @@ double search_node(Search *search, Position *pos, Node node, int depth, double a
 		}
 	}
 	history_pop(search->history);
+	if (search->table != NULL) {
+		table_store(search->table, pos->hash, best_move);
+	}
 	return best;
 }

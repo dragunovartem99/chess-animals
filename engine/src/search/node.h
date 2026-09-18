@@ -16,6 +16,16 @@ typedef struct {
 	int ply;
 } Node;
 
+// The root's moves in the order the shuffle left them, and the one a pass tries first.
+typedef struct {
+	const Move *moves;
+	int count;
+	int lead;
+} Root;
+
+// One pass over the root to `depth`. Aborted partway, it holds the best of the moves it finished.
+SearchResult search_pass(Search *search, Position *pos, Root root, int depth);
+
 // Fail-soft PVS to `depth`, then quiescence or the evaluation.
 double search_node(Search *search, Position *pos, Node node, int depth, double alpha, double beta);
 
@@ -31,6 +41,21 @@ double no_moves_score(const Search *search, const Position *pos, Node node, bool
 
 // Whether the move takes a man — the rook a castling king "takes" is its own, so it does not.
 bool is_capture(const Position *pos, Move move);
+
+// Moves `move` to the front, the rest keeping their order; nothing when it is not in the list.
+void promote_move(Move *moves, int count, Move move);
+
+void table_clear(Table *table);
+// MOVE_NONE when the position is not in the table.
+Move table_move(const Table *table, uint64_t hash);
+// Always replaces: the newest entry is the one from the deepest pass so far.
+void table_store(Table *table, uint64_t hash, Move move);
+
+// Checked on entering a node, before it is counted, so a search never counts past its limit.
+static inline bool exhausted(Search *search) {
+	search->aborted = search->aborted || search->nodes >= search->node_limit;
+	return search->aborted;
+}
 
 // Sorts `moves` best-first in place: captures and promotions by MVV-LVA, then the ply's killers,
 // then the rest in generated order. Stable, so equals keep chessops's order.
@@ -50,5 +75,8 @@ static inline double next_up(double value) {
 	pun.bits = value > 0 ? pun.bits + 1 : pun.bits - 1;
 	return pun.value;
 }
+
+// The next double below `value`, for a window a score equal to `value` falls strictly above.
+static inline double next_down(double value) { return -next_up(-value); }
 
 #endif

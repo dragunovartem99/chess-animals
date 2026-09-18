@@ -61,3 +61,17 @@ void order_moves(const Search *search, const Position *pos, Move *moves, int cou
 		priorities[slot + 1] = value;
 	}
 }
+
+void promote_move(Move *moves, int count, Move move) {
+	int index = 0;
+	while (index < count && moves[index] != move) {
+		index++;
+	}
+	if (index == count) {
+		return;
+	}
+	for (; index > 0; index--) {
+		moves[index] = moves[index - 1];
+	}
+	moves[0] = move;
+}
