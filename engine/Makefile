@@ -13,8 +13,9 @@ WASM_OPT ?= ../node_modules/.bin/wasm-opt
 BUILD := build
 SRC := $(shell find src -name '*.c')
 TESTS := $(shell find tests -name '*.c')
+BENCH := $(shell find bench -name '*.c')
 HEADERS := $(shell find include src -name '*.h')
-C_FILES := $(shell find include src tests -name '*.[ch]')
+C_FILES := $(shell find include src tests bench -name '*.[ch]')
 
 WARNINGS := -Wall -Wextra -Wpedantic -Wconversion -Wshadow -Werror
 # No fused multiply-add: the features and the dot product must round exactly as the TS doubles do,
@@ -27,12 +28,16 @@ NATIVE_FLAGS := -O1 -g -fno-omit-frame-pointer -fsanitize=address,undefined \
 	-fno-sanitize-recover=all -fprofile-instr-generate -fcoverage-mapping
 # Bulk memory lowers the struct copies clang turns into memcpy calls to `memory.copy`, so the
 # module needs no libc symbol to link.
+# What the wasm build is optimised to, without the sanitizers that would make the numbers
+# meaningless. The bench reads the roster through the test fixtures and times the eval families
+# one by one, so it sees `tests/` and the families' private header.
+BENCH_FLAGS := -O3 -flto -Itests -Isrc/eval
 WASM_FLAGS := --target=wasm32 -O3 -flto -nostdlib -mbulk-memory -Wl,--no-entry -Wl,--lto-O3
 
 NATIVE_SRC_OBJ := $(SRC:%.c=$(BUILD)/native/%.o)
 NATIVE_TEST_OBJ := $(TESTS:%.c=$(BUILD)/native/%.o)
 
-.PHONY: all wasm test coverage format format-check lint clean
+.PHONY: all wasm test bench coverage format format-check lint clean
 all: wasm test
 
 wasm: $(BUILD)/engine.wasm
@@ -56,6 +61,13 @@ $(BUILD)/tests: $(NATIVE_SRC_OBJ) $(NATIVE_TEST_OBJ)
 test: $(BUILD)/tests
 	LLVM_PROFILE_FILE=$(BUILD)/tests.profraw ./$(BUILD)/tests
 
+$(BUILD)/bench: $(SRC) $(BENCH) tests/corpus.c $(HEADERS) $(shell find bench tests -name '*.h')
+	@mkdir -p $(@D)
+	$(CLANG) $(CFLAGS) $(BENCH_FLAGS) $(SRC) $(BENCH) tests/corpus.c -o $@
+
+bench: $(BUILD)/bench
+	./$(BUILD)/bench
+
 coverage: test
 	$(PROFDATA) merge -sparse $(BUILD)/tests.profraw -o $(BUILD)/tests.profdata
 	$(COV) report $(BUILD)/tests -instr-profile=$(BUILD)/tests.profdata src include \
@@ -69,7 +81,7 @@ format-check:
 
 # Tests are exempt from the line limit, as the TS specs are: a spec is a flat list of cases.
 lint:
-	$(TIDY) --quiet $(SRC) $(TESTS) -- $(CFLAGS) -Itests
+	$(TIDY) --quiet $(SRC) $(TESTS) $(BENCH) -- $(CFLAGS) -Itests -Isrc/eval
 	awk -v MAX=100 -f scripts/max-lines.awk $(shell find include src -name '*.[ch]')
 
 clean:
