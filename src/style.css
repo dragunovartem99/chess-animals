@@ -29,9 +29,10 @@
 
 	/* The header is dark walnut derived straight from the board: same hue and saturation as the
 	   dark square, only much darker. The on-wood text takes the light square's hue, near-white.
-	   Amber (state) also carries on the wood. */
+	   Amber (state) also carries on the wood. The lighter bar stops at 26%: at 30% both the muted
+	   links and the amber active pill fell just under WCAG AA's 4.5:1. */
 	--color-wood: hsl(from var(--color-board-dark) h s 16%);
-	--color-wood-light: hsl(from var(--color-board-dark) h s 30%);
+	--color-wood-light: hsl(from var(--color-board-dark) h s 26%);
 	--color-wood-text: hsl(from var(--color-board-light) h s 92%);
 
 	--color-bg: var(--color-neutral-darker);
