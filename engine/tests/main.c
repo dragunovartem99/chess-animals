@@ -1,0 +1,26 @@
+#include <stdio.h>
+
+#include "harness.h"
+
+static Test *tests;
+static int failures;
+
+void harness_register(Test *test) {
+	test->next = tests;
+	tests = test;
+}
+
+void harness_fail(Failure failure) {
+	failures++;
+	(void)fprintf(stderr, "%s:%d: CHECK(%s) failed\n", failure.file, failure.line, failure.expr);
+}
+
+int main(void) {
+	int count = 0;
+	for (Test *test = tests; test; test = test->next) {
+		test->run();
+		count++;
+	}
+	(void)printf("%d tests, %d failed checks\n", count, failures);
+	return failures ? 1 : 0;
+}

@@ -13,6 +13,7 @@ src/
   shared/       primitives more than one module needs; depends on nothing above it
   locales/      ru/ en/ — UI strings, bot names, feature labels
   workers/      uciEngine.worker.ts
+engine/         the C search and evaluation, built to wasm and natively for tests (`make -C engine`)
 cli/            dev CLIs — the tournament runner and the SPSA tuner (run with tsx); lab.ts stages
                 candidate bots for `arena -- --lab`
 public/         favicon

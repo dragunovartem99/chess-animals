@@ -1,0 +1,18 @@
+# Off, each for cause: swappable parameters and short names are what chess code is made of
+# (from, to, sq), magic numbers are its tables, and the insecure-API check demands C11 Annex K
+# `_s` functions no libc here ships.
+Checks: >
+    -*,
+    bugprone-*,
+    cert-*,
+    clang-analyzer-*,
+    misc-*,
+    performance-*,
+    portability-*,
+    readability-*,
+    -bugprone-easily-swappable-parameters,
+    -readability-identifier-length,
+    -readability-magic-numbers,
+    -clang-analyzer-security.insecureAPI.DeprecatedOrUnsafeBufferHandling
+WarningsAsErrors: "*"
+HeaderFilterRegex: "engine/(include|src|tests)/"

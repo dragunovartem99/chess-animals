@@ -1,0 +1,6 @@
+BasedOnStyle: LLVM
+# Tabs and a 100-column limit, the same as oxfmt holds the TypeScript to.
+UseTab: ForIndentation
+IndentWidth: 4
+TabWidth: 4
+ColumnLimit: 100

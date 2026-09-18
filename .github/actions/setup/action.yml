@@ -1,0 +1,22 @@
+name: Setup
+description: Node with the npm dependencies, and the LLVM toolchain the C engine builds with
+
+runs:
+    using: composite
+    steps:
+        - uses: actions/setup-node@v4
+          with:
+              node-version: 24
+              cache: npm
+
+        - run: npm ci
+          shell: bash
+
+        # Pinned to the major the repo is formatted with: clang-format's output drifts between
+        # versions, and a local 19 against a CI 18 would fail `format:check` on untouched code.
+        - run: |
+              sudo apt-get update
+              sudo apt-get install -y --no-install-recommends \
+                  clang-19 lld-19 llvm-19 clang-tidy-19 clang-format-19 libclang-rt-19-dev
+              echo "CLANG=clang-19" >> "$GITHUB_ENV"
+          shell: bash

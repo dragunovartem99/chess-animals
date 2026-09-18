@@ -107,7 +107,6 @@ sets for it.
 
 | Commit                                             | Contents                                                                                                 | Green when                                                              |
 | -------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
-| ⬜ `engine: scaffold the c build`                  | Makefile, native + wasm targets, test harness, format/lint/coverage hooks, CI deps                       | An empty module instantiates in vitest; the green list includes C       |
 | ⬜ `engine: add bitboards and the rng`             | Core helpers, xorshift128                                                                                | The stream matches `createRng` for fixed seeds                          |
 | ⬜ `engine: add position, fen and zobrist`         | Bitboards + mailbox, FEN in/out, make/unmake, incremental hash                                           | FEN round-trips the corpus; the make/unmake/hash invariants hold        |
 | ⬜ `engine: add attack tables`                     | Magics, leaper and pawn tables                                                                           | Equal to chessops `attacks` for every square over sampled occupancy     |

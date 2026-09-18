@@ -17,7 +17,8 @@ way down — see [METHOD.md](./METHOD.md).
 
 ## Development
 
-Requires Node.js ≥ 24.
+Requires Node.js ≥ 24, and clang 19 with lld, clang-tidy, clang-format and llvm for the C
+engine under `engine/`.
 
 ```sh
 npm install
@@ -27,11 +28,11 @@ npm run dev
 | Command                             | What it does                                                       |
 | ----------------------------------- | ------------------------------------------------------------------ |
 | `npm run dev` / `build` / `preview` | Vite dev server / type-checked production build / preview of it    |
-| `npm test` / `test:coverage`        | Vitest unit tests / with v8 coverage against a 90% threshold       |
+| `npm test` / `test:coverage`        | C tests under ASan + UBSan, then Vitest / both with 90% coverage   |
 | `npm run bench`                     | feature-extraction and search cost, held under guards by the suite |
 | `npm run arena`                     | dev CLI: rate the roster over the paired opening set               |
 | `npm run tune -- <botId>`           | dev CLI: SPSA-tune one bot's weights against the roster            |
-| `npm run lint` / `format`           | oxlint / oxfmt (`:check` variants don't write)                     |
+| `npm run lint` / `format`           | oxlint + clang-tidy / oxfmt + clang-format (`:check` don't write)  |
 | `npm run types:check`               | `vue-tsc` type-check                                               |
 
 Linting and formatting via [oxlint](https://oxc.rs)/[oxfmt](https://oxc.rs), type-checking via
