@@ -1,5 +1,8 @@
+#include <math.h>
+
 #include "bitboard.h"
 #include "eval.h"
+#include "feature_ids.h"
 #include "harness.h"
 #include "position.h"
 
@@ -31,4 +34,14 @@ TEST(reads_the_phase_from_the_pieces_left) {
 	      eval_phase(&pos) == 2 / 24.0);
 	CHECK(position_from_fen(&pos, "QQQQk3/8/8/8/8/8/8/QQQQK3 w - - 0 1") &&
 	      eval_phase(&pos) == 1.0);
+}
+
+// A perfect mirror is `-asymmetry` of zero in TS, which a Float32Array keeps as -0. The fixture
+// has no such position — every line comes a move after one — so this pins the sign bit here.
+TEST(reads_a_perfect_mirror_as_negative_zero) {
+	Position pos;
+	float features[FEATURE_COUNT];
+	CHECK(position_from_fen(&pos, "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"));
+	extract_features(&pos, features);
+	CHECK(features[FEATURE_MIRROR_RANKS] == 0 && signbit(features[FEATURE_MIRROR_RANKS]));
 }

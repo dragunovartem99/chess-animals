@@ -14,4 +14,5 @@ void extract_features(const Position *pos, float *features) {
 	extract_mobility(&ctx, features);
 	extract_control(&ctx, features);
 	extract_proximity(&ctx, features);
+	extract_symmetry(&ctx, features);
 }
