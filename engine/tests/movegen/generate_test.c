@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include <string.h>
 
 #include "corpus.h"
@@ -59,4 +60,40 @@ TEST(castles_neither_through_check_nor_into_it) {
 	check_moves("3rkr2/8/8/8/8/8/8/R3K2R w KQ - 0 1",
 	            "a1b1 a1c1 a1d1 a1a2 a1a3 a1a4 a1a5 a1a6 a1a7 a1a8 e1e2 h1f1 h1g1 h1h2 h1h3 h1h4 "
 	            "h1h5 h1h6 h1h7 h1h8");
+}
+
+// Held to the full list as well, so a hand-picked position that is not what it claims fails.
+static bool has_move(const char *fen) {
+	Move moves[MAX_MOVES];
+	Position pos;
+	CHECK(position_from_fen(&pos, fen));
+	CHECK(has_legal_move(&pos) == (generate_moves(&pos, moves) > 0));
+	return has_legal_move(&pos);
+}
+
+// The early exit agrees with the full list on every position the corpus reaches.
+static void agrees_with_the_list(const CorpusLine *line) {
+	Move moves[MAX_MOVES];
+	Position pos;
+	CHECK(position_from_fen(&pos, line->after));
+	CHECK(has_legal_move(&pos) == (generate_moves(&pos, moves) > 0));
+}
+
+TEST(finds_a_legal_move_exactly_when_the_list_has_one) {
+	CHECK(corpus_each(agrees_with_the_list) > 1000);
+}
+
+TEST(finds_no_move_in_mate_or_stalemate) {
+	CHECK(!has_move("3R2k1/5ppp/8/8/8/8/5PPP/6K1 b - - 0 1"));
+	CHECK(!has_move("7k/5Q2/6K1/8/8/8/8/8 b - - 0 1"));
+	// Mate with a rook on the board: its destinations are there until the check mask takes them.
+	CHECK(!has_move("4k3/4Q3/4K3/8/8/8/8/r7 b - - 0 1"));
+}
+
+// Each king is boxed in, so the answer rests on the men checked after it: a pawn's push out of
+// stalemate, a rook taking the checker, and a double check the knight and the pawn cannot answer.
+TEST(finds_a_move_past_a_boxed_king) {
+	CHECK(has_move("7k/5Q2/6K1/8/8/8/p7/8 b - - 0 1"));
+	CHECK(has_move("3R2k1/5ppp/8/8/8/8/3r1PPP/6K1 b - - 0 1"));
+	CHECK(!has_move("4R2k/6pp/6N1/n7/8/8/8/K7 b - - 0 1"));
 }

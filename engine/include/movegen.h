@@ -1,6 +1,7 @@
 #ifndef ENGINE_MOVEGEN_H
 #define ENGINE_MOVEGEN_H
 
+#include <stdbool.h>
 #include <stdint.h>
 
 #include "bitboard.h"
@@ -32,6 +33,10 @@ Bitboard castling_dests(const Position *pos, const MoveContext *ctx);
 // Every legal move in chessops's `legalMoves` order — from-square ascending, then to-square
 // ascending, promotions as Q N R B — into `moves`, which holds MAX_MOVES. Returns the count.
 int generate_moves(const Position *pos, Move *moves);
+
+// Whether `generate_moves` would return any move, without listing them: the leaf only needs to
+// tell mate and stalemate from a position that plays on, and nearly every position does.
+bool has_legal_move(const Position *pos);
 
 // chessops's `legalEpSquare`: the en passant square only when a capture onto it is legal, which
 // is what a FEN writes and a repetition compares.

@@ -49,14 +49,16 @@ double quiesce(Search *search, Position *pos, Node node, double alpha, double be
 		return 0;
 	}
 	search->nodes++;
+	bool in_check = move_context(pos).checkers != 0;
+	// A plain leaf searches nothing, so it only asks whether a move exists.
+	if (!search->quiescence || node.ply >= MAX_PLY - 1) {
+		return has_legal_move(pos) ? evaluate_features(&search->eval, pos, node.played)
+		                           : no_moves_score(search, pos, node, in_check);
+	}
 	Move moves[MAX_MOVES];
 	int count = generate_moves(pos, moves);
-	bool in_check = move_context(pos).checkers != 0;
 	if (count == 0) {
 		return no_moves_score(search, pos, node, in_check);
-	}
-	if (!search->quiescence || node.ply >= MAX_PLY - 1) {
-		return evaluate_features(&search->eval, pos, node.played);
 	}
 	double stand = -__builtin_inf();
 	if (!in_check) {

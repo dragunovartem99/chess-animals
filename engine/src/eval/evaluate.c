@@ -3,7 +3,6 @@
 #include "eval.h"
 #include "evaluate.h"
 #include "feature_ids.h"
-#include "move.h"
 #include "movegen.h"
 #include "position.h"
 
@@ -24,8 +23,7 @@ bool terminal_score(const Position *pos, const float *weights, int ply, double *
 	if (preference == 0 || move_context(pos).checkers == 0) {
 		return false;
 	}
-	Move moves[MAX_MOVES];
-	if (generate_moves(pos, moves) > 0) {
+	if (has_legal_move(pos)) {
 		return false;
 	}
 	*score = -(double)(MATE_SCORE - ply) * (double)preference;

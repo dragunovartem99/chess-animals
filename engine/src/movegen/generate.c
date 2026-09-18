@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include <stdint.h>
 
 #include "attacks.h"
@@ -29,6 +30,24 @@ int generate_moves(const Position *pos, Move *moves) {
 		}
 	}
 	return count;
+}
+
+// The king first: it is the man likeliest to have a move and the only one that can answer double
+// check, so most positions are settled by the first question.
+bool has_legal_move(const Position *pos) {
+	MoveContext ctx = move_context(pos);
+	if (legal_dests(pos, &ctx, ctx.king) != 0) {
+		return true;
+	}
+	if (bb_many(ctx.checkers)) {
+		return false;
+	}
+	for (Bitboard men = pos->colors[pos->turn] & ~square_bb(ctx.king); men != 0;) {
+		if (legal_dests(pos, &ctx, bb_pop(&men)) != 0) {
+			return true;
+		}
+	}
+	return false;
 }
 
 Square legal_ep_square(const Position *pos) {
