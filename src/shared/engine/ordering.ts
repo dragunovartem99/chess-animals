@@ -3,6 +3,7 @@ import type { Chess } from "chessops/chess";
 import type { NormalMove } from "chessops/types";
 
 import { CLASSICAL_VALUES } from "../chess";
+import { type Cutoffs, quietPriority } from "./cutoffs";
 
 // The priorities of the list being sorted, reused across calls rather than allocated per node.
 // One buffer is enough because the sort runs to completion before the search recurses, and 256
@@ -16,8 +17,21 @@ const priorities = new Int32Array(256);
 //
 // The occupancy test comes first because `getRole` scans all six role sets and only then reports
 // an empty square — so the common case, a quiet move, was paying the most.
-function priority({ board, move }: { board: Board; move: NormalMove }): number {
-	if (!board.occupied.has(move.to)) return move.promotion ? 1 : 0;
+function priority({
+	board,
+	move,
+	cutoffs,
+	ply,
+}: {
+	board: Board;
+	move: NormalMove;
+	cutoffs?: Cutoffs;
+	ply: number;
+}): number {
+	if (!board.occupied.has(move.to)) {
+		if (move.promotion) return 1;
+		return cutoffs ? quietPriority({ cutoffs, move, ply }) : 0;
+	}
 
 	const victim = board.getRole(move.to) ?? "king";
 	const attacker = board.getRole(move.from) ?? "king";
@@ -36,13 +50,19 @@ function priority({ board, move }: { board: Board; move: NormalMove }): number {
 export function orderMoves({
 	position,
 	moves,
+	cutoffs,
+	ply = 0,
 }: {
 	position: Chess;
 	moves: NormalMove[];
+	// The search's memory of quiet refutations, when it keeps one — see `cutoffs.ts`. Without it
+	// every quiet move ties at zero and keeps its generated order.
+	cutoffs?: Cutoffs;
+	ply?: number;
 }): NormalMove[] {
 	const { board } = position;
 	for (let index = 0; index < moves.length; index += 1) {
-		priorities[index] = priority({ board, move: moves[index] });
+		priorities[index] = priority({ board, move: moves[index], cutoffs, ply });
 	}
 
 	for (let index = 1; index < moves.length; index += 1) {

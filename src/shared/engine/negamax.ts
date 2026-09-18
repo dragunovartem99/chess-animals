@@ -2,6 +2,7 @@ import type { Chess } from "chessops/chess";
 
 import { createDescend, type Descend, createDrawTest, legalMoves, type Repetition } from "../chess";
 import type { PlayedMove, WeightVector } from "../eval";
+import { createCutoffs, type Cutoffs, recordCutoff } from "./cutoffs";
 import { createLeaf, type Leaf } from "./leaf";
 import { orderMoves } from "./ordering";
 
@@ -18,6 +19,7 @@ export type SearchContext = {
 	repetition: Repetition;
 	drawn: (position: Chess) => boolean;
 	leaf: Leaf;
+	cutoffs: Cutoffs;
 };
 
 export type Frame = {
@@ -51,7 +53,7 @@ export function createSearchContext({
 		drawScore: DRAW_SCORE,
 	});
 
-	return { descend, repetition, drawn, leaf };
+	return { descend, repetition, drawn, leaf, cutoffs: createCutoffs() };
 }
 
 // Negamax with alpha-beta, fail-soft. The context travels in the frame rather than in a closure
@@ -66,7 +68,7 @@ export function createSearchContext({
 // from one.
 export function negamax(frame: Frame): number {
 	const { context, position, depth, ply, alpha, beta } = frame;
-	const { descend, repetition, leaf } = context;
+	const { descend, repetition, leaf, cutoffs } = context;
 
 	if (context.drawn(position)) return DRAW_SCORE;
 	if (depth <= 0 || leaf.exhausted()) return leaf.score(frame);
@@ -83,7 +85,7 @@ export function negamax(frame: Frame): number {
 	// it comes off however the loop ends.
 	repetition.push(position);
 
-	for (const move of orderMoves({ position, moves })) {
+	for (const move of orderMoves({ position, moves, cutoffs, ply })) {
 		const score = -negamax({
 			context,
 			position: descend({ position, move, ply: ply + 1 }),
@@ -95,7 +97,10 @@ export function negamax(frame: Frame): number {
 		});
 
 		if (score > best) best = score;
-		if (best >= beta) break;
+		if (best >= beta) {
+			if (!position.board.occupied.has(move.to)) recordCutoff({ cutoffs, move, ply, depth });
+			break;
+		}
 	}
 
 	repetition.pop();
