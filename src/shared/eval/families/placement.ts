@@ -7,7 +7,7 @@ import { squareFile, squareRank } from "chessops/util";
 import { featureId } from "../features";
 import type { FeatureVector } from "../vector";
 import type { EvalContext } from "./context";
-import { FILES, relativeRank } from "./masks";
+import { FILES } from "./masks";
 
 const CENTRALIZATION = featureId("centralization");
 const DEVELOPMENT = featureId("development");
@@ -16,25 +16,22 @@ const CASTLED = featureId("castled");
 
 export const SLOTS = [CENTRALIZATION, DEVELOPMENT, EARLY_QUEEN, CASTLED];
 
-// Files a piece starts its game on, from either side: knights b/g, bishops c/f, the queen d.
-const HOME_FILE = { knight: [1, 6], bishop: [2, 5] } as const;
-const QUEEN_FILE = 3;
+// The squares a piece starts its game on, from either side: knights b/g, bishops c/f, the queen d.
+const HOME = {
+	white: {
+		knight: SquareSet.fromSquare(1).with(6),
+		bishop: SquareSet.fromSquare(2).with(5),
+		queen: 3,
+	},
+	black: {
+		knight: SquareSet.fromSquare(57).with(62),
+		bishop: SquareSet.fromSquare(58).with(61),
+		queen: 59,
+	},
+} as const;
 
 // The a–c and g–h files: where a castled king ends up, or the corner beside it.
 const WINGS = [0, 1, 2, 6, 7].reduce((mask, file) => mask.union(FILES[file]), SquareSet.empty());
-
-// On its own back rank and on one of its starting files — the square a piece has not moved from.
-function atHome({
-	color,
-	square,
-	files,
-}: {
-	color: Color;
-	square: number;
-	files: readonly number[];
-}): boolean {
-	return relativeRank({ color, square }) === 0 && files.includes(squareFile(square));
-}
 
 // Three states from the position alone, since the move history is not on hand: +1 with the king
 // tucked on a wing of its own back rank, 0 while a right still lets it get there, -1 once the
@@ -64,6 +61,19 @@ export function centrality(square: number): number {
 	return Math.min(file, 7 - file) + Math.min(rank, 7 - rank);
 }
 
+// The bits walked by hand rather than through the set's generator, which allocated an iterator
+// and a result object per square on a path every node of a placement bot runs.
+function totalCentrality(squares: SquareSet): number {
+	let total = 0;
+	for (let bits = squares.lo; bits !== 0; bits &= bits - 1) {
+		total += centrality(31 - Math.clz32(bits & -bits));
+	}
+	for (let bits = squares.hi; bits !== 0; bits &= bits - 1) {
+		total += centrality(63 - Math.clz32(bits & -bits));
+	}
+	return total;
+}
+
 // A strategic stand-in for a piece-square table in one number, not sixty-four and not the twelve
 // per-role sliders this replaced: how far the pieces stand from the rim, king and pawns excluded —
 // the king wants safety, and the pawn's own `advancement` term went with the rest of the pawn
@@ -84,29 +94,23 @@ export function extractPlacement({
 
 	for (const color of [context.us, context.them]) {
 		const sign = color === context.us ? 1 : -1;
+		const ours = board[color];
+		const home = HOME[color];
 		castled += sign * castledState({ board, castles, color });
+		central += sign * totalCentrality(ours.diff(board.pawn).diff(board.king));
 
-		for (const role of ["knight", "bishop", "rook", "queen"] as const) {
-			for (const square of board.pieces(color, role)) central += sign * centrality(square);
-		}
+		// A minor counts as developed once it has left its own back rank — a plain count, no read
+		// on whether the square is any good, which `centralization` supplies.
+		const minors = ours.intersect(board.knight.union(board.bishop));
+		developed += sign * minors.diff(SquareSet.backrank(color)).size();
 
 		// The queen has left her home square but is still on the board — a queen home, or traded,
-		// or never developed is not an early one.
-		const queens = board.pieces(color, "queen");
-		const queenOut =
-			queens.nonEmpty() &&
-			![...queens].some((square) => atHome({ color, square, files: [QUEEN_FILE] }));
-
-		for (const role of ["knight", "bishop"] as const) {
-			for (const square of board.pieces(color, role)) {
-				// A minor counts as developed once it has left its own back rank — a plain count,
-				// no read on whether the square is any good, which `centralization` supplies.
-				if (relativeRank({ color, square }) > 0) developed += sign;
-				// ...and as a piece the early queen jumped ahead of if it is still sitting at home.
-				else if (queenOut && atHome({ color, square, files: HOME_FILE[role] })) {
-					earlyQueen += sign;
-				}
-			}
+		// or never developed is not an early one. Each minor still at home is one she jumped.
+		const queens = ours.intersect(board.queen);
+		if (queens.nonEmpty() && !queens.has(home.queen)) {
+			const knightsHome = ours.intersect(board.knight).intersect(home.knight).size();
+			const bishopsHome = ours.intersect(board.bishop).intersect(home.bishop).size();
+			earlyQueen += sign * (knightsHome + bishopsHome);
 		}
 	}
 
