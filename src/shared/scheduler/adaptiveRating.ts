@@ -64,7 +64,10 @@ export async function runAdaptiveRating({
 	// enough that the stop condition is re-checked before the run overshoots it.
 	batchSize = Math.min(ids.length, Math.max(8, Math.round(ids.length / 2))),
 	maxRounds = 40,
-	stableRounds = 3,
+	// The stable order is what ends every real run — the rung bands never fire first on this
+	// roster — so each extra round here is pure cost. Over seeds 1–3, two cut 23% of the games
+	// (and 40% off the worst seed) and moved the ratings no more than a change of seed does.
+	stableRounds = 2,
 	onRound,
 }: {
 	ids: readonly string[];
