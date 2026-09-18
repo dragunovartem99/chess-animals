@@ -1,0 +1,27 @@
+# The apex is canonical; www only redirects, so no page is served under two hosts.
+www.chess-animals.com {
+    redir https://chess-animals.com{uri} permanent
+}
+
+chess-animals.com {
+    root * /www/chess-animals
+    encode zstd gzip
+
+    header Strict-Transport-Security "max-age=31536000; includeSubDomains"
+    header X-Content-Type-Options "nosniff"
+    header Referrer-Policy "strict-origin-when-cross-origin"
+
+    # Vite asset filenames are content-hashed, so they can be cached forever.
+    header /assets/* Cache-Control "public, max-age=31536000, immutable"
+
+    # The shell is unhashed and each deploy swaps the release it is served from, so a cached
+    # shell would point at hashed assets that no longer exist. `no-cache` still caches it, but
+    # makes the browser revalidate first, so a deploy is picked up on the next visit.
+    @shell not path /assets/*
+    header @shell Cache-Control "no-cache"
+
+    # Every route belongs to the client-side router, so anything that is not a file gets the
+    # shell and the router resolves it — unknown paths included, which it prefixes with a locale.
+    try_files {path} /index.html
+    file_server
+}

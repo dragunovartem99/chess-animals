@@ -73,8 +73,7 @@ body {
 	   repeat is not obvious behind the cards. */
 	background-color: #5b7512;
 	background-image:
-		linear-gradient(rgb(34 44 18 / 46%), rgb(34 44 18 / 46%)),
-		url("/chess-animals/cartoon-grass.jpg");
+		linear-gradient(rgb(34 44 18 / 46%), rgb(34 44 18 / 46%)), url("/cartoon-grass.jpg");
 	background-size: auto, 440px;
 	background-attachment: fixed, fixed;
 	color: var(--color-ink);

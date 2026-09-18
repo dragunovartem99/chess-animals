@@ -182,11 +182,11 @@ untranslatable-by-accident rather than silently English-only.
 ## Checks and deployment
 
 `npm run build` type-checks with `vue-tsc` before Vite builds. CI (`.github/workflows/ci.yaml`)
-runs format, types, lint, tests with coverage, and the build on every push and pull request
-against `main`.
+runs format, types, lint, tests with coverage, and the build on every pull request against `main`.
 
-Push to `main` also triggers `.github/workflows/deploy.yaml`, which calls the shared
-[pipes](https://github.com/dragunovartem99/pipes) workflow to publish `dist/` to GitHub Pages.
-Pages serves the repo under a sub-path and knows nothing about the router, so `vite.config.ts`
-sets `base: "/chess-animals/"` and a `spaFallback` plugin copies `index.html` to `404.html` —
-Pages hands deep links to that file, and the router takes the url from there.
+Push to `main` runs `.github/workflows/deploy.yaml`, which reuses CI as a gate and then ships
+`dist/` to the VPS that also serves the author's other sites. Each deploy is rsynced into its own
+release directory and activated by atomically swapping a symlink, so the two previous releases
+stay on disk for rollback. `deploy.sh` installs the repo's `Caddyfile` as this site's block and
+reloads Caddy; the block sends every path that is not a file to `index.html`, which is how deep
+links reach the router.

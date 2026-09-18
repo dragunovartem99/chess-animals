@@ -8,7 +8,7 @@ Every animal — the random 🐴 Donkey, the greedy 🐒 Monkey — runs the sam
 nothing but a set of tunable heuristic weights, and a move is a dot product between those weights
 and one feature vector describing the position.
 
-Live at [dragunovartem99.github.io/chess-animals](https://dragunovartem99.github.io/chess-animals/),
+Live at [chess-animals.com](https://chess-animals.com/),
 in English and Russian.
 
 The design comes from Tom 7's [_Elo World_](paper.pdf) (SIGBOVIK 2019), which rates a crowd of
@@ -35,9 +35,8 @@ npm run dev
 | `npm run types:check`               | `vue-tsc` type-check                                               |
 
 Linting and formatting via [oxlint](https://oxc.rs)/[oxfmt](https://oxc.rs), type-checking via
-`vue-tsc`, tests via Vitest. CI runs all of them plus the build on every push and pull request;
-`main` deploys to GitHub Pages through the shared
-[pipes](https://github.com/dragunovartem99/pipes) workflow.
+`vue-tsc`, tests via Vitest. CI runs all of them plus the build on every pull request;
+`main` runs them again and, once green, deploys to [chess-animals.com](https://chess-animals.com/).
 
 ## Documentation
 
