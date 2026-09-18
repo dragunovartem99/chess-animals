@@ -17,7 +17,9 @@ HEADERS := $(shell find include src -name '*.h')
 C_FILES := $(shell find include src tests -name '*.[ch]')
 
 WARNINGS := -Wall -Wextra -Wpedantic -Wconversion -Wshadow -Werror
-CFLAGS := -std=c17 $(WARNINGS) -Iinclude
+# No fused multiply-add: the features and the dot product must round exactly as the TS doubles do,
+# and a contracted a * b + c rounds once where JavaScript rounds twice.
+CFLAGS := -std=c17 $(WARNINGS) -ffp-contract=off -Iinclude
 # -ffreestanding on the native build too, so the sources cannot lean on libc there and then
 # fail to link in wasm, where there is none.
 SRC_FLAGS := -ffreestanding

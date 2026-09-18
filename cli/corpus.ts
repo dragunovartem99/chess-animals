@@ -2,6 +2,7 @@ import { writeFileSync } from "node:fs";
 
 import { attackLines } from "./corpus/attacks";
 import { drawLines } from "./corpus/draws";
+import { featureLines } from "./corpus/features";
 import { moveLines } from "./corpus/moves";
 
 // Writes the fixtures the C engine is checked against chessops on. `npm run engine:corpus`
@@ -10,6 +11,7 @@ const FIXTURES: [string, () => string[]][] = [
 	["moves.txt", moveLines],
 	["attacks.txt", attackLines],
 	["draws.txt", drawLines],
+	["features.txt", featureLines],
 ];
 
 for (const [name, lines] of FIXTURES) {

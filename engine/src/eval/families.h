@@ -1,0 +1,10 @@
+#ifndef ENGINE_EVAL_FAMILIES_H
+#define ENGINE_EVAL_FAMILIES_H
+
+#include "eval.h"
+
+// One per TS family, each writing only its own slots — `extract_features` calls them in the TS
+// extractor's order.
+void extract_material(EvalContext *ctx, float *features);
+
+#endif

@@ -53,14 +53,14 @@ Measured today (`npm run bench`, material-only weights, argmax): depth 2 ≈ 1.7
   the history into its own Zobrist stack; the RNG state round-trips so TS and C never hold two
   diverging streams. UCI parsing, transports and workers stay TS and stay thin.
 - **The registry stays the single source.** `cli/featuresHeader.ts` generates
-  `engine/include/features.h` (ids, keys) from `features.ts`. A test fails when the committed
+  `engine/include/feature_ids.h` (the ids; not `features.h`, which glibc owns) from `features.ts`. A test fails when the committed
   header is stale. A new heuristic is still one registry entry plus one extractor line, now in C.
 
 ### Layout
 
 ```
 engine/
-  include/     one public header per unit, features.h generated
+  include/     one public header per unit, feature_ids.h generated
   src/core/    bitboard helpers (builtin popcount/ctz), square/piece types, xorshift128
   src/board/   bitboards + mailbox, FEN, Zobrist, make/unmake over a fixed undo stack
   src/movegen/ magic sliders (fancy, tables built at init), leaper/pawn attack tables,
@@ -107,7 +107,6 @@ sets for it.
 
 | Commit                                             | Contents                                                                                                 | Green when                                                              |
 | -------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
-| ⬜ `engine: add the eval context and material`     | Lazy attack maps, `features.h` codegen, differential harness, first family                               | Material slots bit-identical to the TS extractor                        |
 | ⬜ `engine: port the <family> family` × 9          | One commit per family: placement → endgame, then move                                                    | That family's slots bit-identical on the corpus                         |
 | ⬜ `engine: add terminal scoring and the dot`      | `terminalScore`, `liveSlots`, dot in slot order                                                          | `evaluatePosition` identical for every roster bot                       |
 | ⬜ `engine: add alpha-beta and quiescence`         | PVS, MVV-LVA + killers, qsearch with en passant/promotions/evasions, delta pruning, draws, shuffled root | Mate-in-N suite; equal to minimax and to plain alpha-beta on the corpus |
