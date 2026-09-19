@@ -1,9 +1,9 @@
 import type { Animal } from "./types";
 
-// The Monkey plus one instinct: never leave a piece attacked and undefended. `hanging` is a
-// count of such pieces on both sides, so at a pawn apiece the instinct shapes the quiet moves
-// without ever outbidding the material base it sits on — greedy, but safe, is what plain
-// material at depth 2 is not, and it is enough to beat it.
+// The Monkey plus one instinct: never leave a piece attacked and undefended. `hanging` is a count
+// of such pieces on both sides, and no other animal leads with it. At half a pawn apiece the
+// instinct shapes the quiet moves without outbidding the material base — the lab had −50 level
+// with or above −100 at depth 2, lighter as observation 4 of LAB.md predicts.
 export const HEDGEHOG: Animal = {
 	emoji: "🦔",
 	tint: "#8f6b4c",
@@ -11,6 +11,6 @@ export const HEDGEHOG: Animal = {
 		id: "hedgehog",
 		search: { depth: 2 },
 		base: "material",
-		weights: { hanging: -100 },
+		weights: { hanging: -50 },
 	},
 };

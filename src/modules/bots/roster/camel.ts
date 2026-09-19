@@ -5,9 +5,13 @@ import type { Animal } from "./types";
 // `families/endgame.ts`). Every other animal plays the ending with the same eye it played the
 // opening with.
 //
+// `development` is what it does until then: both endgame features are silent in the opening, and
+// without a middlegame weight the Camel played that phase as bare material. The lab put it +75
+// over the endgame pair alone, more than `castled`, `pushDepth` or `centerControl` did.
+//
 // Depth 2 with quiescence — the only animal on that search. It is what an ending needs, since a
 // pawn race is all captures and promotions past the leaf, and it slots the Camel between the Hare
-// and the Raven. The lab put it +106 over the same search with bare material.
+// and the Raven.
 export const CAMEL: Animal = {
 	emoji: "🐪",
 	tint: "#a38a63",
@@ -15,6 +19,6 @@ export const CAMEL: Animal = {
 		id: "camel",
 		search: { depth: 2, quiescence: true },
 		base: "material",
-		weights: { passedPawnPush: 12, kingActivity: 20 },
+		weights: { passedPawnPush: 24, kingActivity: 20, development: 20 },
 	},
 };

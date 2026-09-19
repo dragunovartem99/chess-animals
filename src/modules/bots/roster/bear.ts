@@ -1,12 +1,11 @@
 import type { Animal } from "./types";
 
-// Two positional weights that pull the same way: `centralization` drags every piece off the rim,
-// `space` rewards holding ground in the enemy half. It claims the middle and then keeps pushing
-// out into the other side.
+// Claims the middle and sits behind a castled king: `centralization` drags every piece off the
+// rim, and no other animal reads it; `castled` is the small partner that tucks the king away first.
 //
-// `castled` is the small third weight: tuck the king away, then take the board. It is sparse — it
-// only moves a decision in the opening — but the lab put it ~+100 over the bare pair, as much as
-// borrowing the Hare's `hanging` did, without the borrowing. Heavier (80) gave the gain back.
+// It used to carry `space` as well, but `centralization` and `space` measure nearly the same thing
+// — the lab had the pair below `centralization` alone — and `space` is now the Tiger's. Dropping it
+// was worth ~+80, and `castled` 20 beat 40.
 export const BEAR: Animal = {
 	emoji: "🐻",
 	tint: "#6e5647",
@@ -14,6 +13,6 @@ export const BEAR: Animal = {
 		id: "bear",
 		search: { depth: 3 },
 		base: "material",
-		weights: { centralization: 8, space: 6, castled: 40 },
+		weights: { centralization: 8, castled: 20 },
 	},
 };

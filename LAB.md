@@ -122,40 +122,56 @@ Best known weight, Δ over bare `material` in its run.
 
 A dash is untested on this pass, not zero.
 
-## The roster against its alternatives
+## The roster
 
-Each animal in a field with its alternatives, best first. Every alternative below uses a
-combination no other animal has.
+Every idea animal leads with a feature no other animal reads. Partners may repeat, but no two
+animals share a full weight set. Three overlaps are deliberate: the Goat and the Dove are the same
+weights with opposite signs; the Fox and the Lemming read `offeredMaterial` with opposite signs;
+and the Monkey, Owl and Raven are bare material at three searches, as the calibration line.
 
-| animal   | search | now                                                    | best alternative                      | margin |
-| -------- | ------ | ------------------------------------------------------ | ------------------------------------- | -----: |
-| Spider   | d1     | `mobility` 10                                          | `mobility` 10 + `offeredMaterial` −40 |   +432 |
-| Fox      | d2     | `offeredMaterial` −30                                  | `offeredMaterial` −20 + `swarm` 40    |   +122 |
-| Hedgehog | d2     | `hanging` −100                                         | `hanging` −50 + `huddle` 20           |    +26 |
-| Camel    | d2 + q | `passedPawnPush` 12 + `kingActivity` 20                | `passedPawnPush` 24 + `mobility` 10   |   +188 |
-| Bear     | d3     | `centralization` 8 + `space` 6 + `castled` 40          | drop `space`                          |    +79 |
-| Hare     | d3     | `offeredMaterial` −20 + `hanging` −100                 | —                                     |      — |
-| Tiger    | d3 + q | `swarm` 40 + `mobility` 10 + `earlyQueen` −40          | — (four stacks within ±68)            |      — |
-| Lion     | d3 + q | `kingDanger` −40 + `development` 20 + `earlyQueen` −80 | — (all variants ±140)                 |      — |
+| animal   | search | lead (its own)         | partners                            |
+| -------- | ------ | ---------------------- | ----------------------------------- |
+| Spider   | d1     | `mobility` 10          | —                                   |
+| Parrot   | d2     | `mirrorRanks` 150      | —                                   |
+| Elephant | d2     | `sameColorSquares` 600 | —                                   |
+| Sloth    | d2     | `huddle` 550           | —                                   |
+| Wolf     | d2     | `swarm` 600            | —                                   |
+| Hedgehog | d2     | `hanging` −50          | —                                   |
+| Fox      | d2     | `offeredMaterial` −20  | `centerControl` 15                  |
+| Bear     | d3     | `centralization` 8     | `castled` 20                        |
+| Hare     | d3     | `opponentMobility` −8  | `hanging` −100                      |
+| Camel    | d2 + q | `passedPawnPush` 24    | `kingActivity` 20, `development` 20 |
+| Lion     | d3 + q | `kingDanger` −40       | `development` 20, `earlyQueen` −80  |
+| Tiger    | d3 + q | `space` 6              | `swarm` 20, `mobility` 10           |
 
-- **Each alternative reads as behaviour, not a handicap.** The Fox stalks the king but leaves
-  nothing loose. The Hedgehog curls up (`huddle`) instead of only guarding. The Spider spins its reach only over safe squares.
-- **The Hedgehog and the Bear gain little.** Swap them for their idea, not for Elo.
-- **The Hare is already its own best version.** At d3, `hanging` −100 beats −50 by 61, and
-  `offeredMaterial` + `mobility` beats it only inside the noise.
-- **The Camel has no middlegame.** Both its features switch on only as material comes off, and
-  `kingActivity` adds nothing once `mobility` covers the middlegame (−25, noise).
-- **Obsession animals stay as they are.** The Wolf (`swarm` 600) and the Sloth (`huddle` 550) are
-  meant to lose material to their idea. A safety partner lifts either by ~+100–150 without
-  changing its tier.
+What the lab said for each change, against the old weights in the same field:
+
+- **Bear, +77.** `centralization` and `space` measure nearly the same thing; dropping `space`
+  and halving `castled` beat the triple.
+- **Camel, +75.** Both endgame features are silent in the opening, so it played that phase as
+  bare material. `development` beat `castled`, `pushDepth` and `centerControl` as the fix.
+- **Fox, +15 to +37.** `centerControl` 15 or 30 over `offeredMaterial` −20, the partner the cut
+  Eagle left free.
+- **Hedgehog, +22.** `hanging` −50 over −100: observation 4.
+- **Hare, −37.** `opponentMobility` + `hanging` sits inside the noise of the old
+  `offeredMaterial` + `hanging`, and gives it a lead of its own instead of the Fox's.
+- **Tiger, +52 (±110).** The `space`-led stack ties the old `swarm` + `mobility` + `earlyQueen`
+  and leaves `earlyQueen` to the Lion.
+- **Spider, unchanged.** Every `mobility` stack at d1 still loses to bare material; the best
+  (`mobility` 5 + `earlyQueen` −80) gained +93, not enough to move it off its slot.
+
+## Gaps
+
+The full roster runs in seconds off the cache, but its CIs are ±70–190, so a gap under ~100 is
+not a measurement: the Sloth–Elephant gap read 27 in one run and 104 in the next. The wide gaps
+that stay are structural. At the bottom the Goat, Dodo, Donkey, Lemming and Dove are the paper's
+fixed strategies. At the top the Tiger wins nearly every game, so its rating floats — on depth 4
+with quiescence it was ~+300 stronger head to head, yet rated the same on the roster.
 
 ## Open leads
 
-- **A d3 + q board-control animal.** `centralization` 8 + `space` 6 + `passedPawnPush` 24 topped
-  its field, and no animal on quiescence reads `centralization` or `space`. It is the Bear's idea
-  one search up.
-- **`kingActivity`** helps nothing it has been paired with. If the Camel drops it, no animal reads
-  it, and it is the next feature to cut.
+- **`kingActivity`** helps nothing it has been paired with (−25 beside `mobility` on the Camel).
+  The Camel is the only animal that reads it, and it is the next feature to cut.
 - **The Lion's field is flat.** Every king-safety variant at d3 + q sat inside ±140. Settling it
   needs a narrower field (three or four players).
 

@@ -82,7 +82,7 @@ describe("useSandbox", () => {
 
 		result.seedFrom("hedgehog");
 
-		expect(result.weights.value.hanging).toBe(-100);
+		expect(result.weights.value.hanging).toBe(-50);
 		expect(result.depth.value).toBe(2);
 	});
 

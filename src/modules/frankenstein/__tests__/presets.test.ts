@@ -23,7 +23,7 @@ describe("presetFromBot", () => {
 		const preset = presetFromBot("hedgehog");
 
 		expect(preset).toMatchObject({ depth: 2, quiescence: false });
-		expect(preset?.weights.hanging).toBe(-100);
+		expect(preset?.weights.hanging).toBe(-50);
 		expect(preset?.weights.givesMate).toBe(1);
 	});
 

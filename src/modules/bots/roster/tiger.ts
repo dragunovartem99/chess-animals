@@ -1,18 +1,18 @@
 import type { Animal } from "./types";
 
-// The Raven's shape — depth 3, `quiescence` on — with an aggressive-mobile two-weight stack:
-// `swarm` (40) drives the whole army at the enemy king, `mobility` (10) keeps every piece
-// active on the way in. LAB.md's earlier verdict was "swarm only works solo — two charge-the-king
-// signals hang the army", but that was at depth 3 *without* quiescence: resolving the capture
-// chain past the leaf is what stops the charge being suicide. The full-roster arena puts it top
-// by a distance, beating the Raven's bare build ~7-in-8.
+// The Raven's shape — depth 3, `quiescence` on — with a three-weight board-control stack: `space`
+// holds ground in your half, and no other animal leads with it; `swarm` (20) walks the army at
+// your king; `mobility` (10) keeps every piece active on the way in. Resolving the capture chain
+// past the leaf is what stops the charge being suicide. The full-roster arena puts it top by a
+// distance.
 //
-// Distinct from the Wolf, which is `swarm` alone at 400 and overcommits: the Tiger's charge is
-// a fifteenth of the weight and braced by `mobility`, so it presses without throwing the army away.
+// Distinct from the Wolf, which is `swarm` alone at 600 and overcommits: the Tiger's charge is a
+// thirtieth of the weight and braced by the other two, so it presses without throwing the army
+// away.
 //
-// `earlyQueen` at -40 keeps the queen home until the minors are out — the charge used to lead with
-// it. Rating-neutral; over twenty openings against the Owl it cut queen moves made with two minors
-// still home from 37 to 4.
+// On this search every stack the lab tried — this one, the old `swarm` + `mobility` +
+// `earlyQueen`, and `centralization` + `space` + `passedPawnPush` — rated within noise. This one
+// won the Tiger its own lead feature and left `earlyQueen` to the Lion.
 export const TIGER: Animal = {
 	emoji: "🐅",
 	tint: "#db7f2b",
@@ -20,6 +20,6 @@ export const TIGER: Animal = {
 		id: "tiger",
 		search: { depth: 3, quiescence: true },
 		base: "material",
-		weights: { swarm: 40, mobility: 10, earlyQueen: -40 },
+		weights: { space: 6, swarm: 20, mobility: 10 },
 	},
 };
