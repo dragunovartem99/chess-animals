@@ -31,9 +31,11 @@ bool history_repeats(const History *history, const Position *pos);
 // chessops's `isInsufficientMaterial`: neither side has the men left to mate with.
 bool insufficient_material(const Position *pos);
 
-// `createDrawTest`: the draws a search sees for itself and scores 0 — fifty moves unless the last
-// one mated, insufficient material, and a single repetition rather than the rule's three.
-// Stalemate is the terminal score's, as mate is.
+// The draws a search sees for itself and scores 0 — fifty moves unless the last one mated,
+// insufficient material, and a single repetition rather than the rule's three: a bot that walks
+// into the second copy has already agreed to the line that makes the third. Zero rather than a
+// tunable contempt, because every feature is a difference between the sides, so a level position
+// already scores near zero. Stalemate is the terminal score's, as mate is.
 bool position_drawn(const Position *pos, const History *history);
 
 #endif

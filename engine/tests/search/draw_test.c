@@ -9,8 +9,8 @@
 
 static const char *const START = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
-// Replays one game of `fixtures/draws.txt` as `runGame` plays it — push, then make — and checks
-// every position's verdict against the flag `createDrawTest` gave it.
+// Replays one game of `fixtures/draws.txt` — push, then make — and checks every position's verdict
+// against its flag: the retired TS draw test's, frozen with it, since chessops has no search draw.
 static int check_game(char *moves, const char *flags) {
 	static History history;
 	Position pos;
@@ -28,7 +28,7 @@ static int check_game(char *moves, const char *flags) {
 	return ply;
 }
 
-TEST(agrees_with_create_draw_test_on_the_fixture) {
+TEST(agrees_with_the_fixture) {
 	static char line[8192];
 	FILE *file = fopen("tests/fixtures/draws.txt", "r");
 	CHECK(file != NULL);
@@ -57,7 +57,7 @@ TEST(draws_on_the_hundredth_half_move_unless_it_mated) {
 	CHECK(!drawn("R3k3/8/4K3/8/8/8/8/8 b - - 100 80"));
 }
 
-// Every verdict here was checked against `createDrawTest` itself.
+// Every verdict here was checked against the retired TS draw test.
 TEST(reads_insufficient_material_as_chessops_does) {
 	CHECK(drawn("4k3/8/8/8/8/8/8/4K3 w - - 0 1"));
 	CHECK(drawn("4k3/8/8/8/8/8/8/4KN2 w - - 0 1"));

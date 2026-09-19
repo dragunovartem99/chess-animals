@@ -54,7 +54,7 @@ One flat area per folder, each with its own `index.ts`, and deliberately **no ro
 
 | Area           | What it holds                                                                                                                                  |
 | -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| `chess`        | chessops wrappers — FEN in/out, legal moves, `afterMove`, repetition keys and hashes, and game-over detection                                  |
+| `chess`        | chessops wrappers — FEN in/out, legal moves, `afterMove`, repetition keys, and game-over detection                                             |
 | `eval`         | the feature registry, feature and weight vectors, the mate term, the White-relative breakdown — what a bot is, where `engine/` is what it does |
 | `engine`       | the seeded RNG, the UCI codec, the UCI engine over a `goSearch`, the engine client and its transports                                          |
 | `wasm`         | the binding to `engine/build/engine.wasm` — loading, the linear-memory arena, `search`/`extract`/`perft`, and the `goSearch` over it           |
