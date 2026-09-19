@@ -6,9 +6,10 @@ import { FEATURES } from "@/shared/eval";
 // engine, so the first thing a slider does is visibly change how it plays. Seeding an animal
 // brings that animal's own deeper search along with it.
 export const DEFAULT_DEPTH = 1;
-// The sandbox runs its search in a worker, but a worker is still one thread: depth 4+ turns a
-// slider tick into a multi-second stall before the next move, which is the opposite of "live".
-export const MAX_DEPTH = 3;
+// The sandbox runs its search in a worker, but a worker is still one thread: depth 5+ turns a
+// slider tick into a stall before the next move, which is the opposite of "live". Depth 4 was
+// that stall on the ts search; the wasm engine plays whole depth-4 quiescence games in seconds.
+export const MAX_DEPTH = 4;
 
 export type Preset = { weights: Record<string, number>; depth: number; quiescence: boolean };
 
