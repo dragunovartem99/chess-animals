@@ -48,14 +48,15 @@ costs Elo.
 | `hanging`         | +314 | +242 | +162 |   +162 |
 | `mobility`        | −167 | +203 | +157 |   +532 |
 | `centralization`  |  −12 | +170 | +173 |   +452 |
-| `space`           |    — | +143 |    — |   +415 |
+| `space`           | −278 | +143 |  +28 |   +415 |
 
 `offeredMaterial` and `hanging` stand in for the capture search a plain search lacks. Once
 quiescence resolves the captures, activity features take over and carry the strongest bots.
 
 ### 3. At depth 1, reaching further is a liability
 
-`mobility` at d1 is −167, `centralization` −12, `centerControl` +30. A piece that reaches further
+Every attack-map feature loses at d1: `swarm` −294, `space` −278, `pushDepth` −252,
+`kingDanger` −248, `mobility` −167. A piece that reaches further
 also stands further out, and one ply can't see the recapture. Activity at d1 works only behind a
 safety feature: `mobility` 10 + `offeredMaterial` −40 is +265. The Spider is `mobility` alone at
 d1, and so the weakest material animal.
@@ -98,7 +99,8 @@ out-searching weaker bots; against opponents on the same search, evaluation deci
 
 ## Singles by search
 
-Best known weight, Δ over bare `material` in its run.
+One weight per feature per search — the best of the last sweep — and its Δ over bare `material`
+in its own run. Sorted by d3 + q. d1–d3 runs carry ±35–70; d3 + q runs ±90–130.
 
 | feature            | d1         | d2         | d3         | d3 + q     |
 | ------------------ | ---------- | ---------- | ---------- | ---------- |
@@ -106,21 +108,20 @@ Best known weight, Δ over bare `material` in its run.
 | `hanging`          | −50 → +314 | −50 → +242 | −50 → +162 | −50 → +162 |
 | `mobility`         | 10 → −167  | 10 → +203  | 5 → +157   | 10 → +532  |
 | `centralization`   | 5 → −12    | 8 → +170   | 8 → +173   | 4 → +452   |
-| `space`            | —          | 6 → +143   | —          | 3 → +415   |
-| `swarm`            | —          | 40 → +109  | —          | 20 → +209  |
-| `kingDanger`       | —          | −20 → +108 | —          | −20 → +138 |
-| `pushDepth`        | —          | 10 → +80   | —          | 10 → +128  |
-| `passedPawnPush`   | —          | —          | —          | 24 → +94   |
-| `castled`          | —          | 40 → +74   | —          | 20 → +86   |
-| `huddle`           | 40 → +160  | 20 → +15   | —          | —          |
-| `earlyQueen`       | −80 → +111 | —          | —          | —          |
-| `centerControl`    | 15 → +30   | 30 → +95   | —          | —          |
-| `development`      | 10 → +61   | 20 → +83   | —          | —          |
-| `kingActivity`     | 20 → +67   | —          | —          | —          |
-| `givesCheck`       | —          | 20 → +73   | —          | —          |
-| `opponentMobility` | —          | −8 → +26   | −10 → +39  | —          |
-
-A dash is untested on this pass, not zero.
+| `space`            | 12 → −278  | 6 → +143   | 12 → +28   | 3 → +415   |
+| `huddle`           | 40 → +160  | 20 → +15   | 40 → +102  | 20 → +331  |
+| `swarm`            | 40 → −294  | 40 → +109  | 20 → −29   | 20 → +209  |
+| `centerControl`    | 15 → +30   | 30 → +95   | 30 → +83   | 15 → +164  |
+| `development`      | 10 → +61   | 20 → +83   | 40 → +23   | 10 → +158  |
+| `kingDanger`       | −20 → −248 | −20 → +108 | −20 → −6   | −20 → +138 |
+| `pushDepth`        | 20 → −252  | 10 → +80   | 10 → +22   | 10 → +128  |
+| `passedPawnPush`   | 24 → +44   | 24 → −18   | 24 → +5    | 24 → +94   |
+| `castled`          | 80 → −59   | 40 → +74   | 40 → −13   | 20 → +86   |
+| `givesCheck`       | 80 → −132  | 20 → +73   | 40 → +40   | 20 → +54   |
+| `opponentMobility` | −4 → −167  | −8 → +26   | −10 → +39  | −4 → +47   |
+| `earlyQueen`       | −80 → +111 | −20 → −35  | −20 → +6   | −20 → +27  |
+| `captureValue`     | 50 → −38   | 25 → −39   | 10 → −54   | 10 → +22   |
+| `kingActivity`     | 20 → +67   | 10 → −198  | 10 → −23   | 20 → −143  |
 
 ## The roster
 
@@ -170,8 +171,10 @@ with quiescence it was ~+300 stronger head to head, yet rated the same on the ro
 
 ## Open leads
 
-- **`kingActivity`** helps nothing it has been paired with (−25 beside `mobility` on the Camel).
-  The Camel is the only animal that reads it, and it is the next feature to cut.
+- **`kingActivity`** loses alone at d2, d3 and d3 + q (−198, −23, −143) and helps nothing it has
+  been paired with. The Camel is the only animal that reads it, and it is the next feature to cut.
+- **`huddle` with quiescence.** +331 alone at d3 + q, fourth of all features, yet no animal on
+  quiescence reads it — the Sloth has it at 550, an obsession on d2.
 - **The Lion's field is flat.** Every king-safety variant at d3 + q sat inside ±140. Settling it
   needs a narrower field (three or four players).
 
