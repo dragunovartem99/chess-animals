@@ -1,99 +1,171 @@
 # LAB.md
 
-What the bench in [`cli/lab.ts`](./cli/lab.ts) has measured. Re-run with
-`npm run arena -- --lab-only --seed=1`.
+What the bench in [`cli/lab.ts`](./cli/lab.ts) says about weights today. This file is the current
+state, not a log: when a re-run changes a number, overwrite it.
 
-Weights are in **today's** signs: `swarm`, `huddle` and `kingProximity` were negated after these
-runs, and `kingDanger` was `kingAttackers`. Same bots, same ratings — only the number you would
-type to rebuild one has changed.
+## How to run it
 
-## One weight per feature, depth 2
+Stage candidates in `cli/lab.ts` and run `npm run arena -- --lab-only`. Size the field by cost:
 
-`base: "material"`, one hand-picked weight worth roughly a pawn of influence. Bare `material`
-anchors at **1460** with ±12 CIs, so a paired difference under ~35 Elo is noise. `givesMate` is
-omitted — the base pins it. Piece-value nudges were swept separately and only confirmed the frozen
-numbers.
+| search | field | wall time |  95% CI |
+| ------ | ----: | --------: | ------: |
+| d1, d2 |  ≤ 18 |      ~5 s |     ±45 |
+| d3     |  ≤ 12 |      ~7 s |     ±55 |
+| d3 + q |   6–7 |      ~4 s | ±60–140 |
 
-| feature (weight)                     | rating |    Δ |
-| ------------------------------------ | -----: | ---: |
-| `offeredMaterial` (−20)              |   1697 | +237 |
-| `mobility` (10) _(Spider)_           |   1653 | +193 |
-| `centralization` (8)                 |   1614 | +154 |
-| `hanging` (−100) _(Hedgehog)_        |   1590 | +130 |
-| `space` (6)                          |   1587 | +127 |
-| `swarm` (40)                         |   1561 | +101 |
-| `kingDanger` (−40)                   |   1539 |  +79 |
-| `centerControl` (30)                 |   1536 |  +76 |
-| _noise floor — below here Δ ≈ 0_     |        |      |
-| `givesCheck` (40) _(Goat)_           |   1496 |  +36 |
-| `pushDepth` (15) _(Goat)_            |   1490 |  +30 |
-| `opponentMobility` (−8)              |   1482 |  +22 |
-| `huddle` (40) _(Sloth)_              |   1482 |  +22 |
-| `captureValue` (25) _(Goat)_         |   1465 |   +5 |
-| `material` (bare)                    |   1460 |    0 |
-| `mirrorRanks` (15) _(Parrot)_        |   1440 |  −20 |
-| `sameColorSquares` (15) _(Elephant)_ |   1436 |  −24 |
-| `kingProximity` (20) _(Dodo)_        |   1279 | −181 |
+The arena stops once the order is safe, so a bigger field gets fewer games per pair, not sharper
+ratings. A d3 + q table orders its players; trust its gaps only when they exceed ~150.
 
-- **Only the top eight beat bare material.** Dense signals that nudge almost every quiet move.
-  Below `centerControl` the field is one CI wide, ordered by luck as much as merit.
-- **Below the anchor is load-bearing, not weak.** `mirrorRanks`, `sameColorSquares` and
-  `kingProximity` _are_ the Parrot, the Elephant and the Dodo — −181 is `suicide_king` working,
-  not failing. `captureValue`, `pushDepth` and `givesCheck` are the Goat.
-- **Caveat:** one weight, hand-picked sign. A feature at the floor may be mistuned rather than
-  weak — a real verdict needs the SPSA tuner.
+A rating means something only inside its own run. Compare within one table, never across tables,
+never against the roster's numbers. The same candidate moves ±50 between runs just from who else
+is in the field.
 
-## Two weights at depth 3
+## Method
 
-A ply outweighs any depth-2 stack: bare `material` at depth 3 beat the best depth-2 pair 60/40 and
-a six-weight stack 70/30. Past ~4 weights the argmax gets noisier, not sharper.
+Every candidate is `base: "material"` plus the weights under test, rated against bare `material`
+at the **same search**. Change one thing at a time:
 
-At equal depth, pairs fall into three tiers against bare `material`. **Prophylaxis is the whole
-story** — any pair holding `offeredMaterial` or `hanging` lands ~1600 and 75–82/18–25, the top
-three inside one CI. Two positional features are a tier below at ~1510 — `centralization` with
-`space`, or `mobility` with `opponentMobility` — and stack to ~nothing over one.
-`kingDanger`+`space` is the one pair that _loses_ to the anchor, 42/58.
+1. **Singles** — one feature at its known-best weight, per search.
+2. **Pairs** drawn from the top singles of one search.
+3. **The roster against its alternatives**, one tier at a time, with the current animal in the
+   field.
 
-## Three weights at depth 3 + quiescence
+## Observations
 
-2,800 games, ~79 min. `lab-quiet` is the bare Raven build.
+### 1. A feature helps only if it tells the search something it can't see
 
-| candidate   | weights                                            |   rating | vs `lab-quiet` |
-| ----------- | -------------------------------------------------- | -------: | -------------- |
-| `lab-msc`   | `mobility` 10 + `space` 6 + `centralization` 8     | 1738 ±26 | 91.5/8.5       |
-| `lab-sms`   | `swarm` 40 + `mobility` 10 + `space` 6             | 1681 ±24 | 86/14          |
-| `lab-smf`   | `swarm` 40 + `mobility` 10 + `offeredMaterial` −20 | 1615 ±23 | 82/18          |
-| `lab-mks`   | `mobility` 10 + `kingDanger` −40 + `space` 6       | 1516 ±23 | 84.5/15.5      |
-| `lab-smk`   | `swarm` 40 + `mobility` 10 + `kingDanger` −40      | 1484 ±23 | 81.5/18.5      |
-| `lab-skc`   | `swarm` 40 + `kingDanger` −40 + `centerControl` 30 | 1456 ±23 | 74/26          |
-| `lab-quiet` | —                                                  | 1284 ±25 | —              |
-| `lab-smo`   | `swarm` 40 + `mobility` 10 + `opponentMobility` −8 | 1227 ±28 | 38.5/61.5      |
+Material plus search already covers what the search reaches. A weight pays off when it brings in
+knowledge from past the horizon; when it repeats what the search knows, it double-counts and
+costs Elo.
 
-- **Bare quiescence is rudderless once everyone has it.** The exact Raven build, #1 on the full
-  roster, finished 7th of 8 here: knowing a good square from a bad one is all that is left, and
-  material knows nothing.
-- **`swarm` works at depth 3 once quiescence is on**, reversing the no-quiescence verdict that it
-  only works solo. Resolving the captures past the leaf is what stops the charge being suicide.
-- **Doubling the king-charge still costs you** — `swarm` + `kingDanger` sank to mid-table either
-  way. **`opponentMobility` as a third weight is toxic**, the only candidate below bare material.
-- **Caveat:** lab-only and self-referential to these eight. `1738` here is not `1738` on the
-  roster.
+### 2. Below quiescence, safety wins; with it, board control wins
 
-## Cut on this evidence
+Δ over bare `material`, same run:
 
-- **`reverseStarting`** (+41) cleared the floor but never earned an animal, and walked both armies
-  against every role's home squares — the registry's most expensive feature for one CI.
-- **`kingPawnDistance`** (+30) sat inside the noise band, unweighted, at a pawn walk per node.
+| feature           |   d1 |   d2 |   d3 | d3 + q |
+| ----------------- | ---: | ---: | ---: | -----: |
+| `offeredMaterial` | +327 | +312 | +200 |   +251 |
+| `hanging`         | +314 | +242 | +162 |   +162 |
+| `mobility`        | −167 | +203 | +157 |   +532 |
+| `centralization`  |  −12 | +170 | +173 |   +452 |
+| `space`           |    — | +143 |    — |   +415 |
 
-## Unclaimed
+`offeredMaterial` and `hanging` stand in for the capture search a plain search lacks. Once
+quiescence resolves the captures, activity features take over and carry the strongest bots.
 
-**`kingDanger`** (+79) is the best-rated feature with no animal on it. It pairs badly with
-`swarm`, so its animal is a solo one.
+### 3. At depth 1, reaching further is a liability
 
-## Graduated
+`mobility` at d1 is −167, `centralization` −12, `centerControl` +30. A piece that reaches further
+also stands further out, and one ply can't see the recapture. Activity at d1 works only behind a
+safety feature: `mobility` 10 + `offeredMaterial` −40 is +265. The Spider is `mobility` alone at
+d1, and so the weakest material animal.
 
-`offeredMaterial`+`hanging` → **Hare**, `centralization`+`space` → **Bear**,
-`mobility`+`opponentMobility` → **Rhino** (since cut to `opponentMobility` alone, the **Snake**), `swarm`+`mobility`+`space` → **Tiger** (chosen over the
-higher-rated but personality-free `lab-msc`). The first three rank 2nd–4th on the full roster,
-behind the **Raven** — depth 3 with quiescence and no weights — which beats the Hare ~9-in-10. The
-Tiger's rank is still provisional.
+### 4. The deeper the search, the lighter the best weight
+
+`offeredMaterial` −40 at d1, −20 at d2–d3, −10 with quiescence. `hanging` −50 beats −100 at d2.
+`centralization` 8 beats 20 at d2. Obsession weights (`swarm` 600, `huddle` 550) sit 240–290
+below bare material at d2. A deep search sees real material, and a heavy positional weight
+overrules it.
+
+### 5. Pairs work when the two features know different things
+
+| search | best pair / triple                                     |    Δ |
+| ------ | ------------------------------------------------------ | ---: |
+| d1     | `offeredMaterial` −40 + `earlyQueen` −80 + `huddle` 40 | +459 |
+| d1     | `hanging` −50 + `huddle` 40                            | +414 |
+| d2     | `offeredMaterial` −20 + `swarm` 40                     | +364 |
+| d2     | `offeredMaterial` −20 + `mobility` 10                  | +358 |
+| d2 + q | `passedPawnPush` 24 + `mobility` 10                    | +296 |
+| d3     | `offeredMaterial` −20 + `mobility` 5                   | +267 |
+| d3 + q | `centralization` 8 + `space` 6 + `passedPawnPush` 24   |  top |
+
+Safety plus activity below quiescence; activity plus an endgame feature with it. Two features
+that measure the same thing repeat each other: `centralization` + `space` at d2 (+140) is below
+`centralization` alone (+170), and `hanging` + `offeredMaterial` at d3 gains nothing over
+`offeredMaterial` + `mobility`.
+
+### 6. Some features only work as partners
+
+`huddle` is +160 alone at d1 but lifts `offeredMaterial` or `hanging` by ~+100 — a king-side
+cluster is safety the capture count can't see. `earlyQueen` (+111 alone at d1) and
+`passedPawnPush` (+94 alone at d3 + q) each cover a phase their partner ignores. Judge a feature
+by its best pair, not only by its solo number.
+
+### 7. Search with no evaluation plays blind
+
+Bare `material` is last in every d3 + q field, by 300–600. The Raven's roster rank comes from
+out-searching weaker bots; against opponents on the same search, evaluation decides.
+
+## Singles by search
+
+Best known weight, Δ over bare `material` in its run.
+
+| feature            | d1         | d2         | d3         | d3 + q     |
+| ------------------ | ---------- | ---------- | ---------- | ---------- |
+| `offeredMaterial`  | −40 → +327 | −20 → +312 | −20 → +200 | −10 → +251 |
+| `hanging`          | −50 → +314 | −50 → +242 | −50 → +162 | −50 → +162 |
+| `mobility`         | 10 → −167  | 10 → +203  | 5 → +157   | 10 → +532  |
+| `centralization`   | 5 → −12    | 8 → +170   | 8 → +173   | 4 → +452   |
+| `space`            | —          | 6 → +143   | —          | 3 → +415   |
+| `swarm`            | —          | 40 → +109  | —          | 20 → +209  |
+| `kingDanger`       | —          | −20 → +108 | —          | −20 → +138 |
+| `pushDepth`        | —          | 10 → +80   | —          | 10 → +128  |
+| `passedPawnPush`   | —          | —          | —          | 24 → +94   |
+| `castled`          | —          | 40 → +74   | —          | 20 → +86   |
+| `huddle`           | 40 → +160  | 20 → +15   | —          | —          |
+| `earlyQueen`       | −80 → +111 | —          | —          | —          |
+| `centerControl`    | 15 → +30   | 30 → +95   | —          | —          |
+| `development`      | 10 → +61   | 20 → +83   | —          | —          |
+| `kingActivity`     | 20 → +67   | —          | —          | —          |
+| `givesCheck`       | —          | 20 → +73   | —          | —          |
+| `opponentMobility` | —          | −8 → +26   | −10 → +39  | —          |
+
+A dash is untested on this pass, not zero.
+
+## The roster against its alternatives
+
+Each animal in a field with its alternatives, best first. Every alternative below uses a
+combination no other animal has.
+
+| animal   | search | now                                                    | best alternative                           | margin |
+| -------- | ------ | ------------------------------------------------------ | ------------------------------------------ | -----: |
+| Spider   | d1     | `mobility` 10                                          | `mobility` 10 + `offeredMaterial` −40      |   +432 |
+| Fox      | d2     | `offeredMaterial` −30                                  | `offeredMaterial` −20 + `swarm` 40         |   +122 |
+| Eagle    | d2     | `centerControl` 30                                     | `centerControl` 15 + `offeredMaterial` −20 |   +193 |
+| Hedgehog | d2     | `hanging` −100                                         | `hanging` −50 + `huddle` 20                |    +26 |
+| Hippo    | d2     | `centralization` 20                                    | `centralization` 8 + `development` 20      |    +19 |
+| Camel    | d2 + q | `passedPawnPush` 12 + `kingActivity` 20                | `passedPawnPush` 24 + `mobility` 10        |   +188 |
+| Snake    | d3     | `opponentMobility` −10                                 | `opponentMobility` −8 + `hanging` −50      |    +84 |
+| Bear     | d3     | `centralization` 8 + `space` 6 + `castled` 40          | drop `space`                               |    +79 |
+| Hare     | d3     | `offeredMaterial` −20 + `hanging` −100                 | —                                          |      — |
+| Tiger    | d3 + q | `swarm` 40 + `mobility` 10 + `earlyQueen` −40          | `centralization` 8 + `space` 6             |  ~+120 |
+| Lion     | d3 + q | `kingDanger` −40 + `development` 20 + `earlyQueen` −80 | — (all variants ±140)                      |      — |
+
+- **Each alternative reads as behaviour, not a handicap.** The Fox stalks the king but leaves
+  nothing loose. The Hedgehog curls up (`huddle`) instead of only guarding. The Hippo develops
+  behind its centre, which is what the Hippopotamus defence does. The Snake constricts without
+  leaving a piece behind. The Spider spins its reach only over safe squares.
+- **Hedgehog, Hippo and Bear gain little.** Swap them for their idea, not for Elo.
+- **The Hare is already its own best version.** At d3, `hanging` −100 beats −50 by 61, and
+  `offeredMaterial` + `mobility` beats it only inside the noise.
+- **The Camel has no middlegame.** Both its features switch on only as material comes off, and
+  `kingActivity` adds nothing once `mobility` covers the middlegame (−25, noise).
+- **Obsession animals stay as they are.** The Wolf (`swarm` 600) and the Sloth (`huddle` 550) are
+  meant to lose material to their idea. A safety partner lifts either by ~+100–150 without
+  changing its tier.
+
+## Open leads
+
+- **A d3 + q board-control animal.** `centralization` 8 + `space` 6 + `passedPawnPush` 24 topped
+  its field, and no animal on quiescence reads `centralization` or `space`. It is the Bear's idea
+  one search up.
+- **`kingActivity`** helps nothing it has been paired with. If the Camel drops it, no animal reads
+  it, and it is the next feature to cut.
+- **The Lion's field is flat.** Every king-safety variant at d3 + q sat inside ±140. Settling it
+  needs a narrower field (three or four players).
+
+## Cut on earlier evidence
+
+- **`reverseStarting`** cleared the noise floor but never earned an animal, and it cost more per
+  node than any other feature.
+- **`kingPawnDistance`** sat inside the noise, unweighted.
