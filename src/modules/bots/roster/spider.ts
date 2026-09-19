@@ -9,9 +9,9 @@ import type { Animal } from "./types";
 // 6–15 range flat, so 10 is the round middle of a plateau, not a peak. The Tiger carries the same
 // weight on a deeper search.
 //
-// Depth 1: a greedy one-move look, the only material animal that never sees a reply. At depth 2
-// it sat in a knot with the Hippo and the Hedgehog that no weight untied; a ply down it fills the
-// hole between the Goat and the Parrot instead — the one-idea animals' floor.
+// Depth 1: a greedy one-move look, the only material animal that never sees a reply. At depth 2 it
+// sat in a knot with the Hedgehog that no weight untied; a ply down it fills the hole between the
+// Goat and the Parrot instead — the one-idea animals' floor.
 export const SPIDER: Animal = {
 	emoji: "🕷️",
 	tint: "#5f5a54",

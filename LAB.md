@@ -127,25 +127,20 @@ A dash is untested on this pass, not zero.
 Each animal in a field with its alternatives, best first. Every alternative below uses a
 combination no other animal has.
 
-| animal   | search | now                                                    | best alternative                           | margin |
-| -------- | ------ | ------------------------------------------------------ | ------------------------------------------ | -----: |
-| Spider   | d1     | `mobility` 10                                          | `mobility` 10 + `offeredMaterial` −40      |   +432 |
-| Fox      | d2     | `offeredMaterial` −30                                  | `offeredMaterial` −20 + `swarm` 40         |   +122 |
-| Eagle    | d2     | `centerControl` 30                                     | `centerControl` 15 + `offeredMaterial` −20 |   +193 |
-| Hedgehog | d2     | `hanging` −100                                         | `hanging` −50 + `huddle` 20                |    +26 |
-| Hippo    | d2     | `centralization` 20                                    | `centralization` 8 + `development` 20      |    +19 |
-| Camel    | d2 + q | `passedPawnPush` 12 + `kingActivity` 20                | `passedPawnPush` 24 + `mobility` 10        |   +188 |
-| Snake    | d3     | `opponentMobility` −10                                 | `opponentMobility` −8 + `hanging` −50      |    +84 |
-| Bear     | d3     | `centralization` 8 + `space` 6 + `castled` 40          | drop `space`                               |    +79 |
-| Hare     | d3     | `offeredMaterial` −20 + `hanging` −100                 | —                                          |      — |
-| Tiger    | d3 + q | `swarm` 40 + `mobility` 10 + `earlyQueen` −40          | `centralization` 8 + `space` 6             |  ~+120 |
-| Lion     | d3 + q | `kingDanger` −40 + `development` 20 + `earlyQueen` −80 | — (all variants ±140)                      |      — |
+| animal   | search | now                                                    | best alternative                      | margin |
+| -------- | ------ | ------------------------------------------------------ | ------------------------------------- | -----: |
+| Spider   | d1     | `mobility` 10                                          | `mobility` 10 + `offeredMaterial` −40 |   +432 |
+| Fox      | d2     | `offeredMaterial` −30                                  | `offeredMaterial` −20 + `swarm` 40    |   +122 |
+| Hedgehog | d2     | `hanging` −100                                         | `hanging` −50 + `huddle` 20           |    +26 |
+| Camel    | d2 + q | `passedPawnPush` 12 + `kingActivity` 20                | `passedPawnPush` 24 + `mobility` 10   |   +188 |
+| Bear     | d3     | `centralization` 8 + `space` 6 + `castled` 40          | drop `space`                          |    +79 |
+| Hare     | d3     | `offeredMaterial` −20 + `hanging` −100                 | —                                     |      — |
+| Tiger    | d3 + q | `swarm` 40 + `mobility` 10 + `earlyQueen` −40          | — (four stacks within ±68)            |      — |
+| Lion     | d3 + q | `kingDanger` −40 + `development` 20 + `earlyQueen` −80 | — (all variants ±140)                 |      — |
 
 - **Each alternative reads as behaviour, not a handicap.** The Fox stalks the king but leaves
-  nothing loose. The Hedgehog curls up (`huddle`) instead of only guarding. The Hippo develops
-  behind its centre, which is what the Hippopotamus defence does. The Snake constricts without
-  leaving a piece behind. The Spider spins its reach only over safe squares.
-- **Hedgehog, Hippo and Bear gain little.** Swap them for their idea, not for Elo.
+  nothing loose. The Hedgehog curls up (`huddle`) instead of only guarding. The Spider spins its reach only over safe squares.
+- **The Hedgehog and the Bear gain little.** Swap them for their idea, not for Elo.
 - **The Hare is already its own best version.** At d3, `hanging` −100 beats −50 by 61, and
   `offeredMaterial` + `mobility` beats it only inside the noise.
 - **The Camel has no middlegame.** Both its features switch on only as material comes off, and

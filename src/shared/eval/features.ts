@@ -2,12 +2,11 @@
 // and takes each family's slider band from it, so a family that lumps unlike quantities together
 // gives them the wrong band.
 //
-// It used to be cut by origin instead, with a `behavioural` drawer for "the Elo World
-// strategies". That split the pairs animals are actually built from: `mobility` and
-// `opponentMobility` are one measurement taken of the two sides — the Spider reads one and the
-// Snake the other — yet sat in different families on different scales, and `hanging` and `offeredMaterial` — the
-// Hare, and the lab's two strongest features — did the same. Origin is what the comments beside
-// the entries are for.
+// It used to be cut by origin instead, with a `behavioural` drawer for "the Elo World strategies".
+// That split the pairs animals are actually built from: `mobility` and `opponentMobility` are one
+// measurement taken of the two sides yet sat in different families on different scales, and
+// `hanging` and `offeredMaterial` — the Hare, and the lab's two strongest features — did the same.
+// Origin is what the comments beside the entries are for.
 export type FeatureFamily =
 	// What each side's pieces are worth.
 	| "material"
@@ -102,7 +101,7 @@ export const FEATURES = defineFeatures([
 	// every move with the same move.
 	{ key: "mirrorRanks", family: "shape", defaultWeight: 0 },
 	// The same measurement `mobility` takes of our own side, kept apart so a bot can price taking
-	// the opponent's moves away differently from having moves itself — the Snake prices only that.
+	// the opponent's moves away differently from having moves itself.
 	{ key: "opponentMobility", family: "activity", defaultWeight: 0 },
 	{ key: "pushDepth", family: "activity", defaultWeight: 0 },
 	// Material a side leaves catchable, counted once per way it can be taken. `hanging` below is

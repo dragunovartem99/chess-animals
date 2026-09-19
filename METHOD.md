@@ -44,7 +44,7 @@ bot configs, and the locale files.
 A family says **what a feature measures**, not where the idea came from. That matters because the
 weight editor takes each family's slider band from it, so filing two unlike quantities together
 gives them the wrong scale — and because the pairs animals are built from should sit side by
-side: `mobility` with `opponentMobility` (the Spider and the Snake), `hanging` with `offeredMaterial` (the Hare,
+side: `mobility` with `opponentMobility`, `hanging` with `offeredMaterial` (the Hare,
 and the lab's two strongest features).
 
 | Family     | Count | Features, with the registry's default weight in centipawns                                                                                                                                                                   |
@@ -157,9 +157,8 @@ a noisy signal usable. Target: a useful run in 1–2 minutes.
   stable under deliberately imbalanced pair counts; `markovChampion` on a matrix with a known
   stationary distribution.
 - **Determinism** — the same tournament seed twice gives an identical rating table.
-- **Behavioural sanity** — every animal with a positional idea outscores the Donkey; the Dove,
-  the Lemming (the paper's `pacifist` and `generous`) and the Mouse are the ones the Donkey
-  beats, and the Dodo edges it. **Matching the paper's ordering is the strongest signal the
+- **Behavioural sanity** — every animal with a positional idea outscores the Donkey; the Dove
+  and the Lemming (the paper's `pacifist` and `generous`) are the ones the Donkey beats, and the Dodo edges it. **Matching the paper's ordering is the strongest signal the
   features are right**, and it is the check that would actually catch a wrong sign.
 - **Performance** — `npm run engine:bench` reports the cost of each feature and a search
   signature, `npm run bench` the search through wasm; the suite holds a depth-3 pass under 20 ms.

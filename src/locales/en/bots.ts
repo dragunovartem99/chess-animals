@@ -8,10 +8,6 @@ export default {
 		name: "Dove",
 		description: "Won't check, won't take, won't land the mate. It loses very politely.",
 	},
-	mouse: {
-		name: "Mouse",
-		description: "Scurries along the walls and squeezes into the tightest corner it can find.",
-	},
 	lemming: {
 		name: "Lemming",
 		description: "Hands you its pieces, biggest first. Then hands you the rest, too.",
@@ -37,14 +33,6 @@ export default {
 		name: "Elephant",
 		description: "Only ever steps on squares of its own color. Every piece, every move.",
 	},
-	eagle: {
-		name: "Eagle",
-		description: "Watches the middle of the board from up high. Nothing lands there unseen.",
-	},
-	hippo: {
-		name: "Hippo",
-		description: "Wades into the middle of the board and never leaves. That's home now.",
-	},
 	owl: {
 		name: "Owl",
 		description: "Looks a long way ahead — then just plays the most sensible move.",
@@ -66,10 +54,6 @@ export default {
 		name: "Bear",
 		description:
 			"Takes the middle first. Then, slow and heavy, it comes for the rest of the board.",
-	},
-	snake: {
-		name: "Snake",
-		description: "Wraps around your pieces and squeezes. Soon they have nowhere left to go.",
 	},
 	lion: {
 		name: "Lion",

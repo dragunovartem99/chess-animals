@@ -1,14 +1,12 @@
 import type { Animal } from "./types";
 
 // Two positional weights that pull the same way: `centralization` drags every piece off the rim,
-// `space` rewards holding ground in the enemy half. The Hippo has the first at depth 2; the Bear
-// is the pair, a ply deeper — it claims the middle like the Hippo and then keeps pushing out into
-// the other side.
+// `space` rewards holding ground in the enemy half. It claims the middle and then keeps pushing
+// out into the other side.
 //
-// `castled` is the small third weight that separates it from the Snake: tuck the king away, then
-// take the board. It is sparse — it only moves a decision in the opening — but the lab put it
-// ~+100 over the bare pair, as much as borrowing the Hare's `hanging` did, without the borrowing.
-// Heavier (80) gave the gain back.
+// `castled` is the small third weight: tuck the king away, then take the board. It is sparse — it
+// only moves a decision in the opening — but the lab put it ~+100 over the bare pair, as much as
+// borrowing the Hare's `hanging` did, without the borrowing. Heavier (80) gave the gain back.
 export const BEAR: Animal = {
 	emoji: "🐻",
 	tint: "#6e5647",
