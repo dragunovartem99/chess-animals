@@ -1,7 +1,7 @@
 import { makeUci } from "chessops/util";
 
 import { compileBot } from "../bots";
-import { afterMove, createRepetition, gameStatus, positionFromFen, repetitionKey } from "../chess";
+import { afterMove, gameStatus, positionFromFen, repetitionKey } from "../chess";
 import { type GoSearch, seedState } from "../engine";
 import { createAdjudicator, DEFAULT_ADJUDICATION, materialEdge } from "./adjudicate";
 import type { GameReport, GameSpec } from "./types";
@@ -21,10 +21,8 @@ export function runGame({ spec, goSearch }: { spec: GameSpec; goSearch: GoSearch
 
 	let position = positionFromFen(spec.openingFen);
 	// The same history twice over, in the two forms that need it: exact FEN keys for the game-level
-	// threefold rule, and hashes the search can test a node against without building a string.
+	// threefold rule, and the moves the wasm engine replays into its own Zobrist stack.
 	const keys: string[] = [];
-	const repetition = createRepetition();
-	// The game as the wasm engine replays it for itself, from the opening.
 	const moves: string[] = [];
 	let ply = 0;
 
@@ -44,7 +42,7 @@ export function runGame({ spec, goSearch }: { spec: GameSpec; goSearch: GoSearch
 		}
 
 		const bot = position.turn === "white" ? white : black;
-		const game = { position, repetition, fen: spec.openingFen, moves };
+		const game = { position, fen: spec.openingFen, moves };
 		const found = goSearch({ game, weights: bot.weights, search: bot.search, rngState });
 		const { move } = found;
 		rngState = found.rngState;
@@ -53,7 +51,6 @@ export function runGame({ spec, goSearch }: { spec: GameSpec; goSearch: GoSearch
 		if (!move) throw new Error(`no move for ${bot.id} at ply ${ply}`);
 
 		keys.push(repetitionKey(position));
-		repetition.push(position);
 		moves.push(makeUci(move));
 		position = afterMove({ position, move });
 		ply += 1;

@@ -2,14 +2,7 @@ import { INITIAL_FEN } from "chessops/fen";
 import type { Color } from "chessops/types";
 import { makeUci } from "chessops/util";
 
-import {
-	afterMove,
-	createRepetition,
-	type GameResult,
-	gameStatus,
-	positionFromFen,
-	repetitionKey,
-} from "../chess";
+import { afterMove, type GameResult, gameStatus, positionFromFen, repetitionKey } from "../chess";
 import { type SearchOptions, seedState } from "../engine";
 import type { WeightVector } from "../eval";
 import { goSearch } from "./wasm";
@@ -40,7 +33,6 @@ export function playGame({
 	let rngState = seedState(seed);
 	let position = positionFromFen(fen);
 	const keys: string[] = [];
-	const repetition = createRepetition();
 	const moves: string[] = [];
 	let ply = 0;
 
@@ -49,14 +41,13 @@ export function playGame({
 		if (status.over) return status.result;
 
 		const bot = position.turn === "white" ? white : black;
-		const game = { position, repetition, fen, moves };
+		const game = { position, fen, moves };
 		const found = goSearch({ game, weights: bot.weights, search: bot.search, rngState });
 		const { move } = found;
 		rngState = found.rngState;
 		if (!move) return null;
 
 		keys.push(repetitionKey(position));
-		repetition.push(position);
 		moves.push(makeUci(move));
 		position = afterMove({ position, move });
 		ply += 1;

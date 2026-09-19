@@ -1,7 +1,7 @@
 import { INITIAL_FEN } from "chessops/fen";
 
 import type { BotConfig } from "../bots";
-import { createRepetition, positionFromFen } from "../chess";
+import { positionFromFen } from "../chess";
 import type { GoSearch } from "./goSearch";
 import { applyOption, describeOptions } from "./options";
 import { seedState } from "./rng";
@@ -14,7 +14,7 @@ export type UciEngineState = { config: BotConfig; name: string; goSearch: GoSear
 // sets both and `go` is the one that needs both.
 function startpos(): Replayed {
 	const position = positionFromFen(INITIAL_FEN);
-	return { position, repetition: createRepetition(), fen: INITIAL_FEN, moves: [] };
+	return { position, fen: INITIAL_FEN, moves: [] };
 }
 
 function identify({ config, name }: { config: BotConfig; name: string }): UciResponse[] {

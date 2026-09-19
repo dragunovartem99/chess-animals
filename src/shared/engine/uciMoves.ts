@@ -3,7 +3,7 @@ import { INITIAL_FEN } from "chessops/fen";
 import { makeUci } from "chessops/util";
 
 import type { BotConfig } from "../bots";
-import { afterMove, createRepetition, positionFromFen, type Repetition } from "../chess";
+import { afterMove, positionFromFen } from "../chess";
 import type { GoSearch } from "./goSearch";
 import type { SearchOptions } from "./goSearch";
 import { fromUci, toUci } from "./uci/moves";
@@ -11,7 +11,7 @@ import type { GoLimits, UciResponse } from "./uci/types";
 
 // `fen` and `moves` are the game as the wasm engine replays it for itself: the moves in chessops's
 // UCI, castling as the king taking its rook, and only those the position accepted.
-export type Replayed = { position: Chess; repetition: Repetition; fen: string; moves: string[] };
+export type Replayed = { position: Chess; fen: string; moves: string[] };
 
 // Rebuilds the position a `position` command describes, and the history behind it. A move the
 // position rejects means the caller and the engine no longer agree about the game; stopping there
@@ -23,19 +23,17 @@ export type Replayed = { position: Chess; repetition: Repetition; fen: string; m
 // been played, and without it the engine would repeat a line it has already repeated twice.
 export function replay({ fen = INITIAL_FEN, moves }: { fen?: string; moves: string[] }): Replayed {
 	let position = positionFromFen(fen);
-	const repetition = createRepetition();
 	const played: string[] = [];
 
 	for (const uci of moves) {
 		const move = fromUci({ position, uci });
 		if (!move) break;
 
-		repetition.push(position);
 		played.push(makeUci(move));
 		position = afterMove({ position, move });
 	}
 
-	return { position, repetition, fen, moves: played };
+	return { position, fen, moves: played };
 }
 
 // What one `go` searches: the bot's own settings, with the limits on this particular `go`

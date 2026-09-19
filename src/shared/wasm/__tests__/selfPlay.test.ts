@@ -2,14 +2,7 @@ import { INITIAL_FEN } from "chessops/fen";
 import { makeUci } from "chessops/util";
 import { describe, expect, it } from "vitest";
 
-import {
-	afterMove,
-	createRepetition,
-	gameStatus,
-	legalMoves,
-	positionFromFen,
-	repetitionKey,
-} from "../../chess";
+import { afterMove, gameStatus, legalMoves, positionFromFen, repetitionKey } from "../../chess";
 import { seedState } from "../../engine";
 import { goSearch } from "../../test-support/wasm";
 import { defaultishWeights } from "../../test-support/weights";
@@ -22,13 +15,12 @@ describe("a bot playing itself", () => {
 		let rngState = seedState("self-play");
 
 		let position = positionFromFen(INITIAL_FEN);
-		const repetition = createRepetition();
 		const moves: string[] = [];
 		const keys: string[] = [];
 		let ply = 0;
 
 		while (!gameStatus({ position, keys, plyLimit: 300, ply }).over) {
-			const game = { position, repetition, fen: INITIAL_FEN, moves };
+			const game = { position, fen: INITIAL_FEN, moves };
 			const found = goSearch({ game, weights, search: GREEDY, rngState });
 			const { move } = found;
 			rngState = found.rngState;
@@ -38,7 +30,6 @@ describe("a bot playing itself", () => {
 			);
 
 			keys.push(repetitionKey(position));
-			repetition.push(position);
 			moves.push(makeUci(move!));
 			position = afterMove({ position, move: move! });
 			ply += 1;
