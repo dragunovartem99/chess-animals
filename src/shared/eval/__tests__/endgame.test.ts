@@ -24,10 +24,16 @@ describe("kingActivity", () => {
 		expect(read({ fen: "8/8/8/8/3K4/8/8/k7 b - - 0 1", key: "kingActivity" })).toBe(-6);
 	});
 
-	it("fades in as material comes off", () => {
-		// Two rooks still on: phase 4/24, so five sixths of the bare-ending value.
+	it("fades in as the square of what has come off", () => {
+		// Two rooks still on: phase 4/24, so (5/6)² of the bare-ending value.
 		const fen = "r7/8/8/8/3K4/8/7R/k7 w - - 0 1";
-		expect(read({ fen, key: "kingActivity" })).toBeCloseTo(5);
+		expect(read({ fen, key: "kingActivity" })).toBeCloseTo(6 * (5 / 6) ** 2);
+	});
+
+	it("stays near silent after only a queen trade", () => {
+		// Rooks and minors all on, queens off: phase 16/24, a ninth of the value rather than a third.
+		const fen = "rnb1kbnr/8/8/8/3K4/8/8/RNB2BNR w - - 0 1";
+		expect(read({ fen, key: "kingActivity" })).toBeLessThan(1);
 	});
 });
 

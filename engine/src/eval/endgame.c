@@ -23,13 +23,18 @@ static int king_centrality(const Position *pos, Color color) {
 // then, which is most of a middlegame search. The product is taken in double and rounded once, as
 // the frozen fixture was; a silent feature reads +0, never the -0 a negative difference times
 // zero would give.
+//
+// The king's taper is squared. Linear, a queen trade alone put a third of the weight on it and
+// walked the king into a board still full of rooks and minors; squared, that is a ninth, and the
+// king waits until the ending actually comes. A passed pawn run early costs nothing like a king
+// in the open, so it keeps the linear taper.
 float extract_king_activity(EvalContext *ctx) {
 	const Position *pos = ctx->pos;
 	double late = 1 - eval_phase(pos);
 	if (late == 0) {
 		return 0;
 	}
-	return (float)((king_centrality(pos, ctx->us) - king_centrality(pos, ctx->them)) * late);
+	return (float)((king_centrality(pos, ctx->us) - king_centrality(pos, ctx->them)) * late * late);
 }
 
 float extract_passed_pawn_push(EvalContext *ctx) {

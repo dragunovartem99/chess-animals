@@ -155,8 +155,8 @@ within noise or better; the point of most of them is fit, not Elo.
   pair at d3.
 - **Bear, +27.** A den: `castled` + `huddle`. `huddle` 40 is the best positional single at d3.
 - **Camel, +75.** Both endgame features are silent in the opening, so it played that phase as
-  bare material; `development` fixes it. A pawn-caravan Camel (`passedPawnPush` + `pushDepth`,
-  no `kingActivity`) lost ~140.
+  bare material; `development` fixes it. A pawn-caravan Camel (`passedPawnPush` + `pushDepth`)
+  lost ~140.
 - **Hedgehog, +22.** `hanging` −50 over −100: observation 4.
 - **Tiger, +52 (±110).** The `space`-led stack ties the old `swarm` + `mobility` + `earlyQueen`
   and leaves `earlyQueen` to the Lion.
@@ -173,9 +173,9 @@ with quiescence it was ~+300 stronger head to head, yet rated the same on the ro
 
 ## Open leads
 
-- **`kingActivity` works only inside the Camel.** Alone it loses at d2, d3 and d3 + q (−198, −23,
-  −143), yet taking it out of the Camel's triple cost ~140. It needs the endgame taper of
-  `passedPawnPush` beside it; no other pairing has been tried.
+- **`kingActivity` is flavour, not strength.** Alone it loses at d2, d3 and d3 + q (−198, −23,
+  −143; linear taper). Since its taper was squared — the Camel walked its king out after a queen
+  trade — 0, 20, 40 and 60 on the Camel all rate within noise. It stays for the Camel's walk.
 - **`huddle` with quiescence.** +331 alone at d3 + q, fourth of all features, yet no animal on
   quiescence reads it. On the Lion it tied the current weights; a new top animal could lead with
   it.
