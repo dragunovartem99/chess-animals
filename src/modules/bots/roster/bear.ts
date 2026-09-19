@@ -1,11 +1,11 @@
 import type { Animal } from "./types";
 
-// Claims the middle and sits behind a castled king: `centralization` drags every piece off the
-// rim, and no other animal reads it; `castled` is the small partner that tucks the king away first.
+// Digs a den and sits in it: `castled` tucks the king away, and no other animal leads with it;
+// `huddle` pulls the army home around it. Where the Sloth's `huddle` at 550 is an obsession that
+// gives up material, the Bear's 40 is a preference — strong at home, and heavy to dislodge.
 //
-// It used to carry `space` as well, but `centralization` and `space` measure nearly the same thing
-// — the lab had the pair below `centralization` alone — and `space` is now the Tiger's. Dropping it
-// was worth ~+80, and `castled` 20 beat 40.
+// `huddle` 40 was +102 alone at depth 3, the best positional feature on that search; `castled` 40
+// on top rated level with the old `centralization` + `castled` Bear, and above `castled` 20.
 export const BEAR: Animal = {
 	emoji: "🐻",
 	tint: "#6e5647",
@@ -13,6 +13,6 @@ export const BEAR: Animal = {
 		id: "bear",
 		search: { depth: 3 },
 		base: "material",
-		weights: { centralization: 8, castled: 20 },
+		weights: { huddle: 40, castled: 40 },
 	},
 };

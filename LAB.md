@@ -125,10 +125,11 @@ in its own run. Sorted by d3 + q. d1–d3 runs carry ±35–70; d3 + q runs ±90
 
 ## The roster
 
-Every idea animal leads with a feature no other animal reads. Partners may repeat, but no two
-animals share a full weight set. Three overlaps are deliberate: the Goat and the Dove are the same
-weights with opposite signs; the Fox and the Lemming read `offeredMaterial` with opposite signs;
-and the Monkey, Owl and Raven are bare material at three searches, as the calibration line.
+Every idea animal leads with a feature no other animal reads, chosen to fit how the animal
+plays. Partners may repeat, but no two animals share a full weight set. Three overlaps are
+deliberate: the Goat and the Dove are the same weights with opposite signs; the Hare and the
+Lemming read `offeredMaterial` with opposite signs; and the Monkey, Owl and Raven are bare
+material at three searches, as the calibration line.
 
 | animal   | search | lead (its own)         | partners                            |
 | -------- | ------ | ---------------------- | ----------------------------------- |
@@ -137,29 +138,30 @@ and the Monkey, Owl and Raven are bare material at three searches, as the calibr
 | Elephant | d2     | `sameColorSquares` 600 | —                                   |
 | Sloth    | d2     | `huddle` 550           | —                                   |
 | Wolf     | d2     | `swarm` 600            | —                                   |
+| Fox      | d2     | `opponentMobility` −8  | `hanging` −50                       |
 | Hedgehog | d2     | `hanging` −50          | —                                   |
-| Fox      | d2     | `offeredMaterial` −20  | `centerControl` 15                  |
-| Bear     | d3     | `centralization` 8     | `castled` 20                        |
-| Hare     | d3     | `opponentMobility` −8  | `hanging` −100                      |
+| Bear     | d3     | `castled` 40           | `huddle` 40                         |
+| Hare     | d3     | `offeredMaterial` −20  | `mobility` 5                        |
 | Camel    | d2 + q | `passedPawnPush` 24    | `kingActivity` 20, `development` 20 |
 | Lion     | d3 + q | `kingDanger` −40       | `development` 20, `earlyQueen` −80  |
 | Tiger    | d3 + q | `space` 6              | `swarm` 20, `mobility` 10           |
 
-What the lab said for each change, against the old weights in the same field:
+What the lab said for each, against the previous weights in the same field. Every change is
+within noise or better; the point of most of them is fit, not Elo.
 
-- **Bear, +77.** `centralization` and `space` measure nearly the same thing; dropping `space`
-  and halving `castled` beat the triple.
+- **Fox, −43.** The trapper: `opponentMobility` takes your squares, `hanging` keeps the hunters
+  safe. With `centerControl` in place of `hanging` it lost ~150.
+- **Hare, +24.** Never in reach, always moving: `offeredMaterial` + `mobility` was the lab's best
+  pair at d3.
+- **Bear, +27.** A den: `castled` + `huddle`. `huddle` 40 is the best positional single at d3.
 - **Camel, +75.** Both endgame features are silent in the opening, so it played that phase as
-  bare material. `development` beat `castled`, `pushDepth` and `centerControl` as the fix.
-- **Fox, +15 to +37.** `centerControl` 15 or 30 over `offeredMaterial` −20, the partner the cut
-  Eagle left free.
+  bare material; `development` fixes it. A pawn-caravan Camel (`passedPawnPush` + `pushDepth`,
+  no `kingActivity`) lost ~140.
 - **Hedgehog, +22.** `hanging` −50 over −100: observation 4.
-- **Hare, −37.** `opponentMobility` + `hanging` sits inside the noise of the old
-  `offeredMaterial` + `hanging`, and gives it a lead of its own instead of the Fox's.
 - **Tiger, +52 (±110).** The `space`-led stack ties the old `swarm` + `mobility` + `earlyQueen`
   and leaves `earlyQueen` to the Lion.
-- **Spider, unchanged.** Every `mobility` stack at d1 still loses to bare material; the best
-  (`mobility` 5 + `earlyQueen` −80) gained +93, not enough to move it off its slot.
+- **Spider, unchanged.** Every `mobility` stack at d1 still loses to bare material.
+- **Lion, unchanged.** `huddle`- and `development`-led variants at d3 + q all tied it.
 
 ## Gaps
 
@@ -171,10 +173,12 @@ with quiescence it was ~+300 stronger head to head, yet rated the same on the ro
 
 ## Open leads
 
-- **`kingActivity`** loses alone at d2, d3 and d3 + q (−198, −23, −143) and helps nothing it has
-  been paired with. The Camel is the only animal that reads it, and it is the next feature to cut.
+- **`kingActivity` works only inside the Camel.** Alone it loses at d2, d3 and d3 + q (−198, −23,
+  −143), yet taking it out of the Camel's triple cost ~140. It needs the endgame taper of
+  `passedPawnPush` beside it; no other pairing has been tried.
 - **`huddle` with quiescence.** +331 alone at d3 + q, fourth of all features, yet no animal on
-  quiescence reads it — the Sloth has it at 550, an obsession on d2.
+  quiescence reads it. On the Lion it tied the current weights; a new top animal could lead with
+  it.
 - **The Lion's field is flat.** Every king-safety variant at d3 + q sat inside ±140. Settling it
   needs a narrower field (three or four players).
 

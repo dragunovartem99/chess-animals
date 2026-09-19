@@ -1,9 +1,9 @@
 import type { Animal } from "./types";
 
-// The paper's `generous`, and the Fox turned inside out: `offeredMaterial` is our material sitting
+// The paper's `generous`, and the Hare turned inside out: `offeredMaterial` is our material sitting
 // where the opponent can take it, counted once per piece that attacks it and weighted by value.
-// The Fox drives it to zero and rates just off the top of the roster; the Lemming drives it as
-// high as it will go and marches the whole army off the cliff.
+// The Hare drives it to zero and rates near the top of the roster; the Lemming drives it as high
+// as it will go and marches the whole army off the cliff.
 //
 // No base, so it never once weighs what the gift costs — the pieces are there to be given. Depth
 // 1: the offer is a property of the position in front of it, not a plan. The arena has it a
