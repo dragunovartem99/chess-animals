@@ -1,5 +1,4 @@
-import { mkdtempSync } from "node:fs";
-import { rmSync } from "node:fs";
+import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 

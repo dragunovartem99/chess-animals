@@ -1,11 +1,14 @@
 import type { BotDefinition } from "../bots";
 import type { RatingResult } from "../rating";
-import { type PairOutcome, runAdaptiveRating } from "./adaptiveRating";
-import { crossTable, type CrossTable } from "./crossTable";
+import { runAdaptiveRating } from "./adaptiveRating";
+import type { PairOutcome } from "./adaptiveRating";
+import { crossTable } from "./crossTable";
+import type { CrossTable } from "./crossTable";
 import { pairKey } from "./pairing";
 import { runGames } from "./pool";
 import { standingOrder } from "./settled";
-import { pairSpecs, type SpecContext, type TournamentOpening, tally } from "./tournamentSpecs";
+import { pairSpecs, tally } from "./tournamentSpecs";
+import type { SpecContext, TournamentOpening } from "./tournamentSpecs";
 import type { GameReport, GameSpec } from "./types";
 
 export type { TournamentOpening };

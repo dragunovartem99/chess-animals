@@ -1,5 +1,6 @@
 import type { BotDefinition } from "@/shared/bots";
-import { createUciClient, createWorkerTransport, type UciEngineClient } from "@/shared/engine";
+import { createUciClient, createWorkerTransport } from "@/shared/engine";
+import type { UciEngineClient } from "@/shared/engine";
 
 export const ENGINE_NAME = "frankenstein";
 

@@ -6,7 +6,8 @@ import type { GoSearch } from "./goSearch";
 import { applyOption, describeOptions } from "./options";
 import { seedState } from "./rng";
 import type { GoLimits, UciCommand, UciResponse } from "./uci/types";
-import { findBestMove, type Replayed, replay } from "./uciMoves";
+import { findBestMove, replay } from "./uciMoves";
+import type { Replayed } from "./uciMoves";
 
 export type UciEngineState = { config: BotConfig; name: string; goSearch: GoSearch };
 

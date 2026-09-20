@@ -1,5 +1,7 @@
-import { castlingSide, type Chess, normalizeMove } from "chessops/chess";
-import { isNormal, type NormalMove } from "chessops/types";
+import { castlingSide, normalizeMove } from "chessops/chess";
+import type { Chess } from "chessops/chess";
+import { isNormal } from "chessops/types";
+import type { NormalMove } from "chessops/types";
 import { kingCastlesTo, makeUci, parseUci } from "chessops/util";
 
 // chessops names a castling move by the square the *rook* stands on — Chess960 style, `e1h1`.

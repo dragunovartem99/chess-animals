@@ -1,4 +1,5 @@
-import { type ShallowRef, shallowRef } from "vue";
+import { shallowRef } from "vue";
+import type { ShallowRef } from "vue";
 
 import type { WasmEngine } from "./engine";
 import { loadEngine } from "./load";

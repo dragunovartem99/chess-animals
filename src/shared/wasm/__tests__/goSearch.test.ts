@@ -1,8 +1,11 @@
 import { describe, expect, it } from "vitest";
 
-import { createWasmGoSearch, loadEngine, type WasmEngine } from "..";
-import { type BotDefinition, compileBot } from "../../bots";
-import { createUciEngine, type UciResponse } from "../../engine";
+import { createWasmGoSearch, loadEngine } from "..";
+import type { WasmEngine } from "..";
+import { compileBot } from "../../bots";
+import type { BotDefinition } from "../../bots";
+import { createUciEngine } from "../../engine";
+import type { UciResponse } from "../../engine";
 import { replay } from "../../engine/uciMoves";
 
 const wasm = await loadEngine();

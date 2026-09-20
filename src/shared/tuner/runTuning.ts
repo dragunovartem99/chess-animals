@@ -1,10 +1,13 @@
 import type { BotDefinition } from "../bots";
-import { createRng, type Rng } from "../engine";
+import { createRng } from "../engine";
+import type { Rng } from "../engine";
 import type { GameReport, GameSpec } from "../scheduler";
 import { calibrateStepGain } from "./calibrate";
-import { createGauntlet, type GauntletBot, type GauntletOpening } from "./gauntlet";
+import { createGauntlet } from "./gauntlet";
+import type { GauntletBot, GauntletOpening } from "./gauntlet";
 import { defaultTuneSpec, fromVector, toVector } from "./parameters";
-import { runSpsa, type SpsaResult, type SpsaStep } from "./spsa";
+import { runSpsa } from "./spsa";
+import type { SpsaResult, SpsaStep } from "./spsa";
 
 export type TuningResult = {
 	tuned: BotDefinition;

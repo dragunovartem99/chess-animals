@@ -1,6 +1,7 @@
 import type { Chess } from "chessops/chess";
 
-import { type FeatureFamily, FEATURES } from "./features";
+import { FEATURES } from "./features";
+import type { FeatureFamily } from "./features";
 import { terminalTerm } from "./terminal";
 import type { FeatureVector, WeightVector } from "./vector";
 

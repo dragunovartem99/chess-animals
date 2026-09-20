@@ -1,6 +1,7 @@
 import { createI18n } from "vue-i18n";
 
-import { defaultLocale, isLocale, type Locale, messages } from "../locales";
+import { defaultLocale, isLocale, messages } from "../locales";
+import type { Locale } from "../locales";
 
 const STORAGE_KEY = "chess-animals:locale";
 

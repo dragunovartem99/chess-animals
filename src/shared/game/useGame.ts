@@ -4,14 +4,8 @@ import { makeSan } from "chessops/san";
 import type { NormalMove } from "chessops/types";
 import { computed, ref, shallowRef } from "vue";
 
-import {
-	afterMove,
-	fenFromPosition,
-	type GameStatus,
-	gameStatus,
-	positionFromFen,
-	repetitionKey,
-} from "../chess";
+import { afterMove, fenFromPosition, gameStatus, positionFromFen, repetitionKey } from "../chess";
+import type { GameStatus } from "../chess";
 import { toUci } from "../engine/uci/moves";
 import type { PlayedMove } from "../eval";
 

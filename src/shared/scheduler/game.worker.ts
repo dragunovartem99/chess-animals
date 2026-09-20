@@ -2,6 +2,8 @@ import { parentPort } from "node:worker_threads";
 
 import { tsImport } from "tsx/esm/api";
 
+import type * as WasmModule from "../wasm";
+import type * as RunGameModule from "./runGame";
 import type { GameSpec } from "./types.ts";
 
 // `tsImport` rather than a plain import, and it is the only reason this file is async.
@@ -16,8 +18,8 @@ import type { GameSpec } from "./types.ts";
 //
 // Awaited before the port is listened to, which is safe: a `MessagePort` queues what arrives
 // until the first `message` listener starts it, so no spec posted during startup is lost.
-const { runGame } = (await tsImport("./runGame.ts", import.meta.url)) as typeof import("./runGame");
-const wasm = (await tsImport("../wasm/index.ts", import.meta.url)) as typeof import("../wasm");
+const { runGame } = (await tsImport("./runGame.ts", import.meta.url)) as typeof RunGameModule;
+const wasm = (await tsImport("../wasm/index.ts", import.meta.url)) as typeof WasmModule;
 
 // One engine per worker, loaded before the first game: its tables are built once and every game
 // on this thread reuses them.

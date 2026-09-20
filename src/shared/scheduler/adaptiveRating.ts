@@ -1,7 +1,9 @@
 import { fitBradleyTerry } from "../rating";
 import type { Matchup, RatingResult } from "../rating";
-import { foldRound, type PairOutcome } from "./fold";
-import { decisivenessOf, nextPairings, type Pair, seedPairs, type Standing } from "./pairing";
+import { foldRound } from "./fold";
+import type { PairOutcome } from "./fold";
+import { decisivenessOf, nextPairings, seedPairs } from "./pairing";
+import type { Pair, Standing } from "./pairing";
 import { ratingsSettled, standingOrder } from "./settled";
 
 export type { PairOutcome } from "./fold";

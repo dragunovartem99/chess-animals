@@ -2,7 +2,8 @@
 import type { Chess } from "chessops/chess";
 import { computed } from "vue";
 
-import { explainPosition, type PlayedMove, type WeightVector } from "../eval";
+import { explainPosition } from "../eval";
+import type { PlayedMove, WeightVector } from "../eval";
 import { playedGame, useWasmEngine } from "../wasm";
 
 const props = defineProps<{

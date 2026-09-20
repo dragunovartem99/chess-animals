@@ -1,5 +1,6 @@
 import type { Matchup } from "../rating";
-import { type Pair, pairKey } from "./pairing";
+import { pairKey } from "./pairing";
+import type { Pair } from "./pairing";
 
 export type PairCounts = { whiteWins: number; blackWins: number; draws: number };
 // One mini-match between two bots: the counts with `a` on white and, separately, with `b` on

@@ -6,6 +6,7 @@ import { describe, expect, it } from "vitest";
 import { createEngine, loadEngine } from "..";
 import { createRng, seedState } from "../../engine";
 import { FEATURE_COUNT, MATE_SCORE } from "../../eval";
+import { STALE } from "../../test-support/staleWasm";
 import { onlyWeights } from "../../test-support/weights";
 
 const engine = await loadEngine();
@@ -18,45 +19,6 @@ const MATERIAL = onlyWeights({
 	materialQueen: 900,
 	givesMate: 1,
 });
-
-// A module exporting only `abi_version`, returning 999: the smallest thing a stale build could be.
-const STALE = new Uint8Array([
-	0x00,
-	0x61,
-	0x73,
-	0x6d,
-	0x01,
-	0x00,
-	0x00,
-	0x00,
-	0x01,
-	0x05,
-	0x01,
-	0x60,
-	0x00,
-	0x01,
-	0x7f,
-	0x03,
-	0x02,
-	0x01,
-	0x00,
-	0x07,
-	0x0f,
-	0x01,
-	0x0b,
-	...new TextEncoder().encode("abi_version"),
-	0x00,
-	0x00,
-	0x0a,
-	0x07,
-	0x01,
-	0x05,
-	0x00,
-	0x41,
-	0xe7,
-	0x07,
-	0x0b,
-]);
 
 describe("the wasm engine", () => {
 	it("stands alone, with no libc and no JS glue to import", async () => {

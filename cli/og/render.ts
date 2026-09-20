@@ -6,7 +6,8 @@ import satori from "satori";
 import sharp from "sharp";
 
 import { ogBackground } from "./background";
-import { buildTree, type CardText, type Chip, OG_WIDTH, type PieceUris } from "./tree";
+import { buildTree, OG_WIDTH } from "./tree";
+import type { CardText, Chip, PieceUris } from "./tree";
 
 const FONT_DIR = path.join(import.meta.dirname, "fonts");
 const font = (file: string) => readFileSync(path.join(FONT_DIR, file));

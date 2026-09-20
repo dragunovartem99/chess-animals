@@ -1,7 +1,8 @@
 import type { Chess } from "chessops/chess";
 
 import { fenFromPosition } from "../chess";
-import { type SearchOptions, seedState } from "../engine";
+import { seedState } from "../engine";
+import type { SearchOptions } from "../engine";
 import type { FeatureVector, PlayedMove, WeightVector } from "../eval";
 import { createWasmGoSearch, loadEngine, playedGame } from "../wasm";
 

@@ -1,0 +1,25 @@
+export default {
+	breakdown: {
+		title: "What {name} sees",
+		absolute: "Plus is good for White, minus is good for Black. Points = Amount × Weight.",
+		total: "Total",
+		feature: "Parameter",
+		amount: "Amount",
+		weight: "Weight",
+		points: "Points",
+	},
+	tab: { moves: "Moves", breakdown: "Breakdown" },
+	human: "You",
+	restart: "New game",
+	thinking: "Thinking…",
+	turn: { white: "White", black: "Black" },
+	toMove: { white: "White to move", black: "Black to move" },
+	reason: {
+		"checkmate": "Checkmate",
+		"stalemate": "Stalemate",
+		"insufficient-material": "Draw — not enough material",
+		"fifty-move": "Draw — fifty-move rule",
+		"repetition": "Draw — threefold repetition",
+		"ply-limit": "Adjudicated a draw — move limit reached",
+	},
+};

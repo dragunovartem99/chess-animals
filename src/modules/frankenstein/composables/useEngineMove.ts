@@ -1,4 +1,5 @@
-import { type Ref, ref } from "vue";
+import { ref } from "vue";
+import type { Ref } from "vue";
 
 import type { UciEngineClient } from "@/shared/engine";
 import { fromUci } from "@/shared/engine/uci/moves";

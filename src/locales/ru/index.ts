@@ -1,6 +1,9 @@
 import type { Messages } from "../types";
+import about from "./about";
 import bots from "./bots";
 import feature from "./feature";
+import frankenstein from "./frankenstein";
+import game from "./game";
 
 const messages: Messages = {
 	app: {
@@ -26,78 +29,10 @@ const messages: Messages = {
 	roster: {
 		lead: "Каждый зверь играет в шахматы по-своему странно. Обыграешь хоть одного?",
 	},
-	about: {
-		title: "О проекте",
-		lede: "Коллекция намеренно слабых шахматных ботов, у каждого свой характер. Здесь их можно опробовать в игре и сравнить по общему рейтингу.",
-		bots: {
-			title: "Как устроены боты",
-			body: "Все боты работают на одном движке. Ход оценивается как скалярное произведение вектора признаков позиции и вектора весов, своего у каждого бота.",
-			listLead: "Характер бота задают его веса:",
-			wolf: "Волк идет напролом к вражескому королю.",
-			monkey: "Обезьяна хватает любое доступное взятие.",
-			donkey: "Осел оставляет все веса на нуле и ходит наугад.",
-		},
-		paper: {
-			title: "Откуда идея",
-			body: "Проект вдохновлен докладом Тома 7 «Elo World» (SIGBOVIK 2019): множество намеренно слабых движков играет между собой, растягивая обычную шкалу рейтинга вниз — к нулю и отрицательным значениям.",
-		},
-		credit: {
-			title: "Об авторе",
-			body: "Автор проекта — Артем Драгунов. Ссылки на исходный код и на сам доклад — ниже.",
-		},
-		links: {
-			paper: "Elo World",
-			source: "Исходники на GitHub",
-		},
-	},
-	game: {
-		breakdown: {
-			title: "Что видит {name}",
-			absolute: "Плюс — хорошо для белых, минус — для черных. Очки = Значение × Вес.",
-			total: "Итого",
-			feature: "Параметр",
-			amount: "Значение",
-			weight: "Вес",
-			points: "Очки",
-		},
-		tab: { moves: "Ходы", breakdown: "Разбор" },
-		human: "Вы",
-		restart: "Новая партия",
-		thinking: "Думает…",
-		turn: { white: "Белые", black: "Чёрные" },
-		toMove: { white: "Ход белых", black: "Ход чёрных" },
-		reason: {
-			"checkmate": "Мат",
-			"stalemate": "Пат",
-			"insufficient-material": "Ничья — недостаточно материала",
-			"fifty-move": "Ничья — правило пятидесяти ходов",
-			"repetition": "Ничья — троекратное повторение",
-			"ply-limit": "Ничья по регламенту — исчерпан лимит ходов",
-		},
-	},
+	about,
+	game,
 	feature,
-	frankenstein: {
-		title: "Франкенштейн",
-		settings: "Настройки",
-		depth: "Глубина",
-		quiescence: "Тихий поиск",
-		quiescenceHint: "Досчитывает взятия и шахи, чтобы не обрывать оценку посреди размена",
-		seed: { blank: "Франкенштейн" },
-		autoplay: "Автоигра",
-		pause: "Пауза",
-		step: "Шаг",
-		reset: "Сброс",
-		copy: "Скопировать веса",
-		tab: { weights: "Веса", breakdown: "Разбор" },
-		family: {
-			material: "Материал",
-			activity: "Активность",
-			safety: "Безопасность",
-			distance: "Дистанция",
-			shape: "Форма",
-			move: "Ход",
-		},
-	},
+	frankenstein,
 	placeholder: {
 		notBuiltYet: "Эту страницу еще строим.",
 	},

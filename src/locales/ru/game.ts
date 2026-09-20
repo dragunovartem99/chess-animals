@@ -1,0 +1,25 @@
+export default {
+	breakdown: {
+		title: "Что видит {name}",
+		absolute: "Плюс — хорошо для белых, минус — для черных. Очки = Значение × Вес.",
+		total: "Итого",
+		feature: "Параметр",
+		amount: "Значение",
+		weight: "Вес",
+		points: "Очки",
+	},
+	tab: { moves: "Ходы", breakdown: "Разбор" },
+	human: "Вы",
+	restart: "Новая партия",
+	thinking: "Думает…",
+	turn: { white: "Белые", black: "Чёрные" },
+	toMove: { white: "Ход белых", black: "Ход чёрных" },
+	reason: {
+		"checkmate": "Мат",
+		"stalemate": "Пат",
+		"insufficient-material": "Ничья — недостаточно материала",
+		"fifty-move": "Ничья — правило пятидесяти ходов",
+		"repetition": "Ничья — троекратное повторение",
+		"ply-limit": "Ничья по регламенту — исчерпан лимит ходов",
+	},
+};

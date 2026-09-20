@@ -1,4 +1,5 @@
-import { defaultRecord, type WeightVector, weightsFromRecord } from "../eval";
+import { defaultRecord, weightsFromRecord } from "../eval";
+import type { WeightVector } from "../eval";
 
 // Anything not named is silent, so a test turns on exactly one feature and sees what it alone
 // does.

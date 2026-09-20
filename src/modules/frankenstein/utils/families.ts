@@ -1,4 +1,5 @@
-import { type Feature, FEATURES, type FeatureFamily } from "@/shared/eval";
+import { FEATURES } from "@/shared/eval";
+import type { Feature, FeatureFamily } from "@/shared/eval";
 
 export const FAMILIES: FeatureFamily[] = [
 	"material",

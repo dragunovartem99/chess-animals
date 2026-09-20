@@ -1,7 +1,8 @@
 import { Chessground } from "chessground";
 import type { Api } from "chessground/api";
 import type { Config } from "chessground/config";
-import { onBeforeUnmount, onMounted, type Ref, ref, watch } from "vue";
+import { onBeforeUnmount, onMounted, ref, watch } from "vue";
+import type { Ref } from "vue";
 
 // chessground owns its own DOM and mutates it directly. Vue must therefore not re-render inside
 // the board's element: the component renders an empty div once, and every update after that goes

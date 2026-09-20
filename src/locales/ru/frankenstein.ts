@@ -1,0 +1,22 @@
+export default {
+	title: "Франкенштейн",
+	settings: "Настройки",
+	depth: "Глубина",
+	quiescence: "Тихий поиск",
+	quiescenceHint: "Досчитывает взятия и шахи, чтобы не обрывать оценку посреди размена",
+	seed: { blank: "Франкенштейн" },
+	autoplay: "Автоигра",
+	pause: "Пауза",
+	step: "Шаг",
+	reset: "Сброс",
+	copy: "Скопировать веса",
+	tab: { weights: "Веса", breakdown: "Разбор" },
+	family: {
+		material: "Материал",
+		activity: "Активность",
+		safety: "Безопасность",
+		distance: "Дистанция",
+		shape: "Форма",
+		move: "Ход",
+	},
+};

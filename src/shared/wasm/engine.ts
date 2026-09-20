@@ -1,6 +1,8 @@
 import type { SearchOptions } from "../engine";
-import { FEATURE_COUNT, type FeatureVector, type WeightVector } from "../eval";
-import { ABI_VERSION, type Arena, createArena, type Exports, type Game } from "./memory";
+import { FEATURE_COUNT } from "../eval";
+import type { FeatureVector, WeightVector } from "../eval";
+import { ABI_VERSION, createArena } from "./memory";
+import type { Arena, Exports, Game } from "./memory";
 
 export type { Game };
 

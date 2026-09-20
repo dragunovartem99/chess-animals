@@ -2,8 +2,10 @@ import { INITIAL_FEN } from "chessops/fen";
 import type { Color } from "chessops/types";
 import { makeUci } from "chessops/util";
 
-import { afterMove, type GameResult, gameStatus, positionFromFen, repetitionKey } from "../chess";
-import { type SearchOptions, seedState } from "../engine";
+import { afterMove, gameStatus, positionFromFen, repetitionKey } from "../chess";
+import type { GameResult } from "../chess";
+import { seedState } from "../engine";
+import type { SearchOptions } from "../engine";
 import type { WeightVector } from "../eval";
 import { goSearch } from "./wasm";
 

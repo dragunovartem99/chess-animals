@@ -1,0 +1,22 @@
+export default {
+	title: "Frankenstein",
+	settings: "Settings",
+	depth: "Depth",
+	quiescence: "Quiescence",
+	quiescenceHint: "Plays out captures and checks so the score is not taken mid-exchange",
+	seed: { blank: "Frankenstein" },
+	autoplay: "Autoplay",
+	pause: "Pause",
+	step: "Step",
+	reset: "Reset",
+	copy: "Copy weights",
+	tab: { weights: "Weights", breakdown: "Breakdown" },
+	family: {
+		material: "Material",
+		activity: "Activity",
+		safety: "Safety",
+		distance: "Distance",
+		shape: "Shape",
+		move: "Move",
+	},
+};

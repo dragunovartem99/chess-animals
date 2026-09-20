@@ -1,6 +1,8 @@
 import type { BotDefinition } from "../bots";
-import { type GameReport, type GameSpec, mixSeed } from "../scheduler";
-import { fromVector, type TuneSpec } from "./parameters";
+import { mixSeed } from "../scheduler";
+import type { GameReport, GameSpec } from "../scheduler";
+import { fromVector } from "./parameters";
+import type { TuneSpec } from "./parameters";
 
 export type GauntletBot = { id: string; definition: BotDefinition };
 export type GauntletOpening = { id: string; fen: string };

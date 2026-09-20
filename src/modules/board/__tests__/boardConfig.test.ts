@@ -1,3 +1,4 @@
+import type { Key } from "chessground/types";
 import { INITIAL_FEN } from "chessops/fen";
 import { describe, expect, it } from "vitest";
 import { ref } from "vue";
@@ -9,7 +10,7 @@ function build({ fen = INITIAL_FEN, playable = [] as ("white" | "black")[] } = {
 		fen: ref(fen),
 		orientation: ref("white"),
 		playable: ref(playable),
-		lastMove: ref(undefined),
+		lastMove: ref<[Key, Key] | undefined>(),
 		onMove: () => {},
 	});
 }

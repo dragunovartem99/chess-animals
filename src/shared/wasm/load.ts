@@ -1,4 +1,5 @@
-import { createEngine, type WasmEngine } from "./engine";
+import { createEngine } from "./engine";
+import type { WasmEngine } from "./engine";
 
 // vite turns `new URL(…, import.meta.url)` into a hashed asset of the build, in a worker as on the
 // page; under node — the arena, the CLIs, vitest — it stays a file beside the sources, which

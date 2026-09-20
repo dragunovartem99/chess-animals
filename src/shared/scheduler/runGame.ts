@@ -2,7 +2,8 @@ import { makeUci } from "chessops/util";
 
 import { compileBot } from "../bots";
 import { afterMove, gameStatus, positionFromFen, repetitionKey } from "../chess";
-import { type GoSearch, seedState } from "../engine";
+import { seedState } from "../engine";
+import type { GoSearch } from "../engine";
 import { createAdjudicator, DEFAULT_ADJUDICATION, materialEdge } from "./adjudicate";
 import type { GameReport, GameSpec } from "./types";
 

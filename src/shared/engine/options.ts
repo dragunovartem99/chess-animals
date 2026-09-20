@@ -1,5 +1,6 @@
 import type { BotConfig } from "../bots";
-import { FEATURES_BY_KEY, type WeightVector } from "../eval";
+import { FEATURES_BY_KEY } from "../eval";
+import type { WeightVector } from "../eval";
 import type { UciResponse } from "./uci/types";
 
 // Engine options are advertised the usual way. Weights are not: there are sixty-odd of them, and

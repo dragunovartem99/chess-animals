@@ -1,7 +1,8 @@
 import { onBeforeUnmount, ref } from "vue";
 
 import type { Animal } from "@/modules/bots/roster";
-import { createUciClient, createWorkerTransport, type UciEngineClient } from "@/shared/engine";
+import { createUciClient, createWorkerTransport } from "@/shared/engine";
+import type { UciEngineClient } from "@/shared/engine";
 
 function spawnEngine(animal: Animal): UciEngineClient {
 	const worker = new Worker(new URL("../../../workers/uciEngine.worker.ts", import.meta.url), {

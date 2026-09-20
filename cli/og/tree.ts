@@ -1,5 +1,6 @@
+import { floatingPieces } from "./floating";
 import { el, tagline, title } from "./parts";
-import { bubbleRow, floatingPieces } from "./scatter";
+import { bubbleRow } from "./scatter";
 
 export const OG_WIDTH = 1200;
 export const OG_HEIGHT = 630;

@@ -1,7 +1,8 @@
 import { INITIAL_FEN } from "chessops/fen";
 import { describe, expect, it } from "vitest";
 
-import { type BotDefinition, compileBot } from "../../bots";
+import { compileBot } from "../../bots";
+import type { BotDefinition } from "../../bots";
 import { goSearch } from "../../test-support/wasm";
 import { createUciClient } from "../client";
 import { createLocalTransport } from "../transports";

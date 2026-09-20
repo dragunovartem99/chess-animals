@@ -1,7 +1,8 @@
 import type { Config } from "chessground/config";
 import type { Key } from "chessground/types";
 import { chessgroundDests } from "chessops/compat";
-import { computed, type Ref } from "vue";
+import { computed } from "vue";
+import type { Ref } from "vue";
 
 import { positionFromFen } from "@/shared/chess";
 

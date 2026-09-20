@@ -4,8 +4,7 @@ import { makeUci } from "chessops/util";
 
 import type { BotConfig } from "../bots";
 import { afterMove, positionFromFen } from "../chess";
-import type { GoSearch } from "./goSearch";
-import type { SearchOptions } from "./goSearch";
+import type { GoSearch, SearchOptions } from "./goSearch";
 import { fromUci, toUci } from "./uci/moves";
 import type { GoLimits, UciResponse } from "./uci/types";
 

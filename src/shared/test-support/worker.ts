@@ -1,4 +1,5 @@
-import { compileBot, type BotDefinition } from "../bots";
+import { compileBot } from "../bots";
+import type { BotDefinition } from "../bots";
 import { parseCommand } from "../engine/uci/parseCommand";
 import { serializeResponse } from "../engine/uci/serialize";
 import { createUciEngine } from "../engine/uciEngine";

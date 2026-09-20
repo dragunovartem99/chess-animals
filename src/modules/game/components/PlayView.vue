@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { Key } from "chessground/types";
-import type { Color, Role } from "chessops/types";
+import { COLORS } from "chessops/types";
+import type { Role } from "chessops/types";
 import { computed, ref, watch } from "vue";
-import { useRoute, useRouter } from "vue-router";
 
 import { ChessBoard } from "@/modules/board";
 import { ROSTER, ROSTER_BY_ID } from "@/modules/bots/roster";
@@ -12,29 +12,18 @@ import { useGame } from "@/shared/game";
 import { FeatureBreakdown, SegmentedTabs } from "@/shared/ui";
 
 import { useBotEngines } from "../composables/useBotEngines";
+import { usePlayers } from "../composables/usePlayers";
 import MoveList from "./MoveList.vue";
 import PlayerPicker from "./PlayerPicker.vue";
 
 const HUMAN = "human";
-const COLORS: Color[] = ["white", "black"];
 
 const game = useGame();
 const engines = useBotEngines();
 
-// The roster page links here with `?black=<id>` so a card opens straight into a game against
-// that animal. `?white=<id>` works the same way, and the two combine with `&` for a bot-vs-bot
-// game. An unknown or missing id just leaves the default player in place for that color.
-const route = useRoute();
-const router = useRouter();
-function queryPlayer(color: Color) {
-	const id = route.query[color];
-	return typeof id === "string" && ROSTER_BY_ID.has(id) ? id : undefined;
-}
-const queryPlayers = computed(() => ({ white: queryPlayer("white"), black: queryPlayer("black") }));
-
-const players = ref<Record<Color, string>>({
-	white: queryPlayers.value.white ?? HUMAN,
-	black: queryPlayers.value.black ?? "monkey",
+const players = usePlayers({
+	defaults: { white: HUMAN, black: "monkey" },
+	onQueryChange: restart,
 });
 
 const TABS = ["moves", "breakdown"] as const;
@@ -129,30 +118,6 @@ async function restart() {
 	generation.value += 1;
 	await engines.startNewGame();
 }
-
-// The URL and the picker stay in sync both ways, per color: a roster card (or a pasted link)
-// sets the picker and starts fresh, and choosing another animal in the picker rewrites the
-// matching query param. Each watch checks the value already matches before acting, so they
-// don't ping-pong.
-watch(queryPlayers, (ids) => {
-	if (!COLORS.some((c) => ids[c] && ids[c] !== players.value[c])) return;
-	players.value = {
-		white: ids.white ?? players.value.white,
-		black: ids.black ?? players.value.black,
-	};
-	void restart();
-});
-
-watch(
-	() => ({ ...players.value }),
-	(current) => {
-		const next = Object.fromEntries(
-			COLORS.map((c) => [c, ROSTER_BY_ID.has(current[c]) ? current[c] : undefined])
-		);
-		if (COLORS.every((c) => next[c] === queryPlayers.value[c])) return;
-		void router.replace({ query: { ...route.query, ...next } });
-	}
-);
 </script>
 
 <template>

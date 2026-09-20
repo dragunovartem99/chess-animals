@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
-import { runTournament, type TournamentBot } from "..";
-import type { GameReport, GameSpec } from "..";
+import { runTournament } from "..";
+import type { TournamentBot, GameReport, GameSpec } from "..";
 import type { BotDefinition } from "../../bots";
 
 const STRENGTH: Record<string, number> = { wolf: 1.4, fox: 0.7, cat: 0, donkey: -0.9 };

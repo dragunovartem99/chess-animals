@@ -1,5 +1,6 @@
 import type { Rng } from "../engine";
-import { type SpsaConfig, spsaGains } from "./gains";
+import { spsaGains } from "./gains";
+import type { SpsaConfig } from "./gains";
 import { rademacher } from "./perturb";
 
 export type SpsaStep = {

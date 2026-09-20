@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
-import { playPair, type TestBot } from "../../test-support/play";
+import { playPair } from "../../test-support/play";
+import type { TestBot } from "../../test-support/play";
 import { defaultishWeights } from "../../test-support/weights";
 
 // Four openings a few moves in, so the two bots do not simply replay one game. Colors are
