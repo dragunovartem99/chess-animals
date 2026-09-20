@@ -59,8 +59,7 @@ export default {
 	},
 	tiger: {
 		name: "Tiger",
-		description:
-			"Takes more and more of your side of the board. Then the whole army closes in.",
+		description: "Gives every piece room to move. Then they all head for your king.",
 	},
 	monkey: {
 		name: "Monkey",
