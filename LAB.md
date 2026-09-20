@@ -131,20 +131,20 @@ deliberate: the Goat and the Dove are the same weights with opposite signs; the 
 Lemming read `offeredMaterial` with opposite signs; and the Monkey, Owl and Raven are bare
 material at three searches, as the calibration line.
 
-| animal   | search | lead (its own)         | partners                            |
-| -------- | ------ | ---------------------- | ----------------------------------- |
-| Spider   | d1     | `mobility` 10          | —                                   |
-| Parrot   | d2     | `mirrorRanks` 150      | —                                   |
-| Elephant | d2     | `sameColorSquares` 600 | —                                   |
-| Sloth    | d2     | `huddle` 550           | —                                   |
-| Wolf     | d2     | `swarm` 600            | —                                   |
-| Fox      | d2     | `opponentMobility` −8  | `hanging` −50                       |
-| Hedgehog | d2     | `hanging` −50          | —                                   |
-| Bear     | d3     | `castled` 40           | `huddle` 40                         |
-| Hare     | d3     | `offeredMaterial` −20  | `mobility` 5                        |
-| Camel    | d2 + q | `passedPawnPush` 24    | `kingActivity` 20, `development` 20 |
-| Lion     | d3 + q | `kingDanger` −40       | `development` 20, `earlyQueen` −80  |
-| Tiger    | d3 + q | `space` 6              | `swarm` 20, `mobility` 10           |
+| animal   | search | lead (its own)         | partners                                                            |
+| -------- | ------ | ---------------------- | ------------------------------------------------------------------- |
+| Spider   | d1     | `mobility` 10          | —                                                                   |
+| Parrot   | d2     | `mirrorRanks` 150      | —                                                                   |
+| Elephant | d2     | `sameColorSquares` 600 | —                                                                   |
+| Sloth    | d2     | `huddle` 550           | —                                                                   |
+| Wolf     | d2     | `swarm` 600            | —                                                                   |
+| Fox      | d2     | `opponentMobility` −8  | `hanging` −50                                                       |
+| Hedgehog | d2     | `hanging` −50          | —                                                                   |
+| Bear     | d3     | `castled` 40           | `huddle` 40                                                         |
+| Hare     | d3     | `offeredMaterial` −20  | `mobility` 5                                                        |
+| Camel    | d2 + q | `passedPawnPush` 24    | `kingActivity` 20, `development` 20                                 |
+| Lion     | d3 + q | `kingDanger` −40       | `development` 20, `earlyQueen` −80, `huddle` 20, `centerControl` 30 |
+| Tiger    | d3 + q | `swarm` 20             | `mobility` 10                                                       |
 
 What the lab said for each, against the previous weights in the same field. Every change is
 within noise or better; the point of most of them is fit, not Elo.
@@ -158,10 +158,19 @@ within noise or better; the point of most of them is fit, not Elo.
   bare material; `development` fixes it. A pawn-caravan Camel (`passedPawnPush` + `pushDepth`)
   lost ~140.
 - **Hedgehog, +22.** `hanging` −50 over −100: observation 4.
-- **Tiger, +52 (±110).** The `space`-led stack ties the old `swarm` + `mobility` + `earlyQueen`
-  and leaves `earlyQueen` to the Lion.
+- **Tiger, +52 (±110)** for the `space` + `swarm` + `mobility` stack over the old
+  `swarm` + `mobility` + `earlyQueen`, which left `earlyQueen` to the Lion. Later dropped `space`
+  again, this time for keeps: it repeats what `swarm` and `mobility` already read (observation 5)
+  and pulling it rated the Tiger _higher_, not lower, in three separate runs — dead weight, not a
+  brake.
 - **Spider, unchanged.** Every `mobility` stack at d1 still loses to bare material.
-- **Lion, unchanged.** `huddle`- and `development`-led variants at d3 + q all tied it.
+- **Lion, +47 then +63.** `huddle` 20 closed part of the flat Raven-to-Tiger gap (see Open
+  leads), ahead of the old weights twice running. A `mobility` 10 variant closed most of the rest
+  in the full-roster arena but was ruled out to keep the Lion's identity to king safety and
+  development, not board activity — that idea stays the Tiger's. `centerControl` 30 instead —
+  unread by any other animal, and a hunt wanting the middle on the way in rather than raw
+  activity — beat the `huddle`-only weights by ~60 in the same arena; `development` 40 in its
+  place measured worse.
 
 ## Gaps
 
@@ -176,11 +185,9 @@ with quiescence it was ~+300 stronger head to head, yet rated the same on the ro
 - **`kingActivity` is flavour, not strength.** Alone it loses at d2, d3 and d3 + q (−198, −23,
   −143; linear taper). Since its taper was squared — the Camel walked its king out after a queen
   trade — 0, 20, 40 and 60 on the Camel all rate within noise. It stays for the Camel's walk.
-- **`huddle` with quiescence.** +331 alone at d3 + q, fourth of all features, yet no animal on
-  quiescence reads it. On the Lion it tied the current weights; a new top animal could lead with
-  it.
-- **The Lion's field is flat.** Every king-safety variant at d3 + q sat inside ±140. Settling it
-  needs a narrower field (three or four players).
+- **The Lion's field is flat.** Every king-safety variant at d3 + q sat inside ±140. A narrower
+  three-player field (Lion, huddle variant, Tiger, Raven) still read inside noise, but `huddle`
+  20 came out ahead of the old weights twice running, never behind — see the roster note below.
 
 ## Cut on earlier evidence
 

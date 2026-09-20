@@ -55,9 +55,9 @@ import { WOLF } from "./wolf";
 // for nothing until the pieces come off. On depth 2 with quiescence — a ply short of the Raven —
 // it lands between the Hare and the Raven.
 //
-// The Tiger is the exception: depth 3, quiescence on *and* three board-control weights (`space` +
-// `swarm` + `mobility`). Once every bot has quiescence, bare material has no idea what a good
-// square is — the full-roster arena puts the Tiger top by a distance, beating the Raven ~7-in-8.
+// The Tiger is the exception: depth 3, quiescence on *and* a board-control pair (`swarm` +
+// `mobility`). Once every bot has quiescence, bare material has no idea what a good square is —
+// the full-roster arena puts the Tiger top by a distance, beating the Raven ~7-in-8.
 // The Lion is the Raven's search with `kingDanger` + `development` — it develops, then aims at your
 // king, and keeps its queen home until then — and lands near the middle of the gap between the two.
 export const ROSTER: Animal[] = [

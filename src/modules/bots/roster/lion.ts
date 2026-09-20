@@ -15,6 +15,17 @@ import type { Animal } from "./types";
 // before the minors are out, and this makes it wait. It rated level either way; over twenty
 // openings against the Owl it cut queen moves made with two minors still home from 34 to 10. At
 // -40 the pull still won most of the time, and -150 started to cost rating.
+//
+// `huddle` 20 is the den underneath the hunt: LAB.md's open lead was that no animal on
+// quiescence read it, and a narrow field against the old weights had it ahead twice running,
+// within noise both times — the Raven-to-Tiger gap was flat before this, so a nudge that never
+// lost is worth keeping.
+//
+// `centerControl` 30 came later, no other animal reads it: holding the middle is what a king hunt
+// needs its pieces doing on the way in, distinct from the Tiger's `mobility` + `swarm` — the Lion
+// still isn't a board-control animal, it's a king-hunt one that happens to want the center on the
+// way. Beat the old weights by ~60 in the full-roster arena, `development` 40 in its place instead
+// of alongside measured worse.
 export const LION: Animal = {
 	emoji: "🦁",
 	tint: "#a0522d",
@@ -22,6 +33,12 @@ export const LION: Animal = {
 		id: "lion",
 		search: { depth: 3, quiescence: true },
 		base: "material",
-		weights: { kingDanger: -40, development: 20, earlyQueen: -80 },
+		weights: {
+			kingDanger: -40,
+			development: 20,
+			earlyQueen: -80,
+			huddle: 20,
+			centerControl: 30,
+		},
 	},
 };
