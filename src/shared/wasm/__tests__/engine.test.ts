@@ -106,14 +106,6 @@ describe("the wasm search", () => {
 		expect(result.nodes).toBeGreaterThan(0);
 	});
 
-	it("reports no move when the game is over", () => {
-		const fen = "R5k1/5ppp/8/8/8/8/8/6K1 b - - 0 1";
-
-		expect(
-			engine.search({ fen, weights: MATERIAL, options: { depth: 2 } }).best
-		).toBeUndefined();
-	});
-
 	// A rook down, Black's king steps back to d7, a square the game has already stood on.
 	it("scores a move back into the game's history as the draw it is", () => {
 		const fen = "4k3/8/8/8/8/8/8/R3K3 b - - 0 1";

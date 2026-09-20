@@ -97,6 +97,34 @@ describe("the move that produced the position", () => {
 	});
 });
 
+// The mate rule itself is the engine's, tested in `evaluate_test.c`; these are the panel's reading
+// of it, which must leave every position the engine would evaluate normally to the rows.
+describe("a game-ending position", () => {
+	const MATED = "R5k1/5ppp/8/8/8/8/8/6K1 b - - 0 1";
+	const STALEMATED = "7k/5Q2/6K1/8/8/8/8/8 b - - 0 1";
+
+	it("flips with the preference", () => {
+		const weights = onlyWeights({ givesMate: -1 });
+
+		expect(explain({ position: positionFromFen(MATED), weights }).total).toBe(-MATE_SCORE);
+	});
+
+	// The paper's `random_move` is every weight at zero: it must keep scoring a finished game the
+	// way it scores any other, not as a lone zero row that swallows the rest of the evaluation.
+	it("is scored like any other position by a bot that cannot see mate", () => {
+		const weights = onlyWeights({ givesMate: 0, materialRook: 500 });
+		const { rows } = explain({ position: positionFromFen(MATED), weights });
+
+		expect(rows.map((row) => row.key)).toEqual(["materialRook"]);
+	});
+
+	it("is nothing special in a stalemate", () => {
+		const weights = onlyWeights({ givesMate: 1, materialQueen: 900 });
+
+		expect(explain({ position: positionFromFen(STALEMATED), weights }).total).toBe(900);
+	});
+});
+
 describe("the sign convention", () => {
 	// The one thing the panel must never do is report the same position differently depending on
 	// whose turn it happens to be.

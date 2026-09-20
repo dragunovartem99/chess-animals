@@ -61,6 +61,10 @@ TEST(finds_each_mate_at_its_distance) {
 }
 
 // The bug the decay exists for: a slower mate must not outbid a faster one.
+TEST(takes_free_material_when_material_is_all_it_values) {
+	CHECK(plays(run("4k3/8/8/3q4/8/8/8/3RK3 w - - 0 1", material(0), 1, false), "d1d5"));
+}
+
 TEST(prefers_the_shortest_mate) {
 	SearchResult result = run("6k1/5ppp/8/8/8/8/8/R5K1 w - - 0 1", material(1), 3, false);
 	CHECK(plays(result, "a1a8") && result.score == (double)(MATE_SCORE - 1));
