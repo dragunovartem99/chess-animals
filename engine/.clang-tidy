@@ -1,7 +1,8 @@
 # Off, each for cause: swappable parameters and short names are what chess code is made of
 # (from, to, sq), magic numbers are its tables, `rank * 8 + file` needs no parentheses to be
 # read, the insecure-API check demands C11 Annex K `_s` functions no libc here ships, and a
-# game-tree search is recursion by definition.
+# game-tree search is recursion by definition. Implicit bool conversion: in C every comparison is an
+# `int`, so clang-tidy 22 wants `!= 0` on each `a == b && c` and even on a `bool` ternary condition.
 Checks: >
     -*,
     bugprone-*,
@@ -13,6 +14,7 @@ Checks: >
     readability-*,
     -bugprone-easily-swappable-parameters,
     -readability-identifier-length,
+    -readability-implicit-bool-conversion,
     -readability-magic-numbers,
     -readability-math-missing-parentheses,
     -misc-no-recursion,
