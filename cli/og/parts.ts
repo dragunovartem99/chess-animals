@@ -1,3 +1,5 @@
+import type { Palette } from "./palette";
+
 // No JSX — plain objects in satori's `createElement` shape, so the CLI stays a bare tsx script.
 export const el = (type: string, style: Record<string, unknown>, children?: unknown) => ({
 	type,
@@ -8,11 +10,12 @@ export const img = (src: string, style: Record<string, unknown>) => ({
 	props: { src, style },
 });
 
-// A green outline plus a chunky drop, so the title reads as a sticker peeled off a scrapbook.
-const TITLE_SHADOW =
-	"5px 5px 0 #4a6129, -3px 3px 0 #4a6129, 3px -3px 0 #4a6129, -3px -3px 0 #4a6129, 0 14px 0 #33481f";
+// An outline in the world's ink plus a chunky drop, so the title reads as a sticker peeled off a
+// scrapbook.
+const titleShadow = ({ ink, deep }: Palette) =>
+	`5px 5px 0 ${ink}, -3px 3px 0 ${ink}, 3px -3px 0 ${ink}, -3px -3px 0 ${ink}, 0 14px 0 ${deep}`;
 
-export function title(text: string) {
+export function title({ text, palette }: { text: string; palette: Palette }) {
 	return el(
 		"div",
 		{
@@ -23,13 +26,13 @@ export function title(text: string) {
 			letterSpacing: 1,
 			marginTop: 8,
 			transform: "rotate(-3deg)",
-			textShadow: TITLE_SHADOW,
+			textShadow: titleShadow(palette),
 		},
 		text
 	);
 }
 
-export function tagline(text: string) {
+export function tagline({ text, palette }: { text: string; palette: Palette }) {
 	return el(
 		"div",
 		{
@@ -37,13 +40,13 @@ export function tagline(text: string) {
 			padding: "12px 32px",
 			maxWidth: 1090,
 			borderRadius: 999,
-			backgroundColor: "#fffdf2",
-			border: "5px solid #4a6129",
+			backgroundColor: palette.paper,
+			border: `5px solid ${palette.ink}`,
 			transform: "rotate(-1.5deg)",
 			fontFamily: "Fredoka",
 			fontSize: 25,
 			fontWeight: 500,
-			color: "#4a6129",
+			color: palette.ink,
 			textAlign: "center",
 			lineHeight: 1.15,
 		},

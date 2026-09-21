@@ -22,6 +22,15 @@ chess-animals.com {
 
     # Every route belongs to the client-side router, so anything that is not a file gets the
     # shell and the router resolves it — unknown paths included, which it prefixes with a locale.
-    try_files {path} /index.html
+    # The underwater and monster rosters get their own shells (cli/pages.ts), identical but for
+    # the preview card, under any locale or none. `route` keeps the order as written: the
+    # rewrites must land before try_files sends everything to the default shell.
+    @underwater path /underwater /*/underwater
+    @monsters path /monsters /*/monsters
+    route {
+        rewrite @underwater /underwater.html
+        rewrite @monsters /monsters.html
+        try_files {path} /index.html
+    }
     file_server
 }

@@ -6,6 +6,7 @@ import satori from "satori";
 import sharp from "sharp";
 
 import { ogBackground } from "./background";
+import type { World } from "./palette";
 import { buildTree, OG_WIDTH } from "./tree";
 import type { CardText, Chip, PieceUris } from "./tree";
 
@@ -24,9 +25,12 @@ export async function renderOg(card: {
 	text: CardText;
 	chips: Chip[];
 	pieceUris: PieceUris;
+	world: World;
 }): Promise<Buffer> {
+	const { world, ...rest } = card;
+	const backgroundDataUri = await ogBackground({ svg: world.svg });
 	const svg = await satori(
-		buildTree({ ...card, backgroundDataUri: await ogBackground() }) as never,
+		buildTree({ ...rest, palette: world.palette, backgroundDataUri }) as never,
 		{ width: OG_WIDTH, height: 630, fonts: FONTS }
 	);
 

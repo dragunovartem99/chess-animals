@@ -4,10 +4,12 @@ import vue from "@vitejs/plugin-vue";
 import { defineConfig } from "vite";
 
 import { emojiFont } from "./cli/emojiFont";
+import { pageShells } from "./cli/pages";
 
 export default defineConfig({
 	plugins: [
 		emojiFont(),
+		pageShells(),
 		// `<piece>` is chessground's own element: the promotion picker writes one by hand so the
 		// board's piece images can be reused, and Vue must not look for a component of that name.
 		vue({ template: { compilerOptions: { isCustomElement: (tag) => tag === "piece" } } }),

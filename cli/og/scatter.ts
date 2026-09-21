@@ -1,3 +1,4 @@
+import type { Palette } from "./palette";
 import { el, img } from "./parts";
 import type { Chip } from "./tree";
 
@@ -21,7 +22,36 @@ export function layout(count: number, discCap = 118) {
 	};
 }
 
-function bubble(chip: Chip, i: number, l: ReturnType<typeof layout>) {
+// A paper chip ringed in ink: the label was illegible sitting straight on the hill.
+function label({ name, size, palette }: { name: string; size: number; palette: Palette }) {
+	return el(
+		"div",
+		{
+			marginTop: 12,
+			padding: "3px 14px",
+			borderRadius: 999,
+			backgroundColor: palette.paper,
+			border: `3px solid ${palette.ink}`,
+			fontFamily: "Fredoka",
+			fontSize: size,
+			fontWeight: 600,
+			color: palette.deep,
+		},
+		name
+	);
+}
+
+function bubble({
+	chip,
+	i,
+	l,
+	palette,
+}: {
+	chip: Chip;
+	i: number;
+	l: ReturnType<typeof layout>;
+	palette: Palette;
+}) {
 	const rot = (i % 2 === 0 ? -1 : 1) * (3 + (i % 3) * 2);
 	const disc = el(
 		"div",
@@ -32,33 +62,13 @@ function bubble(chip: Chip, i: number, l: ReturnType<typeof layout>) {
 			width: l.disc,
 			height: l.disc,
 			borderRadius: 999,
-			backgroundColor: "#fffdf2",
+			backgroundColor: palette.paper,
 			border: `${l.border}px solid ${chip.tint}`,
-			boxShadow: "0 11px 0 rgba(20,60,10,0.22)",
+			boxShadow: `0 11px 0 rgba(${palette.shade},0.22)`,
 		},
 		[img(chip.emojiUri, { width: l.emoji, height: l.emoji })]
 	);
-	const kids = [disc];
-	if (l.name) {
-		kids.push(
-			el(
-				"div",
-				{
-					// A cream chip ringed in green: the label was illegible sitting straight on the hill.
-					marginTop: 12,
-					padding: "3px 14px",
-					borderRadius: 999,
-					backgroundColor: "#fffdf2",
-					border: "3px solid #4a6129",
-					fontFamily: "Fredoka",
-					fontSize: l.name,
-					fontWeight: 600,
-					color: "#33481f",
-				},
-				chip.name
-			)
-		);
-	}
+	const kids = l.name ? [disc, label({ name: chip.name, size: l.name, palette })] : [disc];
 	return el(
 		"div",
 		{
@@ -78,7 +88,7 @@ function bubble(chip: Chip, i: number, l: ReturnType<typeof layout>) {
 // The roster is split across two rows so each disc keeps a readable size and its label as the
 // field grows; both rows are sized off the fuller one (the top) so the discs match. The top row
 // takes the extra sticker when the count is odd.
-export function bubbleRow(chips: Chip[]) {
+export function bubbleRow({ chips, palette }: { chips: Chip[]; palette: Palette }) {
 	const half = Math.ceil(chips.length / 2);
 	const rows = [chips.slice(0, half), chips.slice(half)];
 	const l = layout(half, 92);
@@ -89,7 +99,7 @@ export function bubbleRow(chips: Chip[]) {
 			el(
 				"div",
 				{ display: "flex", justifyContent: "center", marginTop: r === 0 ? 0 : 8 },
-				row.map((c, i) => bubble(c, r * half + i, l))
+				row.map((c, i) => bubble({ chip: c, i: r * half + i, l, palette }))
 			)
 		)
 	);

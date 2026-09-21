@@ -1,10 +1,11 @@
+import type { Palette } from "./palette";
 import { img } from "./parts";
 import type { PieceUris } from "./tree";
 
 // Chess pieces strewn around the edges like toys tipped out of a box — one of each of the six,
 // tilted, mismatched sizes, a soft shadow under each, all kept clear of the middle band where
 // the words go and of the sun in the top-right. The white cburnett set only: its heavy black
-// outline reads as a cartoon toy against the greenery, where the black pieces flattened into
+// outline reads as a cartoon toy against any of the backdrops, where the black pieces flattened into
 // dark blobs.
 const FLOATING = [
 	{ key: "white-knight", left: 34, top: 50, size: 146, rot: -14 },
@@ -15,7 +16,7 @@ const FLOATING = [
 	{ key: "white-king", left: 1096, top: 200, size: 96, rot: -10 },
 ];
 
-export function floatingPieces(uris: PieceUris) {
+export function floatingPieces({ uris, palette }: { uris: PieceUris; palette: Palette }) {
 	return FLOATING.map(({ key, left, top, size, rot }) =>
 		img(uris[key], {
 			position: "absolute",
@@ -24,7 +25,7 @@ export function floatingPieces(uris: PieceUris) {
 			width: size,
 			height: size,
 			transform: `rotate(${rot}deg)`,
-			filter: "drop-shadow(0 0 4px #fffdf2) drop-shadow(0 0 4px #fffdf2) drop-shadow(0 10px 6px rgba(20,60,10,0.35))",
+			filter: `drop-shadow(0 0 4px ${palette.paper}) drop-shadow(0 0 4px ${palette.paper}) drop-shadow(0 10px 6px rgba(${palette.shade},0.35))`,
 		})
 	);
 }

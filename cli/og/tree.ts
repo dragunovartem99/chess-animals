@@ -1,4 +1,5 @@
 import { floatingPieces } from "./floating";
+import type { Palette } from "./palette";
 import { el, tagline, title } from "./parts";
 import { bubbleRow } from "./scatter";
 
@@ -13,11 +14,13 @@ export function buildTree({
 	text,
 	chips,
 	pieceUris,
+	palette,
 	backgroundDataUri,
 }: {
 	text: CardText;
 	chips: Chip[];
 	pieceUris: PieceUris;
+	palette: Palette;
 	backgroundDataUri: string;
 }) {
 	return el(
@@ -34,6 +37,11 @@ export function buildTree({
 			backgroundImage: `url(${backgroundDataUri})`,
 			backgroundSize: `${OG_WIDTH}px ${OG_HEIGHT}px`,
 		},
-		[...floatingPieces(pieceUris), title(text.title), tagline(text.tagline), bubbleRow(chips)]
+		[
+			...floatingPieces({ uris: pieceUris, palette }),
+			title({ text: text.title, palette }),
+			tagline({ text: text.tagline, palette }),
+			bubbleRow({ chips, palette }),
+		]
 	);
 }
