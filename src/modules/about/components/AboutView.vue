@@ -2,7 +2,7 @@
 const PAPER_URL = "http://tom7.org/chess/";
 const SOURCE_URL = "https://github.com/dragunovartem99/chess-animals";
 
-const BOTS = ["wolf", "goat", "donkey"] as const;
+const ROSTERS = ["land", "underwater", "monsters"] as const;
 </script>
 
 <template>
@@ -12,13 +12,12 @@ const BOTS = ["wolf", "goat", "donkey"] as const;
 
 		<h2>{{ $t("about.bots.title") }}</h2>
 		<p>{{ $t("about.bots.body") }}</p>
-		<p>{{ $t("about.bots.listLead") }}</p>
 		<ul>
 			<li
-				v-for="bot in BOTS"
-				:key="bot"
+				v-for="roster in ROSTERS"
+				:key="roster"
 			>
-				{{ $t(`about.bots.${bot}`) }}
+				{{ $t(`about.bots.${roster}`) }}
 			</li>
 		</ul>
 

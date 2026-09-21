@@ -5,23 +5,20 @@ import type { PlayedTurn } from "@/shared/game";
 
 import { figurine } from "../utils/figurine";
 
-const props = defineProps<{ turns: PlayedTurn[] }>();
+const { turns } = defineProps<{ turns: PlayedTurn[] }>();
 
 // Chess counts in full moves: White's and Black's replies share a number.
 const rows = computed(() =>
-	props.turns.reduce<{ number: number; white?: PlayedTurn; black?: PlayedTurn }[]>(
-		(acc, turn) => {
-			const number = Math.ceil(turn.ply / 2);
-			const row =
-				acc.at(-1)?.number === number ? acc.at(-1)! : (acc.push({ number }), acc.at(-1)!);
+	turns.reduce<{ number: number; white?: PlayedTurn; black?: PlayedTurn }[]>((acc, turn) => {
+		const number = Math.ceil(turn.ply / 2);
+		const row =
+			acc.at(-1)?.number === number ? acc.at(-1)! : (acc.push({ number }), acc.at(-1)!);
 
-			if (turn.ply % 2 === 1) row.white = turn;
-			else row.black = turn;
+		if (turn.ply % 2 === 1) row.white = turn;
+		else row.black = turn;
 
-			return acc;
-		},
-		[]
-	)
+		return acc;
+	}, [])
 );
 </script>
 

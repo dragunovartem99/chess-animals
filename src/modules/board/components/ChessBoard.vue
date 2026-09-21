@@ -8,16 +8,19 @@ import { useChessground } from "../composables/useChessground";
 import { isPromotionMove } from "../utils/promotion";
 import PromotionPicker from "./PromotionPicker.vue";
 
-const props = withDefaults(
-	defineProps<{
-		fen: string;
-		orientation?: "white" | "black";
-		playable?: ("white" | "black")[];
-		lastMove?: [Key, Key];
-		loading?: boolean;
-	}>(),
-	{ orientation: "white", playable: () => [], lastMove: undefined, loading: false }
-);
+const {
+	fen,
+	orientation = "white",
+	playable = [],
+	lastMove,
+	loading = false,
+} = defineProps<{
+	fen: string;
+	orientation?: "white" | "black";
+	playable?: ("white" | "black")[];
+	lastMove?: [Key, Key];
+	loading?: boolean;
+}>();
 
 const emit = defineEmits<{ move: [{ from: Key; to: Key; promotion?: Role }] }>();
 
@@ -25,7 +28,7 @@ const element = ref<HTMLElement>();
 const pending = ref<{ from: Key; to: Key }>();
 
 function play({ from, to }: { from: Key; to: Key }) {
-	if (isPromotionMove({ fen: props.fen, from, to })) {
+	if (isPromotionMove({ fen, from, to })) {
 		pending.value = { from, to };
 		return;
 	}
@@ -39,10 +42,10 @@ function promote(role: Role) {
 }
 
 const config = useBoardConfig({
-	fen: toRef(props, "fen"),
-	orientation: toRef(props, "orientation"),
-	playable: toRef(props, "playable"),
-	lastMove: toRef(props, "lastMove"),
+	fen: toRef(() => fen),
+	orientation: toRef(() => orientation),
+	playable: toRef(() => playable),
+	lastMove: toRef(() => lastMove),
 	onMove: play,
 });
 

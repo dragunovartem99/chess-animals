@@ -22,7 +22,7 @@ const CHECK_SAMPLE = 4;
 // checks, which is what legal generation gets wrong. A uniform sample is mostly shuffling.
 function isSpecial(before: string, uci: string): boolean {
 	return (
-		uci.length === 5 || uci.slice(2, 4) === before.split(" ")[3] || /^e[18][ah][18]$/.test(uci)
+		uci.length === 5 || uci.slice(2, 4) === before.split(" ")[3] || /^e[18][ah][18]$/u.test(uci)
 	);
 }
 
@@ -49,7 +49,7 @@ export function moveLines(): string[] {
 				isSpecial(before, uci) ||
 				(position.isCheck() && rng.int(CHECK_SAMPLE) === 0) ||
 				rng.int(SAMPLE) === 0;
-			const legal = keep ? moves.map(makeUci).join(" ") : "";
+			const legal = keep ? moves.map((legalMove) => makeUci(legalMove)).join(" ") : "";
 			const leaves = keep ? perft2(position) : 0;
 
 			position.play(move);

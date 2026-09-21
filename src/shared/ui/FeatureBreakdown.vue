@@ -6,7 +6,7 @@ import { explainPosition } from "../eval";
 import type { PlayedMove, WeightVector } from "../eval";
 import { playedGame, useWasmEngine } from "../wasm";
 
-const props = defineProps<{
+const { position, weights, name, played } = defineProps<{
 	position: Chess;
 	weights: WeightVector;
 	name: string;
@@ -25,7 +25,6 @@ const engine = useWasmEngine();
 const breakdown = computed(() => {
 	if (!engine.value) return undefined;
 
-	const { position, weights, played } = props;
 	const features = engine.value.extract(playedGame({ position, played }));
 	return explainPosition({ position, weights, features });
 });

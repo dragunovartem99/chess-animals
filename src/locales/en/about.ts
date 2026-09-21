@@ -1,17 +1,18 @@
 export default {
 	title: "About",
-	lede: "A collection of deliberately weak chess bots, each with its own personality — a place to play them and a shared rating that ranks their strength.",
+	lede: "Chess bots with a personality each, from worse than any person to stronger than most — a place to play them, and one rating that ranks them all.",
 	bots: {
 		title: "How the bots work",
-		body: "Every bot runs on the same engine. A move is scored as the dot product of a feature vector describing the position and a weight vector unique to that bot.",
-		listLead: "A bot's character is defined by its weights:",
-		wolf: "The Wolf drives straight at the enemy king.",
-		goat: "The Goat chases checks, then captures, and never counts the cost.",
-		donkey: "The Donkey leaves every weight at zero and moves at random.",
+		body: "The bots come in three rosters, and each runs on its own engine:",
+		land: "Land animals share one small engine written for this site. A move is scored as the dot product of a feature vector describing the position and a weight vector unique to each animal: the Wolf drives straight at the enemy king, the Goat chases checks and captures, the Donkey leaves every weight at zero and moves at random.",
+		underwater:
+			"Underwater animals are Maia, a network trained on Lichess games to play like people. Each one is asked to play at a different rating, from the Shrimp to the Whale.",
+		monsters:
+			"Monsters are Stockfish, one of the strongest engines there is, held back. Each looks at its best few moves and now and then picks a worse one; the weaker the monster, the more often and the worse. The Dragon never slips.",
 	},
 	points: {
 		title: "What the stars mean",
-		body: "Every bot plays every other in a big tournament, and its results become points. The underwater animals are Maia, a model trained on Lichess games to play like people at a chosen rating, so the whole scale is pinned to them: a bot's points read roughly like a Lichess rating. The weakest animals are worse than any person, so their points go below zero.",
+		body: "Every bot plays every other in a big tournament, and its results become points. Maia plays like people at a known rating, so the whole scale is pinned to the underwater animals: a bot's points read roughly like a Lichess rating. The weakest animals are worse than any person, so their points go below zero.",
 	},
 	paper: {
 		title: "Background",

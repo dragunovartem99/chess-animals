@@ -13,7 +13,7 @@ export const HEADER_PATH = fileURLToPath(
 
 // `kingDanger` becomes `FEATURE_KING_DANGER`, so the C name still reads as the key it came from.
 function constantName(key: string): string {
-	return `FEATURE_${key.replaceAll(/[A-Z]/g, (letter) => `_${letter}`).toUpperCase()}`;
+	return `FEATURE_${key.replaceAll(/[A-Z]/gu, (letter) => `_${letter}`).toUpperCase()}`;
 }
 
 export function renderFeaturesHeader(): string {
