@@ -24,22 +24,35 @@ What is left of the move to C. How it is built is in
 
 - ⬜ A Polyglot `.bin` book reader behind `probe(fen)`
 
-## The underwater section
+## Monsters
 
-The twelve sea animals exist and the arena rates them with the land roster — Stockfish alone, a
-MultiPV line picked by temperature, see [ARCHITECTURE.md](./ARCHITECTURE.md#sea-animals). What is
-left:
+The twelve Stockfish players — a MultiPV line picked by temperature, see
+[ARCHITECTURE.md](./ARCHITECTURE.md#sea-animals) — leave the sea for a section of their own, and
+`/underwater` goes to Maia. They are the strongest on the site, so the rename also reads right.
+
+| Commit                                   | Contents                                                                                                     | Green when                                          |
+| ---------------------------------------- | ------------------------------------------------------------------------------------------------------------ | --------------------------------------------------- |
+| ⬜ `monsters: move the stockfish roster` | `/underwater` → `/monsters`, `SEA` → `MONSTERS`, `shared/sea` → `shared/monsters`, nav, theme, locales, docs | The twelve play and rate from `/monsters` unchanged |
 
 - ⬜ Credit Stockfish on the About page and link its source: it is GPL-3.0 and the site is MIT, so
   the build ships `public/stockfish/COPYING.txt` and the page has to say where the source is.
-- ⬜ More animals, if a real idea turns up. The emoji left are 🐳 (no seahorse, no orca), and each
-  animal needs a `temperature` rung.
+- ⬜ More monsters, if a real idea turns up — each needs a `temperature` rung.
 
-## Human-like players
+## The underwater section
 
-- ⬜ Maia-3 ([CSSLab/maia3](https://github.com/CSSLab/maia3)) as a section of its own: a
-  transformer that predicts a human's move at a given rating, run in the browser with
-  `onnxruntime-web` as [maia-platform-frontend](https://github.com/CSSLab/maia-platform-frontend)
-  does — one Elo-conditioned model, the board as 64×12 tokens, the policy sampled from the seeded
-  stream. AGPL-3.0, a ~44 MB model plus ~10 MB of runtime fetched on first play; no search, so it
-  rates below the Tiger. Spike first: its strength against the roster, under `onnxruntime-node`.
+Maia-3 ([CSSLab/maia3](https://github.com/CSSLab/maia3)): a transformer that predicts a human's
+move at a given rating, run in the browser with `onnxruntime-web` as
+[maia-platform-frontend](https://github.com/CSSLab/maia-platform-frontend) does — one
+Elo-conditioned model, the board as 64×12 tokens, the policy sampled from the seeded stream. An
+animal is an Elo rung, as a monster is a temperature rung. AGPL-3.0, a ~44 MB model plus ~10 MB of
+runtime fetched on first play, behind the board's loading state; no search, so it rates below the
+Tiger.
+
+| Commit                           | Contents                                                                          | Green when                                 |
+| -------------------------------- | --------------------------------------------------------------------------------- | ------------------------------------------ |
+| ⬜ spike, not committed          | The model under `onnxruntime-node` against the roster, a handful of rungs, ~1 min | Where each Elo lands is known              |
+| ⬜ `underwater: maia mover`      | Board tokens, legal-move mask, seeded sampling; tested against a fake session     | A fake policy picks the move it should     |
+| ⬜ `arena: rate underwater`      | The rungs in the rating table; the cache keys on the model's hash                 | The table rates them beside the roster     |
+| ⬜ `underwater: play in browser` | `onnxruntime-web` in the worker, the model fetched on first play only             | A game against a rung plays in the browser |
+| ⬜ `underwater: maia animals`    | Sea creatures on Elo rungs, copy in both locales, the `/underwater` tab back      | The tab lists them and they play           |
+| ⬜ `about: credit maia`          | AGPL-3.0: its source linked, its licence shipped                                  | The About page says where the source is    |
