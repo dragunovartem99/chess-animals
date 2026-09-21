@@ -26,10 +26,10 @@ const players = usePlayers({
 	onQueryChange: restart,
 });
 
-// Down to the dark theme for as long as a monster is at the board, whoever picked it.
+// Into the monsters' theme for as long as a monster is at the board, whoever picked it.
 const MONSTER_IDS = new Set(MONSTERS.map((animal) => animal.definition.id));
 useTheme(() =>
-	Object.values(players.value).some((id) => MONSTER_IDS.has(id)) ? "sea" : undefined
+	Object.values(players.value).some((id) => MONSTER_IDS.has(id)) ? "monsters" : undefined
 );
 
 const TABS = ["moves", "breakdown"] as const;

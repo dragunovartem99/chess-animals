@@ -4,7 +4,7 @@ import { useTheme } from "@/shared/ui";
 import { MONSTERS } from "../roster";
 import AnimalGrid from "./AnimalGrid.vue";
 
-useTheme("sea");
+useTheme("monsters");
 </script>
 
 <template>

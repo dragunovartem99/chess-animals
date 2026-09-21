@@ -184,9 +184,8 @@ read. On every move `createMonsterEngine` asks Stockfish for its best `lines` mo
 Small slips are common and blunders rare, which reads as a person playing — a uniformly random
 move, the paper's dilution, hangs a queen out of the blue. The pick is drawn from a seeded stream
 of its own, so a game replays from its seed. The twelve differ in temperature alone, bar the
-Goldfish, which also sees ten times as far, and all of them rate above the Tiger. They are still
-the sea creatures they were on `/underwater`, which is left to Maia: the ids came along unchanged,
-so their ratings and cached games did too.
+Dragon, which also sees ten times as far, and all of them rate above the Tiger. They were sea
+creatures on `/underwater` once; the fish ids are free again for Maia's animals there.
 
 The engine is the land engine with a `go` that asks Stockfish instead, so the play view cannot
 tell them apart; its answers are promises, because Stockfish is a process. In the browser the
@@ -200,8 +199,8 @@ and the result cache keys a game with a monster in it on the Stockfish build too
 are rated in the same table as the land roster.
 
 The pages follow the roster they show: `useTheme` in `shared/ui` lets a view say which world it is
-in, and the layout paints the document — the dark theme (a blue board highlight, a
-teal button) on `/monsters`, and on `/play` while a monster is at the board.
+in, and the layout paints the document — the monsters' theme (violet squares, a
+slime-green highlight, a purple button) on `/monsters`, and on `/play` while a monster is at the board.
 
 ## App shell
 

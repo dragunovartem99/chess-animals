@@ -201,7 +201,7 @@ cg-board square.move-dest:hover {
 	background: rgb(63 63 70 / 30%);
 }
 
-/* The monsters' world, until Maia's underwater section takes it back. Everything the light theme paints comes from these variables, so
+/* The underwater world, kept for Maia's animals. Everything the light theme paints comes from these variables, so
    the theme is only the variables: the header's wood is derived from the board's dark square and
    follows it down. The board pair is kept apart enough for black pieces to read on the dark
    square and white ones on the light. */
@@ -235,6 +235,42 @@ cg-board square.move-dest:hover {
 	background-image:
 		radial-gradient(ellipse at 50% -10%, rgb(56 189 248 / 14%), transparent 55%),
 		linear-gradient(#062331, #020a10);
+	background-size: auto;
+	background-attachment: fixed;
+}
+
+/* The monsters' night: violet squares and a green glow, the colours of every cartoon haunted
+   house. The dark square keeps the sea's lightness, which is what lets black pieces read on it. */
+:root[data-theme="monsters"] {
+	color-scheme: dark;
+
+	--color-board-light: #b3a5c8;
+	--color-board-dark: #5c4a78;
+
+	--color-surface: #1c1628;
+	--color-ink: #efe9f7;
+	--color-ink-muted: #b1a5c4;
+	--color-border: #372b4c;
+	--color-stripe: #241c34;
+	--color-sunken: #130e1c;
+
+	--color-good: #4ade80;
+	--color-bad: #f87171;
+
+	--color-button: #6d28d9;
+	--color-button-hover: #7c3aed;
+
+	/* Slime green: violet on violet squares would vanish. */
+	--color-last-move: rgb(163 230 53 / 50%);
+
+	--shadow-card: 0 0.75rem 1.5rem rgb(0 0 0 / 50%);
+}
+
+:root[data-theme="monsters"] body {
+	background-color: #0b0714;
+	background-image:
+		radial-gradient(ellipse at 50% -10%, rgb(163 230 53 / 10%), transparent 55%),
+		linear-gradient(#1a1030, #07040d);
 	background-size: auto;
 	background-attachment: fixed;
 }

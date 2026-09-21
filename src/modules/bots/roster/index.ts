@@ -1,36 +1,36 @@
+import { ALIEN } from "./alien";
 import { BEAR } from "./bear";
 import { CAMEL } from "./camel";
-import { CRAB } from "./crab";
+import { DINOSAUR } from "./dinosaur";
 import { DODO } from "./dodo";
-import { DOLPHIN } from "./dolphin";
 import { DONKEY } from "./donkey";
 import { DOVE } from "./dove";
+import { DRAGON } from "./dragon";
 import { ELEPHANT } from "./elephant";
 import { FOX } from "./fox";
+import { GENIE } from "./genie";
+import { GHOST } from "./ghost";
 import { GOAT } from "./goat";
-import { GOLDFISH } from "./goldfish";
+import { GOBLIN } from "./goblin";
 import { HARE } from "./hare";
 import { HEDGEHOG } from "./hedgehog";
-import { HERRING } from "./herring";
-import { JELLYFISH } from "./jellyfish";
+import { IMP } from "./imp";
 import { LEMMING } from "./lemming";
 import { LION } from "./lion";
-import { LOBSTER } from "./lobster";
 import { MONKEY } from "./monkey";
-import { OCTOPUS } from "./octopus";
+import { OGRE } from "./ogre";
 import { OWL } from "./owl";
 import { PARROT } from "./parrot";
-import { PUFFERFISH } from "./pufferfish";
 import { RAVEN } from "./raven";
-import { SHARK } from "./shark";
-import { SHRIMP } from "./shrimp";
+import { ROBOT } from "./robot";
 import { SLOTH } from "./sloth";
 import { SPIDER } from "./spider";
-import { SQUID } from "./squid";
 import { TIGER } from "./tiger";
+import { TROLL } from "./troll";
 import type { Animal } from "./types";
-import { WHALE } from "./whale";
+import { VAMPIRE } from "./vampire";
 import { WOLF } from "./wolf";
+import { ZOMBIE } from "./zombie";
 
 // The roster, weakest first: the order is the one `npm run arena` measured, not one anybody
 // picked. Re-run the arena after adding or retuning an animal and move it if its rating moved.
@@ -103,20 +103,20 @@ export const ROSTER_BY_ID = new Map(ROSTER.map((animal) => [animal.definition.id
 // five lines on 5000 nodes, and picks a line `t` centipawns behind the best about a third as often
 // at temperature `t`, so the lower it is the rarer and smaller the slips. All twelve sit above the
 // Tiger. The top two are never careless — one line, so no nodes are spent on the other four — and
-// the Goldfish sees ten times as far as the Whale.
+// the Dragon sees ten times as far as the Dinosaur.
 export const MONSTERS: Animal[] = [
-	HERRING,
-	SQUID,
-	CRAB,
-	PUFFERFISH,
-	LOBSTER,
-	JELLYFISH,
-	SHARK,
-	SHRIMP,
-	DOLPHIN,
-	OCTOPUS,
-	WHALE,
-	GOLDFISH,
+	ZOMBIE,
+	ALIEN,
+	GOBLIN,
+	OGRE,
+	TROLL,
+	GHOST,
+	VAMPIRE,
+	IMP,
+	GENIE,
+	ROBOT,
+	DINOSAUR,
+	DRAGON,
 ];
 
 // Everyone a player can meet, land then monsters.

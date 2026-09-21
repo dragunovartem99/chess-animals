@@ -2,8 +2,11 @@
 import { onBeforeUnmount, watch } from "vue";
 
 import { theme } from "@/shared/ui";
+import type { Theme } from "@/shared/ui";
 
 import LocaleSwitcher from "./LocaleSwitcher.vue";
+
+const LOGOS: Record<Theme, string> = { sea: "🫧", monsters: "🌚" };
 
 // Set on the document, not on this layout: the page's background is the body's, and the variables
 // that repaint the board and the cards are read from the root.
@@ -29,7 +32,7 @@ onBeforeUnmount(() => {
 					class="brand title"
 					:to="{ name: 'roster' }"
 				>
-					<span class="emoji logo">{{ theme === "sea" ? "🫧" : "🌞" }}</span>
+					<span class="emoji logo">{{ theme ? LOGOS[theme] : "🌞" }}</span>
 					{{ $t("app.title") }}
 				</RouterLink>
 				<LocaleSwitcher />
