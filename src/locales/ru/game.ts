@@ -12,6 +12,7 @@ export default {
 	group: { underwater: "Под водой", land: "На суше", monsters: "Монстры" },
 	human: "Вы",
 	restart: "Новая партия",
+	swap: "Поменять цвета",
 	loading: "Загрузка…",
 	thinking: "Думает…",
 	turn: { white: "Белые", black: "Чёрные" },

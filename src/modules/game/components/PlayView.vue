@@ -136,6 +136,14 @@ const lensWeights = computed(() =>
 	lens.value ? compileBot(lens.value.definition).weights : undefined
 );
 
+// Both seats at once, in one assignment, so the URL is written once. A new game with it: the
+// players trade the pieces they started with, not a position half played by the other side.
+function swapColors() {
+	const { white, black } = players.value;
+	players.value = { white: black, black: white };
+	void restart();
+}
+
 async function restart() {
 	game.reset();
 	generation.value += 1;
@@ -174,12 +182,21 @@ async function restart() {
 				<span v-else>{{ $t(`game.toMove.${game.position.value.turn}`) }}</span>
 			</p>
 
-			<button
-				type="button"
-				@click="restart"
-			>
-				{{ $t("game.restart") }}
-			</button>
+			<div class="actions">
+				<button
+					type="button"
+					@click="restart"
+				>
+					{{ $t("game.restart") }}
+				</button>
+				<button
+					type="button"
+					class="swap"
+					@click="swapColors"
+				>
+					<span aria-hidden="true">⇅</span> {{ $t("game.swap") }}
+				</button>
+			</div>
 
 			<SegmentedTabs
 				v-model="tab"
@@ -222,6 +239,22 @@ async function restart() {
 	gap: 0.75rem;
 	flex: 1 1 18rem;
 	min-width: 16rem;
+}
+
+.actions {
+	display: grid;
+	grid-template-columns: 1fr auto;
+	gap: 0.5rem;
+}
+
+.swap {
+	background: var(--color-sunken);
+	color: var(--color-ink);
+	box-shadow: none;
+}
+
+.swap:hover {
+	background: var(--color-border);
 }
 
 .status {

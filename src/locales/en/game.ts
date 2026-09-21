@@ -12,6 +12,7 @@ export default {
 	group: { underwater: "Underwater", land: "On land", monsters: "Monsters" },
 	human: "You",
 	restart: "New game",
+	swap: "Swap colors",
 	loading: "Loading…",
 	thinking: "Thinking…",
 	turn: { white: "White", black: "Black" },
