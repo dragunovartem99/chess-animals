@@ -1,0 +1,20 @@
+# No compile_commands.json exists, so clangd guesses flags. It treats .h as
+# C++/Objective-C++ (hence -xc) and resolves relative -I against each file's own
+# directory: one fragment per depth.
+CompileFlags:
+    Add: [-xc, -std=c17]
+---
+If:
+    PathMatch: bench/.*
+CompileFlags:
+    Add: [-I../include, -I../tests]
+---
+If:
+    PathMatch: (src|tests)/[^/]+/.*
+CompileFlags:
+    Add: [-I../../include, -I../../tests]
+---
+If:
+    PathMatch: tests/[^/]+\.[ch]
+CompileFlags:
+    Add: [-I../include, -I../tests]
