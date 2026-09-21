@@ -5,10 +5,10 @@ import { assertBotDefinition } from "@/shared/bots";
 import { ANIMALS_BY_ID, ROSTER, ROSTER_BY_ID, MONSTERS } from "../index";
 
 describe("the monsters roster", () => {
-	it("has twelve animals, and ends with the one that is never careless and sees furthest", () => {
+	it("has sixteen animals, and ends with the one that is never careless and sees furthest", () => {
 		const nodes = MONSTERS.map((animal) => animal.definition.stockfish?.nodes ?? 0);
 
-		expect(MONSTERS).toHaveLength(12);
+		expect(MONSTERS).toHaveLength(16);
 		expect(MONSTERS.at(-1)?.definition.stockfish?.temperature).toBe(0);
 		expect(Math.max(...nodes)).toBe(nodes.at(-1));
 	});

@@ -26,7 +26,7 @@ What is left of the move to C. How it is built is in
 
 ## Monsters
 
-The twelve Stockfish players — a MultiPV line picked by temperature, see
+The sixteen Stockfish players — a MultiPV line picked by temperature, see
 [ARCHITECTURE.md](./ARCHITECTURE.md#monsters) — on `/monsters`. What is left:
 
 - ⬜ Credit Stockfish on the About page and link its source: it is GPL-3.0 and the site is MIT, so
@@ -39,10 +39,11 @@ Maia-3 ([CSSLab/maia3](https://github.com/CSSLab/maia3)): a transformer that pre
 move at a given rating, run with `onnxruntime-web` as
 [maia-platform-frontend](https://github.com/CSSLab/maia-platform-frontend) does — one
 Elo-conditioned model, the board as 64×12 tokens (mirrored when Black is to move), 4352 move
-logits masked to the legal ones and sampled from the seeded stream. Twelve animals, twelve Elo
-rungs, as a monster is a temperature rung — tight at the bottom, where the strength moves fastest:
-600, 700, 800, 900, 1000, 1100, 1250, 1400, 1600, 1800, 2100, and at the top 2500 played by its
-likeliest move rather than sampled, which beat the sampled 2500 against the Tiger. The arena
+logits masked to the legal ones and sampled from the seeded stream. Sixteen animals — every roster
+has sixteen — on sixteen Elo rungs, as a monster is a temperature rung, tight at the bottom where
+the strength moves fastest: 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1650,
+1800, 2000, 2200, and at the top 2500 played by its likeliest move rather than sampled, which beat
+the sampled 2500 against the Tiger. The twelve old sea creatures come back, with 🦭 🦦 🐢 🐳. The arena
 decides whether neighbours stay apart; any two that tie get spread.
 
 What the spike found, 6 games a pair:
@@ -57,7 +58,14 @@ What the spike found, 6 games a pair:
 
 | Commit                           | Contents                                                                | Green when                                 |
 | -------------------------------- | ----------------------------------------------------------------------- | ------------------------------------------ |
-| ⬜ `underwater: twelve animals`  | The rungs as definitions and copy, rated by the arena beside the roster | The table rates them in rung order         |
+| ⬜ `underwater: sixteen animals` | The rungs as definitions and copy, rated by the arena beside the roster | The table rates them in rung order         |
 | ⬜ `underwater: play in browser` | `onnxruntime-web` in the worker, the model fetched on first play only   | A game against a rung plays in the browser |
 | ⬜ `underwater: the tab`         | The tab back, the animals in the player picker                          | The tab lists them and they play           |
 | ⬜ `about: credit maia`          | AGPL-3.0: its source linked beside `public/maia3/COPYING.txt`           | The About page says where the source is    |
+
+## Rating points
+
+- ⬜ Every bot's rating on its card and in the player picker, as points. The arena writes a committed
+  `id → points` file beside `arena-results.json`, shifted so the weakest bot sits near 100 and
+  rounded to tens; the UI reads that file. Lands after the three rosters settle at sixteen, so one
+  arena run fills every number.

@@ -1,4 +1,20 @@
 export default {
+	clown: {
+		name: "Clown",
+		description: "Juggles its pieces and laughs. Now and then it drops one.",
+	},
+	pumpkin: {
+		name: "Pumpkin",
+		description: "Glows bright and plays well. Sometimes it just rolls away.",
+	},
+	skeleton: {
+		name: "Skeleton",
+		description: "Rattles along nicely. Once in a while a bone falls off.",
+	},
+	witch: {
+		name: "Witch",
+		description: "Knows lots of spells. Sometimes she says the wrong word.",
+	},
 	zombie: {
 		name: "Zombie",
 		description: "Shuffles along and plays fine. Every so often it forgets what it was doing.",

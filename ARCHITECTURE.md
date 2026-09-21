@@ -184,8 +184,8 @@ read. On every move `createMonsterEngine` asks Stockfish for its best `lines` mo
 `nodes` nodes and picks one, a line `d` centipawns behind the best weighted `exp(-d / temperature)`.
 Small slips are common and blunders rare, which reads as a person playing — a uniformly random
 move, the paper's dilution, hangs a queen out of the blue. The pick is drawn from a seeded stream
-of its own, so a game replays from its seed. The twelve differ in temperature alone, bar the
-Dragon, which also sees ten times as far, and all of them rate above the Tiger. They were sea
+of its own, so a game replays from its seed. The sixteen differ in temperature alone, bar
+the Dragon, which also sees ten times as far; the hottest reach down towards the Tiger. They were sea
 creatures on `/underwater` once; the fish ids are free again for Maia's animals there.
 
 The engine is the land engine with a `go` that asks Stockfish instead, so the play view cannot
@@ -196,7 +196,7 @@ and Chess960 notation is switched on so castling is king-takes-rook in both engi
 `createProcessTransport` runs the same script as a child process, started on the first line sent.
 The arena plays monsters through `createMover`, which makes the same pick from a game's own
 random stream and is why `runGame` is async; each game worker owns one Stockfish, cleared per game,
-and the result cache keys a game with a monster in it on the Stockfish build too. The twelve
+and the result cache keys a game with a monster in it on the Stockfish build too. The sixteen
 are rated in the same table as the land roster.
 
 The pages follow the roster they show: `useTheme` in `shared/ui` lets a view say which world it is

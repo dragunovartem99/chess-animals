@@ -1,6 +1,7 @@
 import { ALIEN } from "./alien";
 import { BEAR } from "./bear";
 import { CAMEL } from "./camel";
+import { CLOWN } from "./clown";
 import { DINOSAUR } from "./dinosaur";
 import { DODO } from "./dodo";
 import { DONKEY } from "./donkey";
@@ -18,13 +19,16 @@ import { LEMMING } from "./lemming";
 import { LION } from "./lion";
 import { OGRE } from "./ogre";
 import { PARROT } from "./parrot";
+import { PUMPKIN } from "./pumpkin";
 import { ROBOT } from "./robot";
+import { SKELETON } from "./skeleton";
 import { SLOTH } from "./sloth";
 import { SPIDER } from "./spider";
 import { TIGER } from "./tiger";
 import { TROLL } from "./troll";
 import type { Animal } from "./types";
 import { VAMPIRE } from "./vampire";
+import { WITCH } from "./witch";
 import { WOLF } from "./wolf";
 import { ZOMBIE } from "./zombie";
 
@@ -83,10 +87,15 @@ export const ROSTER_BY_ID = new Map(ROSTER.map((animal) => [animal.definition.id
 // and `ROSTER` stays the land order and the gauntlet `tune` measures against. The arena rates both
 // together. Weakest first, and the order is the temperature's: every one weighs Stockfish's top
 // five lines on 5000 nodes, and picks a line `t` centipawns behind the best about a third as often
-// at temperature `t`, so the lower it is the rarer and smaller the slips. All twelve sit above the
-// Tiger. The top two are never careless — one line, so no nodes are spent on the other four — and
+// at temperature `t`, so the lower it is the rarer and smaller the slips. The Clown, the Pumpkin,
+// the Skeleton and the Witch came last, the hottest four, to bridge the gap from the Tiger to the
+// Zombie: the rungs below 60 already crowd each other. The top two are never careless — one line, so no nodes are spent on the other four — and
 // the Dragon sees ten times as far as the Dinosaur.
 export const MONSTERS: Animal[] = [
+	CLOWN,
+	PUMPKIN,
+	SKELETON,
+	WITCH,
 	ZOMBIE,
 	ALIEN,
 	GOBLIN,
