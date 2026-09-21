@@ -38,7 +38,20 @@ const orientation = computed(() => humanColors.value[0] ?? "white");
 
 // A finished game is a view, not a position to move from: `game.play` already rejects the move,
 // but the board only resyncs on a FEN change, so a drop after the result would otherwise linger.
-const playable = computed(() => (game.status.value.over ? [] : humanColors.value));
+const playable = computed(() =>
+	game.status.value.over || engines.loading.value ? [] : humanColors.value
+);
+
+// Every bot at the board is started as soon as it is picked, not on its first move: the board
+// waits behind one loading state for all of them rather than stalling mid-game on a fetch.
+watch(
+	() => COLORS.map((color) => players.value[color]),
+	(ids) => {
+		const animals = ids.flatMap((id) => ANIMALS_BY_ID.get(id) ?? []);
+		void engines.prepare(animals);
+	},
+	{ immediate: true }
+);
 
 function playHumanMove({ from, to, promotion }: { from: Key; to: Key; promotion?: Role }) {
 	const move = fromUci({
@@ -132,6 +145,7 @@ async function restart() {
 				:orientation="orientation"
 				:playable="playable"
 				:last-move="game.lastMove.value as [Key, Key] | undefined"
+				:loading="engines.loading.value"
 				@move="playHumanMove"
 			/>
 		</div>
@@ -148,6 +162,7 @@ async function restart() {
 				<span v-if="game.status.value.over">
 					{{ $t(`game.reason.${game.status.value.reason}`) }}
 				</span>
+				<span v-else-if="engines.loading.value">{{ $t("game.loading") }}</span>
 				<span v-else-if="engines.thinking.value">{{ $t("game.thinking") }}</span>
 				<span v-else>{{ $t(`game.toMove.${game.position.value.turn}`) }}</span>
 			</p>

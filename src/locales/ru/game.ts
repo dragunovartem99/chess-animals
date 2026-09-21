@@ -12,6 +12,7 @@ export default {
 	group: { land: "На суше", sea: "Под водой" },
 	human: "Вы",
 	restart: "Новая партия",
+	loading: "Загрузка…",
 	thinking: "Думает…",
 	turn: { white: "Белые", black: "Чёрные" },
 	toMove: { white: "Ход белых", black: "Ход чёрных" },

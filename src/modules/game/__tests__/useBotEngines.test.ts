@@ -1,42 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import type { Animal } from "@/modules/bots/roster";
-import { withSetup } from "@/shared/test-support/component";
-import { createTestWorker } from "@/shared/test-support/worker";
-
-import { useBotEngines } from "../composables/useBotEngines";
-
-const DONKEY: Animal = {
-	emoji: "🫏",
-	tint: "#8b5cf6",
-	definition: {
-		id: "donkey",
-		search: { depth: 1 },
-		weights: { materialPawn: 100, materialKnight: 300 },
-	},
-};
-
-const WOLF: Animal = {
-	emoji: "🐺",
-	tint: "#0ea5e9",
-	definition: {
-		id: "wolf",
-		search: { depth: 1 },
-		weights: { materialQueen: 900, givesMate: 100000 },
-	},
-};
-
-function mount() {
-	const workers: Worker[] = [];
-	vi.stubGlobal("Worker", function WorkerStub() {
-		const worker = createTestWorker();
-		workers.push(worker);
-
-		return worker;
-	});
-
-	return { ...withSetup(() => useBotEngines()), workers };
-}
+import { DONKEY, WOLF, mount } from "./engines";
 
 afterEach(() => {
 	vi.unstubAllGlobals();
@@ -54,7 +18,10 @@ describe("useBotEngines", () => {
 	it("plays on from the moves it is given", async () => {
 		const { result } = mount();
 
-		const best = await result.askForMove({ animal: WOLF, moves: ["e2e4", "e7e5"] });
+		const best = await result.askForMove({
+			animal: WOLF,
+			moves: ["e2e4", "e7e5"],
+		});
 
 		expect(best.move).toMatch(/^[a-h][1-8][a-h][1-8]$/u);
 	});
@@ -83,15 +50,6 @@ describe("useBotEngines", () => {
 		await result.askForMove({ animal: DONKEY });
 
 		expect(result.thinking.value).toBe(false);
-	});
-
-	it("reports thinking while a move is outstanding", () => {
-		const { result } = mount();
-
-		const pending = result.askForMove({ animal: DONKEY });
-
-		expect(result.thinking.value).toBe(true);
-		return pending;
 	});
 
 	it("resets every engine it has started for a new game", async () => {

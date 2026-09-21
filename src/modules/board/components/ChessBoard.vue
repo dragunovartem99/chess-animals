@@ -14,8 +14,9 @@ const props = withDefaults(
 		orientation?: "white" | "black";
 		playable?: ("white" | "black")[];
 		lastMove?: [Key, Key];
+		loading?: boolean;
 	}>(),
-	{ orientation: "white", playable: () => [], lastMove: undefined }
+	{ orientation: "white", playable: () => [], lastMove: undefined, loading: false }
 );
 
 const emit = defineEmits<{ move: [{ from: Key; to: Key; promotion?: Role }] }>();
@@ -60,11 +61,21 @@ const turn = computed(() => config.value.turnColor ?? "white");
 </script>
 
 <template>
-	<div class="board">
+	<div
+		class="board"
+		:aria-busy="loading"
+	>
 		<div
 			ref="element"
 			class="ground"
 		/>
+		<!-- Words are the page's to say, in its status line: the board speaks no locale. -->
+		<div
+			v-if="loading"
+			class="loading"
+		>
+			<span class="spinner" />
+		</div>
 		<PromotionPicker
 			v-if="pending"
 			:color="turn"
@@ -85,5 +96,38 @@ const turn = computed(() => config.value.turnColor ?? "white");
 .ground {
 	width: 100%;
 	height: 100%;
+}
+
+.loading {
+	position: absolute;
+	inset: 0;
+	/* Over chessground's pieces, as the promotion picker is — see its z-index. */
+	z-index: 20;
+	display: grid;
+	place-items: center;
+	/* Fixed, not a theme token: the backdrop is dark in either world. */
+	color: #fff;
+	background: rgb(24 24 27 / 55%);
+}
+
+.spinner {
+	width: 2.5rem;
+	height: 2.5rem;
+	border: 0.25rem solid currentcolor;
+	border-right-color: transparent;
+	border-radius: 50%;
+	animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+	to {
+		transform: rotate(1turn);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.spinner {
+		animation-duration: 3s;
+	}
 }
 </style>

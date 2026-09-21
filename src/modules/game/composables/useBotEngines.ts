@@ -1,4 +1,4 @@
-import { onBeforeUnmount, ref } from "vue";
+import { computed, onBeforeUnmount, ref } from "vue";
 
 import type { Animal } from "@/modules/bots/roster";
 import { createUciClient, createWorkerTransport } from "@/shared/engine";
@@ -40,6 +40,9 @@ async function reseed(engines: Map<string, UciEngineClient>): Promise<void> {
 export function useBotEngines() {
 	const engines = new Map<string, UciEngineClient>();
 	const thinking = ref(false);
+	// A count rather than a flag: the picker can swap a bot while another is still loading, and
+	// the first to finish must not clear the state for the one still on its way.
+	const pending = ref(0);
 
 	function engineFor(animal: Animal): UciEngineClient {
 		const existing = engines.get(animal.definition.id);
@@ -61,15 +64,29 @@ export function useBotEngines() {
 		moves?: string[];
 	}): Promise<{ move: string; score?: number }> {
 		const engine = engineFor(animal);
+		// Loading is not thinking: the first move of a bot waits on its wasm, and for a sea animal
+		// on Stockfish too, which `prepare` has already shown as loading.
+		await engine.init();
 
 		thinking.value = true;
 		try {
-			await engine.init();
 			engine.setPosition({ fen, moves });
 
 			return await engine.go({ depth: animal.definition.search.depth });
 		} finally {
 			thinking.value = false;
+		}
+	}
+
+	// Starts every bot that is about to play, so the board can wait for all of them at once: the
+	// handshake settles only once a worker has its engine — the wasm, Stockfish, whatever it runs
+	// on — so an answered `isready` is what "loaded" means for any kind of opponent.
+	async function prepare(animals: Animal[]): Promise<void> {
+		pending.value += 1;
+		try {
+			await Promise.all(animals.map((animal) => engineFor(animal).init()));
+		} finally {
+			pending.value -= 1;
 		}
 	}
 
@@ -80,5 +97,7 @@ export function useBotEngines() {
 		engines.clear();
 	});
 
-	return { askForMove, startNewGame, thinking };
+	const loading = computed(() => pending.value > 0);
+
+	return { askForMove, prepare, startNewGame, thinking, loading };
 }

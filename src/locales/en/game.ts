@@ -12,6 +12,7 @@ export default {
 	group: { land: "On land", sea: "Underwater" },
 	human: "You",
 	restart: "New game",
+	loading: "Loading…",
 	thinking: "Thinking…",
 	turn: { white: "White", black: "Black" },
 	toMove: { white: "White to move", black: "Black to move" },
