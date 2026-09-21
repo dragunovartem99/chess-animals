@@ -20,6 +20,22 @@ function checkWeights({ id, record }: { id: string; record: unknown }): void {
 	}
 }
 
+function checkStockfish({ id, stockfish }: { id: string; stockfish: unknown }): void {
+	if (stockfish === undefined) return;
+
+	const options = (
+		typeof stockfish === "object" && stockfish !== null ? stockfish : {}
+	) as Record<string, unknown>;
+	if (!Number.isInteger(options.nodes) || (options.nodes as number) < 1) {
+		fail({ id, problem: "stockfish.nodes must be a whole number of at least 1" });
+	}
+
+	const { mix } = options;
+	if (typeof mix !== "number" || !(mix >= 0 && mix <= 100)) {
+		fail({ id, problem: "stockfish.mix must be a percentage from 0 to 100" });
+	}
+}
+
 // Bots arrive from files a person edited, from the weight editor, from a tuner run, and from
 // localStorage written by an older version of this app. None of those are trustworthy, and a bot
 // that is quietly wrong plays a whole tournament before anyone notices, so it is rejected loudly
@@ -45,6 +61,7 @@ export function assertBotDefinition(value: unknown): asserts value is BotDefinit
 		fail({ id, problem: `unknown base "${String(base)}"` });
 	}
 
+	checkStockfish({ id, stockfish: candidate.stockfish });
 	checkWeights({ id, record: candidate.weights });
 }
 

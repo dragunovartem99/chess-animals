@@ -20,6 +20,13 @@ describe("compileBot", () => {
 		expect(bot.search).toEqual({ depth: 2 });
 	});
 
+	it("carries a sea animal's options through, and gives a land animal none", () => {
+		const stockfish = { nodes: 50, mix: 30 };
+
+		expect(compileBot({ ...base, stockfish }).stockfish).toEqual(stockfish);
+		expect(compileBot(base).stockfish).toBeUndefined();
+	});
+
 	it("puts each named weight in its own slot", () => {
 		expect(compileBot(base).weights[SWARM]).toBe(-12);
 	});

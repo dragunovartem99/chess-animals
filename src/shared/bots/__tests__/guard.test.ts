@@ -53,6 +53,24 @@ describe("assertBotDefinition", () => {
 		expect(isBotDefinition({ ...VALID, base: "material" })).toBe(true);
 	});
 
+	it("accepts a sea animal, and one without stockfish options", () => {
+		expect(isBotDefinition({ ...VALID, stockfish: { nodes: 50, mix: 0 } })).toBe(true);
+	});
+
+	it.each([
+		{ nodes: 0, mix: 10 },
+		{ nodes: 50.5, mix: 10 },
+		{ nodes: 50, mix: -1 },
+		{ nodes: 50, mix: 101 },
+		{ nodes: 50, mix: "half" },
+		{ mix: 10 },
+		{ nodes: 50 },
+		"stockfish",
+		null,
+	])("rejects stockfish options %j", (stockfish) => {
+		expect(isBotDefinition({ ...VALID, stockfish })).toBe(false);
+	});
+
 	it("rejects anything that is not an object at all", () => {
 		for (const value of [null, undefined, 42, "wolf", []])
 			expect(isBotDefinition(value)).toBe(false);

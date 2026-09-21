@@ -8,6 +8,7 @@ export function compileBot(definition: BotDefinition): BotConfig {
 	return {
 		id: definition.id,
 		search: definition.search,
+		stockfish: definition.stockfish,
 		weights: weightsFromRecord(weightsOn(definition)),
 	};
 }
