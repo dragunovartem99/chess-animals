@@ -3,6 +3,7 @@ import { availableParallelism } from "node:os";
 
 import { MONSTERS, ROSTER, UNDERWATER } from "@/modules/bots/roster";
 import { openings } from "@/shared/openings";
+import { toPoints } from "@/shared/rating";
 import { createGameCache, createGamePool, runGamesCached, runTournament } from "@/shared/scheduler";
 
 import { LAB } from "./lab";
@@ -35,6 +36,7 @@ const roster = [
 // Leave a core free so the machine stays usable while the arena runs.
 const jobs = Math.max(1, availableParallelism() - 1);
 const cache = createGameCache({ dir: ".cache/arena" });
+const POINTS_FILE = "src/modules/bots/roster/points.json";
 
 const started = Date.now();
 const elapsed = () => Math.round((Date.now() - started) / 1000);
@@ -71,3 +73,18 @@ write(renderCrossTable(result.crossTable));
 
 writeFileSync("arena-results.json", `${JSON.stringify(result, null, 2)}\n`);
 write("\nwrote arena-results.json");
+
+// The site's numbers, from a run that rated the whole roster: a lab-only field has no anchors, and
+// a lab candidate is not an animal a player can meet.
+if (!labOnly) {
+	const ratings = Object.fromEntries(
+		result.rating.players
+			.filter((player) => !player.id.startsWith("lab-"))
+			.map((player) => [player.id, player.rating])
+	);
+	const anchors = Object.fromEntries(
+		UNDERWATER.map(({ definition }) => [definition.id, definition.maia?.elo ?? 0])
+	);
+	writeFileSync(POINTS_FILE, `${JSON.stringify(toPoints({ ratings, anchors }), null, "\t")}\n`);
+	write(`wrote ${POINTS_FILE}`);
+}

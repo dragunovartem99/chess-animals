@@ -59,10 +59,3 @@ What the spike found, 6 games a pair:
 | Commit                  | Contents                                                      | Green when                              |
 | ----------------------- | ------------------------------------------------------------- | --------------------------------------- |
 | ⬜ `about: credit maia` | AGPL-3.0: its source linked beside `public/maia3/COPYING.txt` | The About page says where the source is |
-
-## Rating points
-
-- ⬜ Every bot's rating on its card and in the player picker, as points. The arena writes a committed
-  `id → points` file beside `arena-results.json`, shifted so the weakest bot sits near 100 and
-  rounded to tens; the UI reads that file. Lands after the three rosters settle at sixteen, so one
-  arena run fills every number.

@@ -53,8 +53,9 @@ Linting and formatting via [oxlint](https://oxc.rs)/[oxfmt](https://oxc.rs), typ
 
 ## Where it stands
 
-20 animals, rated by the arena from the Dove (~200) to the Tiger (~2600) and listed weakest
-first. Built: the feature evaluation and a PVS search with quiescence in C compiled to wasm, the UCI codec and worker
+Three rosters of sixteen — land animals on the C engine, underwater animals on Maia, monsters on
+Stockfish — rated together by the arena, in points pinned to Maia's human-like ratings, from the
+Dove (−550) to the Dragon (2480), each listed weakest first. Built: the feature evaluation and a PVS search with quiescence in C compiled to wasm, the UCI codec and worker
 client, `/play` with a per-feature breakdown of what the bot sees, `/about`, and the dev CLIs `npm run arena` and `npm run tune`.
 
 Next, per [PLAN.md](./PLAN.md): golden-game fixtures and a tablebase probe interface.

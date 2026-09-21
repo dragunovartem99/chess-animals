@@ -22,6 +22,9 @@ const BOTS = ["wolf", "goat", "donkey"] as const;
 			</li>
 		</ul>
 
+		<h2>{{ $t("about.points.title") }}</h2>
+		<p>{{ $t("about.points.body") }}</p>
+
 		<h2>{{ $t("about.paper.title") }}</h2>
 		<p>{{ $t("about.paper.body") }}</p>
 

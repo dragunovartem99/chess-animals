@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Color } from "chessops/types";
 
+import { pointsOf } from "@/modules/bots/roster";
 import type { Animal } from "@/modules/bots/roster";
 
 defineProps<{ land: Animal[]; underwater: Animal[]; monsters: Animal[]; human: string }>();
@@ -34,6 +35,21 @@ const GROUPS = ["land", "underwater", "monsters"] as const;
 					</option>
 				</optgroup>
 			</select>
+			<!-- Beside the select, not in its options: a native option is plain text, and a number
+			     in it reads as clutter. Empty for a person, so the rows stay aligned. -->
+			<span
+				class="points"
+				:class="{ empty: pointsOf(players[color]) === undefined }"
+				:aria-label="
+					pointsOf(players[color]) === undefined
+						? undefined
+						: $t('roster.points', { points: pointsOf(players[color]) })
+				"
+			>
+				<template v-if="pointsOf(players[color]) !== undefined">
+					<span aria-hidden="true">★</span> {{ pointsOf(players[color]) }}
+				</template>
+			</span>
 		</label>
 	</div>
 </template>
@@ -46,8 +62,24 @@ const GROUPS = ["land", "underwater", "monsters"] as const;
 
 label {
 	display: grid;
-	grid-template-columns: 4rem 1fr;
+	grid-template-columns: 4rem 1fr 4.5rem;
 	gap: 0.5rem;
 	align-items: center;
+}
+
+.points {
+	justify-self: end;
+	padding: 0.1rem 0.5rem;
+	border-radius: var(--radius-full);
+	background: var(--color-sunken);
+	color: var(--color-ink-muted);
+	font-size: 0.85rem;
+	font-weight: 600;
+	font-variant-numeric: tabular-nums;
+	white-space: nowrap;
+}
+
+.points.empty {
+	visibility: hidden;
 }
 </style>

@@ -36,7 +36,9 @@ thin Node shell (run with `tsx`) over a `worker_threads` pool. `npm run arena` r
 roster over the paired opening set, printing the rating table and cross-table and writing
 `arena-results.json`; the same `--seed=` reproduces it exactly, and the result cache means a new
 bot only replays its own games. The cache is kept per `engine.wasm` build, so a rebuilt engine
-replays everything once. `npm run tune -- <botId>` runs SPSA on one bot's weights against
+replays everything once. It also writes the site's numbers, `src/modules/bots/roster/points.json`,
+committed: the fitted ratings shifted until the underwater animals sit, on average, at the Elo Maia
+was asked to play them at, so a bot's points read roughly as a person's rating (`toPoints`). `npm run tune -- <botId>` runs SPSA on one bot's weights against
 the rest of the roster as a gauntlet, printing the score each iteration and writing
 `<botId>-tuned.json` if the run improved it.
 

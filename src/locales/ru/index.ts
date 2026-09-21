@@ -30,6 +30,8 @@ const messages: Messages = {
 	bot: { ...bots, ...monsterBots, ...underwaterBots },
 	roster: {
 		lead: "Каждый зверь играет в шахматы по-своему странно. Обыграешь хоть одного?",
+		// Always "очков": points are rounded to tens, and a number ending in 0 takes it.
+		points: "{points} очков",
 	},
 	underwater: {
 		lead: "Тут все играют, как люди. Обыграешь хоть одного?",

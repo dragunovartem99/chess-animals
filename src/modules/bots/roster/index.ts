@@ -112,6 +112,7 @@ export const MONSTERS: Animal[] = [
 ];
 
 export { UNDERWATER };
+export { pointsOf } from "./points";
 
 // Everyone a player can meet, in the order the site lists the rosters.
 export const ANIMALS: Animal[] = [...ROSTER, ...UNDERWATER, ...MONSTERS];

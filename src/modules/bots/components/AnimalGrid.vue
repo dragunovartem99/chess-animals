@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { pointsOf } from "../roster";
 import type { Animal } from "../roster";
 
 const { animals } = defineProps<{ animals: Animal[] }>();
@@ -21,7 +22,20 @@ const { animals } = defineProps<{ animals: Animal[] }>();
 					>{{ animal.emoji }}</span
 				>
 				<span class="body">
-					<span class="name">{{ $t(`bot.${animal.definition.id}.name`) }}</span>
+					<span class="head">
+						<span class="name">{{ $t(`bot.${animal.definition.id}.name`) }}</span>
+						<!-- A star and the number: the word would not fit beside a long name. It stays
+						     in the label, for a reader that cannot see the star. -->
+						<span
+							v-if="pointsOf(animal.definition.id) !== undefined"
+							class="points"
+							:aria-label="
+								$t('roster.points', { points: pointsOf(animal.definition.id) })
+							"
+						>
+							<span aria-hidden="true">★</span> {{ pointsOf(animal.definition.id) }}
+						</span>
+					</span>
 					<span class="desc">{{ $t(`bot.${animal.definition.id}.description`) }}</span>
 				</span>
 			</RouterLink>
@@ -75,6 +89,26 @@ const { animals } = defineProps<{ animals: Animal[] }>();
 .body {
 	display: grid;
 	gap: 0.3rem;
+}
+
+.head {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.25rem 0.5rem;
+	align-items: baseline;
+	justify-content: space-between;
+}
+
+.points {
+	flex-shrink: 0;
+	padding: 0.05rem 0.5rem;
+	border-radius: var(--radius-full);
+	background: color-mix(in srgb, var(--tint) 16%, var(--color-surface));
+	color: var(--color-ink-muted);
+	font-size: 0.8rem;
+	font-weight: 600;
+	font-variant-numeric: tabular-nums;
+	white-space: nowrap;
 }
 
 .name {

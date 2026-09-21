@@ -9,6 +9,10 @@ export default {
 		goat: "The Goat chases checks, then captures, and never counts the cost.",
 		donkey: "The Donkey leaves every weight at zero and moves at random.",
 	},
+	points: {
+		title: "What the stars mean",
+		body: "Every bot plays every other in a big tournament, and its results become points. The underwater animals are Maia, a model trained on Lichess games to play like people at a chosen rating, so the whole scale is pinned to them: a bot's points read roughly like a Lichess rating. The weakest animals are worse than any person, so their points go below zero.",
+	},
 	paper: {
 		title: "Background",
 		body: "The project is inspired by Tom 7's Elo World (SIGBOVIK 2019), where a field of deliberately weak engines plays itself to stretch the usual rating scale down toward zero and below.",
