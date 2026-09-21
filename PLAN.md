@@ -39,8 +39,11 @@ Maia-3 ([CSSLab/maia3](https://github.com/CSSLab/maia3)): a transformer that pre
 move at a given rating, run with `onnxruntime-web` as
 [maia-platform-frontend](https://github.com/CSSLab/maia-platform-frontend) does — one
 Elo-conditioned model, the board as 64×12 tokens (mirrored when Black is to move), 4352 move
-logits masked to the legal ones and sampled from the seeded stream. Eight animals, eight Elo
-rungs — 600, 900, 1100, 1300, 1500, 1800, 2100, 2500 — as a monster is a temperature rung.
+logits masked to the legal ones and sampled from the seeded stream. Twelve animals, twelve Elo
+rungs, as a monster is a temperature rung — tight at the bottom, where the strength moves fastest:
+600, 700, 800, 900, 1000, 1100, 1250, 1400, 1600, 1800, 2100, and at the top 2500 played by its
+likeliest move rather than sampled, which beat the sampled 2500 against the Tiger. The arena
+decides whether neighbours stay apart; any two that tie get spread.
 
 What the spike found, 6 games a pair:
 
@@ -57,5 +60,5 @@ What the spike found, 6 games a pair:
 | ⬜ `underwater: maia mover`      | Board tokens, legal-move mask, seeded sampling; tested against a fake session | A fake policy picks the move it should     |
 | ⬜ `arena: rate underwater`      | The rungs in the rating table; the cache keys on the model's hash             | The table rates them beside the roster     |
 | ⬜ `underwater: play in browser` | `onnxruntime-web` in the worker, the model fetched on first play only         | A game against a rung plays in the browser |
-| ⬜ `underwater: maia animals`    | Eight sea creatures on the rungs, copy in both locales, the tab back          | The tab lists them and they play           |
+| ⬜ `underwater: maia animals`    | Twelve sea creatures on the rungs, copy in both locales, the tab back         | The tab lists them and they play           |
 | ⬜ `about: credit maia`          | AGPL-3.0: its source linked, its licence shipped                              | The About page says where the source is    |
