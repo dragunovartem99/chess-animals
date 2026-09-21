@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="T extends string">
-// The panel on `/play` and `/frankenstein` is one thing showing one of two views of the same
+// The panel on `/play` is one thing showing one of two views of the same
 // game; this is the control that switches between them. `i18nPrefix` keys the labels, so
 // `:tabs="['moves', 'breakdown']"` with prefix `game.tab` renders `$t('game.tab.moves')`.
 defineProps<{ tabs: readonly T[]; i18nPrefix: string }>();

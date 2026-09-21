@@ -2,7 +2,6 @@ import type { Messages } from "../types";
 import about from "./about";
 import bots from "./bots";
 import feature from "./feature";
-import frankenstein from "./frankenstein";
 import game from "./game";
 import monsterBots from "./monsters";
 import underwaterBots from "./underwater";
@@ -16,7 +15,6 @@ const messages: Messages = {
 		roster: "Зверинец",
 		play: "Игра",
 		about: "О проекте",
-		frankenstein: "Франкенштейн",
 		underwater: "Под водой",
 		monsters: "Монстры",
 	},
@@ -42,7 +40,6 @@ const messages: Messages = {
 	about,
 	game,
 	feature,
-	frankenstein,
 	placeholder: {
 		notBuiltYet: "Эту страницу еще строим.",
 	},

@@ -22,13 +22,12 @@ paper.pdf       Elo World, the design's source
 
 ### Modules
 
-| Module         | What it does                                                                                                                                                                                                      |
-| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `bots`         | the two rosters — land and monsters (`roster/*.ts`, plain data) — and a landing page for each                                                                                                                     |
-| `game`         | `/play` — human vs bot, bot vs bot, move list, feature breakdown                                                                                                                                                  |
-| `board`        | the chessground wrapper, orientation, legal dests, the promotion picker                                                                                                                                           |
-| `frankenstein` | `/frankenstein` — a live weight/depth sandbox: one weight vector across every feature, an in-thread UCI engine tuned by `setOption` (no restart), autoplay, seeding from a roster animal or the registry defaults |
-| `about`        | `/about` — a short prose page: how the bots work, the paper it comes from, credit                                                                                                                                 |
+| Module  | What it does                                                                                  |
+| ------- | --------------------------------------------------------------------------------------------- |
+| `bots`  | the two rosters — land and monsters (`roster/*.ts`, plain data) — and a landing page for each |
+| `game`  | `/play` — human vs bot, bot vs bot, move list, feature breakdown                              |
+| `board` | the chessground wrapper, orientation, legal dests, the promotion picker                       |
+| `about` | `/about` — a short prose page: how the bots work, the paper it comes from, credit             |
 
 The tournament runner and the SPSA tuner are **dev CLIs under `cli/`**, not modules — they need
 every core and have no place in the shipped app. The rating, scheduler and tuner math they drive
@@ -60,7 +59,7 @@ One flat area per folder, each with its own `index.ts`, and deliberately **no ro
 | `monsters`     | the monsters: Stockfish over a `UciTransport`, and the engine that samples its MultiPV lines                                                   |
 | `underwater`   | Maia: the board as its tokens, the legal moves as its logits, the pick from the seeded stream, the ONNX session and `withMaia` for the arena   |
 | `wasm`         | the binding to `engine/build/engine.wasm` — loading, the linear-memory arena, `search`/`extract`/`perft`, and the `goSearch` over it           |
-| `game`         | `useGame` — one game with its move list and repetition history, owned by whichever view mounts it (`/play`, `/frankenstein`)                   |
+| `game`         | `useGame` — one game with its move list and repetition history, owned by the view that mounts it (`/play`)                                     |
 | `ui`           | the Vue components both game views share — `SegmentedTabs` and the `FeatureBreakdown` table                                                    |
 | `bots`         | `BotDefinition` (JSON on disk) and `BotConfig` (compiled), the frozen weight bases, the guard, and `compileBot` between them                   |
 | `openings`     | the curated paired opening set (JSON), `probe(fen)`, and the colour-swapped schedule                                                           |

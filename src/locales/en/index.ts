@@ -1,7 +1,6 @@
 import about from "./about";
 import bots from "./bots";
 import feature from "./feature";
-import frankenstein from "./frankenstein";
 import game from "./game";
 import monsterBots from "./monsters";
 import underwaterBots from "./underwater";
@@ -15,7 +14,6 @@ export default {
 		roster: "Roster",
 		play: "Play",
 		about: "About",
-		frankenstein: "Frankenstein",
 		underwater: "Underwater",
 		monsters: "Monsters",
 	},
@@ -41,7 +39,6 @@ export default {
 	about,
 	game,
 	feature,
-	frankenstein,
 	placeholder: {
 		notBuiltYet: "Still building this one.",
 	},
