@@ -46,9 +46,9 @@ describe("createGamePool", () => {
 			try {
 				const batches = [specs(6), specs(8), specs(4)];
 				const results = await Promise.all(batches.map((batch) => pool.run(batch)));
-				batches.forEach((batch, i) => {
-					expect(results[i]).toEqual(runGamesSerially({ specs: batch, goSearch }));
-				});
+				for (const [i, batch] of batches.entries()) {
+					expect(results[i]).toEqual(await runGamesSerially({ specs: batch, goSearch }));
+				}
 			} finally {
 				await pool.close();
 			}
@@ -62,7 +62,9 @@ describe("createGamePool", () => {
 			const pool = createGamePool({ concurrency: 4 });
 			try {
 				const batch = specs(20);
-				expect(await pool.run(batch)).toEqual(runGamesSerially({ specs: batch, goSearch }));
+				expect(await pool.run(batch)).toEqual(
+					await runGamesSerially({ specs: batch, goSearch })
+				);
 			} finally {
 				await pool.close();
 			}

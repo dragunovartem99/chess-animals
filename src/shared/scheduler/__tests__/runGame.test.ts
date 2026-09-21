@@ -33,34 +33,34 @@ const spec = (over: Partial<GameSpec> = {}): GameSpec => ({
 const play = (over: Partial<GameSpec> = {}) => runGame({ spec: spec(over), goSearch });
 
 describe("runGame", () => {
-	it("is a pure function of the spec", () => {
-		expect(play()).toEqual(play());
+	it("is a pure function of the spec", async () => {
+		expect(await play()).toEqual(await play());
 	});
 
-	it("changes with the seed", () => {
-		const a = play({ seed: 1 });
-		const b = play({ seed: 2 });
+	it("changes with the seed", async () => {
+		const a = await play({ seed: 1 });
+		const b = await play({ seed: 2 });
 		expect(
 			[a, b].some((report) => report.plies !== a.plies || report.result !== a.result)
 		).toBe(true);
 	});
 
-	it("stops at the ply cap and calls it a draw", () => {
-		const report = play({ plyLimit: 16 });
+	it("stops at the ply cap and calls it a draw", async () => {
+		const report = await play({ plyLimit: 16 });
 		expect(report).toEqual({ result: null, reason: "ply-limit", plies: 16 });
 	});
 
-	it("calls a level position both bots shuffle a draw for want of progress", () => {
+	it("calls a level position both bots shuffle a draw for want of progress", async () => {
 		// Kings and one minor each, no pawns: sufficient material, but neither bot can force
 		// anything. The no-progress rule ends it at 24 quiet half-moves rather than at the ply cap.
-		const report = play({ openingFen: "2bk4/8/8/8/8/8/8/2BK4 w - - 0 1", plyLimit: 200 });
+		const report = await play({ openingFen: "2bk4/8/8/8/8/8/8/2BK4 w - - 0 1", plyLimit: 200 });
 		expect(report).toEqual({ result: null, reason: "no-progress", plies: 24 });
 	});
 
-	it("adjudicates a hopeless position as a resignation", () => {
+	it("adjudicates a hopeless position as a resignation", async () => {
 		// Black has only a king; White a full army. The material edge never comes back under the
 		// threshold, so White wins by resignation well before the ply cap.
-		const report = play({
+		const report = await play({
 			openingFen: "4k3/8/8/8/8/8/PPPPPPPP/RNBQKBNR w KQ - 0 1",
 			plyLimit: 200,
 		});

@@ -2,8 +2,19 @@ import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
+import { STOCKFISH_WASM_URL } from "../sea/process";
 import { ENGINE_URL } from "../wasm";
 import type { GameReport, GameSpec } from "./types";
+
+// The first bytes of the vendored Stockfish's digest, read once.
+let stockfishBuild: string | undefined;
+function stockfishDigest(): string {
+	stockfishBuild ??= createHash("sha256")
+		.update(readFileSync(STOCKFISH_WASM_URL))
+		.digest("hex")
+		.slice(0, 16);
+	return stockfishBuild;
+}
 
 // A stable JSON string: object keys sorted at every level, so two specs that differ only in
 // property order hash the same.
@@ -34,6 +45,9 @@ export function gameKey(spec: GameSpec): string {
 		seed: spec.seed,
 		plyLimit: spec.plyLimit,
 		adjudication: spec.adjudication,
+		// Only a game with a sea animal in it was played by Stockfish, so only its key moves when
+		// the build does: the land games' rows stay where they are.
+		stockfish: spec.white.stockfish || spec.black.stockfish ? stockfishDigest() : undefined,
 	});
 	const digest = createHash("sha256").update(payload).digest("hex");
 	digests.set(spec, digest);

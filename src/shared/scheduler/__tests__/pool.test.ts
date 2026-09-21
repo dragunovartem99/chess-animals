@@ -49,7 +49,7 @@ describe("runGames", () => {
 		async () => {
 			const batch = specs(24);
 			expect(await runGames({ specs: batch, concurrency: 4 })).toEqual(
-				runGamesSerially({ specs: batch, goSearch })
+				await runGamesSerially({ specs: batch, goSearch })
 			);
 		},
 		WORKER_TIMEOUT
