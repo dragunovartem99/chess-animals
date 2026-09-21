@@ -1,14 +1,14 @@
 import { writeFileSync } from "node:fs";
 import { availableParallelism } from "node:os";
 
-import { ROSTER } from "@/modules/bots/roster";
+import { ROSTER, SEA } from "@/modules/bots/roster";
 import { openings } from "@/shared/openings";
 import { createGameCache, createGamePool, runGamesCached, runTournament } from "@/shared/scheduler";
 
 import { LAB } from "./lab";
 import { renderCrossTable, renderRatingTable } from "./render";
 
-// `npm run arena` — rate the whole roster against itself, print the rating and cross tables, and
+// `npm run arena` — rate the whole roster, land and sea, against itself, print the rating and cross tables, and
 // write the full result to `arena-results.json`. A dev tool: it leans on every core but one and
 // runs for a few minutes cold, near-instant off the `.cache/arena` result cache (adding or
 // retuning one bot only replays that bot).
@@ -28,7 +28,7 @@ const write = (line: string) => process.stdout.write(`${line}\n`);
 if (withLab && LAB.length === 0) write("--lab: cli/lab.ts holds no candidates");
 
 const roster = [
-	...(labOnly ? [] : ROSTER.map((animal) => animal.definition)),
+	...(labOnly ? [] : [...ROSTER, ...SEA].map((animal) => animal.definition)),
 	...(withLab ? LAB : []),
 ];
 

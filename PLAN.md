@@ -22,25 +22,19 @@ What is left of the move to C. How it is built is in
 
 ## Outside v1
 
-- ⬜ Stockfish as a second `UciEngine` implementation — unlocks the dilution ladder
 - ⬜ A Polyglot `.bin` book reader behind `probe(fen)`
 
 ## The underwater section
 
-A second roster of **strong but exploitable** bots — the opposite feel to the land animals.
-Where a land animal is beaten by out-searching it, a sea animal is beaten by out-_planning_ it:
-it plays near-Stockfish moves but can't stop leaning on one feature, and that lean is the door.
+The sixteen sea animals exist and the arena rates them with the land roster — Stockfish diluted with
+the animal's own d3 + q search, see
+[ARCHITECTURE.md](./ARCHITECTURE.md#sea-animals). What is left:
 
-- ⬜ `base: "stockfish"` — needs the real `UciEngine` above. Single-threaded `stockfish.wasm`
-  (~12 MB, lazy-loaded so the land roster never pays for it), `Threads 1` + a fixed node/depth
-  budget for arena determinism, pinned build.
-- ⬜ A strength cap on the bot definition: `UCI_LimitStrength` + `UCI_Elo` (≈1400–2000 band).
-  This is a coherent weakening — SF plays its 2nd/3rd move, never a random blunder — so games
-  stay legible. **Not** the paper's random-move dilution, which the underwater section does not use.
-- ⬜ Personality via the existing feature registry: bias SF's root-move scores by the animal's
-  weights _before_ `pick_best`, with a blend strength λ on the definition. Low λ = a strong bot
-  with a tic; high λ = it follows its instinct into a losing plan the player learns to force.
-- ⬜ Emoji budget is tight (~12–15 clean: 🐟🐠🐡🦈🦑🦐🦞🦀🐬🐳🐋🦭🪼🐢). No seahorse emoji exists.
-- ⬜ Each sea animal is a pair: an SF Elo target (how hard) + a feature it over-weights (how to
-  beat it). E.g. Anglerfish — lures central then strikes; Pufferfish — `huddle` until provoked;
-  Electric eel — `kingDanger`, only cares about your king.
+- ⬜ Credit Stockfish on the About page and link its source: it is GPL-3.0 and the site is MIT, so
+  the build ships `public/stockfish/COPYING.txt` and the page has to say where the source is.
+- ⬜ Tune `nodes` and `mix` per animal. The first arena with the bright weights rates them Herring
+  1660 up to Goldfish 2284, with Tiger between Jellyfish and Lion. The weights are deliberately
+  above `LAB.md`'s d3 + q optima (observation 4 says that costs Elo) so each habit shows; `mix`
+  runs from 30 percent to none and `nodes` from 60 to 3000, and both are still first guesses.
+- ⬜ More animals, if a real idea turns up. The emoji left are 🐳 (no seahorse, no orca), and each
+  animal needs a habit and a `nodes`/`mix` pair.
