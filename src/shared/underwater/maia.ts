@@ -9,6 +9,8 @@ import { boardTokens } from "./tokens";
 // The model behind a pipe: tokens and a rating in, 4352 move logits out. An ONNX session in the
 // arena and the browser, a fake in a test — nothing here knows which.
 export type MaiaSession = {
+	// Settles once the model is loaded, loading it if nothing has yet.
+	ready: () => Promise<void>;
 	run: (input: { tokens: Float32Array; elo: number }) => Promise<Float32Array>;
 };
 

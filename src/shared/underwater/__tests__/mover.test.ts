@@ -20,6 +20,7 @@ const request: GoRequest = {
 };
 
 const session: MaiaSession = {
+	ready: () => Promise.resolve(),
 	run: () => {
 		const logits = new Float32Array(MOVE_COUNT).fill(-50);
 		logits[E2E4] = 10;

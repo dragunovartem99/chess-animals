@@ -199,6 +199,22 @@ random stream and is why `runGame` is async; each game worker owns one Stockfish
 and the result cache keys a game with a monster in it on the Stockfish build too. The sixteen
 are rated in the same table as the land roster.
 
+### Underwater animals
+
+A third roster, `UNDERWATER`, of **Maia alone** — a transformer trained to play the move a person
+at a given rating would. An underwater animal is a bot definition with no weights and
+`maia: { elo, greedy? }`; each move the board goes in as 64×12 tokens (flipped when Black is to
+move, since Maia only sees White's side), 4352 logits come out, the legal ones are softmaxed, and
+the move is drawn from the seeded stream — or, `greedy`, the likeliest is played. The sixteen
+differ in `elo` alone, bar the Whale, the one greedy animal.
+
+The model is vendored at `public/maia3/`, 46 MB, with its AGPL-3.0 licence beside it, and run by
+`onnxruntime-web` in the browser and under node alike (`onnxruntime-node` segfaults loading it).
+The runtime and the model load on the first underwater move: the worker's `isready` waits for
+them, so the board's loading state covers the download, and the land and monster rosters never
+fetch either. The arena plays them through `withMaia` in front of `createMover`, and the result
+cache keys a game with one in it on the model's digest.
+
 The pages follow the roster they show: `useTheme` in `shared/ui` lets a view say which world it is
 in, and the layout paints the document — the monsters' theme (violet squares, a
 slime-green highlight, a purple button) on `/monsters`, and on `/play` while a monster is at the board.

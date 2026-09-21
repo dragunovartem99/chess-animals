@@ -6,6 +6,7 @@ import { parseCommand } from "@/shared/engine/uci/parseCommand";
 import { serializeResponse } from "@/shared/engine/uci/serialize";
 import { createUciEngine } from "@/shared/engine/uciEngine";
 import { createMonsterEngine, createStockfish } from "@/shared/monsters";
+import { createMaiaSession, createUnderwaterEngine } from "@/shared/underwater";
 import { createWasmGoSearch, loadEngine } from "@/shared/wasm";
 import type { WasmEngine } from "@/shared/wasm";
 
@@ -14,7 +15,16 @@ import type { WasmEngine } from "@/shared/wasm";
 // which is where the script looks for it.
 const STOCKFISH_URL = `${import.meta.env.BASE_URL}stockfish/stockfish-19-lite-single.js`;
 
-// What either kind of bot is to this file: a command in, responses out, now or a moment later.
+// Vendored in `public/` for the same reason, and fetched by the first underwater animal that plays:
+// nobody else pays for its 46 MB.
+const MAIA_MODEL_URL = `${import.meta.env.BASE_URL}maia3/maia3_simplified.onnx`;
+
+async function fetchModel(): Promise<Uint8Array> {
+	const response = await fetch(MAIA_MODEL_URL);
+	return new Uint8Array(await response.arrayBuffer());
+}
+
+// What any kind of bot is to this file: a command in, responses out, now or a moment later.
 type Engine = { handle: (command: UciCommand) => UciResponse[] | Promise<UciResponse[]> };
 
 // The worker is deliberately almost empty: it owns a bot and a pipe, and everything it does with
@@ -36,6 +46,15 @@ function build({
 	name: string;
 }): Engine {
 	const config = compileBot(definition);
+	if (config.maia) {
+		const session = createMaiaSession({ load: fetchModel });
+		return createUnderwaterEngine({
+			config,
+			name,
+			session,
+			goSearch: createWasmGoSearch(module),
+		});
+	}
 	if (!config.stockfish)
 		return createUciEngine({ config, name, goSearch: createWasmGoSearch(module) });
 

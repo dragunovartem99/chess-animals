@@ -13,6 +13,7 @@ const AFTER_E4 = "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1";
 function fakeSession(favourite: number) {
 	const asked: number[] = [];
 	const session: MaiaSession = {
+		ready: () => Promise.resolve(),
 		run: ({ elo }) => {
 			asked.push(elo);
 			const logits = new Float32Array(MOVE_COUNT).fill(-50);
