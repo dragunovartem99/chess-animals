@@ -186,6 +186,7 @@ async function restart() {
 			</div>
 
 			<MoveList
+				class="moves"
 				:turns="game.turns.value"
 				:current="history.viewed.value"
 				@navigate="history.goTo"
@@ -209,10 +210,10 @@ async function restart() {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 1.5rem;
-	align-items: flex-start;
 }
 
 .board {
+	align-self: flex-start;
 	flex: 1 1 24rem;
 	max-width: 36rem;
 }
@@ -223,6 +224,14 @@ async function restart() {
 	gap: 0.75rem;
 	flex: 1 1 18rem;
 	min-width: 16rem;
+}
+
+/* A fixed box from the first move, so the controls under it never drift down as the game grows.
+   Beside the board the panel stretches to the board's height and the list takes what is left;
+   stacked under it on a phone there is nothing to stretch to, and the basis is the height. */
+.moves {
+	flex: 1 1 12rem;
+	min-height: 8rem;
 }
 
 .actions {

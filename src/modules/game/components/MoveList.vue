@@ -73,7 +73,6 @@ watch(
 
 <style scoped>
 .moves {
-	max-height: 20rem;
 	overflow-y: auto;
 	margin: 0;
 	padding: 0;
