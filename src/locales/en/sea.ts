@@ -1,50 +1,51 @@
 export default {
 	pufferfish: {
 		name: "Pufferfish",
-		description: "Packs every piece around its king, and stays puffed up.",
+		description: "Plays hard, but when it gets scared it puffs up and mixes things up.",
 	},
 	crab: {
 		name: "Crab",
-		description: "Pinches anything it can reach.",
+		description: "Plays well, but sometimes it walks sideways by mistake.",
 	},
 	squid: {
 		name: "Squid",
-		description: "Can't stop giving check.",
+		description: "Sees a lot, then gets bored and wiggles off somewhere else.",
 	},
 	jellyfish: {
 		name: "Jellyfish",
-		description: "Drifts every piece forward, slowly and all together.",
+		description: "Floats along almost perfectly. Once in a while a wave pushes it off.",
 	},
 	dolphin: {
 		name: "Dolphin",
-		description: "Keeps swimming back to the middle of the board.",
+		description: "Clever and playful. It makes a silly move only once in a long while.",
 	},
 	lobster: {
 		name: "Lobster",
-		description: "Closes its claws on the squares your pieces want.",
+		description: "Strong and slow. Now and then it drops something from its claws.",
 	},
 	octopus: {
 		name: "Octopus",
-		description: "Reaches out with every arm as far as it can.",
+		description: "Thinks with every arm at once. It almost never drops anything.",
 	},
 	shark: {
 		name: "Shark",
-		description: "Smells your king and cannot stay away from it.",
+		description: "Hardly ever misses. If it does, it bites again right away.",
 	},
 	whale: {
 		name: "Whale",
-		description: "Takes up more room than you, and waits for you to run out.",
+		description: "Never makes a silly move. You have to really beat it.",
 	},
 	goldfish: {
 		name: "Goldfish",
-		description: "Swims around and forgets everything. Somehow it never blunders.",
+		description:
+			"Forgets everything, except how to win. It sees further than anyone in the sea.",
 	},
 	shrimp: {
 		name: "Shrimp",
-		description: "The whole swarm goes at your king at once.",
+		description: "Small and very careful. It only slips when the water gets rough.",
 	},
 	herring: {
 		name: "Herring",
-		description: "Swims wherever the current takes it.",
+		description: "Very smart, but easy to distract. Every so often it looks the other way.",
 	},
 };
