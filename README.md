@@ -65,7 +65,7 @@ Linting and formatting via [oxlint](https://oxc.rs)/[oxfmt](https://oxc.rs), typ
 All 48 are rated together by the arena, in points pinned to Maia's human-like ratings: from the
 Dove (−550) to the Dragon (2480). The land roster tops out at the Tiger (1690), just past where
 the monsters begin. Built: the feature evaluation and a PVS search with quiescence in C, Maia and
-Stockfish in the browser, `/play` with a per-feature breakdown of what a land animal sees,
+Stockfish in the browser, `/play`,
 `/about`, and the dev CLIs `npm run arena` and `npm run tune`.
 
 Next, per [PLAN.md](./PLAN.md): golden-game fixtures and a tablebase probe interface.

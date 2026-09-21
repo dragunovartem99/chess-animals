@@ -25,7 +25,7 @@ paper.pdf       Elo World, the design's source
 | Module  | What it does                                                                                  |
 | ------- | --------------------------------------------------------------------------------------------- |
 | `bots`  | the two rosters — land and monsters (`roster/*.ts`, plain data) — and a landing page for each |
-| `game`  | `/play` — human vs bot, bot vs bot, move list, feature breakdown                              |
+| `game`  | `/play` — human vs bot, bot vs bot, move list                                                 |
 | `board` | the chessground wrapper, orientation, legal dests, the promotion picker                       |
 | `about` | `/about` — a short prose page: how the bots work, the paper it comes from, credit             |
 
@@ -53,22 +53,22 @@ own lazy chunk.
 One flat area per folder, each with its own `index.ts`, and deliberately **no root barrel**.
 `shared/` depends on nothing else in the repo.
 
-| Area           | What it holds                                                                                                                                  |
-| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| `chess`        | chessops wrappers — FEN in/out, legal moves, `afterMove`, repetition keys, and game-over detection                                             |
-| `eval`         | the feature registry, feature and weight vectors, the mate term, the White-relative breakdown — what a bot is, where `engine/` is what it does |
-| `engine`       | the seeded RNG, the UCI codec, the UCI engine over a `goSearch`, the engine client and its transports                                          |
-| `monsters`     | the monsters: Stockfish over a `UciTransport`, and the engine that samples its MultiPV lines                                                   |
-| `underwater`   | Maia: the board as its tokens, the legal moves as its logits, the pick from the seeded stream, the ONNX session and `withMaia` for the arena   |
-| `wasm`         | the binding to `engine/build/engine.wasm` — loading, the linear-memory arena, `search`/`extract`/`perft`, and the `goSearch` over it           |
-| `game`         | `useGame` — one game with its move list and repetition history, owned by the view that mounts it (`/play`)                                     |
-| `ui`           | the Vue components both game views share — `SegmentedTabs` and the `FeatureBreakdown` table                                                    |
-| `bots`         | `BotDefinition` (JSON on disk) and `BotConfig` (compiled), the frozen weight bases, the guard, and `compileBot` between them                   |
-| `openings`     | the curated paired opening set (JSON), `probe(fen)`, and the colour-swapped schedule                                                           |
-| `rating`       | Bradley–Terry MLE with a white advantage and Rao–Kupper draw term, CIs from the Hessian, and the Markov champion iteration                     |
-| `scheduler`    | the pure `runGame`, a `worker_threads` pool, the result cache, adaptive pairing, and `runTournament` over all of it                            |
-| `tuner`        | SPSA — the decaying gain sequences, the Rademacher perturbation, the ascent loop, and the bot-weights ↔ parameter-vector mapping               |
-| `test-support` | fixtures and helpers shared by specs — the wasm engine, component mounting, played games, weight vectors, a fake worker                        |
+| Area           | What it holds                                                                                                                                |
+| -------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| `chess`        | chessops wrappers — FEN in/out, legal moves, `afterMove`, repetition keys, and game-over detection                                           |
+| `eval`         | the feature registry, feature and weight vectors, `MATE_SCORE` — what a bot is, where `engine/` is what it does                              |
+| `engine`       | the seeded RNG, the UCI codec, the UCI engine over a `goSearch`, the engine client and its transports                                        |
+| `monsters`     | the monsters: Stockfish over a `UciTransport`, and the engine that samples its MultiPV lines                                                 |
+| `underwater`   | Maia: the board as its tokens, the legal moves as its logits, the pick from the seeded stream, the ONNX session and `withMaia` for the arena |
+| `wasm`         | the binding to `engine/build/engine.wasm` — loading, the linear-memory arena, `search`/`extract`/`perft`, and the `goSearch` over it         |
+| `game`         | `useGame` — one game with its move list, positions and repetition history, owned by the view that mounts it (`/play`)                        |
+| `ui`           | `useTheme` — the world a view puts the page in                                                                                               |
+| `bots`         | `BotDefinition` (JSON on disk) and `BotConfig` (compiled), the frozen weight bases, the guard, and `compileBot` between them                 |
+| `openings`     | the curated paired opening set (JSON), `probe(fen)`, and the colour-swapped schedule                                                         |
+| `rating`       | Bradley–Terry MLE with a white advantage and Rao–Kupper draw term, CIs from the Hessian, and the Markov champion iteration                   |
+| `scheduler`    | the pure `runGame`, a `worker_threads` pool, the result cache, adaptive pairing, and `runTournament` over all of it                          |
+| `tuner`        | SPSA — the decaying gain sequences, the Rademacher perturbation, the ascent loop, and the bot-weights ↔ parameter-vector mapping             |
+| `test-support` | fixtures and helpers shared by specs — the wasm engine, component mounting, played games, weight vectors, a fake worker                      |
 
 `shared/bots` sits below both `eval` and `engine` in the dependency order rather than beside the
 roster, because the worker and the cache key need to read a bot definition without pulling a Vue
@@ -107,17 +107,13 @@ twice over: every mate scored the same whatever its distance, and the leaf of a 
 collected plies of positional bonus on top of it, so every animal in the roster walked past a
 mate in one.
 
-The breakdown panel reads the same features: `playedGame` hands the engine the position and the
-move that produced it, `extract` returns the vector, and `explainPosition` turns it into
-White-relative rows that sum to what the search scores.
-
 Feature keys are what a bot config stores, what a UCI `setoption` names, and what the locale
 files key their labels on. Ids are assigned from registry order and never stored, so appending a
 feature is safe and reordering one is not.
 
 ## The engine
 
-The browser's `uciEngine` worker, the breakdown panel and the arena's game workers — so the
+The browser's `uciEngine` worker and the arena's game workers — so the
 tuner's games too — all load the one module. It is called coarsely, never per node:
 `search({ fen, moves, weights, options, rngState })` returns the move, its score, the node count
 and the advanced random state; C replays the move history into its own Zobrist stack, so it sees

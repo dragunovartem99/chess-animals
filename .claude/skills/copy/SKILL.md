@@ -1,6 +1,6 @@
 ---
 name: copy
-description: Write or rewrite the player-facing text — bot names and descriptions in `src/locales/{en,ru}/bots.ts`, and the UI prose in `src/locales/{en,ru}/index.ts` (tagline, roster lead, breakdown blurbs, placeholders). Use when adding an animal, retuning its voice, or the user asks for better wording anywhere on the site.
+description: Write or rewrite the player-facing text — bot names and descriptions in `src/locales/{en,ru}/bots.ts`, and the UI prose in `src/locales/{en,ru}/index.ts` (tagline, roster lead, placeholders). Use when adding an animal, retuning its voice, or the user asks for better wording anywhere on the site.
 ---
 
 ## Voice
@@ -25,7 +25,6 @@ description: Write or rewrite the player-facing text — bot names and descripti
 - DO keep `app.tagline` one line, no animal count baked in (the roster grows).
 - DO keep `roster.lead` an invitation, not a description of the page.
 - DO keep interpolation placeholders (`{name}`, `{phase}`) exactly as they are.
-- DO keep the factual blurbs (`game.breakdown.*`) accurate — plainer wording is fine, wrong wording is not.
 
 ## Russian
 

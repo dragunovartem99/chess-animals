@@ -6,10 +6,9 @@ import { computed, ref, watch } from "vue";
 
 import { ChessBoard } from "@/modules/board";
 import { ANIMALS_BY_ID, MONSTERS, ROSTER, UNDERWATER } from "@/modules/bots/roster";
-import { compileBot } from "@/shared/bots";
 import { fromUci } from "@/shared/engine/uci/moves";
 import { useGame } from "@/shared/game";
-import { FeatureBreakdown, SegmentedTabs, useTheme } from "@/shared/ui";
+import { useTheme } from "@/shared/ui";
 
 import { useBotEngines } from "../composables/useBotEngines";
 import { usePlayers } from "../composables/usePlayers";
@@ -35,9 +34,6 @@ const WORLDS = [
 useTheme(
 	() => WORLDS.find(({ ids }) => Object.values(players.value).some((id) => ids.has(id)))?.theme
 );
-
-const TABS = ["moves", "breakdown"] as const;
-const tab = ref<(typeof TABS)[number]>("moves");
 
 const humanColors = computed(() => COLORS.filter((color) => players.value[color] === HUMAN));
 const orientation = computed(() => humanColors.value[0] ?? "white");
@@ -121,21 +117,6 @@ watch(
 	{ immediate: true }
 );
 
-// The breakdown follows whoever is on move; while a human is thinking it shows their opponent,
-// so the panel is never blank in a human-versus-bot game.
-const lens = computed(() => {
-	const onMove = ANIMALS_BY_ID.get(players.value[game.position.value.turn]);
-	if (onMove) return onMove;
-
-	const other = game.position.value.turn === "white" ? "black" : "white";
-
-	return ANIMALS_BY_ID.get(players.value[other]);
-});
-
-const lensWeights = computed(() =>
-	lens.value ? compileBot(lens.value.definition).weights : undefined
-);
-
 // Both seats at once, in one assignment, so the URL is written once. A new game with it: the
 // players trade the pieces they started with, not a position half played by the other side.
 function swapColors() {
@@ -198,24 +179,7 @@ async function restart() {
 				</button>
 			</div>
 
-			<SegmentedTabs
-				v-model="tab"
-				:tabs="TABS"
-				i18n-prefix="game.tab"
-			/>
-
-			<MoveList
-				v-if="tab === 'moves'"
-				:turns="game.turns.value"
-			/>
-
-			<FeatureBreakdown
-				v-else-if="lens && lensWeights"
-				:position="game.position.value"
-				:weights="lensWeights"
-				:played="game.played.value"
-				:name="$t(`bot.${lens.definition.id}.name`)"
-			/>
+			<MoveList :turns="game.turns.value" />
 		</aside>
 	</section>
 </template>

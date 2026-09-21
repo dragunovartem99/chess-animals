@@ -1,14 +1,4 @@
 export default {
-	breakdown: {
-		title: "What {name} sees",
-		absolute: "Plus is good for White, minus is good for Black. Points = Amount × Weight.",
-		total: "Total",
-		feature: "Parameter",
-		amount: "Amount",
-		weight: "Weight",
-		points: "Points",
-	},
-	tab: { moves: "Moves", breakdown: "Breakdown" },
 	group: { underwater: "Underwater", land: "On land", monsters: "Monsters" },
 	human: "You",
 	restart: "New game",

@@ -3,23 +3,17 @@ import type { Chess } from "chessops/chess";
 import { fenFromPosition } from "../chess";
 import { seedState } from "../engine";
 import type { SearchOptions } from "../engine";
-import type { FeatureVector, PlayedMove, WeightVector } from "../eval";
-import { createWasmGoSearch, loadEngine, playedGame } from "../wasm";
+import type { FeatureVector, WeightVector } from "../eval";
+import { createWasmGoSearch, loadEngine } from "../wasm";
 
 // One engine for a whole test file, loaded when the file is imported: every search and every
 // feature a spec asserts on is the engine's, since there is no other.
 export const engine = await loadEngine();
 export const goSearch = createWasmGoSearch(engine);
 
-// The features of a position, with the move that produced it when there was one.
-export function extract({
-	position,
-	played,
-}: {
-	position: Chess;
-	played?: PlayedMove;
-}): FeatureVector {
-	return engine.extract(playedGame({ position, played }));
+// The features of a position, read with no move behind it.
+export function extract({ position }: { position: Chess }): FeatureVector {
+	return engine.extract({ fen: fenFromPosition(position) });
 }
 
 // The move a bot plays from a position, in UCI with castling as the king taking its rook, or

@@ -1,14 +1,4 @@
 export default {
-	breakdown: {
-		title: "Что видит {name}",
-		absolute: "Плюс — хорошо для белых, минус — для черных. Очки = Значение × Вес.",
-		total: "Итого",
-		feature: "Параметр",
-		amount: "Значение",
-		weight: "Вес",
-		points: "Очки",
-	},
-	tab: { moves: "Ходы", breakdown: "Разбор" },
 	group: { underwater: "Под водой", land: "На суше", monsters: "Монстры" },
 	human: "Вы",
 	restart: "Новая партия",

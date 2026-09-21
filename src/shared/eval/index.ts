@@ -1,5 +1,3 @@
-export { type Breakdown, type Contribution, explainPosition } from "./breakdown";
-export type { PlayedMove } from "./played";
 export {
 	defineFeatures,
 	type Feature,
@@ -18,4 +16,4 @@ export {
 	type WeightVector,
 	weightsFromRecord,
 } from "./vector";
-export { MATE_SCORE, type TerminalTerm, terminalTerm } from "./terminal";
+export { MATE_SCORE } from "./terminal";
