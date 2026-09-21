@@ -4,8 +4,8 @@ import { compileBot } from "../bots";
 import { afterMove, gameStatus, positionFromFen, repetitionKey } from "../chess";
 import { seedState } from "../engine";
 import type { GoSearch } from "../engine";
-import { createMover } from "../sea";
-import type { Stockfish } from "../sea";
+import { createMover } from "../monsters";
+import type { Stockfish } from "../monsters";
 import { createAdjudicator, DEFAULT_ADJUDICATION, materialEdge } from "./adjudicate";
 import type { GameReport, GameSpec } from "./types";
 
@@ -23,7 +23,7 @@ export async function runGame({
 }: {
 	spec: GameSpec;
 	goSearch: GoSearch;
-	// Only a game with a sea animal in it asks for this.
+	// Only a game with a monster in it asks for this.
 	stockfish?: Stockfish;
 }): Promise<GameReport> {
 	const move = createMover({ goSearch, stockfish });

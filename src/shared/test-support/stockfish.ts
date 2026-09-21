@@ -1,5 +1,5 @@
-import type { Line } from "../sea/lines";
-import type { Stockfish } from "../sea/stockfish";
+import type { Line } from "../monsters/lines";
+import type { Stockfish } from "../monsters/stockfish";
 
 // A Stockfish that offers the lines it is told, and remembers what it was asked. A bare move is
 // one line scored zero.

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { compileBot } from "../../bots";
-import { applySeaOption, describeSeaOptions } from "../options";
+import { applyMonsterOption, describeMonsterOptions } from "../options";
 
 const shark = compileBot({
 	id: "shark",
@@ -10,9 +10,9 @@ const shark = compileBot({
 	weights: {},
 });
 
-describe("sea options", () => {
+describe("monster options", () => {
 	it("advertises the node budget, the lines and the temperature", () => {
-		expect(describeSeaOptions(shark)).toMatchObject([
+		expect(describeMonsterOptions(shark)).toMatchObject([
 			{ name: "Nodes", default: "100" },
 			{ name: "Lines", default: "5" },
 			{ name: "Temperature", default: "30" },
@@ -20,7 +20,7 @@ describe("sea options", () => {
 	});
 
 	it("sets them without touching the rest", () => {
-		const next = applySeaOption({ config: shark, name: "Temperature", value: "75" });
+		const next = applyMonsterOption({ config: shark, name: "Temperature", value: "75" });
 
 		expect(next?.stockfish).toEqual({ nodes: 100, lines: 5, temperature: 75 });
 		expect(next?.weights).toBe(shark.weights);
@@ -28,15 +28,15 @@ describe("sea options", () => {
 
 	it("lets the lines and the temperature reach their ends", () => {
 		const set = (name: string, value: string) =>
-			applySeaOption({ config: shark, name, value })?.stockfish;
+			applyMonsterOption({ config: shark, name, value })?.stockfish;
 
 		expect(set("Temperature", "0")?.temperature).toBe(0);
 		expect(set("Lines", "1")?.lines).toBe(1);
 		expect(set("Lines", "500")?.lines).toBe(500);
 	});
 
-	it("leaves an option that is not the sea's to the land engine", () => {
-		expect(applySeaOption({ config: shark, name: "swarm", value: "7" })).toBeUndefined();
+	it("leaves an option that is not a monster's to the land engine", () => {
+		expect(applyMonsterOption({ config: shark, name: "swarm", value: "7" })).toBeUndefined();
 	});
 
 	it.each([
@@ -47,12 +47,12 @@ describe("sea options", () => {
 		["Temperature", "-1"],
 		["Temperature", undefined],
 	])("ignores %s = %s", (name, value) => {
-		expect(applySeaOption({ config: shark, name, value })).toBe(shark);
+		expect(applyMonsterOption({ config: shark, name, value })).toBe(shark);
 	});
 
 	it("leaves a land bot alone", () => {
 		const land = compileBot({ id: "owl", search: { depth: 3 }, weights: {} });
 
-		expect(applySeaOption({ config: land, name: "Lines", value: "3" })).toBe(land);
+		expect(applyMonsterOption({ config: land, name: "Lines", value: "3" })).toBe(land);
 	});
 });

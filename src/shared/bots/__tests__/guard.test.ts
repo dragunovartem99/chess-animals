@@ -53,7 +53,7 @@ describe("assertBotDefinition", () => {
 		expect(isBotDefinition({ ...VALID, base: "material" })).toBe(true);
 	});
 
-	it("accepts a sea animal, and one without stockfish options", () => {
+	it("accepts a monster, and one without stockfish options", () => {
 		expect(
 			isBotDefinition({ ...VALID, stockfish: { nodes: 50, lines: 1, temperature: 0 } })
 		).toBe(true);

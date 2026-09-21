@@ -4,7 +4,7 @@ import { compileBot } from "../../bots";
 import type { BotDefinition } from "../../bots";
 import { fakeStockfish } from "../../test-support/stockfish";
 import { goSearch } from "../../test-support/wasm";
-import { createSeaEngine } from "../engine";
+import { createMonsterEngine } from "../engine";
 
 const SHARK: BotDefinition = {
 	id: "shark",
@@ -27,7 +27,7 @@ function connect({
 	definition?: BotDefinition;
 }) {
 	const { stockfish, asked } = fakeStockfish(move);
-	const engine = createSeaEngine({
+	const engine = createMonsterEngine({
 		config: compileBot(definition),
 		name: "Shark",
 		stockfish,
@@ -45,7 +45,7 @@ async function played(engine: ReturnType<typeof connect>["engine"]) {
 	return answer.type === "bestmove" ? answer.move : undefined;
 }
 
-describe("the sea engine", () => {
+describe("the monster engine", () => {
 	it("completes the UCI handshake, advertising its own options too", async () => {
 		const { engine } = connect({});
 
@@ -114,9 +114,9 @@ describe("the sea engine", () => {
 		expect(await engine.handle(GO)).toEqual([{ type: "bestmove", move: "e1g1" }]);
 	});
 
-	it("refuses a bot that is not a sea animal", async () => {
+	it("refuses a bot that is not a monster", async () => {
 		const { engine } = connect({ definition: { ...SHARK, stockfish: undefined } });
 
-		await expect(engine.handle(GO)).rejects.toThrow("not a sea animal");
+		await expect(engine.handle(GO)).rejects.toThrow("not a monster");
 	});
 });

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useTheme } from "@/shared/ui";
 
-import { SEA } from "../roster";
+import { MONSTERS } from "../roster";
 import AnimalGrid from "./AnimalGrid.vue";
 
 useTheme("sea");
@@ -10,11 +10,11 @@ useTheme("sea");
 <template>
 	<section class="roster">
 		<header>
-			<h1>{{ $t("nav.underwater") }}</h1>
-			<p class="lead">{{ $t("underwater.lead") }}</p>
+			<h1>{{ $t("nav.monsters") }}</h1>
+			<p class="lead">{{ $t("monsters.lead") }}</p>
 		</header>
 
-		<AnimalGrid :animals="SEA" />
+		<AnimalGrid :animals="MONSTERS" />
 	</section>
 </template>
 

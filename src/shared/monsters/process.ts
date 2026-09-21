@@ -15,9 +15,9 @@ export const STOCKFISH_WASM_URL = new URL(
 
 // Stockfish as a child process, for the hosts that have no worker to give it — the arena's game
 // threads and the specs. The browser hands the same `createStockfish` a worker's transport, and
-// the sea engine cannot tell.
+// the monster engine cannot tell.
 //
-// The process starts on the first line sent, so a thread that never plays a sea animal never
+// The process starts on the first line sent, so a thread that never plays a monster never
 // pays for one. `getBuiltinModule` rather than an `import`, as in `loadEngine`: vite would try to
 // resolve `node:child_process` for the browser bundle this file sits beside.
 export function createProcessTransport(): UciTransport {

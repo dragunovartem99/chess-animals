@@ -1,9 +1,9 @@
 import type { BotConfig } from "../bots";
 import type { UciResponse } from "../engine";
 
-// What a caller may set on a sea animal beyond what every bot has: Stockfish's budget, how many
+// What a caller may set on a monster beyond what every bot has: Stockfish's budget, how many
 // lines it weighs, and how carelessly it picks among them. `Temperature` is in centipawns.
-export function describeSeaOptions(config: BotConfig): UciResponse[] {
+export function describeMonsterOptions(config: BotConfig): UciResponse[] {
 	const { nodes, lines, temperature } = config.stockfish ?? {
 		nodes: 0,
 		lines: 0,
@@ -24,10 +24,10 @@ const LIMITS = {
 	Temperature: { key: "temperature", min: 0, max: Infinity },
 } as const;
 
-// `undefined` for an option that is not the sea's, so the land engine underneath can have it; the
+// `undefined` for an option that is not a monster's, so the land engine underneath can have it; the
 // config unchanged for one that is but has no usable value, because UCI says an engine ignores
 // what it does not understand.
-export function applySeaOption({
+export function applyMonsterOption({
 	config,
 	name,
 	value,

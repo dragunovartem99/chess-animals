@@ -9,7 +9,7 @@ export default {
 		points: "Очки",
 	},
 	tab: { moves: "Ходы", breakdown: "Разбор" },
-	group: { land: "На суше", sea: "Под водой" },
+	group: { land: "На суше", monsters: "Монстры" },
 	human: "Вы",
 	restart: "Новая партия",
 	loading: "Загрузка…",

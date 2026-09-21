@@ -48,7 +48,7 @@ describe("createMover", () => {
 		expect(asked).toEqual([]);
 	});
 
-	it("never searches a sea animal itself, and asks Stockfish over the game so far", async () => {
+	it("never searches a monster itself, and asks Stockfish over the game so far", async () => {
 		const { move, goSearch, asked } = setup();
 
 		const found = await move(request(cold));
@@ -85,7 +85,7 @@ describe("createMover", () => {
 		expect(close).toBeLessThan(210);
 	});
 
-	it("refuses a sea animal when there is no Stockfish to ask", async () => {
+	it("refuses a monster when there is no Stockfish to ask", async () => {
 		const move = createMover({
 			goSearch: () => ({ move: OWN, score: 0, rngState: seedState(1) }),
 		});

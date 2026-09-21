@@ -19,7 +19,7 @@ export type Stockfish = {
 
 const BEST_MOVE = /^bestmove (\S+)/u;
 
-// Stockfish over a `UciTransport`, asking one question at a time — the sea engine's commands are
+// Stockfish over a `UciTransport`, asking one question at a time — the monster engine's commands are
 // handled in order, so a second question never arrives while the first is out.
 export function createStockfish({ transport }: { transport: UciTransport }): Stockfish {
 	let listener: ((line: string) => void) | undefined;

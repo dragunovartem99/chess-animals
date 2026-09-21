@@ -20,7 +20,7 @@ describe("compileBot", () => {
 		expect(bot.search).toEqual({ depth: 2 });
 	});
 
-	it("carries a sea animal's options through, and gives a land animal none", () => {
+	it("carries a monster's options through, and gives a land animal none", () => {
 		const stockfish = { nodes: 50, lines: 5, temperature: 30 };
 
 		expect(compileBot({ ...base, stockfish }).stockfish).toEqual(stockfish);

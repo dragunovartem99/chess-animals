@@ -1,8 +1,8 @@
 import { afterAll, describe, expect, it } from "vitest";
 
+import { createProcessTransport } from "../../monsters/process";
+import { createStockfish } from "../../monsters/stockfish";
 import { openings } from "../../openings";
-import { createProcessTransport } from "../../sea/process";
-import { createStockfish } from "../../sea/stockfish";
 import { goSearch } from "../../test-support/wasm";
 import { runGame } from "../runGame";
 import type { GameSpec } from "../types";
@@ -28,8 +28,8 @@ const spec = (over: Partial<GameSpec> = {}): GameSpec => ({
 	...over,
 });
 
-// The arena's own path with the real Stockfish behind it: a sea animal in a game, played out.
-describe("runGame with a sea animal", () => {
+// The arena's own path with the real Stockfish behind it: a monster in a game, played out.
+describe("runGame with a monster", () => {
 	it("plays it through to the end, in either seat", async () => {
 		for (const game of [spec(), spec({ white: MONKEY, black: GOLDFISH })]) {
 			const report = await runGame({ spec: game, goSearch, stockfish });
@@ -44,7 +44,7 @@ describe("runGame with a sea animal", () => {
 		expect(await runGame({ spec: spec(), goSearch, stockfish })).toEqual(first);
 	});
 
-	it("refuses a game with a sea animal and no Stockfish", async () => {
+	it("refuses a game with a monster and no Stockfish", async () => {
 		await expect(runGame({ spec: spec(), goSearch })).rejects.toThrow("needs Stockfish");
 	});
 });

@@ -2,7 +2,7 @@ import type { SearchOptions } from "../engine";
 import type { WeightVector } from "../eval";
 import type { BaseName } from "./bases";
 
-// What makes a bot a sea animal: Stockfish alone, softened. Each move Stockfish weighs its best
+// What makes a bot a monster: Stockfish alone, softened. Each move Stockfish weighs its best
 // `lines` candidates on `nodes` nodes, and the animal picks one at random, a candidate `d`
 // centipawns worse than the best weighted `exp(-d / temperature)`. A slip that costs little is
 // common and a blunder rare, which is how people err — a uniformly random move hangs a queen out
@@ -18,9 +18,9 @@ export type StockfishOptions = { nodes: number; lines: number; temperature: numb
 // registry cannot silently reinterpret every bot ever saved.
 export type BotDefinition = {
 	id: string;
-	// Unread by a sea animal, which never searches itself.
+	// Unread by a monster, which never searches itself.
 	search: SearchOptions;
-	// Present for a sea animal, whose moves all come from Stockfish.
+	// Present for a monster, whose moves all come from Stockfish.
 	stockfish?: StockfishOptions;
 	// The starting point the weights are written over — piece values and mate-awareness, usually.
 	// Omitted means `zero`: a bot that names no base is exactly what its weights say and nothing

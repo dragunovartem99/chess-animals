@@ -2,7 +2,7 @@ import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
-import { STOCKFISH_WASM_URL } from "../sea/process";
+import { STOCKFISH_WASM_URL } from "../monsters/process";
 import { ENGINE_URL } from "../wasm";
 import type { GameReport, GameSpec } from "./types";
 
@@ -45,7 +45,7 @@ export function gameKey(spec: GameSpec): string {
 		seed: spec.seed,
 		plyLimit: spec.plyLimit,
 		adjudication: spec.adjudication,
-		// Only a game with a sea animal in it was played by Stockfish, so only its key moves when
+		// Only a game with a monster in it was played by Stockfish, so only its key moves when
 		// the build does: the land games' rows stay where they are.
 		stockfish: spec.white.stockfish || spec.black.stockfish ? stockfishDigest() : undefined,
 	});

@@ -201,7 +201,7 @@ cg-board square.move-dest:hover {
 	background: rgb(63 63 70 / 30%);
 }
 
-/* The underwater roster's world. Everything the light theme paints comes from these variables, so
+/* The monsters' world, until Maia's underwater section takes it back. Everything the light theme paints comes from these variables, so
    the theme is only the variables: the header's wood is derived from the board's dark square and
    follows it down. The board pair is kept apart enough for black pieces to read on the dark
    square and white ones on the light. */

@@ -3,12 +3,12 @@ import type { Color } from "chessops/types";
 
 import type { Animal } from "@/modules/bots/roster";
 
-defineProps<{ land: Animal[]; sea: Animal[]; human: string }>();
+defineProps<{ land: Animal[]; monsters: Animal[]; human: string }>();
 const players = defineModel<Record<Color, string>>({ required: true });
 
 const COLORS: Color[] = ["white", "black"];
-// Two levels in the one select: the land roster, then the underwater one below it.
-const GROUPS = ["land", "sea"] as const;
+// Two levels in the one select: the land roster, then the monsters below it.
+const GROUPS = ["land", "monsters"] as const;
 </script>
 
 <template>

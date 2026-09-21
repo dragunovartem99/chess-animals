@@ -8,10 +8,10 @@ import { fromUci, toUci } from "../engine/uci/moves";
 import { replay } from "../engine/uciMoves";
 import type { Replayed } from "../engine/uciMoves";
 import { pickLine } from "./lines";
-import { applySeaOption, describeSeaOptions } from "./options";
+import { applyMonsterOption, describeMonsterOptions } from "./options";
 import type { Stockfish } from "./stockfish";
 
-export type SeaEngineState = {
+export type MonsterEngineState = {
 	config: BotConfig;
 	name: string;
 	stockfish: Stockfish;
@@ -20,13 +20,13 @@ export type SeaEngineState = {
 
 const NULL_MOVE: UciResponse[] = [{ type: "bestmove", move: "0000" }];
 
-// One sea animal: Stockfish, softened. Each move it asks Stockfish for its best few lines and
+// One monster: Stockfish, softened. Each move it asks Stockfish for its best few lines and
 // picks one, the worse a line the less likely — see `StockfishOptions`.
 //
 // It speaks UCI like the land engine and is one, mostly: everything but `go` and its own options
 // is the land engine's, and the pick is drawn from a stream of its own so a game replays from its
 // seed. An answer is a promise, because Stockfish is a process to ask, not a function to call.
-export function createSeaEngine({ config, name, stockfish, goSearch }: SeaEngineState) {
+export function createMonsterEngine({ config, name, stockfish, goSearch }: MonsterEngineState) {
 	const land = createUciEngine({ config, name, goSearch });
 	let current = config;
 	let seed: number | string = config.id;
@@ -39,7 +39,7 @@ export function createSeaEngine({ config, name, stockfish, goSearch }: SeaEngine
 
 	async function go(command: Extract<UciCommand, { type: "go" }>): Promise<UciResponse[]> {
 		const options = current.stockfish;
-		if (!options) throw new Error(`"${current.id}" is not a sea animal`);
+		if (!options) throw new Error(`"${current.id}" is not a monster`);
 
 		await start();
 		const { position, fen, moves } = game;
@@ -55,7 +55,9 @@ export function createSeaEngine({ config, name, stockfish, goSearch }: SeaEngine
 		async handle(command: UciCommand): Promise<UciResponse[]> {
 			switch (command.type) {
 				case "uci":
-					return land.handle(command).toSpliced(-1, 0, ...describeSeaOptions(current));
+					return land
+						.handle(command)
+						.toSpliced(-1, 0, ...describeMonsterOptions(current));
 				case "isready":
 					await start();
 					return land.handle(command);
@@ -66,7 +68,7 @@ export function createSeaEngine({ config, name, stockfish, goSearch }: SeaEngine
 					await stockfish.newGame();
 					return land.handle(command);
 				case "setoption": {
-					const next = applySeaOption({ config: current, ...command });
+					const next = applyMonsterOption({ config: current, ...command });
 					if (next) {
 						current = next;
 						return [];

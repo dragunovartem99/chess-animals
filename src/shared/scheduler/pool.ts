@@ -2,7 +2,7 @@ import { availableParallelism } from "node:os";
 import { Worker } from "node:worker_threads";
 
 import type { GoSearch } from "../engine";
-import type { Stockfish } from "../sea";
+import type { Stockfish } from "../monsters";
 import { runGame } from "./runGame";
 import type { GameReport, GameSpec } from "./types";
 

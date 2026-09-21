@@ -27,12 +27,7 @@ What is left of the move to C. How it is built is in
 ## Monsters
 
 The twelve Stockfish players — a MultiPV line picked by temperature, see
-[ARCHITECTURE.md](./ARCHITECTURE.md#sea-animals) — leave the sea for a section of their own, and
-`/underwater` goes to Maia. They are the strongest on the site, so the rename also reads right.
-
-| Commit                                   | Contents                                                                                                     | Green when                                          |
-| ---------------------------------------- | ------------------------------------------------------------------------------------------------------------ | --------------------------------------------------- |
-| ⬜ `monsters: move the stockfish roster` | `/underwater` → `/monsters`, `SEA` → `MONSTERS`, `shared/sea` → `shared/monsters`, nav, theme, locales, docs | The twelve play and rate from `/monsters` unchanged |
+[ARCHITECTURE.md](./ARCHITECTURE.md#monsters) — on `/monsters`. What is left:
 
 - ⬜ Credit Stockfish on the About page and link its source: it is GPL-3.0 and the site is MIT, so
   the build ships `public/stockfish/COPYING.txt` and the page has to say where the source is.

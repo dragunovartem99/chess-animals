@@ -97,14 +97,14 @@ export const ROSTER: Animal[] = [
 
 export const ROSTER_BY_ID = new Map(ROSTER.map((animal) => [animal.definition.id, animal]));
 
-// The second roster, apart from the first on purpose: a sea animal is Stockfish alone, softened,
+// The second roster, apart from the first on purpose: a monster is Stockfish alone, softened,
 // and `ROSTER` stays the land order and the gauntlet `tune` measures against. The arena rates both
 // together. Weakest first, and the order is the temperature's: every one weighs Stockfish's top
 // five lines on 5000 nodes, and picks a line `t` centipawns behind the best about a third as often
 // at temperature `t`, so the lower it is the rarer and smaller the slips. All twelve sit above the
 // Tiger. The top two are never careless — one line, so no nodes are spent on the other four — and
 // the Goldfish sees ten times as far as the Whale.
-export const SEA: Animal[] = [
+export const MONSTERS: Animal[] = [
 	HERRING,
 	SQUID,
 	CRAB,
@@ -119,8 +119,8 @@ export const SEA: Animal[] = [
 	GOLDFISH,
 ];
 
-// Everyone a player can meet, land then sea.
-export const ANIMALS: Animal[] = [...ROSTER, ...SEA];
+// Everyone a player can meet, land then monsters.
+export const ANIMALS: Animal[] = [...ROSTER, ...MONSTERS];
 
 export const ANIMALS_BY_ID = new Map(ANIMALS.map((animal) => [animal.definition.id, animal]));
 

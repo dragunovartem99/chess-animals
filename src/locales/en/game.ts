@@ -9,7 +9,7 @@ export default {
 		points: "Points",
 	},
 	tab: { moves: "Moves", breakdown: "Breakdown" },
-	group: { land: "On land", sea: "Underwater" },
+	group: { land: "On land", monsters: "Monsters" },
 	human: "You",
 	restart: "New game",
 	loading: "Loading…",

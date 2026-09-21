@@ -5,11 +5,11 @@ import type { UciCommand, UciResponse } from "@/shared/engine";
 import { parseCommand } from "@/shared/engine/uci/parseCommand";
 import { serializeResponse } from "@/shared/engine/uci/serialize";
 import { createUciEngine } from "@/shared/engine/uciEngine";
-import { createSeaEngine, createStockfish } from "@/shared/sea";
+import { createMonsterEngine, createStockfish } from "@/shared/monsters";
 import { createWasmGoSearch, loadEngine } from "@/shared/wasm";
 import type { WasmEngine } from "@/shared/wasm";
 
-// Vendored in `public/`, so it is served as it is and only fetched by the first sea animal that
+// Vendored in `public/`, so it is served as it is and only fetched by the first monster that
 // plays: the land roster never pays for its 1.8 MB. Its script and its wasm sit side by side,
 // which is where the script looks for it.
 const STOCKFISH_URL = `${import.meta.env.BASE_URL}stockfish/stockfish-19-lite-single.js`;
@@ -41,7 +41,7 @@ function build({
 
 	const worker = new Worker(STOCKFISH_URL);
 	const stockfish = createStockfish({ transport: createWorkerTransport({ worker }) });
-	return createSeaEngine({ config, name, stockfish, goSearch: createWasmGoSearch(module) });
+	return createMonsterEngine({ config, name, stockfish, goSearch: createWasmGoSearch(module) });
 }
 
 // The lines are handled in the order they came even though the first ones wait on the module: a

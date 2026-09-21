@@ -64,7 +64,7 @@ export function useBotEngines() {
 		moves?: string[];
 	}): Promise<{ move: string; score?: number }> {
 		const engine = engineFor(animal);
-		// Loading is not thinking: the first move of a bot waits on its wasm, and for a sea animal
+		// Loading is not thinking: the first move of a bot waits on its wasm, and for a monster
 		// on Stockfish too, which `prepare` has already shown as loading.
 		await engine.init();
 

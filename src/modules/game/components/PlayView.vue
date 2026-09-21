@@ -5,7 +5,7 @@ import type { Role } from "chessops/types";
 import { computed, ref, watch } from "vue";
 
 import { ChessBoard } from "@/modules/board";
-import { ANIMALS_BY_ID, ROSTER, SEA } from "@/modules/bots/roster";
+import { ANIMALS_BY_ID, ROSTER, MONSTERS } from "@/modules/bots/roster";
 import { compileBot } from "@/shared/bots";
 import { fromUci } from "@/shared/engine/uci/moves";
 import { useGame } from "@/shared/game";
@@ -26,9 +26,11 @@ const players = usePlayers({
 	onQueryChange: restart,
 });
 
-// Down to the underwater theme for as long as a sea animal is at the board, whoever picked it.
-const SEA_IDS = new Set(SEA.map((animal) => animal.definition.id));
-useTheme(() => (Object.values(players.value).some((id) => SEA_IDS.has(id)) ? "sea" : undefined));
+// Down to the dark theme for as long as a monster is at the board, whoever picked it.
+const MONSTER_IDS = new Set(MONSTERS.map((animal) => animal.definition.id));
+useTheme(() =>
+	Object.values(players.value).some((id) => MONSTER_IDS.has(id)) ? "sea" : undefined
+);
 
 const TABS = ["moves", "breakdown"] as const;
 const tab = ref<(typeof TABS)[number]>("moves");
@@ -154,7 +156,7 @@ async function restart() {
 			<PlayerPicker
 				v-model="players"
 				:land="ROSTER"
-				:sea="SEA"
+				:monsters="MONSTERS"
 				:human="HUMAN"
 			/>
 
