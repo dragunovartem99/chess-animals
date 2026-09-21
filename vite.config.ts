@@ -24,4 +24,8 @@ export default defineConfig({
 	// import, so only an underwater game fetches it, and IIFE output cannot split a chunk off.
 	// Every worker here is already started with `type: "module"`.
 	worker: { format: "es" },
+	// Served as it ships, not pre-bundled: the runtime finds its wasm beside its own script, and
+	// the dev server's pre-bundled copy sits in `.vite/deps/` with no wasm beside it — the request
+	// fell through to `index.html` and the first underwater move died on a "magic number".
+	optimizeDeps: { exclude: ["onnxruntime-web"] },
 });
