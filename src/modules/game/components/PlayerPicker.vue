@@ -55,20 +55,24 @@ const GROUPS = ["land", "underwater", "monsters"] as const;
 </template>
 
 <style scoped>
+/* The rows share one set of columns through subgrid, so the label column fits the longer of
+   "White"/"Black" in any locale and the badges come out one width, instead of each hugging its
+   own number with a ragged gap before it. */
 .players {
 	display: grid;
+	grid-template-columns: auto 1fr auto;
 	gap: 0.5rem;
 }
 
 label {
 	display: grid;
-	grid-template-columns: 4rem 1fr 4.5rem;
-	gap: 0.5rem;
+	grid-column: 1 / -1;
+	grid-template-columns: subgrid;
 	align-items: center;
 }
 
 .points {
-	justify-self: end;
+	text-align: center;
 	padding: 0.1rem 0.5rem;
 	border-radius: var(--radius-full);
 	background: var(--color-sunken);
