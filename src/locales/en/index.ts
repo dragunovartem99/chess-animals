@@ -4,6 +4,7 @@ import feature from "./feature";
 import frankenstein from "./frankenstein";
 import game from "./game";
 import monsterBots from "./monsters";
+import underwaterBots from "./underwater";
 
 export default {
 	app: {
@@ -26,7 +27,7 @@ export default {
 		promotion: "Choose a piece",
 		piece: { queen: "Queen", rook: "Rook", bishop: "Bishop", knight: "Knight" },
 	},
-	bot: { ...bots, ...monsterBots },
+	bot: { ...bots, ...monsterBots, ...underwaterBots },
 	roster: {
 		lead: "Every animal plays chess its own strange way. Can you beat one?",
 	},

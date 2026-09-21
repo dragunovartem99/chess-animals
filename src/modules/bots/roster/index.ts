@@ -110,7 +110,10 @@ export const MONSTERS: Animal[] = [
 	DRAGON,
 ];
 
-// Everyone a player can meet, land then monsters.
+export { UNDERWATER } from "./underwater";
+
+// Everyone a player can meet, land then monsters. The underwater animals join once the browser can
+// run Maia.
 export const ANIMALS: Animal[] = [...ROSTER, ...MONSTERS];
 
 export const ANIMALS_BY_ID = new Map(ANIMALS.map((animal) => [animal.definition.id, animal]));

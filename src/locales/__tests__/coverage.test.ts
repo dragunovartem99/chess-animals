@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 
-import { ANIMALS } from "@/modules/bots/roster";
+import { ANIMALS, UNDERWATER } from "@/modules/bots/roster";
+
+// The underwater animals are labelled before the Play page can seat them.
+const LABELLED = [...ANIMALS, ...UNDERWATER];
 import { FEATURES } from "@/shared/eval";
 
 import { locales, messages } from "../index";
@@ -30,18 +33,18 @@ describe.each(locales)("%s labels", (locale) => {
 describe.each(locales)("%s bot labels", (locale) => {
 	it("names and describes every animal on the roster", () => {
 		const bots = messages[locale].bot as Record<string, { name: string; description: string }>;
-		const provided = ANIMALS.map((animal) => [
+		const provided = LABELLED.map((animal) => [
 			animal.definition.id,
 			Object.keys(bots[animal.definition.id] ?? {}).toSorted(),
 		]);
 
 		expect(provided).toEqual(
-			ANIMALS.map((animal) => [animal.definition.id, ["description", "name"]])
+			LABELLED.map((animal) => [animal.definition.id, ["description", "name"]])
 		);
 	});
 
 	it("has no entry left over from a retired animal", () => {
-		const ids = new Set(ANIMALS.map((animal) => animal.definition.id));
+		const ids = new Set(LABELLED.map((animal) => animal.definition.id));
 		const stale = Object.keys(messages[locale].bot).filter((id) => !ids.has(id));
 
 		expect(stale).toEqual([]);
