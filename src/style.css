@@ -4,8 +4,20 @@
 	box-sizing: border-box;
 }
 
+/* Figurines for the move list, so ♘f3 is one move in either locale. Noto Sans draws no chess piece
+   and the system fallbacks draw them thin and small; this is lichess's face cut to the five
+   pieces notation names (see assets/fonts/README.md), and the unicode-range keeps it off every
+   other character. At 3 KB Vite inlines it into the stylesheet, so a move never waits on it. */
+@font-face {
+	font-family: "Chess Figurines";
+	font-style: normal;
+	font-display: swap;
+	src: url("./assets/fonts/lichess-chess.woff2") format("woff2");
+	unicode-range: U+2654-2658;
+}
+
 :root {
-	font-family: "Noto Sans Variable", system-ui, sans-serif;
+	font-family: "Chess Figurines", "Noto Sans Variable", system-ui, sans-serif;
 	line-height: 1.4;
 
 	/* Amber is the one accent — it marks state (the page you are on, the move just played) and

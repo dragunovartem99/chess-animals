@@ -3,6 +3,8 @@ import { computed } from "vue";
 
 import type { PlayedTurn } from "@/shared/game";
 
+import { figurine } from "../utils/figurine";
+
 const props = defineProps<{ turns: PlayedTurn[] }>();
 
 // Chess counts in full moves: White's and Black's replies share a number.
@@ -30,8 +32,8 @@ const rows = computed(() =>
 			:key="row.number"
 		>
 			<span class="number">{{ row.number }}.</span>
-			<span class="san">{{ row.white?.san }}</span>
-			<span class="san">{{ row.black?.san }}</span>
+			<span class="san">{{ row.white && figurine(row.white) }}</span>
+			<span class="san">{{ row.black && figurine(row.black) }}</span>
 		</li>
 	</ol>
 </template>
