@@ -14,7 +14,7 @@ describe("toPoints", () => {
 	it("keeps the gaps the arena measured", () => {
 		const points = toPoints({ ratings: { a: -40, b: 260 }, anchors: { a: 1000 } });
 
-		expect((points.b ?? 0) - (points.a ?? 0)).toBe(300);
+		expect(points).toEqual({ a: 1000, b: 1300 });
 	});
 
 	it("rounds to tens, and goes below zero for a bot worse than any person", () => {

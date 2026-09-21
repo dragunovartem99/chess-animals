@@ -43,7 +43,9 @@ describe("useBotEngines", () => {
 
 		expect(workers).toHaveLength(2);
 	});
+});
 
+describe("useBotEngines, over the view's life", () => {
 	it("is not thinking once a move comes back", async () => {
 		const { result } = mount();
 

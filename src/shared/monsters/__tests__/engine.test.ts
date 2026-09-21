@@ -80,16 +80,19 @@ describe("the monster engine", () => {
 
 		expect(asked[0]?.nodes).toBe(7);
 	});
+});
 
+describe("the monster engine's picks", () => {
 	it("takes its temperature from `setoption`, and replays its picks from its seed", async () => {
 		const play = async (seed: string) => {
 			const { engine } = connect({ move: LINES });
 			await engine.handle({ type: "setoption", name: "Temperature", value: "30" });
 			await engine.handle({ type: "setoption", name: "Seed", value: seed });
-			const moves: (string | undefined)[] = [];
-			for (let move = 0; move < 200; move++) moves.push(await played(engine));
-
-			return moves;
+			// One after another: each pick advances the stream the next is drawn from.
+			return Array.from({ length: 200 }).reduce<Promise<(string | undefined)[]>>(
+				async (moves) => [...(await moves), await played(engine)],
+				Promise.resolve([])
+			);
 		};
 
 		const first = await play("one");

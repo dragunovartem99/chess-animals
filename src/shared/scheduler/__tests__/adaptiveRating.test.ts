@@ -32,9 +32,7 @@ describe("nextPairings", () => {
 			batchSize: 9,
 			decisiveness: new Map([["x::y", 0.96]]),
 		});
-		expect(
-			pairs.some((p) => new Set([p.a, p.b]).has("x") && new Set([p.a, p.b]).has("y"))
-		).toBe(false);
+		expect(pairs.map((p) => [p.a, p.b].toSorted().join())).not.toContain("x,y");
 	});
 });
 
@@ -49,20 +47,20 @@ describe("decisivenessOf", () => {
 	});
 });
 
+const zed = { separationZ: 1.5, tieZ: 0.5 };
+const tight: Standing[] = [
+	{ id: "a", rating: 1600, stderr: 20 },
+	{ id: "b", rating: 1400, stderr: 20 },
+];
+
+// A rung in the productive band: 100 Elo against ±99 SEs — wide enough to matter, close
+// enough that more games would still move it.
+const blurred: Standing[] = [
+	{ id: "a", rating: 1650, stderr: 99 },
+	{ id: "b", rating: 1550, stderr: 99 },
+];
+
 describe("ratingsSettled", () => {
-	const zed = { separationZ: 1.5, tieZ: 0.5 };
-	const tight: Standing[] = [
-		{ id: "a", rating: 1600, stderr: 20 },
-		{ id: "b", rating: 1400, stderr: 20 },
-	];
-
-	// A rung in the productive band: 100 Elo against ±99 SEs — wide enough to matter, close
-	// enough that more games would still move it.
-	const blurred: Standing[] = [
-		{ id: "a", rating: 1650, stderr: 99 },
-		{ id: "b", rating: 1550, stderr: 99 },
-	];
-
 	it("is true once every adjacent rung is separated", () => {
 		expect(
 			ratingsSettled({ standings: tight, ...zed, orderHistory: [], stableRounds: 3 })

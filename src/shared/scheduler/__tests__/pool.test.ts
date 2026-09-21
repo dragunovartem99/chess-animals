@@ -79,7 +79,9 @@ describe("runGames", () => {
 		},
 		WORKER_TIMEOUT
 	);
+});
 
+describe("runGames at scale", () => {
 	it("runs 1000 games across the pool and reproduces from seed", async () => {
 		const batch = specs(1000);
 		const first = await runGames({ specs: batch });

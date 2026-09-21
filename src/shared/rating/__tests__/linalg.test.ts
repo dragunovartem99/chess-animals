@@ -24,9 +24,9 @@ describe("invert", () => {
 		const product = matrix.map((row) =>
 			row.map((_, j) => row.reduce((sum, value, k) => sum + value * inverse[k][j], 0))
 		);
-		for (let i = 0; i < 3; i += 1) {
-			for (let j = 0; j < 3; j += 1) expect(product[i][j]).toBeCloseTo(i === j ? 1 : 0, 10);
-		}
+		const identity = [1, 0, 0, 0, 1, 0, 0, 0, 1];
+		for (const [k, value] of product.flat().entries())
+			expect(value).toBeCloseTo(identity[k], 10);
 	});
 
 	it("throws on a singular matrix", () => {

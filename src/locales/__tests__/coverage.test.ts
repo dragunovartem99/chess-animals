@@ -32,7 +32,7 @@ describe.each(locales)("%s bot labels", (locale) => {
 		const bots = messages[locale].bot as Record<string, { name: string; description: string }>;
 		const provided = ANIMALS.map((animal) => [
 			animal.definition.id,
-			Object.keys(bots[animal.definition.id] ?? {}).toSorted(),
+			Object.keys({ ...bots[animal.definition.id] }).toSorted(),
 		]);
 
 		expect(provided).toEqual(

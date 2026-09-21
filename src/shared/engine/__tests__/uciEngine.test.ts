@@ -64,7 +64,9 @@ describe("the engine over UCI", () => {
 		expect(move).toBe("d1d5");
 		expect(score).toBeGreaterThan(0);
 	});
+});
 
+describe("the engine over UCI, at the edges", () => {
 	it("names castling the way every other engine does", async () => {
 		// No feature says "castle"; instead the one legal move that frees the rook most is O-O,
 		// which puts it on f1 with the whole first rank and f-file behind it.

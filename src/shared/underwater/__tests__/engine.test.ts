@@ -74,7 +74,9 @@ describe("the underwater engine", () => {
 
 		expect(await played(engine)).toBe("e1g1");
 	});
+});
 
+describe("the underwater engine as a UCI engine", () => {
 	it("goes back to the seed on a new game, so a game replays", async () => {
 		const { engine } = connect();
 		await engine.handle({ type: "setoption", name: "Seed", value: "7" });

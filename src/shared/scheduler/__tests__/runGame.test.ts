@@ -40,9 +40,7 @@ describe("runGame", () => {
 	it("changes with the seed", async () => {
 		const a = await play({ seed: 1 });
 		const b = await play({ seed: 2 });
-		expect(
-			[a, b].some((report) => report.plies !== a.plies || report.result !== a.result)
-		).toBe(true);
+		expect([b.plies, b.result]).not.toEqual([a.plies, a.result]);
 	});
 
 	it("stops at the ply cap and calls it a draw", async () => {

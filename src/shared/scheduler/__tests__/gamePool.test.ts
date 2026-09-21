@@ -46,9 +46,8 @@ describe("createGamePool", () => {
 			try {
 				const batches = [specs(6), specs(8), specs(4)];
 				const results = await Promise.all(batches.map((batch) => pool.run(batch)));
-				for (const [i, batch] of batches.entries()) {
-					expect(results[i]).toEqual(await runGamesSerially({ specs: batch, goSearch }));
-				}
+				const serial = batches.map((batch) => runGamesSerially({ specs: batch, goSearch }));
+				expect(results).toEqual(await Promise.all(serial));
 			} finally {
 				await pool.close();
 			}

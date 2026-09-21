@@ -70,7 +70,9 @@ describe("usePlayers", () => {
 
 		expect(players.value).toEqual({ white: "wolf", black: "goat" });
 	});
+});
 
+describe("usePlayers writing the URL", () => {
 	it("writes the picker's choice back into the URL", async () => {
 		const { players, replace, route } = setup();
 

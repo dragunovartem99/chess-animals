@@ -47,7 +47,9 @@ describe("createMover", () => {
 		expect(goSearch).toHaveBeenCalledOnce();
 		expect(asked).toEqual([]);
 	});
+});
 
+describe("createMover on a monster", () => {
 	it("never searches a monster itself, and asks Stockfish over the game so far", async () => {
 		const { move, goSearch, asked } = setup();
 
@@ -74,11 +76,10 @@ describe("createMover", () => {
 
 	it("plays the close line about as often as the temperature says", async () => {
 		const { move } = setup();
-		let close = 0;
-		for (let seed = 0; seed < 400; seed++) {
-			const found = await move(request(warm, `game-${seed}`));
-			if (found.move?.to === 27) close++;
-		}
+		const found = await Promise.all(
+			Array.from({ length: 400 }, (_, seed) => move(request(warm, `game-${seed}`)))
+		);
+		const close = found.filter((pick) => pick.move?.to === 27).length;
 
 		// exp(-10 / 30) ≈ 0.72 against the best's 1: about 42 percent.
 		expect(close).toBeGreaterThan(130);

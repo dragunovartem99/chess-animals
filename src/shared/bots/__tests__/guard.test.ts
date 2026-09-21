@@ -31,6 +31,13 @@ describe("assertBotDefinition", () => {
 		expect(isBotDefinition({ ...VALID, search: { depth: 1.5 } })).toBe(false);
 	});
 
+	it("rejects anything that is not an object at all", () => {
+		for (const value of [null, undefined, 42, "wolf", []])
+			expect(isBotDefinition(value)).toBe(false);
+	});
+});
+
+describe("assertBotDefinition on weights, bases and monsters", () => {
 	it("rejects a weight naming a feature that does not exist", () => {
 		expect(() => assertBotDefinition({ ...VALID, weights: { swrm: 1 } })).toThrow(
 			'unknown feature "swrm"'
@@ -73,10 +80,5 @@ describe("assertBotDefinition", () => {
 		null,
 	])("rejects stockfish options %j", (stockfish) => {
 		expect(isBotDefinition({ ...VALID, stockfish })).toBe(false);
-	});
-
-	it("rejects anything that is not an object at all", () => {
-		for (const value of [null, undefined, 42, "wolf", []])
-			expect(isBotDefinition(value)).toBe(false);
 	});
 });

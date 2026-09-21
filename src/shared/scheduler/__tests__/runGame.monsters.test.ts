@@ -30,12 +30,13 @@ const spec = (over: Partial<GameSpec> = {}): GameSpec => ({
 
 // The arena's own path with the real Stockfish behind it: a monster in a game, played out.
 describe("runGame with a monster", () => {
-	it("plays it through to the end, in either seat", async () => {
-		for (const game of [spec(), spec({ white: MONKEY, black: GOLDFISH })]) {
-			const report = await runGame({ spec: game, goSearch, stockfish });
+	it.each([
+		["white", spec()],
+		["black", spec({ white: MONKEY, black: GOLDFISH })],
+	])("plays it through to the end as %s", async (_, game) => {
+		const report = await runGame({ spec: game, goSearch, stockfish });
 
-			expect(report.plies).toBeGreaterThan(0);
-		}
+		expect(report.plies).toBeGreaterThan(0);
 	});
 
 	it("is a pure function of the spec, though Stockfish is a process that keeps its hash", async () => {

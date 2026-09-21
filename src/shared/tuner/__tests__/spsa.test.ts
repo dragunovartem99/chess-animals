@@ -26,19 +26,19 @@ describe("rademacher", () => {
 	it("draws ±1, balanced, and reproduces from a seed", () => {
 		const values = rademacher({ size: 400, rng: createRng(99) });
 
-		expect(values.every((v) => v === 1 || v === -1)).toBe(true);
+		expect(new Set(values)).toEqual(new Set([1, -1]));
 		expect(Math.abs(values.reduce((sum, v) => sum + v, 0))).toBeLessThan(80);
 		expect(rademacher({ size: 400, rng: createRng(99) })).toEqual(values);
 	});
 });
 
-describe("runSpsa", () => {
-	// A deliberately detuned start: five weights, all at zero, whose ideal values are known. The
-	// score is how close the vector is (negative squared distance), standing in for a gauntlet.
-	const TARGET = [10, -5, 3, 0, 7];
-	const loss = (theta: number[]) =>
-		-theta.reduce((sum, value, i) => sum + (value - TARGET[i]) ** 2, 0);
+// A deliberately detuned start: five weights, all at zero, whose ideal values are known. The
+// score is how close the vector is (negative squared distance), standing in for a gauntlet.
+const TARGET = [10, -5, 3, 0, 7];
+const loss = (theta: number[]) =>
+	-theta.reduce((sum, value, i) => sum + (value - TARGET[i]) ** 2, 0);
 
+describe("runSpsa", () => {
 	it("measurably improves the detuned vector", async () => {
 		const start = [0, 0, 0, 0, 0];
 		const result = await runSpsa({
@@ -69,7 +69,7 @@ describe("runSpsa", () => {
 			},
 		});
 
-		expect(seen.flat().every((value) => value >= -1 && value <= 1)).toBe(true);
+		expect(Math.max(...seen.flat().map((value) => Math.abs(value)))).toBeLessThanOrEqual(1);
 	});
 
 	it("is reproducible from the rng seed", async () => {

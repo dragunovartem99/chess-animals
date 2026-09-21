@@ -52,7 +52,9 @@ describe("createGauntlet", () => {
 		// candidate: win@0 (white), win@1 (black), draw@2, loss@3, loss@4, win@5 → 3.5 / 6
 		expect(await evaluate([20, -10])).toBeCloseTo(3.5 / 6, 10);
 	});
+});
 
+describe("createGauntlet seeds", () => {
 	it("uses the same game seeds regardless of the weights (common random numbers)", async () => {
 		const seen: number[][] = [];
 		const gauntlet = createGauntlet({

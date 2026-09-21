@@ -4,6 +4,9 @@ import { fitBradleyTerry } from "..";
 import type { Matchup } from "..";
 import { TRUE_ELO, synthesise } from "../../test-support/synthesise";
 
+// A pair with the wolf in it is sampled a few hundred times more thinly than any other.
+const wolfRarelyPlays = (a: string, b: string) => (a === "wolf" || b === "wolf" ? 20 : 5000);
+
 describe("fitBradleyTerry", () => {
 	it("recovers known ratings from a synthetic matrix", () => {
 		const result = fitBradleyTerry({
@@ -39,20 +42,23 @@ describe("fitBradleyTerry", () => {
 			expect(theirs.rating).toBeCloseTo(mine.rating, 4);
 		}
 	});
+});
 
+describe("fitBradleyTerry on lopsided or thin data", () => {
 	it("stays stable when pair counts are wildly imbalanced", () => {
 		const result = fitBradleyTerry({
 			matchups: synthesise({
 				trueElo: TRUE_ELO,
 				white: 30,
 				draw: 1.7,
-				games: (a, b) => (a === "wolf" || b === "wolf" ? 20 : 5000),
+				games: wolfRarelyPlays,
 			}),
 		});
 
 		const order = result.players.toSorted((a, b) => b.rating - a.rating).map((p) => p.id);
 		expect(order).toEqual(["wolf", "fox", "cat", "donkey", "rock"]);
-		expect(result.players.every((p) => Number.isFinite(p.rating) && p.stderr > 0)).toBe(true);
+		expect(result.players.every((p) => Number.isFinite(p.rating))).toBe(true);
+		expect(result.players.every((p) => p.stderr > 0)).toBe(true);
 	});
 
 	it("keeps an undefeated player finite", () => {

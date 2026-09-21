@@ -55,7 +55,9 @@ describe("go through wasm", () => {
 
 		expect(bestmoves(engine, lines)).toEqual(["g1f3", "h7h5", "e1e2", "b8c6"]);
 	});
+});
 
+describe("go through wasm, at the edges", () => {
 	it("reads the engine's king-takes-rook castling back as the king's own move", () => {
 		const castles = {
 			search: () => ({ best: "e1h1", score: 0, nodes: 1 }),

@@ -17,11 +17,11 @@ const set = ({ name, value }: { name: string; value?: string }) =>
 
 describe("describeOptions", () => {
 	it("advertises the engine options but not two hundred weights", () => {
-		const names = describeOptions(config).map(
-			(option) => option.type === "option" && option.name
-		);
+		const names = ["Depth", "Quiescence", "NodeLimit", "Seed"];
 
-		expect(names).toEqual(["Depth", "Quiescence", "NodeLimit", "Seed"]);
+		expect(describeOptions(config)).toMatchObject(
+			names.map((name) => ({ type: "option", name }))
+		);
 	});
 });
 

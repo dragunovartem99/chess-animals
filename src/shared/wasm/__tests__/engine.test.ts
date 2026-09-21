@@ -88,7 +88,9 @@ describe("the wasm search", () => {
 		const options = { depth: 3, quiescence: true, nodeLimit: 50 };
 		expect(engine.search({ fen, weights: MATERIAL, options }).nodes).toBeLessThanOrEqual(50);
 	});
+});
 
+describe("the wasm search's tie-breaks", () => {
 	// Every move ties, so the move is the first of the shuffle: pinned, move and stream, to what the
 	// TS search played before it was retired, so the tie-break a game replays by cannot drift.
 	it("shuffles the root from the state it is handed and hands it back advanced", () => {

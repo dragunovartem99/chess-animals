@@ -44,7 +44,9 @@ describe("useGame", () => {
 		expect(game.ply.value).toBe(4);
 		expect(game.fen.value).not.toBe(INITIAL_FEN);
 	});
+});
 
+describe("useGame, ending and resetting", () => {
 	it("draws by repetition, which needs the history the position does not carry", () => {
 		const game = useGame();
 		for (const uci of ["g1f3", "g8f6", "f3g1", "f6g8", "g1f3", "g8f6", "f3g1", "f6g8"]) {
