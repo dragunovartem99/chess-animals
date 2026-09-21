@@ -5,7 +5,7 @@ import type { Role } from "chessops/types";
 import { computed, ref, watch } from "vue";
 
 import { ChessBoard } from "@/modules/board";
-import { ANIMALS_BY_ID, ROSTER, MONSTERS } from "@/modules/bots/roster";
+import { ANIMALS_BY_ID, MONSTERS, ROSTER, UNDERWATER } from "@/modules/bots/roster";
 import { compileBot } from "@/shared/bots";
 import { fromUci } from "@/shared/engine/uci/moves";
 import { useGame } from "@/shared/game";
@@ -26,10 +26,14 @@ const players = usePlayers({
 	onQueryChange: restart,
 });
 
-// Into the monsters' theme for as long as a monster is at the board, whoever picked it.
-const MONSTER_IDS = new Set(MONSTERS.map((animal) => animal.definition.id));
-useTheme(() =>
-	Object.values(players.value).some((id) => MONSTER_IDS.has(id)) ? "monsters" : undefined
+// Into a roster's world for as long as one of its animals is at the board, whoever picked it — the
+// monsters' first, when an underwater animal plays one, as the stronger of the two.
+const WORLDS = [
+	{ theme: "monsters", ids: new Set(MONSTERS.map((animal) => animal.definition.id)) },
+	{ theme: "sea", ids: new Set(UNDERWATER.map((animal) => animal.definition.id)) },
+] as const;
+useTheme(
+	() => WORLDS.find(({ ids }) => Object.values(players.value).some((id) => ids.has(id)))?.theme
 );
 
 const TABS = ["moves", "breakdown"] as const;
@@ -156,6 +160,7 @@ async function restart() {
 			<PlayerPicker
 				v-model="players"
 				:land="ROSTER"
+				:underwater="UNDERWATER"
 				:monsters="MONSTERS"
 				:human="HUMAN"
 			/>

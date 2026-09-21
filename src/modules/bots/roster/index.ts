@@ -27,6 +27,7 @@ import { SPIDER } from "./spider";
 import { TIGER } from "./tiger";
 import { TROLL } from "./troll";
 import type { Animal } from "./types";
+import { UNDERWATER } from "./underwater";
 import { VAMPIRE } from "./vampire";
 import { WITCH } from "./witch";
 import { WOLF } from "./wolf";
@@ -110,11 +111,10 @@ export const MONSTERS: Animal[] = [
 	DRAGON,
 ];
 
-export { UNDERWATER } from "./underwater";
+export { UNDERWATER };
 
-// Everyone a player can meet, land then monsters. The underwater animals join once the browser can
-// run Maia.
-export const ANIMALS: Animal[] = [...ROSTER, ...MONSTERS];
+// Everyone a player can meet, in the order the site lists the rosters.
+export const ANIMALS: Animal[] = [...ROSTER, ...UNDERWATER, ...MONSTERS];
 
 export const ANIMALS_BY_ID = new Map(ANIMALS.map((animal) => [animal.definition.id, animal]));
 

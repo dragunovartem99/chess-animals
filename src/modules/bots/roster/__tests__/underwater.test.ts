@@ -23,8 +23,7 @@ describe("the underwater roster", () => {
 	});
 
 	it("shares no id with the other rosters", () => {
-		for (const animal of UNDERWATER)
-			expect(ANIMALS_BY_ID.has(animal.definition.id)).toBe(false);
+		expect(ANIMALS_BY_ID.size).toBe(ROSTER.length + MONSTERS.length + UNDERWATER.length);
 	});
 
 	it.each(UNDERWATER)("$definition.id is a valid underwater definition", (animal) => {

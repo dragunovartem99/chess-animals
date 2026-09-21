@@ -42,6 +42,7 @@ onBeforeUnmount(() => {
 		<div class="header-sub">
 			<nav class="container nav">
 				<RouterLink :to="{ name: 'roster' }">{{ $t("nav.roster") }}</RouterLink>
+				<RouterLink :to="{ name: 'underwater' }">{{ $t("nav.underwater") }}</RouterLink>
 				<RouterLink :to="{ name: 'monsters' }">{{ $t("nav.monsters") }}</RouterLink>
 				<RouterLink :to="{ name: 'play' }">{{ $t("nav.play") }}</RouterLink>
 				<RouterLink :to="{ name: 'about' }">{{ $t("nav.about") }}</RouterLink>

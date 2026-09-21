@@ -16,6 +16,7 @@ export default {
 		play: "Play",
 		about: "About",
 		frankenstein: "Frankenstein",
+		underwater: "Underwater",
 		monsters: "Monsters",
 	},
 	locale: {
@@ -30,6 +31,9 @@ export default {
 	bot: { ...bots, ...monsterBots, ...underwaterBots },
 	roster: {
 		lead: "Every animal plays chess its own strange way. Can you beat one?",
+	},
+	underwater: {
+		lead: "Down here everyone plays the way people do. Can you beat one?",
 	},
 	monsters: {
 		lead: "These ones play much better. Can you beat one?",

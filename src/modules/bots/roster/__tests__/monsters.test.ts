@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { assertBotDefinition } from "@/shared/bots";
 
-import { ANIMALS_BY_ID, ROSTER, ROSTER_BY_ID, MONSTERS } from "../index";
+import { MONSTERS, ROSTER_BY_ID } from "../index";
 
 describe("the monsters roster", () => {
 	it("has sixteen animals, and ends with the one that is never careless and sees furthest", () => {
@@ -29,10 +29,6 @@ describe("the monsters roster", () => {
 		const own = MONSTERS.map(({ definition }) => JSON.stringify(definition.stockfish));
 
 		expect(new Set(own).size).toBe(MONSTERS.length);
-	});
-
-	it("has a unique id across both rosters", () => {
-		expect(ANIMALS_BY_ID.size).toBe(ROSTER.length + MONSTERS.length);
 	});
 
 	it.each(MONSTERS)("$definition.id is a valid monster definition", (animal) => {

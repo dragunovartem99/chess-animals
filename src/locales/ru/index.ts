@@ -17,6 +17,7 @@ const messages: Messages = {
 		play: "Игра",
 		about: "О проекте",
 		frankenstein: "Франкенштейн",
+		underwater: "Под водой",
 		monsters: "Монстры",
 	},
 	locale: {
@@ -31,6 +32,9 @@ const messages: Messages = {
 	bot: { ...bots, ...monsterBots, ...underwaterBots },
 	roster: {
 		lead: "Каждый зверь играет в шахматы по-своему странно. Обыграешь хоть одного?",
+	},
+	underwater: {
+		lead: "Тут все играют, как люди. Обыграешь хоть одного?",
 	},
 	monsters: {
 		lead: "Эти играют намного сильнее. Обыграешь хоть одного?",
