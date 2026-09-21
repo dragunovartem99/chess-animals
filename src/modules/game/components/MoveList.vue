@@ -117,7 +117,7 @@ li:nth-child(odd) {
 
 .san[aria-current] {
 	font-weight: 700;
-	/* Off the button colour, the one every theme repaints — the accent stays amber in all of them. */
-	background: color-mix(in srgb, var(--color-button) 20%, transparent);
+	/* The board's last-move tint, so the eye pairs the move in the list with the squares it lit. */
+	background: var(--color-last-move);
 }
 </style>
