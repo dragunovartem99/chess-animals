@@ -3,6 +3,7 @@ import bots from "./bots";
 import feature from "./feature";
 import frankenstein from "./frankenstein";
 import game from "./game";
+import seaBots from "./sea";
 
 export default {
 	app: {
@@ -14,6 +15,7 @@ export default {
 		play: "Play",
 		about: "About",
 		frankenstein: "Frankenstein",
+		underwater: "Underwater",
 	},
 	locale: {
 		label: "Language",
@@ -24,9 +26,12 @@ export default {
 		promotion: "Choose a piece",
 		piece: { queen: "Queen", rook: "Rook", bishop: "Bishop", knight: "Knight" },
 	},
-	bot: bots,
+	bot: { ...bots, ...seaBots },
 	roster: {
 		lead: "Every animal plays chess its own strange way. Can you beat one?",
+	},
+	underwater: {
+		lead: "Down here they play much better. Can you beat one?",
 	},
 	about,
 	game,

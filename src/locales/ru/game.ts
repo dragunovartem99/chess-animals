@@ -9,6 +9,7 @@ export default {
 		points: "Очки",
 	},
 	tab: { moves: "Ходы", breakdown: "Разбор" },
+	group: { land: "На суше", sea: "Под водой" },
 	human: "Вы",
 	restart: "Новая партия",
 	thinking: "Думает…",

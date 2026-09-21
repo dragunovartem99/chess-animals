@@ -1,23 +1,39 @@
 import { BEAR } from "./bear";
 import { CAMEL } from "./camel";
+import { CRAB } from "./crab";
 import { DODO } from "./dodo";
+import { DOLPHIN } from "./dolphin";
 import { DONKEY } from "./donkey";
 import { DOVE } from "./dove";
 import { ELEPHANT } from "./elephant";
 import { FOX } from "./fox";
 import { GOAT } from "./goat";
+import { GOLDFISH } from "./goldfish";
 import { HARE } from "./hare";
 import { HEDGEHOG } from "./hedgehog";
+import { HERRING } from "./herring";
+import { JELLYFISH } from "./jellyfish";
 import { LEMMING } from "./lemming";
 import { LION } from "./lion";
+import { LOBSTER } from "./lobster";
 import { MONKEY } from "./monkey";
+import { OCTOPUS } from "./octopus";
+import { OTTER } from "./otter";
 import { OWL } from "./owl";
 import { PARROT } from "./parrot";
+import { PENGUIN } from "./penguin";
+import { PUFFERFISH } from "./pufferfish";
 import { RAVEN } from "./raven";
+import { SEAL } from "./seal";
+import { SHARK } from "./shark";
+import { SHRIMP } from "./shrimp";
 import { SLOTH } from "./sloth";
 import { SPIDER } from "./spider";
+import { SQUID } from "./squid";
 import { TIGER } from "./tiger";
+import { TURTLE } from "./turtle";
 import type { Animal } from "./types";
+import { WHALE } from "./whale";
 import { WOLF } from "./wolf";
 
 // The roster, weakest first: the order is the one `npm run arena` measured, not one anybody
@@ -84,5 +100,34 @@ export const ROSTER: Animal[] = [
 ];
 
 export const ROSTER_BY_ID = new Map(ROSTER.map((animal) => [animal.definition.id, animal]));
+
+// The second roster, apart from the first on purpose: a sea animal is Stockfish diluted with one
+// idea, and `ROSTER` stays the land order and the gauntlet `tune` measures against. The arena rates
+// both together. Weakest first, as the arena measured them: `nodes` sets how well Stockfish sees, so
+// the rating climbs with it, while `mix` falls from a third to none. Herring, Squid and Crab are
+// within thirty points of each other, inside the noise, so their order is a coin's.
+export const SEA: Animal[] = [
+	HERRING,
+	SQUID,
+	CRAB,
+	TURTLE,
+	PUFFERFISH,
+	LOBSTER,
+	JELLYFISH,
+	SHARK,
+	SHRIMP,
+	PENGUIN,
+	OTTER,
+	DOLPHIN,
+	OCTOPUS,
+	SEAL,
+	WHALE,
+	GOLDFISH,
+];
+
+// Everyone a player can meet, land then sea.
+export const ANIMALS: Animal[] = [...ROSTER, ...SEA];
+
+export const ANIMALS_BY_ID = new Map(ANIMALS.map((animal) => [animal.definition.id, animal]));
 
 export type { Animal };

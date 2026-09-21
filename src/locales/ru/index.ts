@@ -4,6 +4,7 @@ import bots from "./bots";
 import feature from "./feature";
 import frankenstein from "./frankenstein";
 import game from "./game";
+import seaBots from "./sea";
 
 const messages: Messages = {
 	app: {
@@ -15,6 +16,7 @@ const messages: Messages = {
 		play: "Игра",
 		about: "О проекте",
 		frankenstein: "Франкенштейн",
+		underwater: "Под водой",
 	},
 	locale: {
 		label: "Язык",
@@ -25,9 +27,12 @@ const messages: Messages = {
 		promotion: "Выберите фигуру",
 		piece: { queen: "Ферзь", rook: "Ладья", bishop: "Слон", knight: "Конь" },
 	},
-	bot: bots,
+	bot: { ...bots, ...seaBots },
 	roster: {
 		lead: "Каждый зверь играет в шахматы по-своему странно. Обыграешь хоть одного?",
+	},
+	underwater: {
+		lead: "Тут звери играют намного сильнее. Обыграешь хоть одного?",
 	},
 	about,
 	game,
