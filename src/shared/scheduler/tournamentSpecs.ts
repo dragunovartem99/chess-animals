@@ -19,11 +19,13 @@ export type SpecContext = {
 };
 
 // Roughly what one game between these two costs, relative to a depth-1/2 game: a depth-3 search
-// is ~10× and quiescence on top ~10× again. Used to shrink the opening window for the pairs that
-// dominate wall time — the arena's whole cost skew is two depth-3+quiescence bots.
+// is ~10× and quiescence on top ~10× again, and a Maia move — a transformer run on one thread — is
+// dearer still. Used to shrink the opening window for the pairs that dominate wall time.
 function pairWeight(a: string, b: string, context: SpecContext): number {
 	const cost = (id: string): number => {
-		const { depth = 1, quiescence } = context.definition.get(id)!.search;
+		const { search, maia } = context.definition.get(id)!;
+		if (maia) return 4;
+		const { depth = 1, quiescence } = search;
 		return depth >= 3 ? (quiescence ? 4 : 2) : 1;
 	};
 	return Math.max(cost(a), cost(b));
