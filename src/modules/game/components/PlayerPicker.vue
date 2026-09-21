@@ -3,10 +3,12 @@ import type { Color } from "chessops/types";
 
 import type { Animal } from "@/modules/bots/roster";
 
-defineProps<{ roster: Animal[]; human: string }>();
+defineProps<{ land: Animal[]; sea: Animal[]; human: string }>();
 const players = defineModel<Record<Color, string>>({ required: true });
 
 const COLORS: Color[] = ["white", "black"];
+// Two levels in the one select: the land roster, then the underwater one below it.
+const GROUPS = ["land", "sea"] as const;
 </script>
 
 <template>
@@ -18,13 +20,19 @@ const COLORS: Color[] = ["white", "black"];
 			<span>{{ $t(`game.turn.${color}`) }}</span>
 			<select v-model="players[color]">
 				<option :value="human">{{ $t("game.human") }}</option>
-				<option
-					v-for="animal in roster"
-					:key="animal.definition.id"
-					:value="animal.definition.id"
+				<optgroup
+					v-for="group in GROUPS"
+					:key="group"
+					:label="$t(`game.group.${group}`)"
 				>
-					{{ animal.emoji }} {{ $t(`bot.${animal.definition.id}.name`) }}
-				</option>
+					<option
+						v-for="animal in $props[group]"
+						:key="animal.definition.id"
+						:value="animal.definition.id"
+					>
+						{{ animal.emoji }} {{ $t(`bot.${animal.definition.id}.name`) }}
+					</option>
+				</optgroup>
 			</select>
 		</label>
 	</div>

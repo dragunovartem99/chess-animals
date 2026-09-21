@@ -1,5 +1,24 @@
 <script setup lang="ts">
+import { onBeforeUnmount, watch } from "vue";
+
+import { theme } from "@/shared/ui";
+
 import LocaleSwitcher from "./LocaleSwitcher.vue";
+
+// Set on the document, not on this layout: the page's background is the body's, and the variables
+// that repaint the board and the cards are read from the root.
+watch(
+	theme,
+	(next) => {
+		if (next) document.documentElement.dataset.theme = next;
+		else delete document.documentElement.dataset.theme;
+	},
+	{ immediate: true }
+);
+
+onBeforeUnmount(() => {
+	delete document.documentElement.dataset.theme;
+});
 </script>
 
 <template>
@@ -10,7 +29,7 @@ import LocaleSwitcher from "./LocaleSwitcher.vue";
 					class="brand title"
 					:to="{ name: 'roster' }"
 				>
-					<span class="emoji logo">🌞</span>
+					<span class="emoji logo">{{ theme === "sea" ? "🫧" : "🌞" }}</span>
 					{{ $t("app.title") }}
 				</RouterLink>
 				<LocaleSwitcher />
@@ -20,6 +39,7 @@ import LocaleSwitcher from "./LocaleSwitcher.vue";
 		<div class="header-sub">
 			<nav class="container nav">
 				<RouterLink :to="{ name: 'roster' }">{{ $t("nav.roster") }}</RouterLink>
+				<RouterLink :to="{ name: 'underwater' }">{{ $t("nav.underwater") }}</RouterLink>
 				<RouterLink :to="{ name: 'play' }">{{ $t("nav.play") }}</RouterLink>
 				<RouterLink :to="{ name: 'about' }">{{ $t("nav.about") }}</RouterLink>
 				<RouterLink :to="{ name: 'frankenstein' }">{{ $t("nav.frankenstein") }}</RouterLink>

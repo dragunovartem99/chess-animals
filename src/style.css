@@ -16,6 +16,14 @@
 	--color-accent-dark: #b45309;
 	--color-accent-veil: rgb(245 158 11 / 16%);
 
+	/* Buttons are amber in the light theme and something else underwater, so they read their own
+	   variables rather than the accent, which stays the colour of state in both. */
+	--color-button: var(--color-accent-dark);
+	--color-button-hover: var(--color-accent);
+
+	/* The squares the opponent just left and landed on. */
+	--color-last-move: rgb(245 158 11 / 32%);
+
 	--color-neutral-lightest: #e4e4e7;
 	--color-neutral-light: #d4d4d8;
 	--color-neutral-lighter: #a1a1aa;
@@ -131,7 +139,7 @@ button {
 	padding: 0.5em 1.5em;
 	border: none;
 	border-radius: var(--radius-sm);
-	background: var(--color-accent-dark);
+	background: var(--color-button);
 	color: var(--color-white);
 	cursor: pointer;
 	box-shadow: var(--shadow-button);
@@ -139,7 +147,7 @@ button {
 }
 
 button:hover {
-	background: var(--color-accent);
+	background: var(--color-button-hover);
 }
 
 button:active {
@@ -169,7 +177,7 @@ cg-board {
 /* Amber for the last move; selection and destinations stay grey, so the one thing that stands
    out on the board is what the opponent just did. */
 cg-board square.last-move {
-	background-color: rgb(245 158 11 / 32%);
+	background-color: var(--color-last-move);
 }
 
 cg-board square.selected {
@@ -191,4 +199,42 @@ cg-board square.oc.move-dest {
 
 cg-board square.move-dest:hover {
 	background: rgb(63 63 70 / 30%);
+}
+
+/* The underwater roster's world. Everything the light theme paints comes from these variables, so
+   the theme is only the variables: the header's wood is derived from the board's dark square and
+   follows it down. The board pair is kept apart enough for black pieces to read on the dark
+   square and white ones on the light. */
+:root[data-theme="sea"] {
+	color-scheme: dark;
+
+	--color-board-light: #8aa8b8;
+	--color-board-dark: #3f6073;
+
+	--color-surface: #12232e;
+	--color-ink: #e6f1f5;
+	--color-ink-muted: #9db6c2;
+	--color-border: #24404f;
+	--color-stripe: #182d3a;
+	--color-sunken: #0c1a23;
+
+	--color-good: #4ade80;
+	--color-bad: #f87171;
+
+	--color-button: #0e7490;
+	--color-button-hover: #0891b2;
+
+	/* Blue, since amber went olive on the steel-blue squares and hid. */
+	--color-last-move: rgb(125 200 255 / 60%);
+
+	--shadow-card: 0 0.75rem 1.5rem rgb(0 0 0 / 45%);
+}
+
+:root[data-theme="sea"] body {
+	background-color: #04121a;
+	background-image:
+		radial-gradient(ellipse at 50% -10%, rgb(56 189 248 / 14%), transparent 55%),
+		linear-gradient(#062331, #020a10);
+	background-size: auto;
+	background-attachment: fixed;
 }

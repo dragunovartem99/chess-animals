@@ -17,6 +17,11 @@ const routes: RouteRecordRaw[] = [
 				component: () => import("../modules/bots").then((m) => m.RosterView),
 			},
 			{
+				path: "underwater",
+				name: "underwater",
+				component: () => import("../modules/bots").then((m) => m.SeaView),
+			},
+			{
 				path: "bots/:id",
 				name: "bot",
 				component: () => import("../modules/bots").then((m) => m.BotView),

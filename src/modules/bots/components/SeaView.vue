@@ -1,16 +1,20 @@
 <script setup lang="ts">
-import { ROSTER } from "../roster";
+import { useTheme } from "@/shared/ui";
+
+import { SEA } from "../roster";
 import AnimalGrid from "./AnimalGrid.vue";
+
+useTheme("sea");
 </script>
 
 <template>
 	<section class="roster">
 		<header>
-			<h1>{{ $t("nav.roster") }}</h1>
-			<p class="lead">{{ $t("roster.lead") }}</p>
+			<h1>{{ $t("nav.underwater") }}</h1>
+			<p class="lead">{{ $t("underwater.lead") }}</p>
 		</header>
 
-		<AnimalGrid :animals="ROSTER" />
+		<AnimalGrid :animals="SEA" />
 	</section>
 </template>
 

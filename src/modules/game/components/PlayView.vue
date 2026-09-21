@@ -5,11 +5,11 @@ import type { Role } from "chessops/types";
 import { computed, ref, watch } from "vue";
 
 import { ChessBoard } from "@/modules/board";
-import { ROSTER, ROSTER_BY_ID } from "@/modules/bots/roster";
+import { ANIMALS_BY_ID, ROSTER, SEA } from "@/modules/bots/roster";
 import { compileBot } from "@/shared/bots";
 import { fromUci } from "@/shared/engine/uci/moves";
 import { useGame } from "@/shared/game";
-import { FeatureBreakdown, SegmentedTabs } from "@/shared/ui";
+import { FeatureBreakdown, SegmentedTabs, useTheme } from "@/shared/ui";
 
 import { useBotEngines } from "../composables/useBotEngines";
 import { usePlayers } from "../composables/usePlayers";
@@ -25,6 +25,10 @@ const players = usePlayers({
 	defaults: { white: HUMAN, black: "monkey" },
 	onQueryChange: restart,
 });
+
+// Down to the underwater theme for as long as a sea animal is at the board, whoever picked it.
+const SEA_IDS = new Set(SEA.map((animal) => animal.definition.id));
+useTheme(() => (Object.values(players.value).some((id) => SEA_IDS.has(id)) ? "sea" : undefined));
 
 const TABS = ["moves", "breakdown"] as const;
 const tab = ref<(typeof TABS)[number]>("moves");
@@ -75,7 +79,7 @@ watch(
 		if (game.status.value.over) return;
 
 		const color = game.position.value.turn;
-		const animal = ROSTER_BY_ID.get(players.value[color]);
+		const animal = ANIMALS_BY_ID.get(players.value[color]);
 		if (!animal) return;
 
 		// The move list, not just the FEN: the engine rebuilds the repetition history from it, so
@@ -101,12 +105,12 @@ watch(
 // The breakdown follows whoever is on move; while a human is thinking it shows their opponent,
 // so the panel is never blank in a human-versus-bot game.
 const lens = computed(() => {
-	const onMove = ROSTER_BY_ID.get(players.value[game.position.value.turn]);
+	const onMove = ANIMALS_BY_ID.get(players.value[game.position.value.turn]);
 	if (onMove) return onMove;
 
 	const other = game.position.value.turn === "white" ? "black" : "white";
 
-	return ROSTER_BY_ID.get(players.value[other]);
+	return ANIMALS_BY_ID.get(players.value[other]);
 });
 
 const lensWeights = computed(() =>
@@ -135,7 +139,8 @@ async function restart() {
 		<aside class="panel card">
 			<PlayerPicker
 				v-model="players"
-				:roster="ROSTER"
+				:land="ROSTER"
+				:sea="SEA"
 				:human="HUMAN"
 			/>
 

@@ -3,7 +3,7 @@ import type { Color } from "chessops/types";
 import { computed, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
-import { ROSTER_BY_ID } from "@/modules/bots/roster";
+import { ANIMALS_BY_ID } from "@/modules/bots/roster";
 
 // Who plays each color, kept in sync with the URL both ways. The roster page links here with
 // `?black=<id>` so a card opens straight into a game against that animal. `?white=<id>` works the
@@ -25,7 +25,7 @@ export function usePlayers({
 
 	function queryPlayer(color: Color) {
 		const id = route.query[color];
-		return typeof id === "string" && ROSTER_BY_ID.has(id) ? id : undefined;
+		return typeof id === "string" && ANIMALS_BY_ID.has(id) ? id : undefined;
 	}
 	const queryPlayers = computed(() => ({
 		white: queryPlayer("white"),
@@ -50,7 +50,7 @@ export function usePlayers({
 		() => ({ ...players.value }),
 		(current) => {
 			const next = Object.fromEntries(
-				COLORS.map((c) => [c, ROSTER_BY_ID.has(current[c]) ? current[c] : undefined])
+				COLORS.map((c) => [c, ANIMALS_BY_ID.has(current[c]) ? current[c] : undefined])
 			);
 			if (COLORS.every((c) => next[c] === queryPlayers.value[c])) return;
 			void router.replace({ query: { ...route.query, ...next } });
