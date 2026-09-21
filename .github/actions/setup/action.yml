@@ -13,10 +13,14 @@ runs:
           shell: bash
 
         # Pinned to the major the repo is formatted with: clang-format's output drifts between
-        # versions, and a local 19 against a CI 18 would fail `format:check` on untouched code.
+        # versions, and a local 22 against a CI 19 would fail `format:check` on untouched code.
         - run: |
+              curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key | sudo tee /etc/apt/keyrings/llvm.asc > /dev/null
+              codename=$(lsb_release -cs)
+              echo "deb [signed-by=/etc/apt/keyrings/llvm.asc] https://apt.llvm.org/$codename/ llvm-toolchain-$codename-22 main" \
+                  | sudo tee /etc/apt/sources.list.d/llvm.list
               sudo apt-get update
               sudo apt-get install -y --no-install-recommends \
-                  clang-19 lld-19 llvm-19 clang-tidy-19 clang-format-19 libclang-rt-19-dev
-              echo "CLANG=clang-19" >> "$GITHUB_ENV"
+                  clang-22 lld-22 llvm-22 clang-tidy-22 clang-format-22 libclang-rt-22-dev
+              echo "CLANG=clang-22" >> "$GITHUB_ENV"
           shell: bash

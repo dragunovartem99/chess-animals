@@ -1,6 +1,6 @@
 # Two builds from one source tree: a freestanding wasm module for the app, and a hosted native
 # test binary under ASan + UBSan + llvm-cov. `CC` is not used because make presets it to `cc`.
-CLANG ?= clang
+CLANG ?= clang-22
 # Debian keeps clang-tidy, llvm-cov and friends beside clang in /usr/lib/llvm-N/bin, off PATH;
 # asking the compiler finds the copies that match its version instead of whatever PATH holds.
 tool = $(shell $(CLANG) -print-prog-name=$(1))
