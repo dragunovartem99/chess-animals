@@ -32,7 +32,10 @@ static int fill(Picker *picker, const Search *search, const Position *pos) {
 		return 0;
 	}
 	bool noisy = picker->stage == STAGE_NOISY;
-	int count = noisy ? generate_noisy(pos, picker->moves) : generate_quiet(pos, picker->moves);
+	int generated = noisy ? generate_noisy(pos, picker->moves) : generate_quiet(pos, picker->moves);
+	// The generators cannot overrun the list, but the static analyzer cannot see that and reports
+	// the selection loop reading past `priorities`; the clamp states the bound where it holds.
+	int count = generated < MAX_MOVES ? generated : MAX_MOVES;
 	int kept = 0;
 	for (int index = 0; index < count; index++) {
 		Move move = picker->moves[index];
