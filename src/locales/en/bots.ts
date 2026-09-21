@@ -31,18 +31,10 @@ export default {
 		name: "Elephant",
 		description: "Steps only on squares of its own color. Every piece, every single move.",
 	},
-	owl: {
-		name: "Owl",
-		description: "Looks a long way ahead — then just plays the most sensible move.",
-	},
 	camel: {
 		name: "Camel",
 		description:
 			"Gets every piece out, then waits. When the board empties, its king and pawns set off.",
-	},
-	raven: {
-		name: "Raven",
-		description: "Waits for the fight to end, then eats only what is really free.",
 	},
 	hare: {
 		name: "Hare",
@@ -61,10 +53,6 @@ export default {
 		name: "Tiger",
 		description: "Gives every piece room to move. Then they all head for your king.",
 	},
-	monkey: {
-		name: "Monkey",
-		description: "Knows what every piece is worth and grabs the best one. No tricks.",
-	},
 	wolf: {
 		name: "Wolf",
 		description: "The whole pack runs at your king at once. It never counts who falls.",
@@ -73,10 +61,6 @@ export default {
 		name: "Fox",
 		description:
 			"Shuts every door your pieces could run through. Its own never get caught alone.",
-	},
-	hedgehog: {
-		name: "Hedgehog",
-		description: "Grabs the best thing it sees. Every piece it has keeps a friend close by.",
 	},
 	spider: {
 		name: "Spider",

@@ -1,7 +1,7 @@
 import type { BotDefinition } from "@/shared/bots";
 
 // The staging area for candidate animals. `npm run arena -- --lab` rates everything here
-// alongside the roster, so a new idea gets a number against the Hedgehog before it earns a name,
+// alongside the roster, so a new idea gets a number against the roster before it earns a name,
 // a locale entry and a place in `ROSTER`.
 //
 // Rules of the bench:
@@ -12,7 +12,7 @@ import type { BotDefinition } from "@/shared/bots";
 // So this list is empty between experiments, and never a second roster.
 //
 // What past experiments turned up is in `../LAB.md` — a broad-feature ranking, and why
-// `hanging` became the Hedgehog and `mobility` the Spider.
+// `hanging` became the Fox's partner and `mobility` the Spider.
 //
 // `lab("kingdanger", { kingDanger: -40 })` is the shape — id gets the `lab-` prefix, `material`
 // base and depth 2 unless the third argument says otherwise. `npm run arena -- --lab-only` rates
@@ -21,7 +21,7 @@ export function lab(id: string, weights: Record<string, number>, depth = 2): Bot
 	return { id: `lab-${id}`, search: { depth }, base: "material", weights };
 }
 
-// The Raven's shape — depth 3, quiescence on, `material` base — with a weight stack over the top,
+// The Lion's and the Tiger's search — depth 3, quiescence on, `material` base — with a weight stack over the top,
 // for experiments that need every candidate on the same search as the roster's strongest bots.
 // The `swarm`+`mobility`+`space` run that became the Tiger used this (see `../LAB.md`).
 export function labQ(id: string, weights: Record<string, number>): BotDefinition {

@@ -1,6 +1,6 @@
 import type { Animal } from "./types";
 
-// The Monkey plus one instinct: give every piece as many squares as it can have. `mobility` is
+// Bare material plus one instinct: give every piece as many squares as it can have. `mobility` is
 // our reachable squares minus theirs — pawns and the king aside — so a positive weight pays the
 // Spider to develop onto open lines, keep its pieces untangled and deny the same to the
 // opponent, all without ever declining a real capture the material base wants.
@@ -10,7 +10,7 @@ import type { Animal } from "./types";
 // weight on a deeper search.
 //
 // Depth 1: a greedy one-move look, the only material animal that never sees a reply. At depth 2 it
-// sat in a knot with the Hedgehog that no weight untied; a ply down it fills the hole between the
+// sat in a knot with a `hanging` animal that no weight untied; a ply down it fills the hole between the
 // Goat and the Parrot instead — the one-idea animals' floor.
 export const SPIDER: Animal = {
 	emoji: "🕷️",

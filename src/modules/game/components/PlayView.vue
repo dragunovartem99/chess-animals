@@ -22,7 +22,7 @@ const game = useGame();
 const engines = useBotEngines();
 
 const players = usePlayers({
-	defaults: { white: HUMAN, black: "monkey" },
+	defaults: { white: HUMAN, black: "donkey" },
 	onQueryChange: restart,
 });
 

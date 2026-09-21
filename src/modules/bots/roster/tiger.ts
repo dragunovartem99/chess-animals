@@ -1,6 +1,6 @@
 import type { Animal } from "./types";
 
-// The Raven's shape — depth 3, `quiescence` on — with a two-weight board-control pair: `swarm`
+// Depth 3, `quiescence` on, with a two-weight board-control pair: `swarm`
 // (20) walks the army at your king, and `mobility` (10) keeps every piece active on the way in.
 // Resolving the capture chain past the leaf is what stops the charge being suicide.
 //

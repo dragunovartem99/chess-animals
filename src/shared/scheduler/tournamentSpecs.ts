@@ -32,7 +32,7 @@ function pairWeight(a: string, b: string, context: SpecContext): number {
 // The slice of the opening set this pair plays on this visit: a window that starts at a per-pair
 // seeded offset (so two pairs don't sample the same lines) and advances one window per revisit.
 // Cheap pairs play the full `openingsPerVisit`; an expensive pair plays a fraction of it and is
-// revisited more instead, so a Raven/Tiger game is never played just to widen a window.
+// revisited more instead, so a Lion/Tiger game is never played just to widen a window.
 function visitWindow(
 	a: string,
 	b: string,

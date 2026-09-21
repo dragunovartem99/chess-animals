@@ -20,7 +20,7 @@ describe("blankPreset", () => {
 
 describe("presetFromBot", () => {
 	it("carries an animal's weights and its own search depth", () => {
-		const preset = presetFromBot("hedgehog");
+		const preset = presetFromBot("fox");
 
 		expect(preset).toMatchObject({ depth: 2, quiescence: false });
 		expect(preset?.weights.hanging).toBe(-50);
@@ -28,7 +28,7 @@ describe("presetFromBot", () => {
 	});
 
 	it("fills in zero for every feature the animal does not name", () => {
-		const preset = presetFromBot("hedgehog");
+		const preset = presetFromBot("fox");
 
 		expect(preset?.weights.centralization).toBe(0);
 	});

@@ -5,7 +5,7 @@ import type { Animal } from "./types";
 // reads it too, at a thirtieth of the weight and braced by `space` and `mobility`.
 //
 // At 600 the charge outbids a minor piece, so it throws pieces at the king rather than merely
-// preferring the squares near it. 400 sat level with the Monkey; 600 drops it a clear step below,
+// preferring the squares near it. 400 sat level with bare material at depth 2; 600 drops it a clear step below,
 // and 700 starts to crowd the Sloth.
 export const WOLF: Animal = {
 	emoji: "🐺",

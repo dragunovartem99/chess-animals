@@ -6,7 +6,7 @@ export default {
 		body: "Every bot runs on the same engine. A move is scored as the dot product of a feature vector describing the position and a weight vector unique to that bot.",
 		listLead: "A bot's character is defined by its weights:",
 		wolf: "The Wolf drives straight at the enemy king.",
-		monkey: "The Monkey grabs any capture it can.",
+		goat: "The Goat chases checks, then captures, and never counts the cost.",
 		donkey: "The Donkey leaves every weight at zero and moves at random.",
 	},
 	paper: {

@@ -14,7 +14,7 @@ import { renderCrossTable, renderRatingTable } from "./render";
 // retuning one bot only replays that bot).
 //
 // `npm run arena -- --lab` also rates the candidate bots staged in `cli/lab.ts` — how a new idea
-// gets a number against the Hedgehog before it becomes an animal. `--lab-only` rates the
+// gets a number against the roster before it becomes an animal. `--lab-only` rates the
 // candidates against each other with the roster left out.
 //
 // No other flags: the run is tuned for speed by default. It plays a rotating window of the

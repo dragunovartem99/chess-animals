@@ -12,7 +12,7 @@ import type { Animal } from "./types";
 //
 // Depth 2 with quiescence — the only animal on that search. It is what an ending needs, since a
 // pawn race is all captures and promotions past the leaf, and it slots the Camel between the Hare
-// and the Raven.
+// and the Lion.
 export const CAMEL: Animal = {
 	emoji: "🐪",
 	tint: "#a38a63",

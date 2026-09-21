@@ -94,8 +94,8 @@ by its best pair, not only by its solo number.
 
 ### 7. Search with no evaluation plays blind
 
-Bare `material` is last in every d3 + q field, by 300–600. The Raven's roster rank comes from
-out-searching weaker bots; against opponents on the same search, evaluation decides.
+Bare `material` is last in every d3 + q field, by 300–600. On the roster it once rated near the
+top by out-searching weaker bots; against opponents on the same search, evaluation decides.
 
 ## Singles by search
 
@@ -126,9 +126,9 @@ in its own run. Sorted by d3 + q. d1–d3 runs carry ±35–70; d3 + q runs ±90
 
 Every idea animal leads with a feature no other animal reads, chosen to fit how the animal
 plays. Partners may repeat, but no two animals share a full weight set. Three overlaps are
-deliberate: the Goat and the Dove are the same weights with opposite signs; the Hare and the
-Lemming read `offeredMaterial` with opposite signs; and the Monkey, Owl and Raven are bare
-material at three searches, as the calibration line.
+deliberate: the Goat and the Dove are the same weights with opposite signs, and the Hare and the
+Lemming read `offeredMaterial` with opposite signs. Bare material — the old Monkey, Owl and Raven
+at d2, d3 and d3 + q — left the roster for want of an idea; `lab()` is the same baseline.
 
 | animal   | search | lead (its own)         | partners                                                            |
 | -------- | ------ | ---------------------- | ------------------------------------------------------------------- |
@@ -138,7 +138,6 @@ material at three searches, as the calibration line.
 | Sloth    | d2     | `huddle` 550           | —                                                                   |
 | Wolf     | d2     | `swarm` 600            | —                                                                   |
 | Fox      | d2     | `opponentMobility` −8  | `hanging` −50                                                       |
-| Hedgehog | d2     | `hanging` −50          | —                                                                   |
 | Bear     | d3     | `huddle` 40            | —                                                                   |
 | Hare     | d3     | `offeredMaterial` −20  | `mobility` 5                                                        |
 | Camel    | d2 + q | `passedPawnPush` 24    | `kingActivity` 20, `development` 20                                 |
@@ -157,7 +156,6 @@ within noise or better; the point of most of them is fit, not Elo.
 - **Camel, +75.** Both endgame features are silent in the opening, so it played that phase as
   bare material; `development` fixes it. A pawn-caravan Camel (`passedPawnPush` + `pushDepth`)
   lost ~140.
-- **Hedgehog, +22.** `hanging` −50 over −100: observation 4.
 - **Tiger, +52 (±110)** for the `space` + `swarm` + `mobility` stack over the old
   `swarm` + `mobility` + `earlyQueen`, which left `earlyQueen` to the Lion. Later dropped `space`
   again, this time for keeps: it repeats what `swarm` and `mobility` already read (observation 5)

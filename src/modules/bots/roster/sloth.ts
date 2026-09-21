@@ -1,6 +1,6 @@
 import type { Animal } from "./types";
 
-// The Monkey plus one instinct: keep every piece close to its own king. `huddle` rises as our
+// Bare material plus one instinct: keep every piece close to its own king. `huddle` rises as our
 // pieces gather around our king and falls as theirs gather around theirs, so a positive weight
 // pulls the whole army home and walls the king in. The arena walked the number up from 750 — 900
 // sits right on the Parrot, 400 nearly reaches the Wolf, and 550 lands in the clear middle,

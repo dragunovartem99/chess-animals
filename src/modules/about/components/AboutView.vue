@@ -2,7 +2,7 @@
 const PAPER_URL = "http://tom7.org/chess/";
 const SOURCE_URL = "https://github.com/dragunovartem99/chess-animals";
 
-const BOTS = ["wolf", "monkey", "donkey"] as const;
+const BOTS = ["wolf", "goat", "donkey"] as const;
 </script>
 
 <template>

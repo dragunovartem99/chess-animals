@@ -51,7 +51,7 @@ What the spike found, 6 games a pair:
   `elo_self`, `elo_oppo`, outputs `logits_move`, `logits_value`. Castling is standard UCI, `e1g1`.
 - `onnxruntime-node` segfaults on load; `onnxruntime-web` runs under node on its wasm backend, so
   the arena and the browser share one runtime. ~140 ms a move on one thread, ~1 s to load.
-- Stronger than the plan guessed: Elo 600 sits near the Monkey, 1100 near the Bear, 2500 takes
+- Stronger than the plan guessed: Elo 600 sits near the Wolf, 1100 near the Bear, 2500 takes
   half its games off the Tiger. Rung order holds; the top rungs are close and need the arena.
 - A Maia game is ~6 s against the land engine's milliseconds: the arena leans on its cache.
 

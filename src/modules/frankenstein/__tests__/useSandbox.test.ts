@@ -80,7 +80,7 @@ describe("useSandbox", () => {
 	it("seeds from an animal's own weights and depth", () => {
 		const { result } = mount();
 
-		result.seedFrom("hedgehog");
+		result.seedFrom("fox");
 
 		expect(result.weights.value.hanging).toBe(-50);
 		expect(result.depth.value).toBe(2);
@@ -88,7 +88,7 @@ describe("useSandbox", () => {
 
 	it("seeds back to the blank preset with no id", () => {
 		const { result } = mount();
-		result.seedFrom("hedgehog");
+		result.seedFrom("fox");
 
 		result.seedFrom();
 

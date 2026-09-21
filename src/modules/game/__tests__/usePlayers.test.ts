@@ -14,7 +14,7 @@ vi.mock("vue-router", async () => {
 	return { useRoute: () => route, useRouter: () => router };
 });
 
-const DEFAULTS = { white: "human", black: "monkey" };
+const DEFAULTS = { white: "human", black: "donkey" };
 
 // The route is shared, so a watcher left over from one test would react to the next one's URL.
 const scopes: ReturnType<typeof effectScope>[] = [];
@@ -65,20 +65,20 @@ describe("usePlayers", () => {
 	it("leaves a color alone when the URL no longer names it", async () => {
 		const { players, route } = setup({ white: "wolf", black: "donkey" });
 
-		route.query = { black: "monkey" };
+		route.query = { black: "goat" };
 		await nextTick();
 
-		expect(players.value).toEqual({ white: "wolf", black: "monkey" });
+		expect(players.value).toEqual({ white: "wolf", black: "goat" });
 	});
 
 	it("writes the picker's choice back into the URL", async () => {
 		const { players, replace, route } = setup();
 
-		players.value.black = "donkey";
+		players.value.black = "wolf";
 		await nextTick();
 
 		expect(replace).toHaveBeenCalledWith({
-			query: { ...route.query, white: undefined, black: "donkey" },
+			query: { ...route.query, white: undefined, black: "wolf" },
 		});
 	});
 
