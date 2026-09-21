@@ -1,7 +1,8 @@
 import type { Animal } from "./types";
 
-// The king goes to safety before anything (`castled` 200; the Bear's is 40): the den, at full
-// volume. A quarter of its moves.
+// Nothing is left out to be taken (`hanging` −50, the Hedgehog's lead on a Stockfish mix): the
+// shell. A quarter of its moves are Stockfish's, which castles on its own, so the Turtle's idea
+// is the one thing Stockfish at this depth still forgets.
 export const TURTLE: Animal = {
 	emoji: "🐢",
 	tint: "#5f9e6e",
@@ -10,6 +11,6 @@ export const TURTLE: Animal = {
 		search: { depth: 3, quiescence: true },
 		base: "material",
 		stockfish: { nodes: 100, mix: 26 },
-		weights: { castled: 200 },
+		weights: { hanging: -50 },
 	},
 };

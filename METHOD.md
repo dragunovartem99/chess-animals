@@ -37,7 +37,7 @@ zero. The random bot is every weight at zero, where the argmax tie-break picks u
 what makes the roster extensible: **adding a heuristic is one registry entry and one C
 function**, and adding an animal is a data file.
 
-27 features in six families, declared once in `shared/eval/features.ts`. That single registry
+26 features in six families, declared once in `shared/eval/features.ts`. That single registry
 drives the engine's feature ids, the weight-editor sliders, the SPSA parameter space, the JSON schema for
 bot configs, and the locale files.
 
@@ -47,14 +47,14 @@ gives them the wrong scale — and because the pairs animals are built from shou
 side: `mobility` with `opponentMobility`, `hanging` with `offeredMaterial` (the Hare,
 and the lab's two strongest features).
 
-| Family     | Count | Features, with the registry's default weight in centipawns                                                                                                                                                                   |
-| ---------- | ----: | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `material` |     5 | one **tunable** weight per piece — `materialPawn` 100, `materialKnight` 320, `materialBishop` 330, `materialRook` 500, `materialQueen` 900                                                                                   |
-| `activity` |    11 | reach, ground and good squares — `mobility` 4, `opponentMobility` 0, `centralization` 0, `space` 2, `centerControl` 8, `pushDepth` 0, `development` 15, `earlyQueen` −10, `castled` 40, `kingActivity` 0, `passedPawnPush` 0 |
-| `safety`   |     3 | what is about to be lost, ours minus theirs — `hanging` −15, `offeredMaterial` 0, `kingDanger` −12                                                                                                                           |
-| `distance` |     3 | where the army stands relative to a king, negated so more is nearer — `swarm` 0, `huddle` 0, `kingProximity` 0                                                                                                               |
-| `shape`    |     2 | whole-board properties, which read the same from either seat — `sameColorSquares` 0, `mirrorRanks` 0                                                                                                                         |
-| `move`     |     3 | properties of the move played — `givesMate` 1, `givesCheck` 0, `captureValue` 0; `givesMate` is a preference in [−1, 1], not centipawns                                                                                      |
+| Family     | Count | Features, with the registry's default weight in centipawns                                                                                                                                                     |
+| ---------- | ----: | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `material` |     5 | one **tunable** weight per piece — `materialPawn` 100, `materialKnight` 320, `materialBishop` 330, `materialRook` 500, `materialQueen` 900                                                                     |
+| `activity` |    10 | reach, ground and good squares — `mobility` 4, `opponentMobility` 0, `centralization` 0, `space` 2, `centerControl` 8, `pushDepth` 0, `development` 15, `earlyQueen` −10, `kingActivity` 0, `passedPawnPush` 0 |
+| `safety`   |     3 | what is about to be lost, ours minus theirs — `hanging` −15, `offeredMaterial` 0, `kingDanger` −12                                                                                                             |
+| `distance` |     3 | where the army stands relative to a king, negated so more is nearer — `swarm` 0, `huddle` 0, `kingProximity` 0                                                                                                 |
+| `shape`    |     2 | whole-board properties, which read the same from either seat — `sameColorSquares` 0, `mirrorRanks` 0                                                                                                           |
+| `move`     |     3 | properties of the move played — `givesMate` 1, `givesCheck` 0, `captureValue` 0; `givesMate` is a preference in [−1, 1], not centipawns                                                                        |
 
 `centralization` is a stand-in for a piece-square table: one number — how far the pieces stand
 from the rim — instead of sixty-four per role. The lab rated per-role sliders as noise and every

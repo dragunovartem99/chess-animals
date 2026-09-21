@@ -29,7 +29,6 @@ float extract_mobility(EvalContext *ctx);
 float extract_centralization(EvalContext *ctx);
 float extract_development(EvalContext *ctx);
 float extract_early_queen(EvalContext *ctx);
-float extract_castled(EvalContext *ctx);
 float extract_king_activity(EvalContext *ctx);
 float extract_passed_pawn_push(EvalContext *ctx);
 

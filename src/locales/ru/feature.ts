@@ -26,7 +26,6 @@ export default {
 	centralization: "Фигуры подальше от края",
 	development: "Легкие фигуры с последней горизонтали",
 	earlyQueen: "Ферзь вышел раньше легких фигур",
-	castled: "Король за рокировкой",
 	kingActivity: "Активный король в эндшпиле",
 	passedPawnPush: "Проходные пешки в эндшпиле",
 };

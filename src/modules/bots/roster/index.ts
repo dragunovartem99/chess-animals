@@ -63,7 +63,7 @@ import { WOLF } from "./wolf";
 // drops it below the Parrot — the Goat chases checks and captures, the Dove refuses to fight at
 // all, the Lemming hands everything over, and the Dodo runs its king at yours.
 //
-// The depth-3 animals without quiescence sit above the plain Owl: the Bear (`castled` + `huddle`)
+// The depth-3 animals without quiescence sit above the plain Owl: the Bear (`huddle`)
 // digs a den, and the Hare (`offeredMaterial` + `mobility`) is never in reach, on pairs the lab
 // rated together — an idea and depth 3 beat one more ply with none, but not the Raven's quiescence.
 //

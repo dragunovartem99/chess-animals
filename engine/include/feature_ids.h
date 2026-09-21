@@ -28,10 +28,9 @@ enum {
 	FEATURE_CENTRALIZATION = 21,
 	FEATURE_DEVELOPMENT = 22,
 	FEATURE_EARLY_QUEEN = 23,
-	FEATURE_CASTLED = 24,
-	FEATURE_KING_ACTIVITY = 25,
-	FEATURE_PASSED_PAWN_PUSH = 26,
-	FEATURE_COUNT = 27
+	FEATURE_KING_ACTIVITY = 24,
+	FEATURE_PASSED_PAWN_PUSH = 25,
+	FEATURE_COUNT = 26
 };
 
 // The registry keys in slot order, for output that names a feature.
@@ -60,7 +59,6 @@ static const char *const FEATURE_KEYS[FEATURE_COUNT] = {
     [FEATURE_CENTRALIZATION] = "centralization",
     [FEATURE_DEVELOPMENT] = "development",
     [FEATURE_EARLY_QUEEN] = "earlyQueen",
-    [FEATURE_CASTLED] = "castled",
     [FEATURE_KING_ACTIVITY] = "kingActivity",
     [FEATURE_PASSED_PAWN_PUSH] = "passedPawnPush",
 };

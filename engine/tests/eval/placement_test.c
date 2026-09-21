@@ -59,19 +59,3 @@ TEST(early_queen_is_zero_once_the_minors_behind_it_have_developed) {
 	const char *fen = "r3k2r/ppp2ppp/2npbn2/4p2q/6P1/2NPBN2/PPP2P1P/R2QK2R w KQkq - 0 1";
 	CHECK(feature_at(fen, FEATURE_EARLY_QUEEN) == 0);
 }
-
-TEST(castled_is_zero_in_the_opening) { CHECK(feature_at(START, FEATURE_CASTLED) == 0); }
-
-// Black castled short; White on e1 with both rights.
-TEST(castled_scores_a_castled_king_over_one_with_its_rights_from_either_seat) {
-	CHECK(feature_at("r4rk1/pppq1ppp/2n2n2/3pp3/3PP3/2N2N2/PPPQ1PPP/R3K2R w KQ - 0 1",
-	                 FEATURE_CASTLED) == -1);
-	CHECK(feature_at("r4rk1/pppq1ppp/2n2n2/3pp3/3PP3/2N2N2/PPPQ1PPP/R3K2R b KQ - 0 1",
-	                 FEATURE_CASTLED) == 1);
-}
-
-// White tucked on g1; Black stuck on e8 with no rights left.
-TEST(castled_marks_a_central_king_with_rights_spent_a_full_step_below_one_that_has_them) {
-	CHECK(feature_at("4k3/8/8/8/8/8/8/6K1 w - - 0 1", FEATURE_CASTLED) == 2);
-	CHECK(feature_at("4k3/8/8/8/8/8/8/4K2R w K - 0 1", FEATURE_CASTLED) == 1);
-}

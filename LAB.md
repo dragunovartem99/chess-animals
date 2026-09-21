@@ -116,7 +116,6 @@ in its own run. Sorted by d3 + q. d1–d3 runs carry ±35–70; d3 + q runs ±90
 | `kingDanger`       | −20 → −248 | −20 → +108 | −20 → −6   | −20 → +138 |
 | `pushDepth`        | 20 → −252  | 10 → +80   | 10 → +22   | 10 → +128  |
 | `passedPawnPush`   | 24 → +44   | 24 → −18   | 24 → +5    | 24 → +94   |
-| `castled`          | 80 → −59   | 40 → +74   | 40 → −13   | 20 → +86   |
 | `givesCheck`       | 80 → −132  | 20 → +73   | 40 → +40   | 20 → +54   |
 | `opponentMobility` | −4 → −167  | −8 → +26   | −10 → +39  | −4 → +47   |
 | `earlyQueen`       | −80 → +111 | −20 → −35  | −20 → +6   | −20 → +27  |
@@ -140,7 +139,7 @@ material at three searches, as the calibration line.
 | Wolf     | d2     | `swarm` 600            | —                                                                   |
 | Fox      | d2     | `opponentMobility` −8  | `hanging` −50                                                       |
 | Hedgehog | d2     | `hanging` −50          | —                                                                   |
-| Bear     | d3     | `castled` 40           | `huddle` 40                                                         |
+| Bear     | d3     | `huddle` 40            | —                                                                   |
 | Hare     | d3     | `offeredMaterial` −20  | `mobility` 5                                                        |
 | Camel    | d2 + q | `passedPawnPush` 24    | `kingActivity` 20, `development` 20                                 |
 | Lion     | d3 + q | `kingDanger` −40       | `development` 20, `earlyQueen` −80, `huddle` 20, `centerControl` 30 |
@@ -153,7 +152,8 @@ within noise or better; the point of most of them is fit, not Elo.
   safe. With `centerControl` in place of `hanging` it lost ~150.
 - **Hare, +24.** Never in reach, always moving: `offeredMaterial` + `mobility` was the lab's best
   pair at d3.
-- **Bear, +27.** A den: `castled` + `huddle`. `huddle` 40 is the best positional single at d3.
+- **Bear, +27.** A den: `huddle` 40, the best positional single at d3. The `castled` partner it
+  once had rated level, and went with the feature.
 - **Camel, +75.** Both endgame features are silent in the opening, so it played that phase as
   bare material; `development` fixes it. A pawn-caravan Camel (`passedPawnPush` + `pushDepth`)
   lost ~140.

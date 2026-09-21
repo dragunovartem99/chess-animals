@@ -50,7 +50,7 @@ export default {
 	},
 	bear: {
 		name: "Bear",
-		description: "Hides its king deep in the den. The whole family stays close around it.",
+		description: "Digs a den. The whole family stays close around its king.",
 	},
 	lion: {
 		name: "Lion",

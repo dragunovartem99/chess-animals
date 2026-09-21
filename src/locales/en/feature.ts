@@ -27,7 +27,6 @@ export default {
 	centralization: "Pieces off the rim",
 	development: "Minors off the back rank",
 	earlyQueen: "Queen out before the minors",
-	castled: "King castled",
 	kingActivity: "Active king in the endgame",
 	passedPawnPush: "Passed pawns pushed in the endgame",
 };

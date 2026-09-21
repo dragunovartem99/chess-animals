@@ -29,7 +29,6 @@ const Extractor EXTRACTORS[FEATURE_COUNT] = {
     [FEATURE_CENTRALIZATION] = extract_centralization,
     [FEATURE_DEVELOPMENT] = extract_development,
     [FEATURE_EARLY_QUEEN] = extract_early_queen,
-    [FEATURE_CASTLED] = extract_castled,
     [FEATURE_KING_ACTIVITY] = extract_king_activity,
     [FEATURE_PASSED_PAWN_PUSH] = extract_passed_pawn_push,
 };

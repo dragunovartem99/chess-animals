@@ -8,7 +8,7 @@ import type { Animal } from "./types";
 //
 // `development` is what it does until then: both endgame features are silent in the opening, and
 // without a middlegame weight the Camel played that phase as bare material. The lab put it +75
-// over the endgame pair alone, more than `castled`, `pushDepth` or `centerControl` did.
+// over the endgame pair alone, more than `pushDepth` or `centerControl` did.
 //
 // Depth 2 with quiescence — the only animal on that search. It is what an ending needs, since a
 // pawn race is all captures and promotions past the leaf, and it slots the Camel between the Hare

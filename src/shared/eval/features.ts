@@ -151,13 +151,6 @@ export const FEATURES = defineFeatures([
 	// develop or the queen comes home.
 	{ key: "earlyQueen", family: "activity", defaultWeight: -10 },
 
-	// Our king's shelter minus theirs, in three states: +1 castled onto a wing, 0 still able to,
-	// -1 with the rights spent and the king left in the centre. `kingDanger` reads the attack
-	// once it arrives; this reads the decision that invites it, and costs no board walk to say.
-	// Also `activity`, also no phase gate: by the endgame both sides have spent their rights and
-	// the difference is usually 0 again.
-	{ key: "castled", family: "activity", defaultWeight: 40 },
-
 	// Our king's distance from the rim minus theirs, scaled by the square of how little material is
 	// left — the endgame's "activate the king", held back until the ending really comes. Unlike the
 	// whole-board `kingProximity` it is a real side-to-move difference, so it needs no even depth.

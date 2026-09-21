@@ -1,26 +1,8 @@
-#include <stdint.h>
-
 #include "bitboard.h"
 #include "eval.h"
 #include "extractors.h"
 #include "masks.h"
 #include "position.h"
-
-// The a–c and g–h files: where a castled king ends up, or the corner beside it.
-static const Bitboard WINGS = 0xc7c7c7c7c7c7c7c7U;
-
-// +1 with the king tucked on a wing of its own back rank, 0 while a right still lets it get
-// there, -1 once the rights are spent with it stuck in the middle.
-static int castled_state(EvalContext *ctx, Color color) {
-	const Position *pos = ctx->pos;
-	Bitboard king = pos->roles[KING] & pos->colors[color];
-	if ((king & WINGS & back_rank(color)) != 0) {
-		return 1;
-	}
-	uint8_t rights =
-	    color == WHITE ? CASTLE_WHITE_H | CASTLE_WHITE_A : CASTLE_BLACK_H | CASTLE_BLACK_A;
-	return (pos->castling & rights) != 0 ? 0 : -1;
-}
 
 // How far the pieces stand from the rim; pawns and the king are not pieces here.
 static int total_centrality(EvalContext *ctx, Color color) {
@@ -56,4 +38,3 @@ static int early_queen(EvalContext *ctx, Color color) {
 float extract_centralization(EvalContext *ctx) { return side_difference(ctx, total_centrality); }
 float extract_development(EvalContext *ctx) { return side_difference(ctx, developed); }
 float extract_early_queen(EvalContext *ctx) { return side_difference(ctx, early_queen); }
-float extract_castled(EvalContext *ctx) { return side_difference(ctx, castled_state); }

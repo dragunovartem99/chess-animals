@@ -6,8 +6,8 @@ import type { Animal } from "./types";
 // is what hands it pieces that can reach your ring at all.
 //
 // `kingDanger` alone sat barely above the Raven (+19 to +100 across runs). Adding `development`
-// put it ~+110 on top and near the middle of the Raven-to-Tiger gap. `centerControl` or `castled`
-// as a third weight measured inside the noise. Most of the gain is `development` — the same weight
+// put it ~+110 on top and near the middle of the Raven-to-Tiger gap. `centerControl` as a
+// third weight measured inside the noise. Most of the gain is `development` — the same weight
 // with `centerControl` and no `kingDanger` rated level — but the Lion keeps the king idea as the
 // thing it is.
 //

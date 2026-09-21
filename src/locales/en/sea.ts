@@ -17,7 +17,7 @@ export default {
 	},
 	turtle: {
 		name: "Turtle",
-		description: "Tucks its king away before anything else.",
+		description: "Never leaves a piece out where you can grab it.",
 	},
 	dolphin: {
 		name: "Dolphin",
