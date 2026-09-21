@@ -70,7 +70,7 @@ export async function runGames({
 // The same contract without threads — for a handful of games, a test, or a debugger. Kept here
 // so callers depend on one module whether or not they want a pool. The caller brings the search,
 // as the worker does, so the two play the same games.
-export async function runGamesSerially({
+export function runGamesSerially({
 	specs,
 	goSearch,
 	stockfish,
@@ -81,8 +81,12 @@ export async function runGamesSerially({
 	stockfish?: Stockfish;
 	maia?: MaiaSession;
 }): Promise<GameReport[]> {
-	const reports: GameReport[] = [];
-	for (const spec of specs) reports.push(await runGame({ spec, goSearch, stockfish, maia }));
-
-	return reports;
+	// A chain rather than `Promise.all`: the games share one set of engines, which play one at a time.
+	return specs.reduce<Promise<GameReport[]>>(
+		async (played, spec) => [
+			...(await played),
+			await runGame({ spec, goSearch, stockfish, maia }),
+		],
+		Promise.resolve([])
+	);
 }

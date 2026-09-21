@@ -1,4 +1,5 @@
 import { computed, onBeforeUnmount, ref } from "vue";
+import type { Ref } from "vue";
 
 import type { Animal } from "@/modules/bots/roster";
 import { createUciClient, createWorkerTransport } from "@/shared/engine";
@@ -34,6 +35,49 @@ async function reseed(engines: Map<string, UciEngineClient>): Promise<void> {
 	);
 }
 
+function cachedEngine({
+	engines,
+	animal,
+}: {
+	engines: Map<string, UciEngineClient>;
+	animal: Animal;
+}): UciEngineClient {
+	const existing = engines.get(animal.definition.id);
+	if (existing) return existing;
+
+	const client = spawnEngine(animal);
+	engines.set(animal.definition.id, client);
+
+	return client;
+}
+
+async function askEngine({
+	engine,
+	depth,
+	thinking,
+	fen,
+	moves,
+}: {
+	engine: UciEngineClient;
+	depth: number;
+	thinking: Ref<boolean>;
+	fen?: string;
+	moves?: string[];
+}): Promise<{ move: string; score?: number }> {
+	// Loading is not thinking: the first move of a bot waits on its wasm, and for a monster
+	// on Stockfish too, which `prepare` has already shown as loading.
+	await engine.init();
+
+	thinking.value = true;
+	try {
+		engine.setPosition({ fen, moves });
+
+		return await engine.go({ depth });
+	} finally {
+		thinking.value = false;
+	}
+}
+
 // One worker per animal, kept for as long as the view is open. Starting a worker costs a few
 // milliseconds and a bot is asked for hundreds of moves, so they are made once and reused; a
 // `ucinewgame` is what separates one game from the next.
@@ -44,17 +88,8 @@ export function useBotEngines() {
 	// the first to finish must not clear the state for the one still on its way.
 	const pending = ref(0);
 
-	function engineFor(animal: Animal): UciEngineClient {
-		const existing = engines.get(animal.definition.id);
-		if (existing) return existing;
-
-		const client = spawnEngine(animal);
-		engines.set(animal.definition.id, client);
-
-		return client;
-	}
-
-	async function askForMove({
+	const engineFor = (animal: Animal) => cachedEngine({ engines, animal });
+	const askForMove = ({
 		animal,
 		fen,
 		moves,
@@ -62,21 +97,14 @@ export function useBotEngines() {
 		animal: Animal;
 		fen?: string;
 		moves?: string[];
-	}): Promise<{ move: string; score?: number }> {
-		const engine = engineFor(animal);
-		// Loading is not thinking: the first move of a bot waits on its wasm, and for a monster
-		// on Stockfish too, which `prepare` has already shown as loading.
-		await engine.init();
-
-		thinking.value = true;
-		try {
-			engine.setPosition({ fen, moves });
-
-			return await engine.go({ depth: animal.definition.search.depth });
-		} finally {
-			thinking.value = false;
-		}
-	}
+	}) =>
+		askEngine({
+			engine: engineFor(animal),
+			depth: animal.definition.search.depth,
+			thinking,
+			fen,
+			moves,
+		});
 
 	// Starts every bot that is about to play, so the board can wait for all of them at once: the
 	// handshake settles only once a worker has its engine — the wasm, Stockfish, whatever it runs

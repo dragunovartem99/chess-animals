@@ -20,36 +20,53 @@ export type MonsterEngineState = {
 
 const NULL_MOVE: UciResponse[] = [{ type: "bestmove", move: "0000" }];
 
+const freshGame = (): Replayed => ({
+	position: positionFromFen(INITIAL_FEN),
+	fen: INITIAL_FEN,
+	moves: [],
+});
+
+// Stockfish's best few lines for the game so far, and one of them drawn from `rng`.
+async function pickMove({
+	command,
+	config,
+	stockfish,
+	game,
+	rng,
+}: {
+	command: Extract<UciCommand, { type: "go" }>;
+	config: BotConfig;
+	stockfish: Stockfish;
+	game: Replayed;
+	rng: Rng;
+}): Promise<UciResponse[]> {
+	const options = config.stockfish;
+	if (!options) throw new Error(`"${config.id}" is not a monster`);
+
+	await stockfish.init();
+	const { position, fen, moves } = game;
+	const nodes = command.limits.nodes ?? options.nodes;
+	const lines = await stockfish.lines({ fen, moves, nodes, lines: options.lines });
+	const line = pickLine({ lines, temperature: options.temperature, rng });
+	const move = line && fromUci({ position, uci: line.move });
+
+	return move ? [{ type: "bestmove", move: toUci({ position, move }) }] : NULL_MOVE;
+}
+
 // One monster: Stockfish, softened. Each move it asks Stockfish for its best few lines and
 // picks one, the worse a line the less likely — see `StockfishOptions`.
 //
 // It speaks UCI like the land engine and is one, mostly: everything but `go` and its own options
 // is the land engine's, and the pick is drawn from a stream of its own so a game replays from its
 // seed. An answer is a promise, because Stockfish is a process to ask, not a function to call.
+// Stockfish starts on the first command that needs it, not when the animal is made: a roster view
+// that never plays one never pays for it.
 export function createMonsterEngine({ config, name, stockfish, goSearch }: MonsterEngineState) {
 	const land = createUciEngine({ config, name, goSearch });
 	let current = config;
 	let seed: number | string = config.id;
 	let rng: Rng = createRng(seed);
-	let game: Replayed = { position: positionFromFen(INITIAL_FEN), fen: INITIAL_FEN, moves: [] };
-
-	// Stockfish starts on the first command that needs it, not when the animal is made: a roster
-	// view that never plays one never pays for it.
-	const start = () => stockfish.init();
-
-	async function go(command: Extract<UciCommand, { type: "go" }>): Promise<UciResponse[]> {
-		const options = current.stockfish;
-		if (!options) throw new Error(`"${current.id}" is not a monster`);
-
-		await start();
-		const { position, fen, moves } = game;
-		const nodes = command.limits.nodes ?? options.nodes;
-		const lines = await stockfish.lines({ fen, moves, nodes, lines: options.lines });
-		const line = pickLine({ lines, temperature: options.temperature, rng });
-		const move = line && fromUci({ position, uci: line.move });
-
-		return move ? [{ type: "bestmove", move: toUci({ position, move }) }] : NULL_MOVE;
-	}
+	let game = freshGame();
 
 	return {
 		async handle(command: UciCommand): Promise<UciResponse[]> {
@@ -59,12 +76,12 @@ export function createMonsterEngine({ config, name, stockfish, goSearch }: Monst
 						.handle(command)
 						.toSpliced(-1, 0, ...describeMonsterOptions(current));
 				case "isready":
-					await start();
+					await stockfish.init();
 					return land.handle(command);
 				case "ucinewgame":
 					rng = createRng(seed);
-					game = { position: positionFromFen(INITIAL_FEN), fen: INITIAL_FEN, moves: [] };
-					await start();
+					game = freshGame();
+					await stockfish.init();
 					await stockfish.newGame();
 					return land.handle(command);
 				case "setoption": {
@@ -84,7 +101,7 @@ export function createMonsterEngine({ config, name, stockfish, goSearch }: Monst
 					game = replay(command);
 					return land.handle(command);
 				case "go":
-					return go(command);
+					return pickMove({ command, config: current, stockfish, game, rng });
 				default:
 					return [];
 			}

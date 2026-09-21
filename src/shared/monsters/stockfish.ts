@@ -19,17 +19,15 @@ export type Stockfish = {
 
 const BEST_MOVE = /^bestmove (\S+)/u;
 
-// Stockfish over a `UciTransport`, asking one question at a time — the monster engine's commands are
-// handled in order, so a second question never arrives while the first is out.
-export function createStockfish({ transport }: { transport: UciTransport }): Stockfish {
+// Everything said up to and including the line that ends the question. The listener is set
+// before the commands go out, for the reason `createUciClient` gives: a local transport answers
+// during `send`.
+function createAsker(transport: UciTransport) {
 	let listener: ((line: string) => void) | undefined;
 	transport.subscribe((line) => listener?.(line));
 
-	// Everything said up to and including the line that ends the question. The listener is set
-	// before the commands go out, for the reason `createUciClient` gives: a local transport answers
-	// during `send`.
-	function ask({ commands, until }: { commands: string[]; until: RegExp }): Promise<string[]> {
-		return new Promise((resolve) => {
+	return ({ commands, until }: { commands: string[]; until: RegExp }): Promise<string[]> =>
+		new Promise((resolve) => {
 			const said: string[] = [];
 			listener = (line) => {
 				said.push(line);
@@ -40,7 +38,12 @@ export function createStockfish({ transport }: { transport: UciTransport }): Sto
 			};
 			for (const command of commands) transport.send(command);
 		});
-	}
+}
+
+// Stockfish over a `UciTransport`, asking one question at a time — the monster engine's commands are
+// handled in order, so a second question never arrives while the first is out.
+export function createStockfish({ transport }: { transport: UciTransport }): Stockfish {
+	const ask = createAsker(transport);
 
 	async function handshake(): Promise<void> {
 		await ask({ commands: ["uci"], until: /^uciok/u });
