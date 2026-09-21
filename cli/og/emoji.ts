@@ -6,7 +6,7 @@ import path from "node:path";
 // images instead, cached under ./emoji as `<lower-hex codepoint>.svg`. A glyph the roster adds
 // later is fetched from Noto on the next build and committed alongside the rest.
 const EMOJI_DIR = path.join(import.meta.dirname, "emoji");
-const NOTO_RAW = "https://raw.githubusercontent.com/googlefonts/noto-emoji/main/svg";
+const NOTO_RAW = "https://raw.githubusercontent.com/googlefonts/noto-emoji/main/2D/svg";
 
 function codepoint(emoji: string): string {
 	// Strip the U+FE0F variation selector Noto drops from its filenames (e.g. 🐿️ -> 1f43f).
