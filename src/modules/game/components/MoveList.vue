@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, nextTick, ref, watch } from "vue";
 
 import type { PlayedTurn } from "@/shared/game";
 
 import { figurine } from "../utils/figurine";
 
-const { turns } = defineProps<{ turns: PlayedTurn[] }>();
+const { turns, current } = defineProps<{ turns: PlayedTurn[]; current: number }>();
+
+const emit = defineEmits<{ navigate: [number] }>();
 
 // Chess counts in full moves: White's and Black's replies share a number.
 const rows = computed(() =>
@@ -20,17 +22,51 @@ const rows = computed(() =>
 		return acc;
 	}, [])
 );
+
+const list = ref<HTMLElement>();
+
+// The list scrolls itself rather than asking the move to `scrollIntoView`, which walks every
+// scrollable ancestor: on a phone, where the page is what scrolls, each bot move would drag the
+// board out from under the player's thumb.
+watch(
+	() => [current, turns.length],
+	async () => {
+		await nextTick();
+
+		const move = list.value?.querySelector("[aria-current]");
+		if (!list.value || !move) return;
+
+		const box = list.value.getBoundingClientRect();
+		const moveBox = move.getBoundingClientRect();
+		list.value.scrollTop += moveBox.top - box.top - (box.height - moveBox.height) / 2;
+	}
+);
 </script>
 
 <template>
-	<ol class="moves">
+	<ol
+		ref="list"
+		class="moves"
+	>
 		<li
 			v-for="row in rows"
 			:key="row.number"
 		>
 			<span class="number">{{ row.number }}.</span>
-			<span class="san">{{ row.white && figurine(row.white) }}</span>
-			<span class="san">{{ row.black && figurine(row.black) }}</span>
+			<template
+				v-for="turn in [row.white, row.black]"
+				:key="turn?.ply"
+			>
+				<button
+					v-if="turn"
+					type="button"
+					class="san"
+					:aria-current="turn.ply === current ? 'true' : undefined"
+					@click="emit('navigate', turn.ply)"
+				>
+					{{ figurine(turn) }}
+				</button>
+			</template>
 		</li>
 	</ol>
 </template>
@@ -58,5 +94,30 @@ li:nth-child(odd) {
 
 .number {
 	color: var(--color-ink-muted);
+}
+
+.san {
+	justify-content: flex-start;
+	padding: 0 0.375rem;
+	border-radius: var(--radius-sm);
+	font-weight: 400;
+	color: var(--color-ink);
+	background: none;
+	box-shadow: none;
+	transition: none;
+}
+
+.san:hover {
+	background: var(--color-sunken);
+}
+
+.san:active {
+	transform: none;
+}
+
+.san[aria-current] {
+	font-weight: 700;
+	/* Off the button colour, the one every theme repaints — the accent stays amber in all of them. */
+	background: color-mix(in srgb, var(--color-button) 20%, transparent);
 }
 </style>

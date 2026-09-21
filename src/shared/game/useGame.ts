@@ -17,7 +17,9 @@ export function useGame({ plyLimit = 300 }: { plyLimit?: number } = {}) {
 	const position = shallowRef<Chess>(positionFromFen(INITIAL_FEN));
 	const keys = ref<string[]>([]);
 	const turns = ref<PlayedTurn[]>([]);
-	const lastMove = ref<[string, string]>();
+	// The position after every ply, the opening one first, so the board can show any point of the
+	// game without replaying it from the start.
+	const fens = ref<string[]>([INITIAL_FEN]);
 
 	const fen = computed(() => fenFromPosition(position.value));
 	const ply = computed(() => turns.value.length);
@@ -35,16 +37,16 @@ export function useGame({ plyLimit = 300 }: { plyLimit?: number } = {}) {
 
 		keys.value = [...keys.value, repetitionKey(position.value)];
 		turns.value = [...turns.value, { ply: ply.value + 1, san, uci }];
-		lastMove.value = [uci.slice(0, 2), uci.slice(2, 4)];
 		position.value = afterMove({ position: position.value, move });
+		fens.value = [...fens.value, fenFromPosition(position.value)];
 	}
 
 	function reset(): void {
 		position.value = positionFromFen(INITIAL_FEN);
 		keys.value = [];
 		turns.value = [];
-		lastMove.value = undefined;
+		fens.value = [INITIAL_FEN];
 	}
 
-	return { position, fen, turns, lastMove, status, ply, play, reset };
+	return { position, fen, fens, turns, status, ply, play, reset };
 }

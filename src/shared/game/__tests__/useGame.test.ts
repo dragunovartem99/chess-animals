@@ -27,7 +27,6 @@ describe("useGame", () => {
 		move({ game, uci: "e2e4" });
 
 		expect(game.turns.value).toEqual([{ ply: 1, san: "e4", uci: "e2e4" }]);
-		expect(game.lastMove.value).toEqual(["e2", "e4"]);
 	});
 
 	it("names the piece from the position the move came from", () => {
@@ -73,7 +72,6 @@ describe("useGame, ending and resetting", () => {
 
 		expect(game.fen.value).toBe(INITIAL_FEN);
 		expect(game.turns.value).toEqual([]);
-		expect(game.lastMove.value).toBeUndefined();
 		expect(game.status.value.over).toBe(false);
 	});
 });

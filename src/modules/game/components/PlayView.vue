@@ -11,7 +11,9 @@ import { useGame } from "@/shared/game";
 import { useTheme } from "@/shared/ui";
 
 import { useBotEngines } from "../composables/useBotEngines";
+import { useHistory } from "../composables/useHistory";
 import { usePlayers } from "../composables/usePlayers";
+import HistoryControls from "./HistoryControls.vue";
 import MoveList from "./MoveList.vue";
 import PlayerPicker from "./PlayerPicker.vue";
 
@@ -38,10 +40,13 @@ useTheme(
 const humanColors = computed(() => COLORS.filter((color) => players.value[color] === HUMAN));
 const orientation = computed(() => humanColors.value[0] ?? "white");
 
+const history = useHistory({ fens: game.fens, turns: game.turns });
+
 // A finished game is a view, not a position to move from: `game.play` already rejects the move,
 // but the board only resyncs on a FEN change, so a drop after the result would otherwise linger.
+// A past position is only a view as well — a move from it would be played on the current one.
 const playable = computed(() =>
-	game.status.value.over || engines.loading.value ? [] : humanColors.value
+	game.status.value.over || engines.loading.value || !history.live.value ? [] : humanColors.value
 );
 
 // Every bot at the board is started as soon as it is picked, not on its first move: the board
@@ -127,6 +132,7 @@ function swapColors() {
 
 async function restart() {
 	game.reset();
+	history.last();
 	generation.value += 1;
 	await engines.startNewGame();
 }
@@ -136,10 +142,10 @@ async function restart() {
 	<section class="play">
 		<div class="board card">
 			<ChessBoard
-				:fen="game.fen.value"
+				:fen="history.fen.value"
 				:orientation="orientation"
 				:playable="playable"
-				:last-move="game.lastMove.value as [Key, Key] | undefined"
+				:last-move="history.lastMove.value"
 				:loading="engines.loading.value"
 				@move="playHumanMove"
 			/>
@@ -179,7 +185,21 @@ async function restart() {
 				</button>
 			</div>
 
-			<MoveList :turns="game.turns.value" />
+			<MoveList
+				:turns="game.turns.value"
+				:current="history.viewed.value"
+				@navigate="history.goTo"
+			/>
+
+			<HistoryControls
+				:can-go-back="history.viewed.value > 0"
+				:can-go-forward="!history.live.value"
+				:turns="game.turns.value"
+				:status="game.status.value"
+				:players="players"
+				:human="HUMAN"
+				@step="(step) => history[step]()"
+			/>
 		</aside>
 	</section>
 </template>

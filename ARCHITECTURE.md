@@ -25,7 +25,7 @@ paper.pdf       Elo World, the design's source
 | Module  | What it does                                                                                  |
 | ------- | --------------------------------------------------------------------------------------------- |
 | `bots`  | the two rosters — land and monsters (`roster/*.ts`, plain data) — and a landing page for each |
-| `game`  | `/play` — human vs bot, bot vs bot, move list                                                 |
+| `game`  | `/play` — human vs bot, bot vs bot, the move list with history navigation, PGN copy           |
 | `board` | the chessground wrapper, orientation, legal dests, the promotion picker                       |
 | `about` | `/about` — a short prose page: how the bots work, the paper it comes from, credit             |
 
