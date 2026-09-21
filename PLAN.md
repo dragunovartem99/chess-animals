@@ -26,15 +26,11 @@ What is left of the move to C. How it is built is in
 
 ## The underwater section
 
-The sixteen sea animals exist and the arena rates them with the land roster — Stockfish diluted with
-the animal's own d3 + q search, see
-[ARCHITECTURE.md](./ARCHITECTURE.md#sea-animals). What is left:
+The twelve sea animals exist and the arena rates them with the land roster — Stockfish alone, a
+MultiPV line picked by temperature, see [ARCHITECTURE.md](./ARCHITECTURE.md#sea-animals). What is
+left:
 
 - ⬜ Credit Stockfish on the About page and link its source: it is GPL-3.0 and the site is MIT, so
   the build ships `public/stockfish/COPYING.txt` and the page has to say where the source is.
-- ⬜ Tune `nodes` and `mix` per animal. The first arena with the bright weights rates them Herring
-  1660 up to Goldfish 2284, with Tiger between Jellyfish and Lion. The weights are deliberately
-  above `LAB.md`'s d3 + q optima (observation 4 says that costs Elo) so each habit shows; `mix`
-  runs from 30 percent to none and `nodes` from 60 to 3000, and both are still first guesses.
 - ⬜ More animals, if a real idea turns up. The emoji left are 🐳 (no seahorse, no orca), and each
-  animal needs a habit and a `nodes`/`mix` pair.
+  animal needs a `temperature` rung.

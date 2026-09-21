@@ -57,7 +57,7 @@ One flat area per folder, each with its own `index.ts`, and deliberately **no ro
 | `chess`        | chessops wrappers — FEN in/out, legal moves, `afterMove`, repetition keys, and game-over detection                                             |
 | `eval`         | the feature registry, feature and weight vectors, the mate term, the White-relative breakdown — what a bot is, where `engine/` is what it does |
 | `engine`       | the seeded RNG, the UCI codec, the UCI engine over a `goSearch`, the engine client and its transports                                          |
-| `sea`          | the sea animals: Stockfish over a `UciTransport`, and the engine that mixes it with an animal's own search                                     |
+| `sea`          | the sea animals: Stockfish over a `UciTransport`, and the engine that samples its MultiPV lines                                                |
 | `wasm`         | the binding to `engine/build/engine.wasm` — loading, the linear-memory arena, `search`/`extract`/`perft`, and the `goSearch` over it           |
 | `game`         | `useGame` — one game with its move list and repetition history, owned by whichever view mounts it (`/play`, `/frankenstein`)                   |
 | `ui`           | the Vue components both game views share — `SegmentedTabs` and the `FeatureBreakdown` table                                                    |
@@ -177,22 +177,24 @@ the worker.
 
 ### Sea animals
 
-A second roster, `SEA` beside `ROSTER`, of **Stockfish diluted with the animal itself**. A sea
-animal is an ordinary bot definition — `search` d3 + q, `base: "material"`, one idea in `weights` —
-plus `stockfish: { nodes, mix }`. On every move `createSeaEngine` rolls: `mix` percent of the time
-the animal's own search plays, the rest of the time Stockfish does, thinking `nodes` nodes. `mix` is
-how often it plays what it believes in, `nodes` how well it sees the rest of the time; the roll is
-drawn from a seeded stream of its own, so a game replays from its seed.
+A second roster, `SEA` beside `ROSTER`, of **Stockfish alone, softened**. A sea animal is a bot
+definition with no weights and `stockfish: { nodes, lines, temperature }`; its `search` is never
+read. On every move `createSeaEngine` asks Stockfish for its best `lines` moves (MultiPV) on
+`nodes` nodes and picks one, a line `d` centipawns behind the best weighted `exp(-d / temperature)`.
+Small slips are common and blunders rare, which reads as a person playing — a uniformly random
+move, the paper's dilution, hangs a queen out of the blue. The pick is drawn from a seeded stream
+of its own, so a game replays from its seed. The twelve differ in temperature alone, bar the
+Goldfish, which also sees ten times as far, and all of them rate above the Tiger.
 
-The engine is the land engine with a `go` that may ask Stockfish instead, so the play view cannot
+The engine is the land engine with a `go` that asks Stockfish instead, so the play view cannot
 tell them apart; its answers are promises, because Stockfish is a process. In the browser the
 worker starts Stockfish as a second worker from `public/stockfish/` — the vendored 1.8 MB
 lite single-threaded build, fetched by the first sea animal that plays, never by the land roster —
 and Chess960 notation is switched on so castling is king-takes-rook in both engines. Outside a browser
 `createProcessTransport` runs the same script as a child process, started on the first line sent.
-The arena plays sea animals through `createMover`, which makes the same roll for a game's own
+The arena plays sea animals through `createMover`, which makes the same pick from a game's own
 random stream and is why `runGame` is async; each game worker owns one Stockfish, cleared per game,
-and the result cache keys a game with a sea animal in it on the Stockfish build too. The sixteen
+and the result cache keys a game with a sea animal in it on the Stockfish build too. The twelve
 are rated in the same table as the land roster.
 
 The pages follow the roster they show: `useTheme` in `shared/ui` lets a view say which world it is

@@ -2,11 +2,13 @@ import type { SearchOptions } from "../engine";
 import type { WeightVector } from "../eval";
 import type { BaseName } from "./bases";
 
-// What makes a bot a sea animal: Stockfish, diluted with the bot itself. Every move is rolled —
-// `mix` percent of them the bot's own search plays, with its own weights, and the rest are
-// Stockfish's, which sees as far as `nodes` nodes take it. The node budget sets how well the
-// animal sees, the mix how often it plays what it believes in instead.
-export type StockfishOptions = { nodes: number; mix: number };
+// What makes a bot a sea animal: Stockfish alone, softened. Each move Stockfish weighs its best
+// `lines` candidates on `nodes` nodes, and the animal picks one at random, a candidate `d`
+// centipawns worse than the best weighted `exp(-d / temperature)`. A slip that costs little is
+// common and a blunder rare, which is how people err — a uniformly random move hangs a queen out
+// of the blue. `nodes` is how far it sees, `lines` how many moves it considers, `temperature` how
+// carelessly it chooses among them; zero plays the best line every time.
+export type StockfishOptions = { nodes: number; lines: number; temperature: number };
 
 // What a bot is on disk and on the wire: plain JSON-shaped data, so a tuned bot can be exported,
 // pasted into a file, sent to a worker, or hashed into a cache key without any of them needing to
@@ -16,9 +18,9 @@ export type StockfishOptions = { nodes: number; mix: number };
 // registry cannot silently reinterpret every bot ever saved.
 export type BotDefinition = {
 	id: string;
-	// For a sea animal, the search of the moves it plays itself.
+	// Unread by a sea animal, which never searches itself.
 	search: SearchOptions;
-	// Present for a sea animal, whose other moves come from Stockfish.
+	// Present for a sea animal, whose moves all come from Stockfish.
 	stockfish?: StockfishOptions;
 	// The starting point the weights are written over — piece values and mate-awareness, usually.
 	// Omitted means `zero`: a bot that names no base is exactly what its weights say and nothing

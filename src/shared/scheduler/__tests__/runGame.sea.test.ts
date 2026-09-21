@@ -14,7 +14,7 @@ const [opening] = openings;
 const GOLDFISH = {
 	id: "goldfish",
 	search: { depth: 2 },
-	stockfish: { nodes: 50, mix: 0 },
+	stockfish: { nodes: 50, lines: 3, temperature: 30 },
 	weights: {},
 };
 const MONKEY = { id: "monkey", search: { depth: 1 }, base: "material", weights: {} } as const;

@@ -21,7 +21,7 @@ describe("compileBot", () => {
 	});
 
 	it("carries a sea animal's options through, and gives a land animal none", () => {
-		const stockfish = { nodes: 50, mix: 30 };
+		const stockfish = { nodes: 50, lines: 5, temperature: 30 };
 
 		expect(compileBot({ ...base, stockfish }).stockfish).toEqual(stockfish);
 		expect(compileBot(base).stockfish).toBeUndefined();

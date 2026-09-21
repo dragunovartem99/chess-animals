@@ -18,20 +18,16 @@ import { LION } from "./lion";
 import { LOBSTER } from "./lobster";
 import { MONKEY } from "./monkey";
 import { OCTOPUS } from "./octopus";
-import { OTTER } from "./otter";
 import { OWL } from "./owl";
 import { PARROT } from "./parrot";
-import { PENGUIN } from "./penguin";
 import { PUFFERFISH } from "./pufferfish";
 import { RAVEN } from "./raven";
-import { SEAL } from "./seal";
 import { SHARK } from "./shark";
 import { SHRIMP } from "./shrimp";
 import { SLOTH } from "./sloth";
 import { SPIDER } from "./spider";
 import { SQUID } from "./squid";
 import { TIGER } from "./tiger";
-import { TURTLE } from "./turtle";
 import type { Animal } from "./types";
 import { WHALE } from "./whale";
 import { WOLF } from "./wolf";
@@ -101,26 +97,24 @@ export const ROSTER: Animal[] = [
 
 export const ROSTER_BY_ID = new Map(ROSTER.map((animal) => [animal.definition.id, animal]));
 
-// The second roster, apart from the first on purpose: a sea animal is Stockfish diluted with one
-// idea, and `ROSTER` stays the land order and the gauntlet `tune` measures against. The arena rates
-// both together. Weakest first, as the arena measured them: `nodes` sets how well Stockfish sees, so
-// the rating climbs with it, while `mix` falls from a third to none. Herring, Squid and Crab are
-// within thirty points of each other, inside the noise, so their order is a coin's.
+// The second roster, apart from the first on purpose: a sea animal is Stockfish alone, softened,
+// and `ROSTER` stays the land order and the gauntlet `tune` measures against. The arena rates both
+// together. Weakest first, and the order is the temperature's: every one weighs Stockfish's top
+// five lines on 5000 nodes, and picks a line `t` centipawns behind the best about a third as often
+// at temperature `t`, so the lower it is the rarer and smaller the slips. All twelve sit above the
+// Tiger. The top two are never careless — one line, so no nodes are spent on the other four — and
+// the Goldfish sees ten times as far as the Whale.
 export const SEA: Animal[] = [
 	HERRING,
 	SQUID,
 	CRAB,
-	TURTLE,
 	PUFFERFISH,
 	LOBSTER,
 	JELLYFISH,
 	SHARK,
 	SHRIMP,
-	PENGUIN,
-	OTTER,
 	DOLPHIN,
 	OCTOPUS,
-	SEAL,
 	WHALE,
 	GOLDFISH,
 ];

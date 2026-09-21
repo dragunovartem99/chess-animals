@@ -5,19 +5,26 @@ import { assertBotDefinition } from "@/shared/bots";
 import { ANIMALS_BY_ID, ROSTER, ROSTER_BY_ID, SEA } from "../index";
 
 describe("the sea roster", () => {
-	it("has sixteen animals, and ends with the one that is not diluted", () => {
-		expect(SEA).toHaveLength(16);
-		expect(SEA.at(-1)?.definition.stockfish?.mix).toBe(0);
+	it("has twelve animals, and ends with the one that is never careless and sees furthest", () => {
+		const nodes = SEA.map((animal) => animal.definition.stockfish?.nodes ?? 0);
+
+		expect(SEA).toHaveLength(12);
+		expect(SEA.at(-1)?.definition.stockfish?.temperature).toBe(0);
+		expect(Math.max(...nodes)).toBe(nodes.at(-1));
+	});
+
+	it("is ordered by how carefully it plays, weakest first", () => {
+		const temperatures = SEA.map((animal) => animal.definition.stockfish?.temperature ?? 0);
+
+		expect(temperatures).toEqual(temperatures.toSorted((a, b) => b - a));
 	});
 
 	it("keeps its animals off the land roster, which the arena rates", () => {
 		for (const animal of SEA) expect(ROSTER_BY_ID.has(animal.definition.id)).toBe(false);
 	});
 
-	it("gives no two animals the same search and weights, as on the land roster", () => {
-		const own = SEA.map(({ definition: { search, base, weights } }) =>
-			JSON.stringify({ search, base, weights })
-		);
+	it("gives no two animals the same Stockfish settings", () => {
+		const own = SEA.map(({ definition }) => JSON.stringify(definition.stockfish));
 
 		expect(new Set(own).size).toBe(SEA.length);
 	});

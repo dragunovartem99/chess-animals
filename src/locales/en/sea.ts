@@ -15,10 +15,6 @@ export default {
 		name: "Jellyfish",
 		description: "Drifts every piece forward, slowly and all together.",
 	},
-	turtle: {
-		name: "Turtle",
-		description: "Never leaves a piece out where you can grab it.",
-	},
 	dolphin: {
 		name: "Dolphin",
 		description: "Keeps swimming back to the middle of the board.",
@@ -35,10 +31,6 @@ export default {
 		name: "Shark",
 		description: "Smells your king and cannot stay away from it.",
 	},
-	seal: {
-		name: "Seal",
-		description: "Splashes around in the middle of the board.",
-	},
 	whale: {
 		name: "Whale",
 		description: "Takes up more room than you, and waits for you to run out.",
@@ -50,14 +42,6 @@ export default {
 	shrimp: {
 		name: "Shrimp",
 		description: "The whole swarm goes at your king at once.",
-	},
-	otter: {
-		name: "Otter",
-		description: "Brings out every piece to play, one after another.",
-	},
-	penguin: {
-		name: "Penguin",
-		description: "Slides everything away from whatever could catch it.",
 	},
 	herring: {
 		name: "Herring",

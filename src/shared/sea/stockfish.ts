@@ -1,16 +1,19 @@
 import type { UciTransport } from "../engine";
+import { parseLines } from "./lines";
+import type { Line } from "./lines";
 
 export type Stockfish = {
 	init: () => Promise<void>;
 	newGame: () => Promise<void>;
-	// The move Stockfish plays after `nodes` nodes, in Chess960 notation — castling as the king
-	// taking its rook, which is chessops's and this repo's own — or `undefined` once the game is
-	// over.
-	bestMove: (request: {
+	// Stockfish's best `lines` candidates after `nodes` nodes, best first, in Chess960 notation —
+	// castling as the king taking its rook, which is chessops's and this repo's own. Empty once the
+	// game is over.
+	lines: (request: {
 		fen: string;
 		moves: readonly string[];
 		nodes: number;
-	}) => Promise<string | undefined>;
+		lines: number;
+	}) => Promise<Line[]>;
 	dispose: () => void;
 };
 
@@ -22,15 +25,18 @@ export function createStockfish({ transport }: { transport: UciTransport }): Sto
 	let listener: ((line: string) => void) | undefined;
 	transport.subscribe((line) => listener?.(line));
 
-	// The listener is set before the commands go out, for the reason `createUciClient` gives: a
-	// local transport answers during `send`.
-	function ask({ commands, until }: { commands: string[]; until: RegExp }): Promise<string> {
+	// Everything said up to and including the line that ends the question. The listener is set
+	// before the commands go out, for the reason `createUciClient` gives: a local transport answers
+	// during `send`.
+	function ask({ commands, until }: { commands: string[]; until: RegExp }): Promise<string[]> {
 		return new Promise((resolve) => {
+			const said: string[] = [];
 			listener = (line) => {
+				said.push(line);
 				if (!until.test(line)) return;
 
 				listener = undefined;
-				resolve(line);
+				resolve(said);
 			};
 			for (const command of commands) transport.send(command);
 		});
@@ -52,15 +58,22 @@ export function createStockfish({ transport }: { transport: UciTransport }): Sto
 		async newGame() {
 			await ask({ commands: ["ucinewgame", "isready"], until: /^readyok/u });
 		},
-		async bestMove({ fen, moves, nodes }) {
+		async lines({ fen, moves, nodes, lines }) {
 			const played = moves.length > 0 ? ` moves ${moves.join(" ")}` : "";
-			const line = await ask({
-				commands: [`position fen ${fen}${played}`, `go nodes ${nodes}`],
+			const said = await ask({
+				commands: [
+					`setoption name MultiPV value ${lines}`,
+					`position fen ${fen}${played}`,
+					`go nodes ${nodes}`,
+				],
 				until: BEST_MOVE,
 			});
-			const move = BEST_MOVE.exec(line)?.[1];
+			const best = BEST_MOVE.exec(said.at(-1) ?? "")?.[1];
+			if (best === undefined || best === "(none)" || best === "0000") return [];
 
-			return move === "(none)" || move === "0000" ? undefined : move;
+			// A search stopped before its first line finished still names a move: play that.
+			const found = parseLines(said);
+			return found.length > 0 ? found : [{ move: best, score: 0 }];
 		},
 		dispose: transport.dispose,
 	};

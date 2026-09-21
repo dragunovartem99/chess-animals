@@ -5,31 +5,34 @@ import { applySeaOption, describeSeaOptions } from "../options";
 
 const shark = compileBot({
 	id: "shark",
-	search: { depth: 3 },
-	stockfish: { nodes: 100, mix: 30 },
-	weights: { kingDanger: -40 },
+	search: { depth: 1 },
+	stockfish: { nodes: 100, lines: 5, temperature: 30 },
+	weights: {},
 });
 
 describe("sea options", () => {
-	it("advertises the node budget and the mix", () => {
+	it("advertises the node budget, the lines and the temperature", () => {
 		expect(describeSeaOptions(shark)).toMatchObject([
 			{ name: "Nodes", default: "100" },
-			{ name: "Mix", default: "30" },
+			{ name: "Lines", default: "5" },
+			{ name: "Temperature", default: "30" },
 		]);
 	});
 
 	it("sets them without touching the rest", () => {
-		const next = applySeaOption({ config: shark, name: "Mix", value: "75" });
+		const next = applySeaOption({ config: shark, name: "Temperature", value: "75" });
 
-		expect(next?.stockfish).toEqual({ nodes: 100, mix: 75 });
+		expect(next?.stockfish).toEqual({ nodes: 100, lines: 5, temperature: 75 });
 		expect(next?.weights).toBe(shark.weights);
 	});
 
-	it("lets the mix reach both ends", () => {
-		expect(applySeaOption({ config: shark, name: "Mix", value: "0" })?.stockfish?.mix).toBe(0);
-		expect(applySeaOption({ config: shark, name: "Mix", value: "100" })?.stockfish?.mix).toBe(
-			100
-		);
+	it("lets the lines and the temperature reach their ends", () => {
+		const set = (name: string, value: string) =>
+			applySeaOption({ config: shark, name, value })?.stockfish;
+
+		expect(set("Temperature", "0")?.temperature).toBe(0);
+		expect(set("Lines", "1")?.lines).toBe(1);
+		expect(set("Lines", "500")?.lines).toBe(500);
 	});
 
 	it("leaves an option that is not the sea's to the land engine", () => {
@@ -39,9 +42,10 @@ describe("sea options", () => {
 	it.each([
 		["Nodes", "0"],
 		["Nodes", "many"],
-		["Mix", "-1"],
-		["Mix", "101"],
-		["Mix", undefined],
+		["Lines", "0"],
+		["Lines", "501"],
+		["Temperature", "-1"],
+		["Temperature", undefined],
 	])("ignores %s = %s", (name, value) => {
 		expect(applySeaOption({ config: shark, name, value })).toBe(shark);
 	});
@@ -49,6 +53,6 @@ describe("sea options", () => {
 	it("leaves a land bot alone", () => {
 		const land = compileBot({ id: "owl", search: { depth: 3 }, weights: {} });
 
-		expect(applySeaOption({ config: land, name: "Mix", value: "50" })).toBe(land);
+		expect(applySeaOption({ config: land, name: "Lines", value: "3" })).toBe(land);
 	});
 });

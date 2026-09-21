@@ -54,17 +54,21 @@ describe("assertBotDefinition", () => {
 	});
 
 	it("accepts a sea animal, and one without stockfish options", () => {
-		expect(isBotDefinition({ ...VALID, stockfish: { nodes: 50, mix: 0 } })).toBe(true);
+		expect(
+			isBotDefinition({ ...VALID, stockfish: { nodes: 50, lines: 1, temperature: 0 } })
+		).toBe(true);
 	});
 
 	it.each([
-		{ nodes: 0, mix: 10 },
-		{ nodes: 50.5, mix: 10 },
-		{ nodes: 50, mix: -1 },
-		{ nodes: 50, mix: 101 },
-		{ nodes: 50, mix: "half" },
-		{ mix: 10 },
-		{ nodes: 50 },
+		{ nodes: 0, lines: 5, temperature: 10 },
+		{ nodes: 50.5, lines: 5, temperature: 10 },
+		{ nodes: 50, lines: 0, temperature: 10 },
+		{ nodes: 50, lines: 2.5, temperature: 10 },
+		{ nodes: 50, lines: 5, temperature: -1 },
+		{ nodes: 50, lines: 5, temperature: Infinity },
+		{ nodes: 50, lines: 5, temperature: "hot" },
+		{ nodes: 50, mix: 10 },
+		{ lines: 5, temperature: 10 },
 		"stockfish",
 		null,
 	])("rejects stockfish options %j", (stockfish) => {

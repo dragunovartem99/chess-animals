@@ -26,13 +26,16 @@ function checkStockfish({ id, stockfish }: { id: string; stockfish: unknown }): 
 	const options = (
 		typeof stockfish === "object" && stockfish !== null ? stockfish : {}
 	) as Record<string, unknown>;
-	if (!Number.isInteger(options.nodes) || (options.nodes as number) < 1) {
-		fail({ id, problem: "stockfish.nodes must be a whole number of at least 1" });
+	for (const key of ["nodes", "lines"] as const) {
+		const value = options[key];
+		if (!Number.isInteger(value) || (value as number) < 1) {
+			fail({ id, problem: `stockfish.${key} must be a whole number of at least 1` });
+		}
 	}
 
-	const { mix } = options;
-	if (typeof mix !== "number" || !(mix >= 0 && mix <= 100)) {
-		fail({ id, problem: "stockfish.mix must be a percentage from 0 to 100" });
+	const { temperature } = options;
+	if (typeof temperature !== "number" || !(temperature >= 0 && Number.isFinite(temperature))) {
+		fail({ id, problem: "stockfish.temperature must be a number of at least 0" });
 	}
 }
 

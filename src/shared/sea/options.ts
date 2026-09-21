@@ -1,20 +1,27 @@
 import type { BotConfig } from "../bots";
 import type { UciResponse } from "../engine";
 
-// What a caller may set on a sea animal beyond what every bot has: Stockfish's budget, and how
-// often the animal is the one playing. The names are UCI's, `Mix` in percent.
+// What a caller may set on a sea animal beyond what every bot has: Stockfish's budget, how many
+// lines it weighs, and how carelessly it picks among them. `Temperature` is in centipawns.
 export function describeSeaOptions(config: BotConfig): UciResponse[] {
-	const { nodes, mix } = config.stockfish ?? { nodes: 0, mix: 0 };
+	const { nodes, lines, temperature } = config.stockfish ?? {
+		nodes: 0,
+		lines: 0,
+		temperature: 0,
+	};
 
 	return [
 		{ type: "option", name: "Nodes", optionType: "spin", default: String(nodes) },
-		{ type: "option", name: "Mix", optionType: "spin", default: String(mix) },
+		{ type: "option", name: "Lines", optionType: "spin", default: String(lines) },
+		{ type: "option", name: "Temperature", optionType: "spin", default: String(temperature) },
 	];
 }
 
 const LIMITS = {
 	Nodes: { key: "nodes", min: 1, max: Infinity },
-	Mix: { key: "mix", min: 0, max: 100 },
+	// Stockfish's own ceiling on MultiPV.
+	Lines: { key: "lines", min: 1, max: 500 },
+	Temperature: { key: "temperature", min: 0, max: Infinity },
 } as const;
 
 // `undefined` for an option that is not the sea's, so the land engine underneath can have it; the

@@ -8,13 +8,24 @@ import { createSeaEngine } from "../engine";
 
 const SHARK: BotDefinition = {
 	id: "shark",
-	search: { depth: 2 },
-	base: "material",
-	stockfish: { nodes: 100, mix: 0 },
-	weights: { kingDanger: -40 },
+	search: { depth: 1 },
+	stockfish: { nodes: 100, lines: 3, temperature: 0 },
+	weights: {},
 };
 
-function connect({ move, definition = SHARK }: { move?: string; definition?: BotDefinition }) {
+const LINES = [
+	{ move: "e2e4", score: 30 },
+	{ move: "d2d4", score: 25 },
+	{ move: "a2a3", score: -200 },
+];
+
+function connect({
+	move,
+	definition = SHARK,
+}: {
+	move?: string | typeof LINES;
+	definition?: BotDefinition;
+}) {
 	const { stockfish, asked } = fakeStockfish(move);
 	const engine = createSeaEngine({
 		config: compileBot(definition),
@@ -26,14 +37,12 @@ function connect({ move, definition = SHARK }: { move?: string; definition?: Bot
 	return { engine, asked };
 }
 
-const withMix = (mix: number): BotDefinition => ({ ...SHARK, stockfish: { nodes: 100, mix } });
 const GO = { type: "go", limits: {} } as const;
 
-// Who played a move, told by the one thing the fake does: it plays the corner pawn.
-async function whoPlayed(engine: ReturnType<typeof connect>["engine"]) {
+async function played(engine: ReturnType<typeof connect>["engine"]) {
 	const [answer] = await engine.handle(GO);
 
-	return answer.type === "bestmove" && answer.move === "a2a3" ? "stockfish" : "animal";
+	return answer.type === "bestmove" ? answer.move : undefined;
 }
 
 describe("the sea engine", () => {
@@ -49,20 +58,19 @@ describe("the sea engine", () => {
 			{ name: "NodeLimit" },
 			{ name: "Seed" },
 			{ name: "Nodes" },
-			{ name: "Mix" },
+			{ name: "Lines" },
+			{ name: "Temperature" },
 		]);
 		await expect(engine.handle({ type: "isready" })).resolves.toEqual([{ type: "readyok" }]);
 	});
 
-	it("asks Stockfish for the animal's budget, over the game so far", async () => {
+	it("asks Stockfish for the animal's budget and lines, over the game so far", async () => {
 		const { engine, asked } = connect({ move: "e7e5" });
 		await engine.handle({ type: "position", moves: ["e2e4"] });
 
 		await engine.handle(GO);
 
-		expect(asked).toEqual([
-			{ fen: expect.stringContaining("rnbqkbnr") as string, moves: ["e2e4"], nodes: 100 },
-		]);
+		expect(asked).toMatchObject([{ moves: ["e2e4"], nodes: 100, lines: 3 }]);
 	});
 
 	it("lets `go nodes` override the budget", async () => {
@@ -73,39 +81,23 @@ describe("the sea engine", () => {
 		expect(asked[0]?.nodes).toBe(7);
 	});
 
-	it("plays Stockfish's move at a mix of zero, and its own at a hundred", async () => {
-		const stockfish = connect({ move: "a2a3", definition: withMix(0) });
-		const animal = connect({ move: "a2a3", definition: withMix(100) });
-
-		expect(await whoPlayed(stockfish.engine)).toBe("stockfish");
-		expect(await whoPlayed(animal.engine)).toBe("animal");
-		expect(animal.asked).toEqual([]);
-	});
-
-	it("plays its own moves for about the share it says, and replays from its seed", async () => {
+	it("takes its temperature from `setoption`, and replays its picks from its seed", async () => {
 		const play = async (seed: string) => {
-			const { engine } = connect({ move: "a2a3", definition: withMix(30) });
+			const { engine } = connect({ move: LINES });
+			await engine.handle({ type: "setoption", name: "Temperature", value: "30" });
 			await engine.handle({ type: "setoption", name: "Seed", value: seed });
-			const who: string[] = [];
-			for (let move = 0; move < 200; move++) who.push(await whoPlayed(engine));
+			const moves: (string | undefined)[] = [];
+			for (let move = 0; move < 200; move++) moves.push(await played(engine));
 
-			return who;
+			return moves;
 		};
 
 		const first = await play("one");
-		const own = first.filter((who) => who === "animal").length;
 
-		expect(own).toBeGreaterThan(40);
-		expect(own).toBeLessThan(80);
+		expect(first.filter((move) => move === "d2d4").length).toBeGreaterThan(50);
+		expect(first).not.toContain("a2a3");
 		expect(await play("one")).toEqual(first);
 		expect(await play("two")).not.toEqual(first);
-	});
-
-	it("takes the mix from `setoption`", async () => {
-		const { engine } = connect({ move: "a2a3", definition: withMix(0) });
-		await engine.handle({ type: "setoption", name: "Mix", value: "100" });
-
-		expect(await whoPlayed(engine)).toBe("animal");
 	});
 
 	it("answers the null move when Stockfish has none to offer", async () => {

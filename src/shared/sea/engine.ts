@@ -7,6 +7,7 @@ import type { GoSearch, Rng, UciCommand, UciResponse } from "../engine";
 import { fromUci, toUci } from "../engine/uci/moves";
 import { replay } from "../engine/uciMoves";
 import type { Replayed } from "../engine/uciMoves";
+import { pickLine } from "./lines";
 import { applySeaOption, describeSeaOptions } from "./options";
 import type { Stockfish } from "./stockfish";
 
@@ -19,13 +20,11 @@ export type SeaEngineState = {
 
 const NULL_MOVE: UciResponse[] = [{ type: "bestmove", move: "0000" }];
 
-// One sea animal: Stockfish, diluted. On each move a roll decides who plays it — the animal's own
-// search, the land engine underneath, for `mix` percent of them, and Stockfish for the rest.
-// Diluting with the animal rather than with a random move is the point: a strong opponent that
-// now and then plays what it believes in, which is a thing to learn and to lean on.
+// One sea animal: Stockfish, softened. Each move it asks Stockfish for its best few lines and
+// picks one, the worse a line the less likely — see `StockfishOptions`.
 //
-// It speaks UCI like the land engine and is one, mostly: everything but `go` and its two options
-// is the land engine's, and the roll is drawn from a stream of its own so a game replays from its
+// It speaks UCI like the land engine and is one, mostly: everything but `go` and its own options
+// is the land engine's, and the pick is drawn from a stream of its own so a game replays from its
 // seed. An answer is a promise, because Stockfish is a process to ask, not a function to call.
 export function createSeaEngine({ config, name, stockfish, goSearch }: SeaEngineState) {
 	const land = createUciEngine({ config, name, goSearch });
@@ -42,14 +41,12 @@ export function createSeaEngine({ config, name, stockfish, goSearch }: SeaEngine
 		const options = current.stockfish;
 		if (!options) throw new Error(`"${current.id}" is not a sea animal`);
 
-		// Drawn on every move, even at a mix of zero: the stream must not depend on who played.
-		if (rng.float() * 100 < options.mix) return land.handle(command);
-
 		await start();
 		const { position, fen, moves } = game;
 		const nodes = command.limits.nodes ?? options.nodes;
-		const uci = await stockfish.bestMove({ fen, moves, nodes });
-		const move = uci && fromUci({ position, uci });
+		const lines = await stockfish.lines({ fen, moves, nodes, lines: options.lines });
+		const line = pickLine({ lines, temperature: options.temperature, rng });
+		const move = line && fromUci({ position, uci: line.move });
 
 		return move ? [{ type: "bestmove", move: toUci({ position, move }) }] : NULL_MOVE;
 	}
