@@ -58,7 +58,7 @@ One flat area per folder, each with its own `index.ts`, and deliberately **no ro
 | `eval`         | the feature registry, feature and weight vectors, the mate term, the White-relative breakdown — what a bot is, where `engine/` is what it does |
 | `engine`       | the seeded RNG, the UCI codec, the UCI engine over a `goSearch`, the engine client and its transports                                          |
 | `monsters`     | the monsters: Stockfish over a `UciTransport`, and the engine that samples its MultiPV lines                                                   |
-| `underwater`   | Maia: the board as its tokens, the legal moves as its logits, and the pick — sampled from the seeded stream, or its likeliest move             |
+| `underwater`   | Maia: the board as its tokens, the legal moves as its logits, the pick from the seeded stream, the ONNX session and `withMaia` for the arena   |
 | `wasm`         | the binding to `engine/build/engine.wasm` — loading, the linear-memory arena, `search`/`extract`/`perft`, and the `goSearch` over it           |
 | `game`         | `useGame` — one game with its move list and repetition history, owned by whichever view mounts it (`/play`, `/frankenstein`)                   |
 | `ui`           | the Vue components both game views share — `SegmentedTabs` and the `FeatureBreakdown` table                                                    |

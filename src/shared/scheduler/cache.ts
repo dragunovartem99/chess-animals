@@ -3,17 +3,19 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 import { STOCKFISH_WASM_URL } from "../monsters/process";
+import { MAIA_MODEL_URL } from "../underwater/model";
 import { ENGINE_URL } from "../wasm";
 import type { GameReport, GameSpec } from "./types";
 
-// The first bytes of the vendored Stockfish's digest, read once.
-let stockfishBuild: string | undefined;
-function stockfishDigest(): string {
-	stockfishBuild ??= createHash("sha256")
-		.update(readFileSync(STOCKFISH_WASM_URL))
-		.digest("hex")
-		.slice(0, 16);
-	return stockfishBuild;
+// The first bytes of a vendored file's digest, read once per file.
+const vendored = new Map<string, string>();
+function fileDigest(url: URL): string {
+	const known = vendored.get(url.href);
+	if (known !== undefined) return known;
+
+	const digest = createHash("sha256").update(readFileSync(url)).digest("hex").slice(0, 16);
+	vendored.set(url.href, digest);
+	return digest;
 }
 
 // A stable JSON string: object keys sorted at every level, so two specs that differ only in
@@ -47,7 +49,12 @@ export function gameKey(spec: GameSpec): string {
 		adjudication: spec.adjudication,
 		// Only a game with a monster in it was played by Stockfish, so only its key moves when
 		// the build does: the land games' rows stay where they are.
-		stockfish: spec.white.stockfish || spec.black.stockfish ? stockfishDigest() : undefined,
+		stockfish:
+			spec.white.stockfish || spec.black.stockfish
+				? fileDigest(STOCKFISH_WASM_URL)
+				: undefined,
+		// The same for Maia's model.
+		maia: spec.white.maia || spec.black.maia ? fileDigest(MAIA_MODEL_URL) : undefined,
 	});
 	const digest = createHash("sha256").update(payload).digest("hex");
 	digests.set(spec, digest);

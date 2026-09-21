@@ -1,2 +1,4 @@
-export { maiaMove, type MaiaOptions, type MaiaSession } from "./maia";
+export { maiaMove, type MaiaSession } from "./maia";
+export { withMaia } from "./mover";
+export { createMaiaSession } from "./session";
 export { MOVE_COUNT } from "./vocab";

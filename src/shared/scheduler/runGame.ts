@@ -6,6 +6,8 @@ import { seedState } from "../engine";
 import type { GoSearch } from "../engine";
 import { createMover } from "../monsters";
 import type { Stockfish } from "../monsters";
+import { withMaia } from "../underwater";
+import type { MaiaSession } from "../underwater";
 import { createAdjudicator, DEFAULT_ADJUDICATION, materialEdge } from "./adjudicate";
 import type { GameReport, GameSpec } from "./types";
 
@@ -20,13 +22,16 @@ export async function runGame({
 	spec,
 	goSearch,
 	stockfish,
+	maia,
 }: {
 	spec: GameSpec;
 	goSearch: GoSearch;
 	// Only a game with a monster in it asks for this.
 	stockfish?: Stockfish;
+	// Only a game with an underwater animal in it asks for this.
+	maia?: MaiaSession;
 }): Promise<GameReport> {
-	const move = createMover({ goSearch, stockfish });
+	const move = withMaia({ next: createMover({ goSearch, stockfish }), session: maia });
 	const white = compileBot(spec.white);
 	const black = compileBot(spec.black);
 	let rngState = seedState(spec.seed);
@@ -64,6 +69,7 @@ export async function runGame({
 			weights: bot.weights,
 			search: bot.search,
 			stockfish: bot.stockfish,
+			maia: bot.maia,
 			rngState,
 		});
 		rngState = found.rngState;

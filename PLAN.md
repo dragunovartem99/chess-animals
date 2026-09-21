@@ -55,9 +55,9 @@ What the spike found, 6 games a pair:
   half its games off the Tiger. Rung order holds; the top rungs are close and need the arena.
 - A Maia game is ~6 s against the land engine's milliseconds: the arena leans on its cache.
 
-| Commit                           | Contents                                                              | Green when                                 |
-| -------------------------------- | --------------------------------------------------------------------- | ------------------------------------------ |
-| ⬜ `arena: rate underwater`      | The rungs in the rating table; the cache keys on the model's hash     | The table rates them beside the roster     |
-| ⬜ `underwater: play in browser` | `onnxruntime-web` in the worker, the model fetched on first play only | A game against a rung plays in the browser |
-| ⬜ `underwater: maia animals`    | Twelve sea creatures on the rungs, copy in both locales, the tab back | The tab lists them and they play           |
-| ⬜ `about: credit maia`          | AGPL-3.0: its source linked, its licence shipped                      | The About page says where the source is    |
+| Commit                           | Contents                                                                | Green when                                 |
+| -------------------------------- | ----------------------------------------------------------------------- | ------------------------------------------ |
+| ⬜ `underwater: twelve animals`  | The rungs as definitions and copy, rated by the arena beside the roster | The table rates them in rung order         |
+| ⬜ `underwater: play in browser` | `onnxruntime-web` in the worker, the model fetched on first play only   | A game against a rung plays in the browser |
+| ⬜ `underwater: the tab`         | The tab back, the animals in the player picker                          | The tab lists them and they play           |
+| ⬜ `about: credit maia`          | AGPL-3.0: its source linked beside `public/maia3/COPYING.txt`           | The About page says where the source is    |

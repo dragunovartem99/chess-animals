@@ -39,6 +39,7 @@
 	"dependencies": {
 		"chessground": "^9.2.1",
 		"chessops": "^0.15.1",
+		"onnxruntime-web": "^1.30.0",
 		"vue": "^3.5.39",
 		"vue-i18n": "^11.1.14",
 		"vue-router": "^4.5.1"

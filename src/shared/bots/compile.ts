@@ -9,6 +9,7 @@ export function compileBot(definition: BotDefinition): BotConfig {
 		id: definition.id,
 		search: definition.search,
 		stockfish: definition.stockfish,
+		maia: definition.maia,
 		weights: weightsFromRecord(weightsOn(definition)),
 	};
 }

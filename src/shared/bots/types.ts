@@ -10,6 +10,11 @@ import type { BaseName } from "./bases";
 // carelessly it chooses among them; zero plays the best line every time.
 export type StockfishOptions = { nodes: number; lines: number; temperature: number };
 
+// What makes a bot an underwater animal: Maia, a model of how people play at a rating. It plays
+// a move people at `elo` would, drawn by how often they would — or, `greedy`, the one they play
+// most, which is Maia at its strongest.
+export type MaiaOptions = { elo: number; greedy?: boolean };
+
 // What a bot is on disk and on the wire: plain JSON-shaped data, so a tuned bot can be exported,
 // pasted into a file, sent to a worker, or hashed into a cache key without any of them needing to
 // know what a feature vector is.
@@ -18,10 +23,12 @@ export type StockfishOptions = { nodes: number; lines: number; temperature: numb
 // registry cannot silently reinterpret every bot ever saved.
 export type BotDefinition = {
 	id: string;
-	// Unread by a monster, which never searches itself.
+	// Unread by a monster or an underwater animal, neither of which searches itself.
 	search: SearchOptions;
 	// Present for a monster, whose moves all come from Stockfish.
 	stockfish?: StockfishOptions;
+	// Present for an underwater animal, whose moves all come from Maia.
+	maia?: MaiaOptions;
 	// The starting point the weights are written over — piece values and mate-awareness, usually.
 	// Omitted means `zero`: a bot that names no base is exactly what its weights say and nothing
 	// else, which is what the paper's `random_move` needs.
@@ -37,5 +44,6 @@ export type BotConfig = {
 	id: string;
 	search: SearchOptions;
 	stockfish?: StockfishOptions;
+	maia?: MaiaOptions;
 	weights: WeightVector;
 };

@@ -3,6 +3,7 @@ import { Worker } from "node:worker_threads";
 
 import type { GoSearch } from "../engine";
 import type { Stockfish } from "../monsters";
+import type { MaiaSession } from "../underwater";
 import { runGame } from "./runGame";
 import type { GameReport, GameSpec } from "./types";
 
@@ -73,13 +74,15 @@ export async function runGamesSerially({
 	specs,
 	goSearch,
 	stockfish,
+	maia,
 }: {
 	specs: readonly GameSpec[];
 	goSearch: GoSearch;
 	stockfish?: Stockfish;
+	maia?: MaiaSession;
 }): Promise<GameReport[]> {
 	const reports: GameReport[] = [];
-	for (const spec of specs) reports.push(await runGame({ spec, goSearch, stockfish }));
+	for (const spec of specs) reports.push(await runGame({ spec, goSearch, stockfish, maia }));
 
 	return reports;
 }

@@ -39,6 +39,24 @@ function checkStockfish({ id, stockfish }: { id: string; stockfish: unknown }): 
 	}
 }
 
+function checkMaia({ id, candidate }: { id: string; candidate: Record<string, unknown> }): void {
+	const { maia } = candidate;
+	if (maia === undefined) return;
+	// One engine owns a bot's moves; a bot naming two would play whichever the mover asked first.
+	if (candidate.stockfish !== undefined) fail({ id, problem: "maia and stockfish together" });
+
+	const { elo, greedy } = (typeof maia === "object" && maia !== null ? maia : {}) as Record<
+		string,
+		unknown
+	>;
+	if (typeof elo !== "number" || !(elo > 0 && Number.isFinite(elo))) {
+		fail({ id, problem: "maia.elo must be a positive number" });
+	}
+	if (greedy !== undefined && typeof greedy !== "boolean") {
+		fail({ id, problem: "maia.greedy must be true or false" });
+	}
+}
+
 // Bots arrive from files a person edited, from the weight editor, from a tuner run, and from
 // localStorage written by an older version of this app. None of those are trustworthy, and a bot
 // that is quietly wrong plays a whole tournament before anyone notices, so it is rejected loudly
@@ -65,6 +83,7 @@ export function assertBotDefinition(value: unknown): asserts value is BotDefinit
 	}
 
 	checkStockfish({ id, stockfish: candidate.stockfish });
+	checkMaia({ id, candidate });
 	checkWeights({ id, record: candidate.weights });
 }
 

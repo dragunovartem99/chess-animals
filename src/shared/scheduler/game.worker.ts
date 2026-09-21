@@ -4,6 +4,8 @@ import { tsImport } from "tsx/esm/api";
 
 import type * as MonstersModule from "../monsters";
 import type * as ProcessModule from "../monsters/process";
+import type * as UnderwaterModule from "../underwater";
+import type * as ModelModule from "../underwater/model";
 import type * as WasmModule from "../wasm";
 import type * as RunGameModule from "./runGame";
 import type { GameSpec } from "./types.ts";
@@ -24,6 +26,11 @@ const { runGame } = (await tsImport("./runGame.ts", import.meta.url)) as typeof 
 const wasm = (await tsImport("../wasm/index.ts", import.meta.url)) as typeof WasmModule;
 const monsters = (await tsImport("../monsters/index.ts", import.meta.url)) as typeof MonstersModule;
 const host = (await tsImport("../monsters/process.ts", import.meta.url)) as typeof ProcessModule;
+const underwater = (await tsImport(
+	"../underwater/index.ts",
+	import.meta.url
+)) as typeof UnderwaterModule;
+const model = (await tsImport("../underwater/model.ts", import.meta.url)) as typeof ModelModule;
 
 // One engine per worker, loaded before the first game: its tables are built once and every game
 // on this thread reuses them.
@@ -33,11 +40,14 @@ const goSearch = wasm.createWasmGoSearch(await wasm.loadEngine());
 // description until a game with a monster in it sends the first line: the process starts then.
 const stockfish = monsters.createStockfish({ transport: host.createProcessTransport() });
 
+// One Maia per worker, on the same terms: the model is read on the first underwater move.
+const maia = underwater.createMaiaSession({ load: model.readMaiaModel });
+
 // Thin by design: the pool owns the thread and the queue, this owns only the pipe. Every game is
 // independent, so one message in, one report out, no state between them.
 if (parentPort) {
 	const post = parentPort.postMessage.bind(parentPort);
 	parentPort.on("message", async (spec: GameSpec) =>
-		post(await runGame({ spec, goSearch, stockfish }))
+		post(await runGame({ spec, goSearch, stockfish, maia }))
 	);
 }

@@ -1,6 +1,7 @@
 import type { Chess } from "chessops/chess";
 import type { NormalMove } from "chessops/types";
 
+import type { MaiaOptions } from "../bots";
 import type { Rng } from "../engine";
 import { candidates, pickMove } from "./policy";
 import { boardTokens } from "./tokens";
@@ -10,8 +11,6 @@ import { boardTokens } from "./tokens";
 export type MaiaSession = {
 	run: (input: { tokens: Float32Array; elo: number }) => Promise<Float32Array>;
 };
-
-export type MaiaOptions = { elo: number; greedy?: boolean };
 
 // One move from Maia at a rating. `undefined` only when there is no legal move.
 export async function maiaMove({
