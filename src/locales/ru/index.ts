@@ -8,7 +8,6 @@ import underwaterBots from "./underwater";
 
 const messages: Messages = {
 	app: {
-		title: "Шахматы с животными",
 		tagline: "Каждый зверь играет в шахматы по-своему странно. Обыграешь хоть одного?",
 	},
 	nav: {

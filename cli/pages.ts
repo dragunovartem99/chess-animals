@@ -12,17 +12,17 @@ export type Page = { slug: string; image: string; title: string; description: st
 const ORIGIN = "https://chess-animals.com";
 
 export const PAGES = {
-	land: { slug: "", image: "og.png", title: en.app.title, description: en.roster.lead },
+	land: { slug: "", image: "og.png", title: "Chess Animals", description: en.roster.lead },
 	underwater: {
 		slug: "underwater",
 		image: "og-underwater.png",
-		title: `${en.app.title} — ${en.nav.underwater}`,
+		title: `Chess Animals — ${en.nav.underwater}`,
 		description: en.underwater.lead,
 	},
 	monsters: {
 		slug: "monsters",
 		image: "og-monsters.png",
-		title: `${en.app.title} — ${en.nav.monsters}`,
+		title: `Chess Animals — ${en.nav.monsters}`,
 		description: en.monsters.lead,
 	},
 } satisfies Record<string, Page>;

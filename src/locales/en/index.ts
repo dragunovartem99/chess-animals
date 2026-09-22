@@ -7,7 +7,6 @@ import underwaterBots from "./underwater";
 
 export default {
 	app: {
-		title: "Chess Animals",
 		tagline: "Every animal plays chess its own strange way. Can you beat one?",
 	},
 	nav: {

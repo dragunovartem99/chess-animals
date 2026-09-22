@@ -33,7 +33,7 @@ onBeforeUnmount(() => {
 					:to="{ name: 'roster' }"
 				>
 					<span class="emoji logo">{{ theme ? LOGOS[theme] : "🌞" }}</span>
-					{{ $t("app.title") }}
+					Chess Animals
 				</RouterLink>
 				<LocaleSwitcher />
 			</div>

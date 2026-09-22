@@ -39,7 +39,7 @@ async function renderCard({ page, animals, world }: (typeof CARDS)[number]) {
 	);
 
 	const png = await renderOg({
-		text: { title: en.app.title, tagline: page.description },
+		text: { title: "Chess Animals", tagline: page.description },
 		chips,
 		pieceUris,
 		world,
