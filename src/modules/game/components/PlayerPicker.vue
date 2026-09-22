@@ -71,6 +71,15 @@ label {
 	align-items: center;
 }
 
+select {
+	/* A grid item's min-width defaults to its content, not its track — a long bot name can
+	   then outgrow the 1fr column and push the badge past the container's edge. */
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
 .points {
 	text-align: center;
 	padding: 0.1rem 0.5rem;
