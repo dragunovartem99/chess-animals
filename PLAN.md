@@ -23,6 +23,11 @@ What is left of the move to C. How it is built is in
 ## Outside v1
 
 - ⬜ A Polyglot `.bin` book reader behind `probe(fen)`
+- ⬜ Animal voice lines: each bot's own barks over a move — a win, a loss, a draw, a check, a
+  capture — recorded once with ElevenLabs (`npm run voice`, billed and cached, not part of the
+  build), played from `public/voice/<id>/<event>-<n>.mp3` client-side. One clip at a time, cut off
+  rather than queued, and never repeats the same line twice running. Spiked in a throwaway branch;
+  worth landing for real when there is time to write every animal's lines.
 
 ## Monsters
 
