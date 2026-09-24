@@ -52,7 +52,7 @@ describe("useTalk, from game to game", () => {
 		expect(texts()).toEqual(["wolf greet 2", "donkey greet 2"]);
 	});
 
-	it("clears and lets go of the observer when switched off", async () => {
+	it("lets go of the observer when switched off", async () => {
 		const { talk, calls, switchOn, play, unmount } = mountTalk();
 		await switchOn();
 
@@ -60,7 +60,6 @@ describe("useTalk, from game to game", () => {
 		await play([]);
 		unmount();
 
-		expect(talk.said.value).toEqual([]);
 		expect(calls.dispose).toBe(1);
 	});
 });

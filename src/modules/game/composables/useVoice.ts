@@ -1,8 +1,9 @@
-import { ref, watch } from "vue";
+import { watch } from "vue";
 import type { Ref } from "vue";
 
 import { clipPath } from "@/shared/talk";
 import type { Line } from "@/shared/talk";
+import { useStoredFlag } from "@/shared/ui";
 
 // What playing a clip needs from an `<audio>`: a test hands in a fake.
 export type Player = {
@@ -38,7 +39,7 @@ export function useVoice({
 	locale: Ref<string>;
 	player?: (url: string) => Player;
 }) {
-	const enabled = ref(false);
+	const enabled = useStoredFlag("chess-animals:voices");
 	let playing: Player | undefined;
 	let heard = 0;
 

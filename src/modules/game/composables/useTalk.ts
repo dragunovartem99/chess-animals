@@ -8,6 +8,7 @@ import type { GameStatus } from "@/shared/chess";
 import type { PlayedTurn } from "@/shared/game";
 import { createConversation, farewell, greet, moveFacts } from "@/shared/talk";
 import type { Line, LinesFor, Observer, Spoken } from "@/shared/talk";
+import { useStoredFlag } from "@/shared/ui";
 
 import { spawnObserver, useObserver } from "./spawnObserver";
 
@@ -44,7 +45,7 @@ const talkers = ({ players, linesFor }: { players: Record<Color, string>; linesF
 export function useTalk(options: Options) {
 	const { players, linesFor } = options;
 	const { turns, fens, status } = options.game;
-	const enabled = ref(false);
+	const enabled = useStoredFlag("chess-animals:talk");
 	const observer = useObserver({ enabled, spawn: options.spawn ?? spawnObserver });
 	const said = ref<Line[]>([]);
 	const bots = computed(() => talkers({ players: players.value, linesFor }));
@@ -69,10 +70,8 @@ export function useTalk(options: Options) {
 		void observe();
 	}
 
-	watch(enabled, (on) => {
-		if (on) begin();
-		else said.value = [];
-	});
+	// The panel hides what was said while it is off, and a fresh hello replaces it when it opens.
+	watch(enabled, (on) => on && begin(), { immediate: true });
 	watch(
 		() => turns.value.length,
 		(ply) => {

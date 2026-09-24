@@ -86,6 +86,7 @@ const voices = useVoice({ said: computed(() => said), locale: useI18n().locale }
 }
 
 .toggle {
+	accent-color: var(--color-button);
 	display: flex;
 	align-items: center;
 	gap: 0.5rem;

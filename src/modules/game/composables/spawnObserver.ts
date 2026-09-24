@@ -23,10 +23,14 @@ export function spawnObserver(): Observer {
 export function useObserver({ enabled, spawn }: { enabled: Ref<boolean>; spawn: () => Observer }) {
 	let observer: Observer | undefined;
 
-	watch(enabled, (on) => {
-		observer?.dispose();
-		observer = on ? spawn() : undefined;
-	});
+	watch(
+		enabled,
+		(on) => {
+			observer?.dispose();
+			observer = on ? spawn() : undefined;
+		},
+		{ immediate: true }
+	);
 	onBeforeUnmount(() => observer?.dispose());
 
 	return () => observer;
