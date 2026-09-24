@@ -1,10 +1,11 @@
-// Which ElevenLabs voice speaks for each land animal and monster, in both languages: the model
+// Which ElevenLabs voice speaks for each animal of every roster, in both languages: the model
 // keeps a voice's timbre across them, so an animal sounds like itself in Russian too. Most are
 // made with Voice Design from the description beside it and live in the project's account, so
 // regenerating a clip needs that account's key — the clips are committed for that reason. The
 // later ones are designed from a Russian sample: one designed from English rolled its Russian «р»
 // like an English speaker. A few are stock voices, which take none of the account's 30 custom
-// slots: two rosters of 16 designed voices would need 32.
+// slots: two rosters of 16 designed voices would need 32. The sea creatures are all stock: they
+// play the way people do, so they sound like people too.
 export const CASTING: Record<string, string> = {
 	// Dopey and cheerful, a slow country drawl, forgets what it came for.
 	donkey: "c5XTzZfSskN4Ut6RVcrx",
@@ -72,4 +73,38 @@ export const CASTING: Record<string, string> = {
 	dinosaur: "xRS2OKepBgshbtSVOq7D",
 	// Low, tired and quiet, from deep in the throat; sly, as if it already sees through you.
 	dragon: "qrwsQB8xRez8ToeXjpjM",
+	// The sea creatures. The Shrimp, the Herring, the Goldfish, the Dolphin, the Octopus and the
+	// Shark are shes in Russian.
+	// A giddy little beginner, everything is new and wonderful. Stock: Jessica.
+	shrimp: "cgSgspJ2msm6clMCkdW9",
+	// A chatty scatterbrain, always a thought behind the game. Stock: Laura.
+	herring: "FGY2WhTYpPnrIDTdsKH5",
+	// A rough, grabby grump. Stock: Harry.
+	crab: "SOYHLrjzK2X1ezoPC6cr",
+	// A spaced-out drifter, never quite sure what happened. Stock: Will.
+	jellyfish: "bIHbv24MWmeRgasZH58o",
+	// All bluster, then nerves. Stock: Liam.
+	pufferfish: "TX3LPaxmHKxFdv7VOQHJ",
+	// A hyped circus showman who applauds himself. Stock: Charlie.
+	seal: "IKne3meq5aSn9XLyUdCD",
+	// A husky card-sharp with a trick up every sleeve. Stock: Callum.
+	squid: "N2lVS1w4EtoT3dr4eOWO",
+	// An old-timer in no hurry at all. Stock: Bill.
+	turtle: "pqHfZKP75CvOlQylNhV4",
+	// Brash and prickly, don't come close. Stock: Adam.
+	lobster: "pNInz6obpgDQGcFmaJgB",
+	// Sweet and forgetful. Stock: Matilda.
+	goldfish: "XrExE9yKIg1WjnnlVkGX",
+	// Cosy and unhurried, playing on its back. Stock: George.
+	otter: "JBFqnCBsd6RMkjVDRZzb",
+	// Bright and teasing, reads you a move ahead. Stock: Bella.
+	dolphin: "hpp4J3VqNfWAUOO0d1Us",
+	// A brisk British multitasker. Stock: Alice.
+	octopus: "Xb7hH8MSUJpSbSDYk0k2",
+	// Formal and drilled, in a pressed suit. Stock: Daniel.
+	penguin: "onwK4e9ZLuTAKqWW03F9",
+	// Cold and velvety, circling. Stock: Lily.
+	shark: "pFZP5JQG7iQjIQuC4Bku",
+	// A deep, calm champion. Stock: Brian.
+	whale: "nPczCjzI2devNBz1zQrb",
 };

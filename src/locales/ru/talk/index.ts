@@ -14,10 +14,12 @@ import parrot from "./parrot";
 import sloth from "./sloth";
 import spider from "./spider";
 import tiger from "./tiger";
+import underwater from "./underwater";
 import wolf from "./wolf";
 
 export default {
 	...monsters,
+	...underwater,
 	donkey,
 	dove,
 	lemming,

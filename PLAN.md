@@ -26,17 +26,16 @@ so a land game without it still never fetches Stockfish.
 - The observer's answer is tagged by ply and dropped if the game has moved on: a remark never
   lands a move late.
 - Lines live in `talk.<id>.<remark>` in both locales, picked from a seeded stream, never the
-  same line twice running. Land animals and monsters talk; sea creatures when they have a voice.
+  same line twice running. All three rosters talk.
 - A bot-vs-bot game pauses a random while before each move, talk or no talk, so it can be
   followed. The pause is seeded like everything else random.
 
-Every land animal and monster is recorded with `eleven_v3`, in `public/voice/`; the sea creatures
-are next. Recording them:
+Every animal is recorded with `eleven_v3`, in `public/voice/`. Recording them:
 
 - Voices: Creator holds 30 custom voices, and stock ones take no slot. The 14 designed land
   voices and the 16 monsters fill all 30; the Camel and the Tiger are stock (Chris, Eric). The sea
   creatures play the way people do, so plain stock voices suit them: one each, told apart by age
-  and temperament, none of them Chris or Eric. Name a custom voice
+  and temperament, none of them Chris or Eric — 16 of the 19 left. Name a custom voice
   `chess-animals · <roster> · <id>` in ElevenLabs.
 - A voice designed from a Russian sample keeps a Russian accent in English under v3, and
   `language_code` does not remove it. It is kept: it suits the animals.

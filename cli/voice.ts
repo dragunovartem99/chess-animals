@@ -1,7 +1,7 @@
 import type { Role } from "chessops/types";
 
 import { locales, messages } from "@/locales";
-import { MONSTERS, ROSTER } from "@/modules/bots/roster";
+import { MONSTERS, ROSTER, UNDERWATER } from "@/modules/bots/roster";
 import { clipsFor } from "@/shared/talk";
 import type { Clip, Remark } from "@/shared/talk";
 
@@ -9,7 +9,7 @@ import { CASTING } from "./voice/casting";
 import { speak } from "./voice/speak";
 import type { Job } from "./voice/speak";
 
-// `npm run voice` — record every land animal's and monster's lines with ElevenLabs into
+// `npm run voice` — record every animal's lines, of all three rosters, with ElevenLabs into
 // `public/voice/`. Billed per character, so it is never part of the build: run it by hand after
 // the lines change, and only the clips that are not on disk yet are recorded. The key comes from
 // `.env.local`.
@@ -32,7 +32,7 @@ function clipsOf(id: string): Clip[] {
 	});
 }
 
-const jobs = [...ROSTER, ...MONSTERS].flatMap((animal) => {
+const jobs = [...ROSTER, ...UNDERWATER, ...MONSTERS].flatMap((animal) => {
 	const { id } = animal.definition;
 	const voice = CASTING[id];
 	if (!voice) throw new Error(`${id} has lines but no voice in cli/voice/casting.ts`);
