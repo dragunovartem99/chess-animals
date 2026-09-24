@@ -1,5 +1,5 @@
-// Which ElevenLabs voice speaks for each land animal, in both languages: the model keeps a
-// voice's timbre across them, so an animal sounds like itself in Russian too. Most are
+// Which ElevenLabs voice speaks for each land animal and monster, in both languages: the model
+// keeps a voice's timbre across them, so an animal sounds like itself in Russian too. Most are
 // made with Voice Design from the description beside it and live in the project's account, so
 // regenerating a clip needs that account's key — the clips are committed for that reason. The
 // later ones are designed from a Russian sample: one designed from English rolled its Russian «р»
@@ -39,4 +39,37 @@ export const CASTING: Record<string, string> = {
 	fox: "IgJyigVhCEiWtDubWOqy",
 	// Creepy and over-polite, a soft, slightly creaky hissing whisper.
 	spider: "bW6RZDNm4HBOdIINQLSi",
+	// The monsters, designed the same way; they took the account's last 16 custom slots.
+	// Manic, high and fast, giggles breaking into a flat, cold menace.
+	clown: "Ca9jXgw1mohPqEO3FBZf",
+	// A kind old granny, warm, soft and clear, fussing over you; a she in Russian.
+	pumpkin: "kFzgp69qj9nyrwpZSYFn",
+	// An old vaudeville comic, thin, dry and rattly, with a wheezy chuckle.
+	skeleton: "oiKj1bq1XtEiP57zcAv6",
+	// A grown woman, a rich, husky alto, mischievous and a little mad, half-remembers her spells.
+	witch: "HZxfhGisFkI2FB5hWv0H",
+	// A very low, very slow groan that loses the thread mid-sentence.
+	zombie: "nHq3HmNeg8aFGtuVIKLH",
+	// Uncanny and flat, stresses the wrong words, studies you like a specimen.
+	alien: "HeY4xr4rxXobdvneFPtZ",
+	// Nasal and quick, a greedy conspiratorial half-whisper.
+	goblin: "5EUFSIbnBBX2Zh8NiAOM",
+	// A dim, booming bass, calm until it isn't.
+	ogre: "UtYQ0p4uJUz8b2RTwInk",
+	// A gravelly, grumbling bridge-keeper, a petty bureaucrat's drone.
+	troll: "bZY3Nhvtyqoq16kzyGBZ",
+	// A lonely Victorian ghost, a soft, echoing whisper; a she in Russian.
+	ghost: "ckE45X57bpvSsrPmbUXf",
+	// An old-world count, a velvety baritone with long, hungry pauses.
+	vampire: "UcqN9uXNrksIXqEIOPUm",
+	// A tiny prankster, squeaky and breathless, can barely hold back a snicker.
+	imp: "v722u1aGrxil9gABbJ6h",
+	// A booming carnival showman, grand and a bit of a con man.
+	genie: "mYuFWJpSzhsfuPhLWcJl",
+	// Polite synthetic monotone, clipped, with the odd glitch.
+	robot: "RJBtc86MLilftnK8E3km",
+	// A loud, booming chest voice with a rough growl, blunt and proud; few words.
+	dinosaur: "xRS2OKepBgshbtSVOq7D",
+	// Low, tired and quiet, from deep in the throat; sly, as if it already sees through you.
+	dragon: "qrwsQB8xRez8ToeXjpjM",
 };

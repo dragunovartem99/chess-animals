@@ -9,6 +9,7 @@ import goat from "./goat";
 import hare from "./hare";
 import lemming from "./lemming";
 import lion from "./lion";
+import monsters from "./monsters";
 import parrot from "./parrot";
 import sloth from "./sloth";
 import spider from "./spider";
@@ -16,6 +17,7 @@ import tiger from "./tiger";
 import wolf from "./wolf";
 
 export default {
+	...monsters,
 	donkey,
 	dove,
 	lemming,
