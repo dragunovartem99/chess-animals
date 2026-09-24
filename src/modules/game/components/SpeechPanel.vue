@@ -18,7 +18,7 @@ const animal = (id: string) => ANIMALS_BY_ID.get(id);
 const linesFor = useLines();
 const text = (line: Line) => linesFor(line)[line.index];
 
-const voices = useVoice({ said: computed(() => said), locale: useI18n().locale });
+const voices = useVoice({ said: computed(() => said), locale: useI18n().locale, linesFor });
 </script>
 
 <template>
