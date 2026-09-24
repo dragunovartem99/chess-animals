@@ -39,9 +39,25 @@ so a land game without it still never fetches Stockfish.
 - A bot-vs-bot game pauses a random while before each move, talk or no talk, so it can be
   followed. The pause is seeded like everything else random.
 
-| Commit                     | Contents                                                                                                                                                                                                                              | Green when                         |
-| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
-| ⬜ `talk: voice the lines` | ElevenLabs once via `npm run voice` (billed, cached, not in the build) into `public/voice/<locale>/<id>/<remark>-<n>[-<piece>].mp3`, a `{piece}` line once per piece; a second toggle, one clip at a time, cut off rather than queued | Silent until the toggle is clicked |
+The playback and `npm run voice` are in; what is left is the recording. The free ElevenLabs tier
+(10k characters a month, two requests at once, no commercial licence) ran dry after the greetings
+of nine animals — those 45 clips sit in `public/voice/`, not yet committed. The full set is ~900
+clips, ~24k characters, ~14 MB, so it waits for the Creator plan:
+
+- Cast first, record second. The current casting is 16 different stock voices; with Creator, give
+  each animal a voice of its own from Voice Design (described: "old, slow, gravelly elephant") or
+  the Voice Library, and hear it in Russian too — one voice speaks both languages, and many library
+  voices sound off in Russian.
+- Record the greetings only (~1.6k characters), listen, fix `cli/voice/casting.ts`, then the rest.
+  Only missing clips are recorded, so a recast means deleting that animal's folder first.
+- Raise `AT_ONCE` in `cli/voice/speak.ts` to the plan's concurrency; Free allows two.
+- Never several free accounts to stretch the quota: it breaks ElevenLabs' terms, and a public site
+  wants the paid plan's commercial licence anyway.
+
+| Commit                       | Contents                                                                                                     | Green when                                  |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------- |
+| ⬜ `talk: cast every animal` | A designed or library voice per land animal in `cli/voice/casting.ts`, the old greetings re-recorded with it | Every greeting heard and approved           |
+| ⬜ `talk: record the lines`  | `npm run voice` over every land animal, both locales, a `{piece}` line once per piece; the clips committed   | No line on `/play` is silent with voices on |
 
 ## Outside v1
 
