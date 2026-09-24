@@ -1,6 +1,6 @@
 import type { Role } from "chessops/types";
 
-import { messages } from "@/locales";
+import { locales, messages } from "@/locales";
 import { ROSTER } from "@/modules/bots/roster";
 import { clipsFor } from "@/shared/talk";
 import type { Clip, Remark } from "@/shared/talk";
@@ -8,6 +8,7 @@ import type { Clip, Remark } from "@/shared/talk";
 import { CASTING } from "./voice/casting";
 import { speak } from "./voice/speak";
 import type { Job } from "./voice/speak";
+import { STRESSED, stressed } from "./voice/stress";
 
 // `npm run voice` — record every land animal's lines with ElevenLabs into `public/voice/`. Billed
 // per character, so it is never part of the build: run it by hand after the lines change, and
@@ -18,16 +19,20 @@ if (!key) throw new Error("ELEVENLABS_API_KEY is not set: put it in .env.local")
 
 type Lines = Partial<Record<Remark, readonly string[]>>;
 
-// Every clip one animal has, in both languages.
+// Every clip one animal has, in every language.
 function clipsOf(id: string): Clip[] {
-	return Object.entries(messages).flatMap(([locale, words]) =>
-		clipsFor({
+	return locales.flatMap((locale) => {
+		const words = messages[locale];
+		return clipsFor({
 			locale,
 			id,
 			lines: (words.talk as Record<string, Lines>)[id] ?? {},
 			pieces: words.game.talk.piece as Record<Role, string>,
-		})
-	);
+		}).map((clip) => ({
+			...clip,
+			text: stressed({ text: clip.text, stress: STRESSED[locale] }),
+		}));
+	});
 }
 
 const jobs = ROSTER.flatMap((animal) => {

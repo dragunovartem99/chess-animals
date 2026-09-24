@@ -1,13 +1,20 @@
-import { existsSync, mkdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import path from "node:path";
 
 import type { Clip } from "@/shared/talk";
 
+import { withBreaks } from "./breaks";
+import { level } from "./level";
+
 export type Job = Clip & { voice: string };
 
-// Multilingual, so one voice carries both languages; small mp3s, since a clip is a second or two.
+// Multilingual, so one voice carries both languages. Fetched at the best mp3 the plan gives, since
+// `level` re-encodes it and a thin source only gets thinner.
 const MODEL = "eleven_multilingual_v2";
-const FORMAT = "mp3_44100_64";
+const FORMAT = "mp3_44100_192";
+// Steadier than the default 0.5: at 0.5 a voice sped up or slowed down around each break.
+const SETTINGS = { stability: 0.75, similarity_boost: 0.75 };
 // Two requests at once: the account's plan refuses a third in flight with a 429.
 const AT_ONCE = 2;
 
@@ -19,14 +26,22 @@ async function record({ job, key }: { job: Job; key: string }) {
 		{
 			method: "POST",
 			headers: { "xi-api-key": key, "content-type": "application/json" },
-			body: JSON.stringify({ text: job.text, model_id: MODEL }),
+			body: JSON.stringify({
+				text: withBreaks(job.text),
+				model_id: MODEL,
+				voice_settings: SETTINGS,
+			}),
 		}
 	);
 	if (!response.ok) throw new Error(`${job.path}: ${response.status} ${await response.text()}`);
 
+	const scratch = mkdtempSync(path.join(tmpdir(), "voice-"));
+	const raw = path.join(scratch, "raw.mp3");
+	writeFileSync(raw, Buffer.from(await response.arrayBuffer()));
 	const file = path.join(publicDir, job.path);
 	mkdirSync(path.dirname(file), { recursive: true });
-	writeFileSync(file, Buffer.from(await response.arrayBuffer()));
+	level({ input: raw, output: file });
+	rmSync(scratch, { recursive: true });
 	console.log(`${job.path}  ${job.text}`);
 }
 
