@@ -13,6 +13,7 @@ import { useTheme } from "@/shared/ui";
 import { useBotEngines } from "../composables/useBotEngines";
 import { useHistory } from "../composables/useHistory";
 import { useLines } from "../composables/useLines";
+import { usePace } from "../composables/usePace";
 import { usePlayers } from "../composables/usePlayers";
 import { useTalk } from "../composables/useTalk";
 import HistoryControls from "./HistoryControls.vue";
@@ -41,6 +42,7 @@ useTheme(
 );
 
 const talk = useTalk({ game, players, linesFor: useLines() });
+const pace = usePace({ players, isBot: (id) => ANIMALS_BY_ID.has(id) });
 
 const humanColors = computed(() => COLORS.filter((color) => players.value[color] === HUMAN));
 const orientation = computed(() => humanColors.value[0] ?? "white");
@@ -107,7 +109,7 @@ watch(
 		const animal = ANIMALS_BY_ID.get(players.value[color]);
 		if (!animal) return;
 
-		await talk.pause();
+		await pace();
 		if (turn.value !== key) return;
 
 		// The move list, not just the FEN: the engine rebuilds the repetition history from it, so

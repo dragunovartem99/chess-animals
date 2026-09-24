@@ -4,7 +4,6 @@ import { createRng } from "../engine";
 import type { Rng } from "../engine";
 import type { Facts } from "./facts";
 import type { Verdict } from "./observer";
-import { pauseFor } from "./pause";
 import { pickRemark } from "./pick";
 import { react } from "./react";
 import type { Spoken } from "./react";
@@ -81,7 +80,5 @@ export function createConversation({ linesFor, seed }: { linesFor: LinesFor; see
 
 			return spoken;
 		},
-		// Two bots wait before each move, so a remark can be read; a human is never kept waiting.
-		pause: (bots: readonly Color[]) => (bots.length === 2 ? pauseFor(rng) : 0),
 	};
 }

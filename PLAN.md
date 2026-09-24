@@ -36,8 +36,8 @@ so a land game without it still never fetches Stockfish.
   lands a move late.
 - Lines live in `talk.<id>.<remark>` in both locales, picked from a seeded stream, never the
   same line twice running. Land animals first; monsters and sea creatures when they have a voice.
-- With the panel open, a bot-vs-bot game pauses a random while before each move, so a remark can
-  be read before the next one replaces it. The pause is seeded like everything else random.
+- A bot-vs-bot game pauses a random while before each move, talk or no talk, so it can be
+  followed. The pause is seeded like everything else random.
 
 | Commit                     | Contents                                                                                                                                                                                                                              | Green when                         |
 | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |

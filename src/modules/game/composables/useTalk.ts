@@ -11,11 +11,6 @@ import type { Line, LinesFor, Observer, Spoken } from "@/shared/talk";
 
 import { spawnObserver, useObserver } from "./spawnObserver";
 
-const sleep = (ms: number) =>
-	new Promise<void>((resolve) => {
-		setTimeout(resolve, ms);
-	});
-
 type Options = {
 	// The game's moves, its position before every ply, and whether it is over.
 	game: { turns: Ref<PlayedTurn[]>; fens: Ref<string[]>; status: Ref<GameStatus> };
@@ -92,6 +87,5 @@ export function useTalk(options: Options) {
 		enabled,
 		said,
 		newGame: () => enabled.value && begin(),
-		pause: () => sleep(enabled.value ? conversation.pause(bots.value) : 0),
 	};
 }
