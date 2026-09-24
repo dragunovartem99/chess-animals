@@ -32,9 +32,7 @@ function fakePlayers() {
 	return { player, played, paused, finish };
 }
 
-// The fox names what it takes; the wolf just takes it.
-const linesFor: LinesFor = ({ id, piece }) =>
-	id === "fox" ? [`Your ${piece ?? ""}, thanks.`] : ["Mine now."];
+const linesFor: LinesFor = () => ["Hello."];
 
 function mount() {
 	const said = ref<Line[]>([]);
@@ -84,21 +82,5 @@ describe("useVoice", () => {
 
 		expect(played).toEqual(["/voice/en/wolf/greet-0.mp3", "/voice/en/wolf/check-0.mp3"]);
 		expect(paused).toEqual(["/voice/en/wolf/greet-0.mp3", "/voice/en/wolf/check-0.mp3"]);
-	});
-
-	it("plays a piece's own clip only for a line that names the piece", async () => {
-		const { said, enabled, played, finish } = mount();
-		enabled.value = true;
-
-		const took = (key: number, id: string): Line => ({
-			...line(key, id, "take"),
-			piece: "queen",
-		});
-		said.value = [took(1, "fox"), took(2, "wolf")];
-		await nextTick();
-
-		finish[0]();
-
-		expect(played).toEqual(["/voice/en/fox/take-0-queen.mp3", "/voice/en/wolf/take-0.mp3"]);
 	});
 });

@@ -6,4 +6,4 @@ const BREAK = '<break time="0.3s" />';
 
 // After a sentence's end, with or without an ellipsis, when another sentence follows.
 export const withBreaks = (text: string): string =>
-	text.replace(/([.?!…]+)\s+(?=\S)/g, `$1 ${BREAK} `);
+	text.replaceAll(/([.?!…]+)\s+(?=\S)/gu, `$1 ${BREAK} `);

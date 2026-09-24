@@ -1,9 +1,10 @@
 import { watch } from "vue";
 import type { Ref } from "vue";
 
-import { clipPath } from "@/shared/talk";
 import type { Line, LinesFor } from "@/shared/talk";
 import { useStoredFlag } from "@/shared/ui";
+
+import { clipOf } from "../utils/clip";
 
 // What playing a clip needs from an `<audio>`: a test hands in a fake.
 export type Player = {
@@ -50,18 +51,8 @@ export function useVoice({
 		playing = undefined;
 	}
 
-	// A line is recorded once per piece only if it names the piece; a take that says "Thanks,
-	// I'll keep that" is one clip whatever was taken. Rendered both ways rather than read raw,
-	// since the raw message may be compiled.
-	const names = ({ id, remark, piece, index }: Line) =>
-		piece !== undefined &&
-		linesFor({ id, remark, piece })[index] !== linesFor({ id, remark })[index];
-
-	const urlOf = (line: Line) => {
-		const { piece, ...rest } = line;
-		const at = { ...rest, locale: locale.value, ...(names(line) ? { piece } : {}) };
-		return `${import.meta.env.BASE_URL}${clipPath(at)}`;
-	};
+	const urlOf = (line: Line) =>
+		`${import.meta.env.BASE_URL}${clipOf({ line, locale: locale.value, linesFor })}`;
 
 	function playFrom(lines: Line[]) {
 		const [line, ...rest] = lines;

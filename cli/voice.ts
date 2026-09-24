@@ -28,10 +28,7 @@ function clipsOf(id: string): Clip[] {
 			id,
 			lines: (words.talk as Record<string, Lines>)[id] ?? {},
 			pieces: words.game.talk.piece as Record<Role, string>,
-		}).map((clip) => ({
-			...clip,
-			text: stressed({ text: clip.text, stress: STRESSED[locale] }),
-		}));
+		}).map(({ path, text }) => ({ path, text: stressed({ text, stress: STRESSED[locale] }) }));
 	});
 }
 

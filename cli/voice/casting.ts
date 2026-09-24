@@ -1,37 +1,42 @@
 // Which ElevenLabs voice speaks for each land animal, in both languages: the multilingual model
-// keeps a voice's timbre across them, so an animal sounds like itself in Russian too. Premade
-// voices only, so anyone with a key can regenerate the same clips.
+// keeps a voice's timbre across them, so an animal sounds like itself in Russian too. Most are
+// made with Voice Design from the description beside it and live in the project's account, so
+// regenerating a clip needs that account's key — the clips are committed for that reason. The
+// later ones are designed from a Russian sample: one designed from English rolled its Russian «р»
+// like an English speaker. A few are stock voices, which take none of the account's 30 custom
+// slots: two rosters of 16 designed voices would need 32.
 export const CASTING: Record<string, string> = {
-	// Down-to-earth, never quite sure what happened.
-	donkey: "iP95p4xoKVk53GoZ742B",
-	// Warm and apologetic.
-	dove: "cgSgspJ2msm6clMCkdW9",
-	// Quirky, delighted to give everything away.
-	lemming: "FGY2WhTYpPnrIDTdsKH5",
-	// Loud and fearless.
-	dodo: "IKne3meq5aSn9XLyUdCD",
-	// Rough, charging.
-	goat: "SOYHLrjzK2X1ezoPC6cr",
-	// Chirpy, repeats itself.
-	parrot: "TX3LPaxmHKxFdv7VOQHJ",
-	// Slow and calm.
-	sloth: "SAz9YHcvj6GT2YYXdXww",
-	// Old and wise, forgets nothing.
-	elephant: "pqHfZKP75CvOlQylNhV4",
-	// A storyteller on a long road.
-	camel: "JBFqnCBsd6RMkjVDRZzb",
-	// Quick and cheeky.
-	hare: "EXAVITQu4vr4xnSDxMaL",
-	// Deep and homely.
-	bear: "nPczCjzI2devNBz1zQrb",
-	// Firm, sure of itself.
-	lion: "pNInz6obpgDQGcFmaJgB",
-	// Resonant, unhurried.
-	tiger: "CwhRBWXzGAHq8TQ4Fs17",
-	// Husky, the pack's voice.
-	wolf: "N2lVS1w4EtoT3dr4eOWO",
-	// Velvety and sly; the Fox is a she in Russian.
-	fox: "pFZP5JQG7iQjIQuC4Bku",
-	// Smooth, not looking at you.
-	spider: "cjVigY5qzO86Huf0OWal",
+	// Dopey and cheerful, a slow country drawl, forgets what it came for.
+	donkey: "c5XTzZfSskN4Ut6RVcrx",
+	// Shy, a breathy near-whisper, sorry for everything. Sounds like a girl, so she speaks as one in
+	// Russian.
+	dove: "tXtmoClvKMDIT6yAj5Ew",
+	// Hyperactive and squeaky, too excited to breathe.
+	lemming: "o7PlX1q9E070RX4u2lu6",
+	// A pompous old aristocrat, sure it has never lost.
+	dodo: "X9FG2ZBSMn17O2KBZSxg",
+	// A hoarse middle-aged brawler, low and heavy, barks in short bursts.
+	goat: "xMg7WUw8SQNRZmHbkAKr",
+	// An old, shrill, nasal chatterbox, sing-song, repeats itself.
+	parrot: "b6DpG4oSJGpAaWu4RKjb",
+	// Barely awake, yawning, drifts off mid-word.
+	sloth: "f6Cz3JynC8oTg7XbYVw7",
+	// In his late eighties, gravelly and a little shaky, a pedantic old professor.
+	elephant: "GNq6yBiEuCpwk2fhvSpG",
+	// Deadpan and weary, unimpressed by anything. Stock: Chris.
+	camel: "iP95p4xoKVk53GoZ742B",
+	// A fast-talking braggart, jittery and impatient.
+	hare: "6m9fXYIlcPNYN4tGOfeR",
+	// A grumpy-warm grandpa, deep and rumbling.
+	bear: "QoNaah2cnyD6PDsMnsqs",
+	// A Machiavellian manipulator, silky and drawling, flattering with poison underneath.
+	lion: "7nYltb0fiMzNVCaWsUUi",
+	// Calm menace, smooth and quiet, never raises its voice. Stock: Eric.
+	tiger: "cjVigY5qzO86Huf0OWal",
+	// A nineties gopnik, raspy, cocky and clipped.
+	wolf: "0QjRjbzPMSepAhrWoVSm",
+	// Sly and flirtatious; the Fox is a she in Russian.
+	fox: "IgJyigVhCEiWtDubWOqy",
+	// Creepy and over-polite, a soft, slightly creaky hissing whisper.
+	spider: "bW6RZDNm4HBOdIINQLSi",
 };

@@ -26,7 +26,7 @@ export const STRESSED = Object.fromEntries(
 
 // Matches whole words in any case, and keeps a capital at the start of a sentence.
 export function stressed({ text, stress }: { text: string; stress: Map<string, string> }): string {
-	return text.replace(/\p{L}+/gu, (word) => {
+	return text.replaceAll(/\p{L}+/gu, (word) => {
 		const fixed = stress.get(word.toLowerCase());
 		if (!fixed) return word;
 		return word[0] === word[0].toUpperCase() ? fixed[0].toUpperCase() + fixed.slice(1) : fixed;
