@@ -30,25 +30,26 @@ so a land game without it still never fetches Stockfish.
 - A bot-vs-bot game pauses a random while before each move, talk or no talk, so it can be
   followed. The pause is seeded like everything else random.
 
-The playback and `npm run voice` are in; what is left is the recording. The free ElevenLabs tier
-(10k characters a month, two requests at once, no commercial licence) ran dry after the greetings
-of nine animals — those 45 clips sit in `public/voice/`, not yet committed. The full set is ~900
-clips, ~24k characters, ~14 MB, so it waits for the Creator plan:
+The playback and `npm run voice` are in, and every land animal is recorded: 384 clips, ~18 MB, in
+`public/voice/`, not yet committed.
 
-- Cast first, record second. The current casting is 16 different stock voices; with Creator, give
-  each animal a voice of its own from Voice Design (described: "old, slow, gravelly elephant") or
-  the Voice Library, and hear it in Russian too — one voice speaks both languages, and many library
-  voices sound off in Russian.
-- Record the greetings only (~1.6k characters), listen, fix `cli/voice/casting.ts`, then the rest.
-  Only missing clips are recorded, so a recast means deleting that animal's folder first.
+- Voices: Creator holds 30 custom voices, and stock ones take no slot. The land roster speaks in 14
+  designed voices and 2 stock ones (the Camel is Chris, the Tiger is Eric), which leaves 16 for
+  the monsters. The sea creatures get their slots once a roster's clips are committed and its
+  voices can be deleted. Name a voice `chess-animals · <roster> · <id>` in ElevenLabs.
+- Hear a voice in Russian before keeping it: one voice speaks both languages, and a design made
+  from an English sample can sound boxed-in in Russian, or roll its «р» like an English speaker.
+  The Spider's was designed from a Russian sample instead, and a sample full of ellipses kept it
+  slow and creepy where a plain one read flat.
+- Stress a voice gets wrong goes in `cli/voice/stress.ts`, never into the locale text.
+- Only missing clips are recorded, so a changed line or a recast means deleting its clips first.
 - Raise `AT_ONCE` in `cli/voice/speak.ts` to the plan's concurrency; Free allows two.
 - Never several free accounts to stretch the quota: it breaks ElevenLabs' terms, and a public site
   wants the paid plan's commercial licence anyway.
 
-| Commit                       | Contents                                                                                                     | Green when                                  |
-| ---------------------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------- |
-| ⬜ `talk: cast every animal` | A designed or library voice per land animal in `cli/voice/casting.ts`, the old greetings re-recorded with it | Every greeting heard and approved           |
-| ⬜ `talk: record the lines`  | `npm run voice` over every land animal, both locales, a `{piece}` line once per piece; the clips committed   | No line on `/play` is silent with voices on |
+| Commit                      | Contents                                                                  | Green when                                  |
+| --------------------------- | ------------------------------------------------------------------------- | ------------------------------------------- |
+| ⬜ `talk: record the lines` | `npm run voice` over every land animal, both locales; the clips committed | No line on `/play` is silent with voices on |
 
 ## Outside v1
 
