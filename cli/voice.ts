@@ -8,7 +8,6 @@ import type { Clip, Remark } from "@/shared/talk";
 import { CASTING } from "./voice/casting";
 import { speak } from "./voice/speak";
 import type { Job } from "./voice/speak";
-import { STRESSED, stressed } from "./voice/stress";
 
 // `npm run voice` — record every land animal's and monster's lines with ElevenLabs into
 // `public/voice/`. Billed per character, so it is never part of the build: run it by hand after
@@ -29,7 +28,7 @@ function clipsOf(id: string): Clip[] {
 			id,
 			lines: (words.talk as Record<string, Lines>)[id] ?? {},
 			pieces: words.game.talk.piece as Record<Role, string>,
-		}).map(({ path, text }) => ({ path, text: stressed({ text, stress: STRESSED[locale] }) }));
+		});
 	});
 }
 

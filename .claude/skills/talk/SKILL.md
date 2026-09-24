@@ -1,6 +1,6 @@
 ---
 name: talk
-description: Write, rewrite or record what the animals say in the talk panel — `src/locales/{en,ru}/talk/<id>.ts` and their clips via `npm run voice` / `cli/voice/`. Use when adding an animal's lines, retuning its personality, fixing a line or a Russian stress, or recasting its voice.
+description: Write, rewrite or record what the animals say in the talk panel — `src/locales/{en,ru}/talk/<id>.ts` and their clips via `npm run voice` / `cli/voice/`. Use when adding an animal's lines, retuning its personality, fixing a line, or recasting its voice.
 ---
 
 ## Lines
@@ -17,7 +17,6 @@ description: Write, rewrite or record what the animals say in the talk panel —
 - DO write `ё` (ещё, всё, мёд, пришёл) — the lines are read aloud; the `copy` skill's no-ё rule does not apply here.
 - DO make only the speaker's gender show: the Fox and the Dove speak as women, the rest as men, the Wolf as "we".
 - NEVER assume the player's gender: "Победа твоя", not "Ты выиграл".
-- DO fix a stress the voice gets wrong in `cli/voice/stress.ts` (capital on the stressed vowel, `заходИ`), never in the locale text.
 
 ## Voices
 

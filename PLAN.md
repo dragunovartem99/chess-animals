@@ -44,7 +44,6 @@ are next. Recording them:
   from an English sample can sound boxed-in in Russian, or roll its «р» like an English speaker.
   The Spider's was designed from a Russian sample instead, and a sample full of ellipses kept it
   slow and creepy where a plain one read flat.
-- Stress a voice gets wrong goes in `cli/voice/stress.ts`, never into the locale text.
 - Only missing clips are recorded, so a changed line or a recast means deleting its clips first.
 - Raise `AT_ONCE` in `cli/voice/speak.ts` to the plan's concurrency; Free allows two.
 - Never several free accounts to stretch the quota: it breaks ElevenLabs' terms, and a public site
