@@ -6,7 +6,7 @@ import type { Locale } from "@/locales";
 // locale, so a new one is a type error until it says it needs no fixes.
 const STRESS: Record<Locale, string[]> = {
 	en: [],
-	ru: ["пятьдесЯт", "заходИ"],
+	ru: [],
 };
 
 const ACUTE = "́";

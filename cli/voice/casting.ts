@@ -1,5 +1,5 @@
-// Which ElevenLabs voice speaks for each land animal, in both languages: the multilingual model
-// keeps a voice's timbre across them, so an animal sounds like itself in Russian too. Most are
+// Which ElevenLabs voice speaks for each land animal, in both languages: the model keeps a
+// voice's timbre across them, so an animal sounds like itself in Russian too. Most are
 // made with Voice Design from the description beside it and live in the project's account, so
 // regenerating a clip needs that account's key — the clips are committed for that reason. The
 // later ones are designed from a Russian sample: one designed from English rolled its Russian «р»
