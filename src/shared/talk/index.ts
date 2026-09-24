@@ -7,3 +7,6 @@ export { createObserver, NODES } from "./observer";
 export { pickRemark } from "./pick";
 export type { Remark } from "./remark";
 export { REMARKS } from "./remark";
+export { PAUSE, pauseFor } from "./pause";
+export type { Spoken } from "./react";
+export { farewell, greet, LATE, react } from "./react";
