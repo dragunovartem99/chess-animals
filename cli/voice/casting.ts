@@ -29,8 +29,8 @@ export const CASTING: Record<string, string> = {
 	hare: "6m9fXYIlcPNYN4tGOfeR",
 	// A grumpy-warm grandpa, deep and rumbling.
 	bear: "QoNaah2cnyD6PDsMnsqs",
-	// A Machiavellian manipulator, silky and drawling, flattering with poison underneath.
-	lion: "7nYltb0fiMzNVCaWsUUi",
+	// An unstable tyrant king, a deep regal bass: a sweet whisper, then a roar without warning.
+	lion: "116XzEWN3rUDUV1F5pOs",
 	// Calm menace, smooth and quiet, never raises its voice. Stock: Eric.
 	tiger: "cjVigY5qzO86Huf0OWal",
 	// A nineties gopnik, raspy, cocky and clipped.
