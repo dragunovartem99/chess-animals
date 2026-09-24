@@ -5,3 +5,5 @@ export { BLUNDER, COOLDOWN, detectSwing, isQuiet } from "./swing";
 export type { Observer, Verdict } from "./observer";
 export { createObserver, NODES } from "./observer";
 export { pickRemark } from "./pick";
+export type { Remark } from "./remark";
+export { REMARKS } from "./remark";

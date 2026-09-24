@@ -3,6 +3,7 @@ import bots from "./bots";
 import feature from "./feature";
 import game from "./game";
 import monsterBots from "./monsters";
+import talk from "./talk";
 import underwaterBots from "./underwater";
 
 export default {
@@ -38,6 +39,7 @@ export default {
 	},
 	about,
 	game,
+	talk,
 	feature,
 	placeholder: {
 		notBuiltYet: "Still building this one.",

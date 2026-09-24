@@ -34,16 +34,15 @@ with the panel, so a land game without it still never fetches Stockfish.
   draw. A few plies of cooldown after a line, so one exchange is one remark.
 - The observer's answer is tagged by ply and dropped if the game has moved on: a remark never
   lands a move late.
-- Lines live in `bot.<id>.lines.<event>` in both locales, picked from a seeded stream, never the
+- Lines live in `talk.<id>.<remark>` in both locales, picked from a seeded stream, never the
   same line twice running. Land animals first; monsters and sea creatures when they have a voice.
 - With the panel open, a bot-vs-bot game pauses a random while before each move, so a remark can
   be read before the next one replaces it. The pause is seeded like everything else random.
 
-| Commit                              | Contents                                                                                                                                                                                  | Green when                           |
-| ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ |
-| ⬜ `locales: add land animal lines` | Every land animal, every event, both locales                                                                                                                                              | The coverage spec covers the lines   |
-| ⬜ `play: add the speech panel`     | Opt-in toggle, the panel, both sides talking, the seeded pause                                                                                                                            | Off by default; no Stockfish fetched |
-| ⬜ `talk: voice the lines`          | ElevenLabs once via `npm run voice` (billed, cached, not in the build) into `public/voice/<locale>/<id>/<event>-<n>.mp3`; a second toggle, one clip at a time, cut off rather than queued | Silent until the toggle is clicked   |
+| Commit                          | Contents                                                                                                                                                                                  | Green when                           |
+| ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ |
+| ⬜ `play: add the speech panel` | Opt-in toggle, the panel, both sides talking, the seeded pause                                                                                                                            | Off by default; no Stockfish fetched |
+| ⬜ `talk: voice the lines`      | ElevenLabs once via `npm run voice` (billed, cached, not in the build) into `public/voice/<locale>/<id>/<event>-<n>.mp3`; a second toggle, one clip at a time, cut off rather than queued | Silent until the toggle is clicked   |
 
 ## Outside v1
 

@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
 
-import { ANIMALS } from "@/modules/bots/roster";
+import { ANIMALS, ROSTER } from "@/modules/bots/roster";
 import { FEATURES } from "@/shared/eval";
+import { REMARKS } from "@/shared/talk";
 
 import { locales, messages } from "../index";
 
@@ -45,5 +46,27 @@ describe.each(locales)("%s bot labels", (locale) => {
 		const stale = Object.keys(messages[locale].bot).filter((id) => !ids.has(id));
 
 		expect(stale).toEqual([]);
+	});
+});
+
+// And for what they say: a land animal with a remark unwritten would fall silent on it in one
+// language only. Two lines at least, so the picker always has another to say.
+describe.each(locales)("%s talk", (locale) => {
+	const talk = messages[locale].talk as Record<string, Record<string, string[]>>;
+	const ids = ROSTER.map((animal) => animal.definition.id);
+
+	it("writes every remark for every land animal, and nothing more", () => {
+		expect(Object.keys(talk).toSorted()).toEqual(ids.toSorted());
+		expect(Object.values(talk).map((lines) => Object.keys(lines).toSorted())).toEqual(
+			ids.map(() => REMARKS.toSorted())
+		);
+	});
+
+	it("gives every remark at least two lines", () => {
+		const counts = Object.values(talk).flatMap((lines) =>
+			Object.values(lines).map((said) => said.length)
+		);
+
+		expect(Math.min(...counts)).toBeGreaterThanOrEqual(2);
 	});
 });

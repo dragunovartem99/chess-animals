@@ -31,7 +31,7 @@ next in [PLAN.md](./PLAN.md).
 ## Locales
 
 - DO add UI strings to `locales/ru/` and `locales/en/` at once — a missing key is a type error, not a fallback
-- DO keep bot names and descriptions under `bot.<id>` and feature labels under `feature.<key>`, so a new animal or heuristic is untranslatable-by-accident rather than silently English-only
+- DO keep bot names and descriptions under `bot.<id>`, what a bot says under `talk.<id>.<remark>`, and feature labels under `feature.<key>`, so a new animal or heuristic is untranslatable-by-accident rather than silently English-only
 
 ## Tests
 

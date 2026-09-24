@@ -4,6 +4,7 @@ import bots from "./bots";
 import feature from "./feature";
 import game from "./game";
 import monsterBots from "./monsters";
+import talk from "./talk";
 import underwaterBots from "./underwater";
 
 const messages: Messages = {
@@ -40,6 +41,7 @@ const messages: Messages = {
 	},
 	about,
 	game,
+	talk,
 	feature,
 	placeholder: {
 		notBuiltYet: "Эту страницу еще строим.",

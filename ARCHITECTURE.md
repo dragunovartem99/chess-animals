@@ -226,7 +226,8 @@ locale's root, which keeps a typo like `/xx/play` from redirecting onto itself f
 
 `vue-i18n` with `locales/ru` and `locales/en`, typed against `locales/types.ts` — a missing key
 is a type error, not a silent fallback, and `locales/__tests__/coverage.test.ts` holds the two
-sets to each other. Bot names and descriptions live there under `bot.<id>`, feature labels under
+sets to each other. Bot names and descriptions live there under `bot.<id>`, what a bot says under
+`talk.<id>.<remark>` — a file per animal, since every remark has its lines — feature labels under
 `feature.<key>` from the registry's `i18nKey`, so a new animal or heuristic is
 untranslatable-by-accident rather than silently English-only.
 
