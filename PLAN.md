@@ -22,16 +22,16 @@ What is left of the move to C. How it is built is in
 
 ## Talk
 
-An opt-in speech panel on `/play`: the animals talk, and in a bot-vs-bot game both of them do. They
-do not bark on every check and capture, as the voice spike did, because then something is said on
-most moves and none of it means anything. An observer, a Stockfish of its own on fixed nodes, and never the
-monster's instance, which plays MultiPV at a temperature, rates each position, and a bot speaks
-only at the start, at the end, and when the win chance swings. The swing is measured in win
-chance rather than centipawns, so +8 → +5 stays quiet and +1 → −2 does not. The observer loads
-with the panel, so a land game without it still never fetches Stockfish.
+An opt-in speech panel on `/play`: the animals talk, and in a bot-vs-bot game both of them do. A
+remark is about the move just played — the piece it took, the check it gave — and said plainly,
+in the animal's own attitude rather than a catchphrase. Most moves say nothing: a capture speaks
+only when an observer, a Stockfish of its own on fixed nodes and never a monster's, sees it win
+something, judged in win chance so an even trade stays quiet. The observer loads with the panel,
+so a land game without it still never fetches Stockfish.
 
-- Events, from the speaker's side: greeting, "you blundered", "I blundered", mate seen, win, loss,
-  draw. A few plies of cooldown after a line, so one exchange is one remark.
+- Remarks, from the speaker's side: greeting, check, taking a piece, losing one, mate seen, win,
+  loss, draw. One voice a move, and a few plies of cooldown after it.
+- A hanging piece is remarked on when it is taken, never before: saying so would give it away.
 - The observer's answer is tagged by ply and dropped if the game has moved on: a remark never
   lands a move late.
 - Lines live in `talk.<id>.<remark>` in both locales, picked from a seeded stream, never the
@@ -39,10 +39,10 @@ with the panel, so a land game without it still never fetches Stockfish.
 - With the panel open, a bot-vs-bot game pauses a random while before each move, so a remark can
   be read before the next one replaces it. The pause is seeded like everything else random.
 
-| Commit                          | Contents                                                                                                                                                                                  | Green when                           |
-| ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ |
-| ⬜ `play: add the speech panel` | Opt-in toggle, the panel, both sides talking, the seeded pause                                                                                                                            | Off by default; no Stockfish fetched |
-| ⬜ `talk: voice the lines`      | ElevenLabs once via `npm run voice` (billed, cached, not in the build) into `public/voice/<locale>/<id>/<event>-<n>.mp3`; a second toggle, one clip at a time, cut off rather than queued | Silent until the toggle is clicked   |
+| Commit                          | Contents                                                                                                                                                                                                                              | Green when                           |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ |
+| ⬜ `play: add the speech panel` | Opt-in toggle, the panel, both sides talking, the seeded pause                                                                                                                                                                        | Off by default; no Stockfish fetched |
+| ⬜ `talk: voice the lines`      | ElevenLabs once via `npm run voice` (billed, cached, not in the build) into `public/voice/<locale>/<id>/<remark>-<n>[-<piece>].mp3`, a `{piece}` line once per piece; a second toggle, one clip at a time, cut off rather than queued | Silent until the toggle is clicked   |
 
 ## Outside v1
 

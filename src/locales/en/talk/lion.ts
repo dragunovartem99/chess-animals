@@ -1,10 +1,10 @@
 export default {
-	greet: ["I am awake. All of me.", "Roar. Let the hunt begin."],
-	gloat: ["A slip. I saw it.", "Roar. You should not have done that."],
-	groan: ["Hm. The grass hid something.", "Roar. That one got away."],
-	mating: ["Now I am sure. Pounce!", "No more circling. Here I come."],
-	mated: ["Hm. The hunter is hunted.", "Roar... I was not sure enough."],
-	win: ["The king of the grass wins. Roar!", "Circle, wait, pounce. Always works."],
-	loss: ["You hunted me. Well done.", "Roar. I'll be back."],
-	draw: ["Two lions. Nobody wins.", "Roar. A tie. We rest."],
+	greet: ["I'm awake. All of me.", "Let's hunt."],
+	check: ["Check. Not the pounce yet.", "Check. I'm circling."],
+	take: ["Your {piece}. I was sure.", "Took your {piece}. Patience."],
+	lose: ["Lost my {piece}. The grass hid something.", "My {piece}. I wasn't sure enough."],
+	mating: ["Now I'm sure."],
+	win: ["Circle, wait, pounce."],
+	loss: ["You hunted me. Well done."],
+	draw: ["Nobody eats. We rest."],
 };

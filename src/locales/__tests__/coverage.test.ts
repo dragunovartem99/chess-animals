@@ -50,7 +50,7 @@ describe.each(locales)("%s bot labels", (locale) => {
 });
 
 // And for what they say: a land animal with a remark unwritten would fall silent on it in one
-// language only. Two lines at least, so the picker always has another to say.
+// language only.
 describe.each(locales)("%s talk", (locale) => {
 	const talk = messages[locale].talk as Record<string, Record<string, string[]>>;
 	const ids = ROSTER.map((animal) => animal.definition.id);
@@ -62,11 +62,11 @@ describe.each(locales)("%s talk", (locale) => {
 		);
 	});
 
-	it("gives every remark at least two lines", () => {
+	it("gives every remark a line", () => {
 		const counts = Object.values(talk).flatMap((lines) =>
 			Object.values(lines).map((said) => said.length)
 		);
 
-		expect(Math.min(...counts)).toBeGreaterThanOrEqual(2);
+		expect(Math.min(...counts)).toBeGreaterThanOrEqual(1);
 	});
 });

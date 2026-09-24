@@ -1,10 +1,10 @@
 export default {
-	greet: ["Hello! Hello! You go first!", "Squawk! I'll do what you do."],
-	gloat: ["Squawk! You dropped one! Dropped one!", "Oops, oops! Your oops!"],
-	groan: ["Squawk! Copied the wrong thing!", "Bad bird. Bad bird."],
-	mating: ["Squawk! King stuck! King stuck!", "Nowhere to go! Nowhere to go!"],
-	mated: ["Squawk! Help! Help!", "Uh-oh! Uh-oh!"],
-	win: ["Squawk! Pretty bird wins!", "I won! I won!"],
-	loss: ["You won! You won! Squawk.", "Good game! Good game!"],
-	draw: ["Same! Same! Nobody wins!", "Squawk! Tie! Tie!"],
+	greet: ["Hello. Hello.", "Your move. I'll do the same."],
+	check: ["Check! Check!", "Check. Copied that from somewhere."],
+	take: ["Your {piece}! Your {piece}!", "Took your {piece}. Everybody does it."],
+	lose: ["My {piece}! My {piece}!", "Lost my {piece}. Copied the wrong thing."],
+	mating: ["Stuck! Your king's stuck!"],
+	win: ["Won! Won!"],
+	loss: ["Good game! Good game!"],
+	draw: ["Draw! Draw!"],
 };

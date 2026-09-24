@@ -1,17 +1,17 @@
-import type { Color } from "chessops/types";
+import type { Color, Role } from "chessops/types";
 
 import type { GameResult } from "../chess";
+import type { Facts } from "./facts";
 import type { Verdict } from "./observer";
 import type { Remark } from "./remark";
-import { detectSwing, isQuiet } from "./swing";
-import type { Swing } from "./swing";
+import { gained, isQuiet, mateFor, SWING } from "./swing";
 
-// One bot, one remark. The line itself is picked later, from the locale.
-export type Spoken = { color: Color; remark: Remark };
+// One bot, one remark, and the piece it is about. The line itself is picked later, from the locale.
+export type Spoken = { color: Color; remark: Remark; piece?: Role };
 
 // How many plies behind the game a verdict may land and still be spoken. One, because a bot
 // answers a human in milliseconds: the observer's verdict on the human's move always lands after
-// the reply, and "thanks for the queen" said then is still on time. Two plies on, it is not.
+// the reply, and "check, sorry" said then is still on time. Two plies on, it is not.
 export const LATE = 1;
 
 const other = (color: Color): Color => (color === "white" ? "black" : "white");
@@ -28,40 +28,42 @@ export const farewell = ({ result, bots }: { result: GameResult; bots: readonly 
 		return { color, remark: result === color ? "win" : "loss" };
 	});
 
-// One voice per swing, so a blunder is one remark and not a dialogue. The side it went well for
-// speaks when it is a bot — a gloat is the better line — and the other side only when it is not.
-function cast({ swing, bots }: { swing: Swing; bots: readonly Color[] }): Spoken[] {
-	const winner = swing.kind === "mate" ? swing.by : other(swing.by);
-	const [happy, sad] =
-		swing.kind === "mate" ? (["mating", "mated"] as const) : (["gloat", "groan"] as const);
-	if (bots.includes(winner)) return [{ color: winner, remark: happy }];
-	if (bots.includes(other(winner))) return [{ color: other(winner), remark: sad }];
-
-	return [];
-}
-
-// What the bots say to a verdict on the move that led to it, if anything: nothing about a
-// position the game has left behind, nothing inside the cooldown of the last remark, and nothing
-// unless the move swung the game.
-export function react({
-	before,
-	verdict,
-	bots,
-	livePly,
-	lastPly,
-}: {
-	before: Verdict | undefined;
+type Moment = {
+	// Every verdict so far, by ply; the one on `verdict.ply` itself need not be among them.
+	verdicts: readonly (Verdict | undefined)[];
 	verdict: Verdict;
+	facts: Facts;
 	bots: readonly Color[];
 	livePly: number;
 	lastPly: number | undefined;
-}): Spoken[] {
-	if (!before || before.ply !== verdict.ply - 1 || livePly - verdict.ply > LATE) return [];
-	if (isQuiet({ ply: verdict.ply, lastPly })) return [];
+};
+
+// What a bot says about the move that led to `verdict`, if anything — one voice at most, so a
+// move is one remark and not a dialogue. Nothing about a position the game has left behind, and
+// nothing inside the cooldown of the last remark.
+//
+// A mate found comes first, then a capture that won something, then a check. A capture is judged
+// over two plies, from before the move that left the piece hanging: the observer saw the gift
+// coming then, so the capture itself swings nothing, and an even trade swings nothing either way.
+// It is said when the piece is taken, never when it is left hanging, which would give it away.
+export function react({ verdicts, verdict, facts, bots, livePly, lastPly }: Moment): Spoken[] {
+	const { ply, score } = verdict;
+	const before = verdicts[ply - 1];
+	if (!before || livePly - ply > LATE || isQuiet({ ply, lastPly })) return [];
 
 	// A game on `/play` starts from the opening position, so White makes the odd plies.
-	const mover: Color = verdict.ply % 2 === 1 ? "white" : "black";
-	const swing = detectSwing({ before: before.score, after: verdict.score, mover });
+	const mover: Color = ply % 2 === 1 ? "white" : "black";
+	const say = (color: Color, remark: Remark, piece?: Role): Spoken[] =>
+		bots.includes(color) ? [piece ? { color, remark, piece } : { color, remark }] : [];
 
-	return swing ? cast({ swing, bots }) : [];
+	if (mateFor(score) === mover && mateFor(before.score) !== mover) return say(mover, "mating");
+
+	const from = (verdicts[ply - 2] ?? before).score;
+	const piece = facts.captured;
+	if (piece && gained({ from, to: score, side: mover }) >= SWING) {
+		const taken = say(mover, "take", piece);
+		return taken.length > 0 ? taken : say(other(mover), "lose", piece);
+	}
+
+	return facts.check ? say(mover, "check") : [];
 }

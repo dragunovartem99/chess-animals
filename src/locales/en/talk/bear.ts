@@ -1,10 +1,10 @@
 export default {
-	greet: ["Welcome to my den. Wipe your paws.", "Grr. Everyone stays close to me."],
-	gloat: ["Grr. Honey, just lying there.", "Thank you. My den needed that."],
-	groan: ["Grr. Someone left the den.", "Hm. A cub wandered off."],
-	mating: ["Out of the den comes the bear. Grr!", "Your king is trapped. My turn to go out."],
-	mated: ["Grr. They broke into my den.", "Hm. Not so cozy anymore."],
-	win: ["Grr! Nobody gets into my den.", "Safe and warm, and I won."],
-	loss: ["Grr. You got into my den.", "Hm. Time for a long winter sleep."],
-	draw: ["Nobody came in. Nobody went out.", "Grr. A quiet day at the den."],
+	greet: ["Welcome. Everyone stays close to me.", "Come in. Wipe your paws."],
+	check: ["Check. Out of my den I come.", "Check. The den has teeth."],
+	take: ["Your {piece} came too close to my den.", "Took your {piece}. Stay out."],
+	lose: ["Lost my {piece}. Never leave the den.", "My {piece}. Should've stayed close."],
+	mating: ["Your king's trapped. My turn."],
+	win: ["Nobody gets into my den."],
+	loss: ["You got into my den. Well done."],
+	draw: ["Quiet day at the den."],
 };

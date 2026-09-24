@@ -1,10 +1,10 @@
 export default {
-	greet: ["Hello. Every door will close.", "Hm. Let's see where you can run."],
-	gloat: ["Oh, thank you. How kind.", "You left the door open. Tsk."],
-	groan: ["Hm. One of mine got caught alone.", "Clever. I didn't see that."],
-	mating: ["Every door is shut. Oh dear.", "Your king is locked in. How sad."],
-	mated: ["Hm. You shut my doors first.", "Clever you. Very clever."],
-	win: ["Every door shut. Just as I planned.", "Tricked you. Sorry, not sorry."],
-	loss: ["Clever. Next time I'll lock more doors.", "Hm. Well played, sly one."],
-	draw: ["Nobody got out. How tidy.", "A tie. We're both too clever."],
+	greet: ["Hello. Let's see where you'll run.", "Take your time. I'll wait."],
+	check: ["Check. Careful now.", "Check. Where to?"],
+	take: ["Thanks for the {piece}.", "Your {piece} wandered off alone."],
+	lose: ["My {piece}? Clever.", "Hm. I left the {piece} alone."],
+	mating: ["Every door is shut."],
+	win: ["Just as planned."],
+	loss: ["Clever. Next time."],
+	draw: ["Nobody got out. Fine."],
 };

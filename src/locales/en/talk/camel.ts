@@ -1,10 +1,10 @@
 export default {
-	greet: ["Long road ahead. I have water.", "Everyone out first. Then we wait."],
-	gloat: ["Thank you. That will help on the long walk.", "You dropped something. I'll carry it."],
-	groan: ["Hm. A heavy thing to lose.", "That hurt. The road is still long."],
-	mating: ["The walk is almost over. For you.", "My little ones are nearly home."],
-	mated: ["Hm. The desert got me.", "Out of water. Out of room."],
-	win: ["The long road ends with me.", "Wait, wait, then walk. Always works."],
-	loss: ["The desert is big. You crossed it first.", "A good trip. You won it."],
-	draw: ["A long walk, and nobody got there.", "Hm. We both ran out of road."],
+	greet: ["Long game ahead. I'm ready.", "Everyone out first. Then we wait."],
+	check: ["Check. No hurry.", "Check. The road goes on."],
+	take: ["Your {piece}. I'll carry it.", "Took your {piece}. That'll help on the road."],
+	lose: ["Lost my {piece}. The road's still long.", "My {piece}. Heavy loss."],
+	mating: ["The walk's almost over. For you."],
+	win: ["Patience wins."],
+	loss: ["You got there first."],
+	draw: ["Long road. Nobody got there."],
 };

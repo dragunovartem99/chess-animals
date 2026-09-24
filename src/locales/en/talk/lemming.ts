@@ -1,13 +1,10 @@
 export default {
-	greet: ["Hi! I brought presents.", "Ready? I'll jump first."],
-	gloat: [
-		"You dropped a piece? I'll drop two!",
-		"Oh no, don't give me things. I give you things.",
-	],
-	groan: ["There goes another one. Wheee!", "Take it! Take it! It's yours."],
-	mating: ["Wait, I'm winning? That's not the plan.", "Oh no. I might catch your king."],
-	mated: ["Here comes the edge! Wheee!", "Almost off the cliff now."],
-	win: ["I won? But I gave you everything!", "That was an accident. Sorry."],
-	loss: ["Wheee! Over the cliff we go!", "All gone! Best game ever."],
-	draw: ["Nobody won? I'll try harder to lose.", "Hm. Not even off the cliff."],
+	greet: ["Hi. I brought you things.", "Ready? I'll start giving."],
+	check: ["Check. Sorry, that slipped out.", "Check? That's not like me."],
+	take: ["I took your {piece}? I'll give it back.", "Oh no, your {piece}. I didn't want that."],
+	lose: ["Here, have my {piece}.", "My {piece}? Yours now. Good."],
+	mating: ["Oh no. I'm about to win."],
+	win: ["I won? I gave you everything."],
+	loss: ["All gone. Perfect."],
+	draw: ["A draw? I didn't give enough."],
 };

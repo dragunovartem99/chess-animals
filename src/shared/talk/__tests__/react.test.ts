@@ -2,55 +2,82 @@ import type { Color } from "chessops/types";
 import { describe, expect, it } from "vitest";
 
 import { createRng } from "../../engine";
+import type { Verdict } from "../observer";
 import { PAUSE, pauseFor } from "../pause";
 import { farewell, greet, react } from "../react";
 
 const BOTH: Color[] = ["white", "black"];
+const QUIET = { check: false };
 
-// Black's move at ply 4 hangs a piece: White's win chance jumps.
-const HANG = { before: { ply: 3, score: { cp: 0 } }, verdict: { ply: 4, score: { cp: 400 } } };
-// White's move at ply 5 finds a mate.
-const MATE = { before: { ply: 4, score: { cp: 400 } }, verdict: { ply: 5, score: { mate: 3 } } };
+// Verdicts by ply, as the conversation keeps them.
+const at = (...verdicts: Verdict[]) =>
+	verdicts.reduce<(Verdict | undefined)[]>((all, verdict) => {
+		all[verdict.ply] = verdict;
+		return all;
+	}, []);
 
-const quiet = { livePly: 5, lastPly: undefined };
+// Black leaves a knight hanging at ply 4; White takes it at ply 5.
+const HUNG = at({ ply: 3, score: { cp: 0 } }, { ply: 4, score: { cp: 350 } });
+const TAKE = {
+	verdicts: HUNG,
+	verdict: { ply: 5, score: { cp: 340 } },
+	livePly: 5,
+	lastPly: undefined,
+};
 
-describe("react", () => {
-	it("lets the side a blunder helped gloat, or the blunderer groan when that side is human", () => {
-		expect(react({ ...HANG, ...quiet, bots: BOTH })).toEqual([
-			{ color: "white", remark: "gloat" },
+describe("react to a capture", () => {
+	it("lets the taker speak, or the loser when the taker is human", () => {
+		const facts = { captured: "knight", check: false } as const;
+
+		expect(react({ ...TAKE, facts, bots: BOTH })).toEqual([
+			{ color: "white", remark: "take", piece: "knight" },
 		]);
-		expect(react({ ...HANG, ...quiet, bots: ["black"] })).toEqual([
-			{ color: "black", remark: "groan" },
+		expect(react({ ...TAKE, facts, bots: ["black"] })).toEqual([
+			{ color: "black", remark: "lose", piece: "knight" },
 		]);
 	});
 
-	it("lets the mating side say so, or the mated one when the mater is human", () => {
-		expect(react({ ...MATE, ...quiet, bots: BOTH })).toEqual([
+	it("says nothing about an even trade, or with nobody to say it", () => {
+		const facts = { captured: "knight", check: false } as const;
+		const even = {
+			...TAKE,
+			verdicts: at({ ply: 3, score: { cp: 0 } }, { ply: 4, score: { cp: 0 } }),
+		};
+
+		expect(
+			react({ ...even, verdict: { ply: 5, score: { cp: 0 } }, facts, bots: BOTH })
+		).toEqual([]);
+		expect(react({ ...TAKE, facts, bots: [] })).toEqual([]);
+	});
+});
+
+describe("react to a check or a mate", () => {
+	it("lets the checking bot say so, and a human's check pass", () => {
+		expect(react({ ...TAKE, facts: { check: true }, bots: BOTH })).toEqual([
+			{ color: "white", remark: "check" },
+		]);
+		expect(react({ ...TAKE, facts: { check: true }, bots: ["black"] })).toEqual([]);
+	});
+
+	it("puts a mate found before anything else, and only once", () => {
+		const mate = { ...TAKE, verdict: { ply: 5, score: { mate: 3 } } };
+		const again = { ...mate, verdicts: at({ ply: 4, score: { mate: 4 } }) };
+
+		expect(react({ ...mate, facts: { check: true }, bots: BOTH })).toEqual([
 			{ color: "white", remark: "mating" },
 		]);
-		expect(react({ ...MATE, ...quiet, bots: ["black"] })).toEqual([
-			{ color: "black", remark: "mated" },
-		]);
+		expect(react({ ...again, facts: QUIET, bots: BOTH })).toEqual([]);
 	});
+});
 
-	it("says nothing for a human against a human, or for a quiet move", () => {
-		expect(react({ ...HANG, ...quiet, bots: [] })).toEqual([]);
-		expect(
-			react({ ...HANG, verdict: { ply: 4, score: { cp: 20 } }, ...quiet, bots: BOTH })
-		).toEqual([]);
-	});
+describe("react's timing", () => {
+	it("answers a verdict one ply late, not two, and keeps the cooldown", () => {
+		const check = { ...TAKE, facts: { check: true }, bots: BOTH };
 
-	it("still answers a verdict one ply late, not two", () => {
-		expect(react({ ...HANG, bots: BOTH, livePly: 5, lastPly: undefined })).toHaveLength(1);
-		expect(react({ ...HANG, bots: BOTH, livePly: 6, lastPly: undefined })).toEqual([]);
-	});
-
-	it("keeps quiet inside the cooldown, and without the verdict just before", () => {
-		expect(react({ ...HANG, bots: BOTH, livePly: 4, lastPly: 2 })).toEqual([]);
-		expect(react({ ...HANG, before: undefined, ...quiet, bots: BOTH })).toEqual([]);
-		expect(
-			react({ ...HANG, before: { ply: 2, score: { cp: 0 } }, ...quiet, bots: BOTH })
-		).toEqual([]);
+		expect(react({ ...check, livePly: 6 })).toHaveLength(1);
+		expect(react({ ...check, livePly: 7 })).toEqual([]);
+		expect(react({ ...check, lastPly: 2 })).toEqual([]);
+		expect(react({ ...check, verdicts: [] })).toEqual([]);
 	});
 });
 
