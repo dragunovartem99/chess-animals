@@ -30,8 +30,8 @@ so a land game without it still never fetches Stockfish.
 - A bot-vs-bot game pauses a random while before each move, talk or no talk, so it can be
   followed. The pause is seeded like everything else random.
 
-The playback and `npm run voice` are in, and every land animal is recorded: 384 clips, ~18 MB, in
-`public/voice/`, not yet committed.
+Every land animal is recorded, 384 clips in `public/voice/`; monsters and sea creatures are next,
+each a roster of 16 new voices. Recording them:
 
 - Voices: Creator holds 30 custom voices, and stock ones take no slot. The land roster speaks in 14
   designed voices and 2 stock ones (the Camel is Chris, the Tiger is Eric), which leaves 16 for
@@ -46,10 +46,6 @@ The playback and `npm run voice` are in, and every land animal is recorded: 384 
 - Raise `AT_ONCE` in `cli/voice/speak.ts` to the plan's concurrency; Free allows two.
 - Never several free accounts to stretch the quota: it breaks ElevenLabs' terms, and a public site
   wants the paid plan's commercial licence anyway.
-
-| Commit                      | Contents                                                                  | Green when                                  |
-| --------------------------- | ------------------------------------------------------------------------- | ------------------------------------------- |
-| ⬜ `talk: record the lines` | `npm run voice` over every land animal, both locales; the clips committed | No line on `/play` is silent with voices on |
 
 ## Outside v1
 
