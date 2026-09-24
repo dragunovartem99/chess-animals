@@ -44,26 +44,28 @@ const ENGINES = [
 		<p>{{ $t("about.paper.body") }}</p>
 
 		<h2>{{ $t("about.engines.title") }}</h2>
-		<template
-			v-for="engine in ENGINES"
-			:key="engine.id"
-		>
-			<p>{{ $t(`about.engines.${engine.id}`) }}</p>
-			<p class="links">
+		<ul class="engines">
+			<li
+				v-for="engine in ENGINES"
+				:key="engine.id"
+			>
+				<strong>{{ $t(`about.engines.${engine.id}.name`) }}</strong>
+				{{ $t(`about.engines.${engine.id}.role`) }}
 				<a
 					:href="engine.source"
 					target="_blank"
 					rel="noopener"
 					>{{ $t("about.engines.source") }}</a
 				>
+				·
 				<a
 					:href="engine.license"
 					target="_blank"
 					rel="noopener"
-					>{{ $t("about.engines.license") }}</a
+					>{{ $t(`about.engines.${engine.id}.license`) }}</a
 				>
-			</p>
-		</template>
+			</li>
+		</ul>
 
 		<h2>{{ $t("about.credit.title") }}</h2>
 		<p>{{ $t("about.credit.body") }}</p>
@@ -106,6 +108,21 @@ ul {
 	margin: 0;
 	padding-left: 1.25rem;
 	color: var(--color-ink-muted);
+}
+
+.engines {
+	display: grid;
+	gap: 0.35rem;
+}
+
+.engines strong {
+	color: var(--color-ink);
+}
+
+.engines a {
+	color: var(--color-accent-dark);
+	font-weight: 600;
+	white-space: nowrap;
 }
 
 .lede {

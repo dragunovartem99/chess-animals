@@ -20,11 +20,17 @@ export default {
 	},
 	engines: {
 		title: "Open source inside",
-		stockfish:
-			"The monsters, and the observer that tells the animals when to speak, run Stockfish.js 19: Stockfish built for the browser, shipped unchanged under the GNU GPL v3.",
-		maia: "The underwater animals run Maia-3, a model from the University of Toronto's CSSLab, shipped unchanged under the GNU AGPL v3.",
-		source: "Source code",
-		license: "License",
+		stockfish: {
+			name: "Stockfish.js 19",
+			role: "plays the monsters and tells the animals when to speak.",
+			license: "GNU GPL v3",
+		},
+		maia: {
+			name: "Maia-3",
+			role: "from the University of Toronto's CSSLab plays the underwater animals.",
+			license: "GNU AGPL v3",
+		},
+		source: "Source",
 	},
 	credit: {
 		title: "About the author",
