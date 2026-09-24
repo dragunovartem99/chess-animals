@@ -1,13 +1,10 @@
 export default {
-	greet: [
-		"You may begin. Try to make it interesting.",
-		"Kneel. Oh, you're here to play? Very well.",
-	],
-	check: ["Check. Bow to your king. Well, to me.", "Check. The king has spoken."],
-	take: ["A gift to the crown.", "Everything here is mine anyway."],
-	lose: ["You dare?", "A small loss for a great king."],
-	mating: ["Your king is finished. Kneel."],
-	win: ["Of course. Long live the king."],
-	loss: ["You beat me. Enjoy it. It won't happen twice."],
-	draw: ["A draw. The crown allows it. This once."],
+	greet: ["Ah, what a pleasure. Do sit. Try to amuse me.", "I like you already. So trusting."],
+	check: ["Check. Oh, did I startle you? Forgive me.", "Check. I only want what's best for you."],
+	take: ["I'll look after that for you.", "Thank you. I knew you'd see it my way."],
+	lose: ["Take it. A gift. You'll repay me later.", "Clever. Enjoy it. I insist."],
+	mating: ["Your king trusted you. Pity."],
+	win: ["Everything went exactly as I promised. Well, as I planned."],
+	loss: ["You won. How delightful. I'll remember you."],
+	draw: ["A draw. Let's call it friendship. For now."],
 };
