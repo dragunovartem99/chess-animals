@@ -11,6 +11,18 @@ export default {
 		copy: "Copy PGN",
 		copied: "Copied",
 	},
+	talk: {
+		toggle: "Let them talk",
+		empty: "Nobody has said a word yet.",
+		piece: {
+			pawn: "pawn",
+			knight: "knight",
+			bishop: "bishop",
+			rook: "rook",
+			queen: "queen",
+			king: "king",
+		},
+	},
 	loading: "Loading…",
 	thinking: "Thinking…",
 	turn: { white: "White", black: "Black" },

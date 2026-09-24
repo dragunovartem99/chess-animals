@@ -11,6 +11,18 @@ export default {
 		copy: "Копировать PGN",
 		copied: "Скопировано",
 	},
+	talk: {
+		toggle: "Пусть болтают",
+		empty: "Пока все молчат.",
+		piece: {
+			pawn: "пешку",
+			knight: "коня",
+			bishop: "слона",
+			rook: "ладью",
+			queen: "ферзя",
+			king: "короля",
+		},
+	},
 	loading: "Загрузка…",
 	thinking: "Думает…",
 	turn: { white: "Белые", black: "Чёрные" },

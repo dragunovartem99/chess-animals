@@ -11,3 +11,5 @@ export { REMARKS } from "./remark";
 export { PAUSE, pauseFor } from "./pause";
 export type { Spoken } from "./react";
 export { farewell, greet, LATE, react } from "./react";
+export type { Line, LinesFor } from "./conversation";
+export { createConversation, KEPT } from "./conversation";

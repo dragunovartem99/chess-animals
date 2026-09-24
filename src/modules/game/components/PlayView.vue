@@ -12,10 +12,13 @@ import { useTheme } from "@/shared/ui";
 
 import { useBotEngines } from "../composables/useBotEngines";
 import { useHistory } from "../composables/useHistory";
+import { useLines } from "../composables/useLines";
 import { usePlayers } from "../composables/usePlayers";
+import { useTalk } from "../composables/useTalk";
 import HistoryControls from "./HistoryControls.vue";
 import MoveList from "./MoveList.vue";
 import PlayerPicker from "./PlayerPicker.vue";
+import SpeechPanel from "./SpeechPanel.vue";
 
 const HUMAN = "human";
 
@@ -36,6 +39,8 @@ const WORLDS = [
 useTheme(
 	() => WORLDS.find(({ ids }) => Object.values(players.value).some((id) => ids.has(id)))?.theme
 );
+
+const talk = useTalk({ game, players, linesFor: useLines() });
 
 const humanColors = computed(() => COLORS.filter((color) => players.value[color] === HUMAN));
 const orientation = computed(() => humanColors.value[0] ?? "white");
@@ -102,6 +107,9 @@ watch(
 		const animal = ANIMALS_BY_ID.get(players.value[color]);
 		if (!animal) return;
 
+		await talk.pause();
+		if (turn.value !== key) return;
+
 		// The move list, not just the FEN: the engine rebuilds the repetition history from it, so
 		// without it a bot-vs-bot game is blind to threefold and can only end at the
 		// ply cap.
@@ -134,6 +142,7 @@ async function restart() {
 	game.reset();
 	history.last();
 	generation.value += 1;
+	talk.newGame();
 	await engines.startNewGame();
 }
 </script>
@@ -185,6 +194,11 @@ async function restart() {
 				</button>
 			</div>
 
+			<SpeechPanel
+				v-model="talk.enabled.value"
+				:said="talk.said.value"
+			/>
+
 			<MoveList
 				class="moves"
 				:turns="game.turns.value"
@@ -228,10 +242,11 @@ async function restart() {
 
 /* A fixed box from the first move, so the controls under it never drift down as the game grows.
    Beside the board the panel stretches to the board's height and the list takes what is left;
-   stacked under it on a phone there is nothing to stretch to, and the basis is the height. */
+   stacked under it on a phone there is nothing to stretch to, and the basis is the height. The
+   floor is low so the talk box can open without making the panel taller than the board. */
 .moves {
 	flex: 1 1 12rem;
-	min-height: 8rem;
+	min-height: 4rem;
 }
 
 .actions {

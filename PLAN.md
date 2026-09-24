@@ -39,10 +39,9 @@ so a land game without it still never fetches Stockfish.
 - With the panel open, a bot-vs-bot game pauses a random while before each move, so a remark can
   be read before the next one replaces it. The pause is seeded like everything else random.
 
-| Commit                          | Contents                                                                                                                                                                                                                              | Green when                           |
-| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ |
-| ⬜ `play: add the speech panel` | Opt-in toggle, the panel, both sides talking, the seeded pause                                                                                                                                                                        | Off by default; no Stockfish fetched |
-| ⬜ `talk: voice the lines`      | ElevenLabs once via `npm run voice` (billed, cached, not in the build) into `public/voice/<locale>/<id>/<remark>-<n>[-<piece>].mp3`, a `{piece}` line once per piece; a second toggle, one clip at a time, cut off rather than queued | Silent until the toggle is clicked   |
+| Commit                     | Contents                                                                                                                                                                                                                              | Green when                         |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
+| ⬜ `talk: voice the lines` | ElevenLabs once via `npm run voice` (billed, cached, not in the build) into `public/voice/<locale>/<id>/<remark>-<n>[-<piece>].mp3`, a `{piece}` line once per piece; a second toggle, one clip at a time, cut off rather than queued | Silent until the toggle is clicked |
 
 ## Outside v1
 
