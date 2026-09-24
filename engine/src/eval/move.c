@@ -8,11 +8,13 @@
 #include "position.h"
 #include "values.h"
 
+// What a move took. Only a piece of the other side: castling lands the king on its own rook, the
+// way chessops spells it, and that is a move, not a capture.
 Played played_move(const Position *parent, Move move) {
+	Piece mover = parent->board[move_from(move)];
 	Piece target = parent->board[move_to(move)];
-	bool en_passant =
-	    piece_role(parent->board[move_from(move)]) == PAWN && move_to(move) == parent->ep;
-	if (target != PIECE_NONE) {
+	bool en_passant = piece_role(mover) == PAWN && move_to(move) == parent->ep;
+	if (target != PIECE_NONE && piece_color(target) != piece_color(mover)) {
 		return (Played){.move = move, .captured = piece_role(target)};
 	}
 	return (Played){.move = move, .captured = en_passant ? PAWN : NO_ROLE};

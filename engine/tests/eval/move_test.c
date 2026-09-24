@@ -28,6 +28,12 @@ TEST(capture_value_is_zero_for_a_quiet_move) {
 	CHECK(feature_after("4k3/8/8/8/8/8/8/4K2R w K - 0 1", "h1h2", FEATURE_CAPTURE_VALUE) == 0);
 }
 
+// Castling is the king stepping onto its own rook, as chessops spells it: a move, not a capture.
+TEST(capture_value_is_zero_for_castling_onto_its_own_rook) {
+	CHECK(feature_after("4k3/8/8/8/8/8/8/4K2R w K - 0 1", "e1h1", FEATURE_CAPTURE_VALUE) == 0);
+	CHECK(feature_after("r3k3/8/8/8/8/8/8/4K3 b q - 0 1", "e8a8", FEATURE_CAPTURE_VALUE) == 0);
+}
+
 TEST(capture_value_sees_the_pawn_en_passant_takes_from_a_square_the_move_never_names) {
 	CHECK(feature_after("4k3/8/8/3pP3/8/8/8/4K3 w - d6 0 2", "e5d6", FEATURE_CAPTURE_VALUE) == -1);
 }

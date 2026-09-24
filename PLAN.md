@@ -11,15 +11,6 @@ types, lint, tests, build.
 | ⬜ `test: golden games`         | Fixed pair + seed + opening → committed PGN fixtures                            | Any eval change surfaces as a diff                  |
 | ⬜ `tablebase: probe interface` | `probe(fen) → { wdl, dtz, moves }` stub, `bot.useTablebase` honoured as a no-op | The interface compiles and is tested against a fake |
 
-## The C engine
-
-What is left of the move to C. How it is built is in
-[ARCHITECTURE.md](./ARCHITECTURE.md#the-engine); what it replaced is in the history.
-
-| Commit                                             | Contents                                                                 | Green when                     |
-| -------------------------------------------------- | ------------------------------------------------------------------------ | ------------------------------ |
-| ⬜ `eval: stop scoring castling as a rook capture` | chessops encodes castling king-takes-rook, so `captureValue` pays for it | Castling reads 0; arena re-run |
-
 ## Talk
 
 An opt-in speech panel on `/play`: the animals talk, and in a bot-vs-bot game both of them do. A
