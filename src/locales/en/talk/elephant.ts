@@ -1,10 +1,13 @@
 export default {
-	greet: ["Hello. I stay on my own color.", "Mind your step."],
-	check: ["Check. From my color, of course.", "Check. I remembered that one."],
-	take: ["Your {piece} stepped onto my color.", "Took your {piece}. I'll remember it."],
-	lose: ["My {piece}. I won't forget that.", "Lost my {piece} on the other color."],
-	mating: ["Your king has no squares left."],
-	win: ["Every step was right."],
-	loss: ["Well played. I'll remember."],
-	draw: ["Even. Very tidy."],
+	greet: [
+		"Good evening. Sit up straight, please. We are playing chess.",
+		"I have played this opening before. In nineteen fifty-three.",
+	],
+	check: ["Check. Mind your posture.", "Check. I saw this coming in nineteen seventy-one."],
+	take: ["A classic mistake, young one.", "I'll take that. You'll remember this lesson."],
+	lose: ["Hm. I shall remember that.", "Not bad. Not good either."],
+	mating: ["Your king has run out of squares, I'm afraid."],
+	win: ["Well played. By me. Study harder."],
+	loss: ["You won. Good. I'll remember your name."],
+	draw: ["A draw. Perfectly respectable."],
 };

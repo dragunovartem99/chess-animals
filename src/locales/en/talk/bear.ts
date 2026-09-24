@@ -1,10 +1,13 @@
 export default {
-	greet: ["Welcome. Everyone stays close to me.", "Come in. Wipe your paws."],
-	check: ["Check. Out of my den I come.", "Check. The den has teeth."],
-	take: ["Your {piece} came too close to my den.", "Took your {piece}. Stay out."],
-	lose: ["Lost my {piece}. Never leave the den.", "My {piece}. Should've stayed close."],
-	mating: ["Your king's trapped. My turn."],
-	win: ["Nobody gets into my den."],
-	loss: ["You got into my den. Well done."],
-	draw: ["Quiet day at the den."],
+	greet: [
+		"Come in, come in. Kettle's on. Mind the honey.",
+		"Sit down, get comfortable. And don't touch my stuff.",
+	],
+	check: ["Check. Now sit still.", "Check. Don't make me get up."],
+	take: ["I'll take that. You weren't using it.", "That goes in the cupboard with the honey."],
+	lose: ["Hey. That's mine. Put it back.", "In my own house. Well, I never."],
+	mating: ["That's it, little one. Your king's got nowhere to go."],
+	win: ["There. Now have some tea."],
+	loss: ["You beat me. Fine. You're still washing the cups."],
+	draw: ["A draw. Good. Nobody sulks at my table."],
 };

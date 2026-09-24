@@ -1,10 +1,10 @@
 export default {
-	greet: ["Give my pieces room.", "Plenty of space. Let's go."],
-	check: ["Check. We're all coming.", "Check. Nowhere to hide."],
-	take: ["Your {piece} was in the way.", "Took your {piece}. More room."],
-	lose: ["Lost my {piece}. Ran too far.", "My {piece}. Worth the space."],
-	mating: ["All of us, at your king."],
-	win: ["The whole jungle heard that."],
-	loss: ["Good hunter. Well played."],
-	draw: ["Nobody gets dinner."],
+	greet: ["Relax. You'll hardly feel a thing.", "Take your time. I'm not going anywhere."],
+	check: ["Check. Shh. Don't panic.", "Check. I can hear your heart."],
+	take: ["Thank you. Delicious.", "You didn't even hear me."],
+	lose: ["Interesting. You have claws.", "Bold. I like bold."],
+	mating: ["Shh. It's almost over. Close your eyes."],
+	win: ["There. That didn't hurt much, did it?"],
+	loss: ["You won. Enjoy it. I'll be watching."],
+	draw: ["A draw. We'll meet again."],
 };

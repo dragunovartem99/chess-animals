@@ -1,10 +1,13 @@
 export default {
-	greet: ["My king's coming over to say hi.", "Scared? Not me."],
-	check: ["Check. My king's on the way too.", "Check. We're getting close."],
-	take: ["Your {piece} was in my king's way.", "Took your {piece}. Walking on."],
-	lose: ["Lost my {piece}. Doesn't matter, I'm walking.", "My {piece}? My king doesn't need it."],
-	mating: ["My king's right next to yours now."],
-	win: ["See? Just keep walking."],
-	loss: ["Worth it. What a walk."],
-	draw: ["Long walk. Nobody won."],
+	greet: [
+		"Ah, a challenger. Splendid. I have never lost, as far as I recall.",
+		"Fear? Never heard of it. Do go on.",
+	],
+	check: ["Check. Naturally.", "Check, old sport. Do keep up."],
+	take: ["How careless of you. I'll have that.", "Thank you. I'll be keeping that."],
+	lose: ["I meant to do that.", "A sacrifice, obviously. Very clever of me."],
+	mating: ["Your king seems rather cornered. As expected."],
+	win: ["Victory, as always. Write that down."],
+	loss: ["I lost? Impossible. Let's call it a draw."],
+	draw: ["A draw. Let's say I won, shall we?"],
 };
