@@ -3,6 +3,17 @@ const PAPER_URL = "http://tom7.org/chess/";
 const SOURCE_URL = "https://github.com/dragunovartem99/chess-animals";
 
 const ROSTERS = ["land", "underwater", "monsters"] as const;
+
+// The engines the site ships as they are, each under its own licence: the licence asks that
+// anyone who gets the program can find its source, so each is linked, with the licence text that
+// is served beside it.
+const ENGINES = [
+	{
+		id: "stockfish",
+		source: "https://github.com/nmrugg/stockfish.js",
+		license: `${import.meta.env.BASE_URL}stockfish/COPYING.txt`,
+	},
+] as const;
 </script>
 
 <template>
@@ -26,6 +37,28 @@ const ROSTERS = ["land", "underwater", "monsters"] as const;
 
 		<h2>{{ $t("about.paper.title") }}</h2>
 		<p>{{ $t("about.paper.body") }}</p>
+
+		<h2>{{ $t("about.engines.title") }}</h2>
+		<template
+			v-for="engine in ENGINES"
+			:key="engine.id"
+		>
+			<p>{{ $t(`about.engines.${engine.id}`) }}</p>
+			<p class="links">
+				<a
+					:href="engine.source"
+					target="_blank"
+					rel="noopener"
+					>{{ $t("about.engines.source") }}</a
+				>
+				<a
+					:href="engine.license"
+					target="_blank"
+					rel="noopener"
+					>{{ $t("about.engines.license") }}</a
+				>
+			</p>
+		</template>
 
 		<h2>{{ $t("about.credit.title") }}</h2>
 		<p>{{ $t("about.credit.body") }}</p>

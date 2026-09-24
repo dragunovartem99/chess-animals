@@ -52,8 +52,6 @@ so a land game without it still never fetches Stockfish.
 The sixteen Stockfish players — a MultiPV line picked by temperature, see
 [ARCHITECTURE.md](./ARCHITECTURE.md#monsters) — on `/monsters`. What is left:
 
-- ⬜ Credit Stockfish on the About page and link its source: it is GPL-3.0 and the site is MIT, so
-  the build ships `public/stockfish/COPYING.txt` and the page has to say where the source is.
 - ⬜ More monsters, if a real idea turns up — each needs a `temperature` rung.
 
 ## The underwater section

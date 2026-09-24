@@ -18,6 +18,13 @@ export default {
 		title: "Background",
 		body: "The project is inspired by Tom 7's Elo World (SIGBOVIK 2019), where a field of deliberately weak engines plays itself to stretch the usual rating scale down toward zero and below.",
 	},
+	engines: {
+		title: "Open source inside",
+		stockfish:
+			"The monsters, and the observer that tells the animals when to speak, run Stockfish.js 19: Stockfish built for the browser, shipped unchanged under the GNU GPL v3.",
+		source: "Source code",
+		license: "License",
+	},
 	credit: {
 		title: "About the author",
 		body: "Created by Artem Dragunov. Links to the source and to the original talk are below.",
