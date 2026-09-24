@@ -76,7 +76,3 @@ What the spike found, 6 games a pair:
 - Stronger than the plan guessed: Elo 600 sits near the Wolf, 1100 near the Bear, 2500 takes
   half its games off the Tiger. Rung order holds; the top rungs are close and need the arena.
 - A Maia game is ~6 s against the land engine's milliseconds: the arena leans on its cache.
-
-| Commit                  | Contents                                                      | Green when                              |
-| ----------------------- | ------------------------------------------------------------- | --------------------------------------- |
-| ⬜ `about: credit maia` | AGPL-3.0: its source linked beside `public/maia3/COPYING.txt` | The About page says where the source is |

@@ -13,6 +13,11 @@ const ENGINES = [
 		source: "https://github.com/nmrugg/stockfish.js",
 		license: `${import.meta.env.BASE_URL}stockfish/COPYING.txt`,
 	},
+	{
+		id: "maia",
+		source: "https://github.com/CSSLab/maia3",
+		license: `${import.meta.env.BASE_URL}maia3/COPYING.txt`,
+	},
 ] as const;
 </script>
 

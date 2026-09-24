@@ -22,6 +22,7 @@ export default {
 		title: "Open source inside",
 		stockfish:
 			"The monsters, and the observer that tells the animals when to speak, run Stockfish.js 19: Stockfish built for the browser, shipped unchanged under the GNU GPL v3.",
+		maia: "The underwater animals run Maia-3, a model from the University of Toronto's CSSLab, shipped unchanged under the GNU AGPL v3.",
 		source: "Source code",
 		license: "License",
 	},
