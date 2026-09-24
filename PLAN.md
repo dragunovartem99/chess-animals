@@ -20,14 +20,37 @@ What is left of the move to C. How it is built is in
 | -------------------------------------------------- | ------------------------------------------------------------------------ | ------------------------------ |
 | ⬜ `eval: stop scoring castling as a rook capture` | chessops encodes castling king-takes-rook, so `captureValue` pays for it | Castling reads 0; arena re-run |
 
+## Talk
+
+An opt-in speech panel on `/play`: the animals talk, and in a bot-vs-bot game both of them do. They
+do not bark on every check and capture, as the voice spike did, because then something is said on
+most moves and none of it means anything. An observer, a Stockfish of its own on fixed nodes, and never the
+monster's instance, which plays MultiPV at a temperature, rates each position, and a bot speaks
+only at the start, at the end, and when the win chance swings. The swing is measured in win
+chance rather than centipawns, so +8 → +5 stays quiet and +1 → −2 does not. The observer loads
+with the panel, so a land game without it still never fetches Stockfish.
+
+- Events, from the speaker's side: greeting, "you blundered", "I blundered", mate seen, win, loss,
+  draw. A few plies of cooldown after a line, so one exchange is one remark.
+- The observer's answer is tagged by ply and dropped if the game has moved on: a remark never
+  lands a move late.
+- Lines live in `bot.<id>.lines.<event>` in both locales, picked from a seeded stream, never the
+  same line twice running. Land animals first; monsters and sea creatures when they have a voice.
+- With the panel open, a bot-vs-bot game pauses a random while before each move, so a remark can
+  be read before the next one replaces it. The pause is seeded like everything else random.
+
+| Commit                                      | Contents                                                                                                                                                                                  | Green when                                 |
+| ------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------ |
+| ⬜ `talk: detect eval swings`               | `shared/talk/`: win chance, thresholds, mate, cooldown → an event                                                                                                                         | A scripted eval series yields its events   |
+| ⬜ `talk: observe positions with stockfish` | An observer over `UciTransport`, fixed nodes, answers tagged by ply                                                                                                                       | A fake transport's stale answer is dropped |
+| ⬜ `talk: pick a seeded line`               | Line per bot and event from a seeded stream, no repeat running                                                                                                                            | A seed asserts the sequence                |
+| ⬜ `locales: add land animal lines`         | Every land animal, every event, both locales                                                                                                                                              | The coverage spec covers the lines         |
+| ⬜ `play: add the speech panel`             | Opt-in toggle, the panel, both sides talking, the seeded pause                                                                                                                            | Off by default; no Stockfish fetched       |
+| ⬜ `talk: voice the lines`                  | ElevenLabs once via `npm run voice` (billed, cached, not in the build) into `public/voice/<locale>/<id>/<event>-<n>.mp3`; a second toggle, one clip at a time, cut off rather than queued | Silent until the toggle is clicked         |
+
 ## Outside v1
 
 - ⬜ A Polyglot `.bin` book reader behind `probe(fen)`
-- ⬜ Animal voice lines: each bot's own barks over a move — a win, a loss, a draw, a check, a
-  capture — recorded once with ElevenLabs (`npm run voice`, billed and cached, not part of the
-  build), played from `public/voice/<id>/<event>-<n>.mp3` client-side. One clip at a time, cut off
-  rather than queued, and never repeats the same line twice running. Spiked in a throwaway branch;
-  worth landing for real when there is time to write every animal's lines.
 
 ## Monsters
 
