@@ -34,10 +34,10 @@ export default {
 	},
 	credit: {
 		title: "About the author",
-		body: "Created by Artem Dragunov. Links to the source and to the original talk are below.",
+		body: "Made by Artem Dragunov.",
 	},
 	links: {
-		paper: "Elo World",
+		paper: "Read the original",
 		source: "Source on GitHub",
 	},
 };

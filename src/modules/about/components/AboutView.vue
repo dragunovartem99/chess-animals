@@ -41,7 +41,15 @@ const ENGINES = [
 		<p>{{ $t("about.points.body") }}</p>
 
 		<h2>{{ $t("about.paper.title") }}</h2>
-		<p>{{ $t("about.paper.body") }}</p>
+		<p>
+			{{ $t("about.paper.body") }}
+			<a
+				:href="PAPER_URL"
+				target="_blank"
+				rel="noopener"
+				>{{ $t("about.links.paper") }}</a
+			>
+		</p>
 
 		<h2>{{ $t("about.engines.title") }}</h2>
 		<ul class="engines">
@@ -68,20 +76,13 @@ const ENGINES = [
 		</ul>
 
 		<h2>{{ $t("about.credit.title") }}</h2>
-		<p>{{ $t("about.credit.body") }}</p>
-
-		<p class="links">
+		<p>
+			{{ $t("about.credit.body") }}
 			<a
 				:href="SOURCE_URL"
 				target="_blank"
 				rel="noopener"
 				>{{ $t("about.links.source") }}</a
-			>
-			<a
-				:href="PAPER_URL"
-				target="_blank"
-				rel="noopener"
-				>{{ $t("about.links.paper") }}</a
 			>
 		</p>
 	</section>
@@ -119,26 +120,14 @@ ul {
 	color: var(--color-ink);
 }
 
-.engines a {
-	color: var(--color-accent-dark);
-	font-weight: 600;
-	white-space: nowrap;
-}
-
 .lede {
 	font-size: 1.05rem;
 	color: var(--color-ink);
 }
 
-.links {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 1rem;
-	margin-top: 1rem;
-}
-
-.links a {
+a {
 	color: var(--color-accent-dark);
 	font-weight: 600;
+	white-space: nowrap;
 }
 </style>
