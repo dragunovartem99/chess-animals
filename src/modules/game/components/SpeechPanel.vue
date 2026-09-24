@@ -1,8 +1,12 @@
 <script setup lang="ts">
+import { computed } from "vue";
+import { useI18n } from "vue-i18n";
+
 import { ANIMALS_BY_ID } from "@/modules/bots/roster";
 import type { Line } from "@/shared/talk";
 
 import { useLines } from "../composables/useLines";
+import { useVoice } from "../composables/useVoice";
 
 const { said } = defineProps<{ said: Line[] }>();
 
@@ -13,17 +17,31 @@ const animal = (id: string) => ANIMALS_BY_ID.get(id);
 // Read out at render, in the language of the page as it is now.
 const linesFor = useLines();
 const text = (line: Line) => linesFor(line)[line.index];
+
+const voices = useVoice({ said: computed(() => said), locale: useI18n().locale });
 </script>
 
 <template>
 	<section class="speech">
-		<label class="toggle">
-			<input
-				v-model="enabled"
-				type="checkbox"
-			/>
-			{{ $t("game.talk.toggle") }}
-		</label>
+		<div class="toggles">
+			<label class="toggle">
+				<input
+					v-model="enabled"
+					type="checkbox"
+				/>
+				{{ $t("game.talk.toggle") }}
+			</label>
+			<label
+				v-if="enabled"
+				class="toggle"
+			>
+				<input
+					v-model="voices"
+					type="checkbox"
+				/>
+				{{ $t("game.talk.voices") }}
+			</label>
+		</div>
 
 		<ol
 			v-if="enabled"
@@ -59,6 +77,12 @@ const text = (line: Line) => linesFor(line)[line.index];
 	display: flex;
 	flex-direction: column;
 	gap: 0.5rem;
+}
+
+.toggles {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem 1.5rem;
 }
 
 .toggle {

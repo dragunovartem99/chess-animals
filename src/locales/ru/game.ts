@@ -13,6 +13,7 @@ export default {
 	},
 	talk: {
 		toggle: "Пусть болтают",
+		voices: "Вслух",
 		empty: "Пока все молчат.",
 		piece: {
 			pawn: "пешку",

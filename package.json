@@ -34,7 +34,8 @@
 		"test": "make -sC engine wasm test && vitest",
 		"test:coverage": "make -sC engine wasm coverage && COVERAGE=1 vitest run --coverage",
 		"tune": "tsx cli/tune.ts",
-		"types:check": "vue-tsc -b --noEmit"
+		"types:check": "vue-tsc -b --noEmit",
+		"voice": "tsx --env-file=.env.local cli/voice.ts"
 	},
 	"dependencies": {
 		"chessground": "^9.2.1",

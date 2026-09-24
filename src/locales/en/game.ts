@@ -13,6 +13,7 @@ export default {
 	},
 	talk: {
 		toggle: "Let them talk",
+		voices: "Out loud",
 		empty: "Nobody has said a word yet.",
 		piece: {
 			pawn: "pawn",
