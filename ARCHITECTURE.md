@@ -61,7 +61,7 @@ One flat area per folder, each with its own `index.ts`, and deliberately **no ro
 | `monsters`     | the monsters: Stockfish over a `UciTransport`, and the engine that samples its MultiPV lines                                                 |
 | `underwater`   | Maia: the board as its tokens, the legal moves as its logits, the pick from the seeded stream, the ONNX session and `withMaia` for the arena |
 | `wasm`         | the binding to `engine/build/engine.wasm` — loading, the linear-memory arena, `search`/`extract`/`perft`, and the `goSearch` over it         |
-| `talk`         | what the animals say: the observer's verdict as a win chance, and the eval swings worth a remark                                             |
+| `talk`         | what the animals say: the Stockfish observer and its verdicts from White's view, the win chance, and the eval swings worth a remark          |
 | `game`         | `useGame` — one game with its move list, positions and repetition history, owned by the view that mounts it (`/play`)                        |
 | `ui`           | `useTheme` — the world a view puts the page in                                                                                               |
 | `bots`         | `BotDefinition` (JSON on disk) and `BotConfig` (compiled), the frozen weight bases, the guard, and `compileBot` between them                 |

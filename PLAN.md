@@ -39,13 +39,12 @@ with the panel, so a land game without it still never fetches Stockfish.
 - With the panel open, a bot-vs-bot game pauses a random while before each move, so a remark can
   be read before the next one replaces it. The pause is seeded like everything else random.
 
-| Commit                                      | Contents                                                                                                                                                                                  | Green when                                 |
-| ------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------ |
-| ⬜ `talk: observe positions with stockfish` | An observer over `UciTransport`, fixed nodes, answers tagged by ply                                                                                                                       | A fake transport's stale answer is dropped |
-| ⬜ `talk: pick a seeded line`               | Line per bot and event from a seeded stream, no repeat running                                                                                                                            | A seed asserts the sequence                |
-| ⬜ `locales: add land animal lines`         | Every land animal, every event, both locales                                                                                                                                              | The coverage spec covers the lines         |
-| ⬜ `play: add the speech panel`             | Opt-in toggle, the panel, both sides talking, the seeded pause                                                                                                                            | Off by default; no Stockfish fetched       |
-| ⬜ `talk: voice the lines`                  | ElevenLabs once via `npm run voice` (billed, cached, not in the build) into `public/voice/<locale>/<id>/<event>-<n>.mp3`; a second toggle, one clip at a time, cut off rather than queued | Silent until the toggle is clicked         |
+| Commit                              | Contents                                                                                                                                                                                  | Green when                           |
+| ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ |
+| ⬜ `talk: pick a seeded line`       | Line per bot and event from a seeded stream, no repeat running                                                                                                                            | A seed asserts the sequence          |
+| ⬜ `locales: add land animal lines` | Every land animal, every event, both locales                                                                                                                                              | The coverage spec covers the lines   |
+| ⬜ `play: add the speech panel`     | Opt-in toggle, the panel, both sides talking, the seeded pause                                                                                                                            | Off by default; no Stockfish fetched |
+| ⬜ `talk: voice the lines`          | ElevenLabs once via `npm run voice` (billed, cached, not in the build) into `public/voice/<locale>/<id>/<event>-<n>.mp3`; a second toggle, one clip at a time, cut off rather than queued | Silent until the toggle is clicked   |
 
 ## Outside v1
 

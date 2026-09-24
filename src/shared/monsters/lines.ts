@@ -5,7 +5,7 @@ export type Line = { move: string; score: number };
 
 // Mate folded into centipawns past anything material can reach, sooner mates further out, so a
 // forced mate outweighs every line and being mated is worse the faster it comes.
-const MATE = 100_000;
+export const MATE = 100_000;
 
 const INFO = /\bmultipv (\d+) score (cp|mate) (-?\d+)\b.*?\bpv (\S+)/u;
 
