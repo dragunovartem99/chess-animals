@@ -74,7 +74,7 @@ export function mountTalk({ white = "human", black = "donkey", scores = [] as Sc
 		status: game.status,
 		spawn,
 		calls,
-		texts: () => talk.said.value.map((line) => line.text),
+		texts: () => talk.said.value.map((line) => linesFor(line)[line.index]),
 		switchOn: async () => {
 			talk.enabled.value = true;
 			await nextTick();

@@ -9,8 +9,10 @@ import { react } from "./react";
 import type { Spoken } from "./react";
 import type { Remark } from "./remark";
 
-// One remark as said, `key` counting up across the whole talk so a list can key on it.
-export type Line = { key: number; color: Color; id: string; text: string };
+// One remark as said: which of the bot's lines it was, not its text, so it is read out in whatever
+// language the page is in now rather than the one it was said in. `key` counts up across the
+// whole talk so a list can key on it.
+export type Line = Spoken & { key: number; id: string; index: number };
 
 // A bot's lines for a remark, with the piece already filled in where the remark has one.
 export type LinesFor = (request: { id: string; remark: Remark; piece?: Role }) => readonly string[];
@@ -19,7 +21,7 @@ export type LinesFor = (request: { id: string; remark: Remark; piece?: Role }) =
 // top rather than push the move list down.
 export const KEPT = 2;
 
-// A bot's line for a remark, never the one it said for that remark last.
+// Which of a bot's lines it says for a remark, never the one it said for that remark last.
 function lineFor({
 	id,
 	remark,
@@ -31,9 +33,10 @@ function lineFor({
 	const lines = linesFor(piece ? { id, remark, piece } : { id, remark });
 	const last = lastLine.get(`${id}.${remark}`);
 	const text = pickRemark({ lines, last: last === undefined ? undefined : lines[last], rng });
-	if (text !== undefined) lastLine.set(`${id}.${remark}`, lines.indexOf(text));
+	if (text === undefined) return undefined;
 
-	return text;
+	lastLine.set(`${id}.${remark}`, lines.indexOf(text));
+	return lines.indexOf(text);
 }
 
 type Hearing = { verdict: Verdict; facts: Facts; bots: readonly Color[]; livePly: number };
@@ -62,10 +65,10 @@ export function createConversation({ linesFor, seed }: { linesFor: LinesFor; see
 		},
 		// Has the bots say what they want to, in order, and gives back the last few remarks.
 		say({ spoken, players }: { spoken: Spoken[]; players: Record<Color, string> }): Line[] {
-			const lines = spoken.flatMap((one) => {
+			const lines = spoken.flatMap((one): Line[] => {
 				const id = players[one.color];
-				const text = lineFor({ ...one, id, linesFor, lastLine, rng });
-				return text === undefined ? [] : [{ key: (said += 1), color: one.color, id, text }];
+				const index = lineFor({ ...one, id, linesFor, lastLine, rng });
+				return index === undefined ? [] : [{ ...one, key: (said += 1), id, index }];
 			});
 			transcript = [...transcript, ...lines].slice(-KEPT);
 

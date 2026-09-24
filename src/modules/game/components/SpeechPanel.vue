@@ -2,11 +2,17 @@
 import { ANIMALS_BY_ID } from "@/modules/bots/roster";
 import type { Line } from "@/shared/talk";
 
+import { useLines } from "../composables/useLines";
+
 const { said } = defineProps<{ said: Line[] }>();
 
 const enabled = defineModel<boolean>({ required: true });
 
 const animal = (id: string) => ANIMALS_BY_ID.get(id);
+
+// Read out at render, in the language of the page as it is now.
+const linesFor = useLines();
+const text = (line: Line) => linesFor(line)[line.index];
 </script>
 
 <template>
@@ -36,7 +42,7 @@ const animal = (id: string) => ANIMALS_BY_ID.get(id);
 					<span aria-hidden="true">{{ animal(line.id)?.emoji }}</span>
 					{{ $t(`bot.${line.id}.name`) }}:
 				</span>
-				{{ line.text }}
+				{{ text(line) }}
 			</li>
 			<li
 				v-if="said.length === 0"
