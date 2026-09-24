@@ -42,7 +42,7 @@ type Moment = {
 // move is one remark and not a dialogue. Nothing about a position the game has left behind, and
 // nothing inside the cooldown of the last remark.
 //
-// A mate found comes first, then a capture that won something, then a check. A capture is judged
+// A mate found comes first, said by the side that has it, then a capture that won something, then a check. A capture is judged
 // over two plies, from before the move that left the piece hanging: the observer saw the gift
 // coming then, so the capture itself swings nothing, and an even trade swings nothing either way.
 // It is said when the piece is taken, never when it is left hanging, which would give it away.
@@ -56,7 +56,9 @@ export function react({ verdicts, verdict, facts, bots, livePly, lastPly }: Mome
 	const say = (color: Color, remark: Remark, piece?: Role): Spoken[] =>
 		bots.includes(color) ? [piece ? { color, remark, piece } : { color, remark }] : [];
 
-	if (mateFor(score) === mover && mateFor(before.score) !== mover) return say(mover, "mating");
+	// Whoever's move showed it: a mate often appears only once the losing side has moved into it.
+	const mating = mateFor(score);
+	if (mating && mateFor(before.score) !== mating) return say(mating, "mating");
 
 	const from = (verdicts[ply - 2] ?? before).score;
 	const piece = facts.captured;

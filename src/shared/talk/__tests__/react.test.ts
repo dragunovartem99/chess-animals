@@ -67,6 +67,9 @@ describe("react to a check or a mate", () => {
 			{ color: "white", remark: "mating" },
 		]);
 		expect(react({ ...again, facts: QUIET, bots: BOTH })).toEqual([]);
+		expect(
+			react({ ...mate, verdict: { ply: 5, score: { mate: -2 } }, facts: QUIET, bots: BOTH })
+		).toEqual([{ color: "black", remark: "mating" }]);
 	});
 });
 
