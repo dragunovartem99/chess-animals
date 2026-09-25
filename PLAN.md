@@ -13,7 +13,7 @@ types, lint, tests, build.
 
 ## Outside v1
 
-- ⬜ A Polyglot `.bin` book reader behind `probe(fen)`
+- ⬜ A Polyglot `.bin` book reader
 
 ## Monsters
 

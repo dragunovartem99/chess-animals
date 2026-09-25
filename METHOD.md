@@ -166,8 +166,8 @@ a noisy signal usable. Target: a useful run in 1–2 minutes.
 - **Golden games** — fixed pair + fixed seed + fixed opening → a committed PGN fixture. Any eval
   change that shifts a game shows up as a diff, the cheapest regression net for a heuristic
   engine.
-- **Opening book** — the curated JSON set sits behind a `probe(fen)` interface a Polyglot `.bin`
-  reader can implement later. `probe(fen)` is in place; the `bot.useBook` flag is not wired yet.
+- **Opening book** — a Polyglot `.bin` reader, so a bot can play book moves. The curated JSON set
+  is only the arena's start positions, not a book.
 - **Endgame tablebase** — `probe(fen) → { wdl, dtz, moves }`, simplest backing being lichess's
   free 7-man HTTP API with an IndexedDB cache.
 

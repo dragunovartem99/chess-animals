@@ -5,12 +5,3 @@ export type Opening = {
 	name: string;
 	fen: string;
 };
-
-// An opening scheduled for one game. The arena plays every opening twice — once with the
-// candidate as White (`swapColors: false`) and once as Black — so the first move's value cancels
-// out of the paired score.
-export type OpeningGame = {
-	openingId: string;
-	fen: string;
-	swapColors: boolean;
-};
