@@ -18,6 +18,9 @@ const animal = (id: string) => ANIMALS_BY_ID.get(id);
 const linesFor = useLines();
 const text = (line: Line) => linesFor(line)[line.index];
 
+// The last two remarks, whole: a bot-vs-bot game keeps the reply and what it answered.
+const recent = computed(() => said.slice(-2));
+
 const voices = useVoice({ said: computed(() => said), locale: useI18n().locale, linesFor });
 </script>
 
@@ -49,7 +52,7 @@ const voices = useVoice({ said: computed(() => said), locale: useI18n().locale, 
 			aria-live="polite"
 		>
 			<li
-				v-for="line in said"
+				v-for="line in recent"
 				:key="line.key"
 				class="line"
 			>
@@ -94,24 +97,21 @@ const voices = useVoice({ said: computed(() => said), locale: useI18n().locale, 
 	color: var(--color-ink-muted);
 }
 
-/* A fixed box, the newest remark at the bottom and an older one clipped off the top, so the
-   panel never changes height as the bots talk. */
+/* Sized to the two remarks it shows, so neither is ever cut: a fixed height clipped a wrapped
+   one mid-line. The floor of two lines, padding included, keeps it from jumping while it holds
+   fewer. */
 .lines {
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-end;
 	gap: 0.25rem;
-	height: 4.25rem;
-	overflow: hidden;
+	min-height: calc(2 * 1.4em + 0.25rem + 1rem);
 	margin: 0;
 	padding: 0.5rem 0.75rem;
 	list-style: none;
+	line-height: 1.4;
 	border-radius: 0.5rem;
 	background: var(--color-sunken);
-}
-
-.line {
-	line-height: 1.4;
 }
 
 .speaker {
