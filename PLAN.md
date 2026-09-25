@@ -11,43 +11,6 @@ types, lint, tests, build.
 | ⬜ `test: golden games`         | Fixed pair + seed + opening → committed PGN fixtures                            | Any eval change surfaces as a diff                  |
 | ⬜ `tablebase: probe interface` | `probe(fen) → { wdl, dtz, moves }` stub, `bot.useTablebase` honoured as a no-op | The interface compiles and is tested against a fake |
 
-## Talk
-
-An opt-in speech panel on `/play`: the animals talk, and in a bot-vs-bot game both of them do. A
-remark is about the move just played — the piece it took, the check it gave — and said plainly,
-in the animal's own attitude rather than a catchphrase. Most moves say nothing: a capture speaks
-only when an observer, a Stockfish of its own on fixed nodes and never a monster's, sees it win
-something, judged in material that holds so an even trade stays quiet. The observer loads with the panel,
-so a land game without it still never fetches Stockfish.
-
-- Remarks, from the speaker's side: greeting, check, taking a piece, losing one, mate seen, win,
-  loss, draw. One voice a move, and a few plies of cooldown after it.
-- A hanging piece is remarked on when it is taken, never before: saying so would give it away.
-- The observer's answer is tagged by ply and dropped if the game has moved on: a remark never
-  lands a move late.
-- Lines live in `talk.<id>.<remark>` in both locales, picked from a seeded stream, never the
-  same line twice running. All three rosters talk.
-- A bot-vs-bot game pauses a random while before each move, talk or no talk, so it can be
-  followed. The pause is seeded like everything else random.
-
-Every animal is recorded with `eleven_v3`, in `public/voice/`. Recording them:
-
-- Voices: Creator holds 30 custom voices, and stock ones take no slot. The 14 designed land
-  voices and the 16 monsters fill all 30; the Camel and the Tiger are stock (Chris, Eric). The sea
-  creatures play the way people do, so plain stock voices suit them: one each, told apart by age
-  and temperament, none of them Chris or Eric — 16 of the 19 left. Name a custom voice
-  `chess-animals · <roster> · <id>` in ElevenLabs.
-- A voice designed from a Russian sample keeps a Russian accent in English under v3, and
-  `language_code` does not remove it. It is kept: it suits the animals.
-- Hear a voice in Russian before keeping it: one voice speaks both languages, and a design made
-  from an English sample can sound boxed-in in Russian, or roll its «р» like an English speaker.
-  The Spider's was designed from a Russian sample instead, and a sample full of ellipses kept it
-  slow and creepy where a plain one read flat.
-- Only missing clips are recorded, so a changed line or a recast means deleting its clips first.
-- Raise `AT_ONCE` in `cli/voice/speak.ts` to the plan's concurrency; Free allows two.
-- Never several free accounts to stretch the quota: it breaks ElevenLabs' terms, and a public site
-  wants the paid plan's commercial licence anyway.
-
 ## Outside v1
 
 - ⬜ A Polyglot `.bin` book reader behind `probe(fen)`
@@ -58,26 +21,3 @@ The sixteen Stockfish players — a MultiPV line picked by temperature, see
 [ARCHITECTURE.md](./ARCHITECTURE.md#monsters) — on `/monsters`. What is left:
 
 - ⬜ More monsters, if a real idea turns up — each needs a `temperature` rung.
-
-## The underwater section
-
-Maia-3 ([CSSLab/maia3](https://github.com/CSSLab/maia3)): a transformer that predicts a human's
-move at a given rating, run with `onnxruntime-web` as
-[maia-platform-frontend](https://github.com/CSSLab/maia-platform-frontend) does — one
-Elo-conditioned model, the board as 64×12 tokens (mirrored when Black is to move), 4352 move
-logits masked to the legal ones and sampled from the seeded stream. Sixteen animals — every roster
-has sixteen — on sixteen Elo rungs, as a monster is a temperature rung, tight at the bottom where
-the strength moves fastest: 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1650,
-1800, 2000, 2200, and at the top 2500 played by its likeliest move rather than sampled, which beat
-the sampled 2500 against the Tiger. The twelve old sea creatures come back, with 🦭 🦦 🐢 🐳. The arena
-decides whether neighbours stay apart; any two that tie get spread.
-
-What the spike found, 6 games a pair:
-
-- The model is `public/maia3/maia3_simplified.onnx` in the frontend repo, 45.7 MB; inputs `tokens`,
-  `elo_self`, `elo_oppo`, outputs `logits_move`, `logits_value`. Castling is standard UCI, `e1g1`.
-- `onnxruntime-node` segfaults on load; `onnxruntime-web` runs under node on its wasm backend, so
-  the arena and the browser share one runtime. ~140 ms a move on one thread, ~1 s to load.
-- Stronger than the plan guessed: Elo 600 sits near the Wolf, 1100 near the Bear, 2500 takes
-  half its games off the Tiger. Rung order holds; the top rungs are close and need the arena.
-- A Maia game is ~6 s against the land engine's milliseconds: the arena leans on its cache.

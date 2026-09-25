@@ -42,9 +42,12 @@ npm run dev
 | `npm run engine:bench`              | the C engine natively: perft, each feature's cost, the search signature |
 | `npm run arena`                     | dev CLI: rate the roster over the paired opening set                    |
 | `npm run tune -- <botId>`           | dev CLI: SPSA-tune one bot's weights against the roster                 |
+| `npm run voice`                     | dev CLI: record the animals' missing voice clips with ElevenLabs        |
+| `npm run og`                        | draw the preview cards (the build does it too)                          |
 | `npm run lint` / `format`           | oxlint + clang-tidy / oxfmt + clang-format (`:check` don't write)       |
 | `npm run types:check`               | `vue-tsc` type-check                                                    |
 | `npm run engine:corpus`             | regenerate the C engine's chessops fixture corpus                       |
+| `npm run engine:features`           | regenerate the C engine's feature-id header from the registry           |
 
 Linting and formatting via [oxlint](https://oxc.rs)/[oxfmt](https://oxc.rs), type-checking via
 `vue-tsc`, tests via Vitest. CI runs all of them plus the build on every pull request;
@@ -63,10 +66,11 @@ Linting and formatting via [oxlint](https://oxc.rs)/[oxfmt](https://oxc.rs), typ
 ## Where it stands
 
 All 48 are rated together by the arena, in points pinned to Maia's human-like ratings: from the
-Dove (−550) to the Dragon (2480). The land roster tops out at the Tiger (1690), just past where
+Dove (−560) to the Dragon (2450). The land roster tops out at the Tiger (1680), just past where
 the monsters begin. Built: the feature evaluation and a PVS search with quiescence in C, Maia and
-Stockfish in the browser, `/play` with a move list to step through and copy as PGN,
-`/about`, and the dev CLIs `npm run arena` and `npm run tune`.
+Stockfish in the browser, `/play` with a move list to step through and copy as PGN and a speech
+panel where the animals talk, voiced in both languages, `/about`, and the dev CLIs
+`npm run arena` and `npm run tune`.
 
 Next, per [PLAN.md](./PLAN.md): golden-game fixtures and a tablebase probe interface.
 

@@ -101,7 +101,7 @@ in its own run. Sorted by d3 + q. d1–d3 runs carry ±35–70; d3 + q runs ±90
 
 Every idea animal leads with a feature no other animal reads, chosen to fit how it plays.
 Partners may repeat, but no two animals share a full weight set. Three overlaps are deliberate:
-the Goat and the Dove are the same weights with opposite signs, and the Hare and the Lemming read
+the Dove is the Goat's checks and captures with opposite signs, and the Hare and the Lemming read
 `offeredMaterial` with opposite signs. Bare material — once the Monkey, Owl and Raven — left the
 roster for want of an idea; `lab()` is the same baseline. The paper's fixed strategies (Dove,
 Lemming, Donkey, Dodo, Goat) sit below the table.

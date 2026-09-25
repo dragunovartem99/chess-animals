@@ -2,7 +2,7 @@
 
 How the app is built. Why the numbers mean anything — the paper, the feature vector, the rating
 fit — is in [METHOD.md](./METHOD.md); the conventions the code holds itself to are in
-[CLAUDE.md](./CLAUDE.md); what is built and what is next is in [PLAN.md](./PLAN.md).
+[CLAUDE.md](./CLAUDE.md); what is next is in [PLAN.md](./PLAN.md).
 
 ## Layout
 
@@ -11,23 +11,24 @@ src/
   app/          router, i18n, the layout shell and the locale switcher
   modules/      feature modules (see below) — each with an index.ts barrel
   shared/       primitives more than one module needs; depends on nothing above it
-  locales/      ru/ en/ — UI strings, bot names, feature labels
+  locales/      ru/ en/ — UI strings, bot names, feature labels, what the animals say
   workers/      uciEngine.worker.ts
 engine/         the C search and evaluation, built to wasm and natively for tests (`make -C engine`)
-cli/            dev CLIs — the tournament runner and the SPSA tuner (run with tsx); lab.ts stages
-                candidate bots for `arena -- --lab`
-public/         favicon
+cli/            dev CLIs, run with tsx — the tournament runner and the SPSA tuner (lab.ts stages
+                candidate bots for `arena -- --lab`), the preview cards (og), the voice recorder,
+                the engine's fixture corpus and its generated feature header
+public/         favicon, preview cards, the vendored Stockfish and Maia, the recorded voices
 paper.pdf       Elo World, the design's source
 ```
 
 ### Modules
 
-| Module  | What it does                                                                                  |
-| ------- | --------------------------------------------------------------------------------------------- |
-| `bots`  | the two rosters — land and monsters (`roster/*.ts`, plain data) — and a landing page for each |
-| `game`  | `/play` — human vs bot, bot vs bot, the move list with history navigation, PGN copy           |
-| `board` | the chessground wrapper, orientation, legal dests, the promotion picker                       |
-| `about` | `/about` — a short prose page: how the bots work, the paper it comes from, credit             |
+| Module  | What it does                                                                                 |
+| ------- | -------------------------------------------------------------------------------------------- |
+| `bots`  | the three rosters — land, underwater, monsters (`roster/*.ts`, plain data) — a page for each |
+| `game`  | `/play` — human vs bot, bot vs bot, the move list with history, PGN copy, the speech panel   |
+| `board` | the chessground wrapper, orientation, legal dests, the promotion picker                      |
+| `about` | `/about` — a short prose page: how the bots work, the paper it comes from, credit            |
 
 The tournament runner and the SPSA tuner are **dev CLIs under `cli/`**, not modules — they need
 every core and have no place in the shipped app. The rating, scheduler and tuner math they drive
@@ -183,8 +184,7 @@ read. On every move `createMonsterEngine` asks Stockfish for its best `lines` mo
 Small slips are common and blunders rare, which reads as a person playing — a uniformly random
 move, the paper's dilution, hangs a queen out of the blue. The pick is drawn from a seeded stream
 of its own, so a game replays from its seed. The sixteen differ in temperature alone, bar
-the Dragon, which also sees ten times as far; the hottest reach down towards the Tiger. They were sea
-creatures on `/underwater` once; the fish ids are free again for Maia's animals there.
+the Dragon, which also sees ten times as far; the hottest reach down towards the Tiger.
 
 The engine is the land engine with a `go` that asks Stockfish instead, so the play view cannot
 tell them apart; its answers are promises, because Stockfish is a process. In the browser the
@@ -214,13 +214,35 @@ fetch either. The arena plays them through `withMaia` in front of `createMover`,
 cache keys a game with one in it on the model's digest.
 
 The pages follow the roster they show: `useTheme` in `shared/ui` lets a view say which world it is
-in, and the layout paints the document — the monsters' theme (violet squares, a
-slime-green highlight, a purple button) on `/monsters`, and on `/play` while a monster is at the board.
+in, and the layout paints the document — the monsters' theme (violet squares, a slime-green
+highlight, a purple button) on `/monsters`, the sea on `/underwater`, and on `/play` whichever of
+the two is at the board, the monsters' first.
+
+### Talk
+
+An opt-in speech panel on `/play`: the animals talk, and in a bot-vs-bot game both of them do. A
+remark is about the move just played — the piece it took, the check it gave — in the animal's own
+attitude rather than a catchphrase. Most moves say nothing: a capture speaks only when the
+observer, a Stockfish of its own on fixed nodes and never a monster's, sees it win something,
+judged in material that holds, so an even trade stays quiet. The observer loads with the panel, so
+a land game without it still never fetches Stockfish.
+
+- Remarks, from the speaker's side: greeting, check, taking a piece, losing one, mate seen, win,
+  loss, draw. One voice a move, and a few plies of cooldown after it.
+- A hanging piece is remarked on when it is taken, never before: saying so would give it away.
+- The observer's answer is tagged by ply and dropped if the game has moved on, so a remark never
+  lands a move late.
+- Lines live in `talk.<id>.<remark>` in both locales, picked from a seeded stream: never the same
+  line twice running, and none more than twice a game.
+- A bot-vs-bot game pauses a seeded while before each move, talk or no talk, so it can be followed.
+
+Every line is recorded with ElevenLabs `eleven_v3` into `public/voice/{en,ru}/<id>/` by
+`npm run voice`, one voice per animal in `cli/voice/casting.ts`; only missing clips are recorded.
 
 ## App shell
 
-`vue-router` with the locale in the path, `/:locale(ru|en)/…` over roster, `/bots/:id`, `/play`,
-`/about`. Anything without a known locale prefix is re-entered under the
+`vue-router` with the locale in the path, `/:locale(ru|en)/…` over the land roster,
+`/underwater`, `/monsters`, `/bots/:id`, `/play`, `/about`. Anything without a known locale prefix is re-entered under the
 reader's own locale rather than 404ing; a path that still matches nothing falls back to that
 locale's root, which keeps a typo like `/xx/play` from redirecting onto itself forever.
 
@@ -235,6 +257,9 @@ untranslatable-by-accident rather than silently English-only.
 
 `npm run build` type-checks with `vue-tsc` before Vite builds. CI (`.github/workflows/ci.yaml`)
 runs format, types, lint, tests with coverage, and the build on every pull request against `main`.
+
+The build also draws the preview cards (`cli/og.ts`) and emits one `index.html` per shareable
+page with its own `<meta>` (`cli/pages.ts`), since a link preview's crawler runs no script.
 
 Push to `main` runs `.github/workflows/deploy.yaml`, which reuses CI as a gate and then ships
 `dist/` to the VPS that also serves the author's other sites. Each deploy is rsynced into its own

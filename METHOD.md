@@ -24,8 +24,9 @@ own stated weaknesses as its design constraints:
 
 ## One mechanism for every bot
 
-The central design choice: **every bot, serious or silly, is the same code path.** A move's score
-is a dot product.
+The central design choice: **every land animal, serious or silly, is the same code path.** A
+move's score is a dot product. (The underwater animals and the monsters are Maia and Stockfish;
+they carry no weights, and serve as the scale's anchors and its top.)
 
 ```ts
 score = dot(features(position, move), weights);
@@ -38,12 +39,11 @@ what makes the roster extensible: **adding a heuristic is one registry entry and
 function**, and adding an animal is a data file.
 
 26 features in six families, declared once in `shared/eval/features.ts`. That single registry
-drives the engine's feature ids, the weight-editor sliders, the SPSA parameter space, the JSON schema for
+drives the engine's feature ids, the UCI options, the SPSA parameter space, the JSON schema for
 bot configs, and the locale files.
 
-A family says **what a feature measures**, not where the idea came from. That matters because the
-weight editor takes each family's slider band from it, so filing two unlike quantities together
-gives them the wrong scale — and because the pairs animals are built from should sit side by
+A family says **what a feature measures**, not where the idea came from, so filing two unlike
+quantities together is a mistake — and the pairs animals are built from should sit side by
 side: `mobility` with `opponentMobility`, `hanging` with `offeredMaterial` (the Hare,
 and the lab's two strongest features).
 
@@ -119,13 +119,17 @@ to infinity. Order-independent and imbalance-robust, which is precisely what the
 with. Standard errors from the inverse Hessian diagonal give the confidence intervals the
 scheduler needs.
 
+**Anchored to people** — the fit only fixes differences, so the arena shifts the whole table until
+the underwater animals sit, on average, at the rating Maia was asked to play them at. A bot's
+points then read roughly as a person's rating, and the weakest animals fall below zero.
+
 **Markov champion** — the paper's trophy transition matrix, power-iterated to its stationary
 distribution. Implemented and tested as a second opinion, because the paper shows the two
 disagree in interesting places (`same_color`); the arena does not print it yet.
 
 ## Buying speed instead of games
 
-The roster is 24 bots, rated together on every run. Four choices keep that cheap:
+The three rosters are 48 bots, rated together on every run. Four choices keep that cheap:
 
 1. **Whole games run inside a worker.** The runner is a dev CLI: a Node `worker_threads` worker
    takes `{ white, black, openingFen, seed, plyLimit }` and returns a result — no per-move round
@@ -172,10 +176,6 @@ a noisy signal usable. Target: a useful run in 1–2 minutes.
   reader can implement later. `probe(fen)` is in place; the `bot.useBook` flag is not wired yet.
 - **Endgame tablebase** — `probe(fen) → { wdl, dtz, moves }`, simplest backing being lichess's
   free 7-man HTTP API with an IndexedDB cache.
-- **Real Stockfish** — a second implementation of `UciEngine`, which unlocks the paper's
-  **dilution ladder**: Stockfish playing a random move 1-in-N of the time gives calibrated
-  reference points at every rating level. That is how the scale gets absolute meaning instead of
-  being self-referential.
 
 ## Credit
 

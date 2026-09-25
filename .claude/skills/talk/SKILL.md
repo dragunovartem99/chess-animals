@@ -23,6 +23,10 @@ description: Write, rewrite or record what the animals say in the talk panel —
 - DO keep one voice per animal in `cli/voice/casting.ts`, with its description beside it.
 - DO design a new voice from a Russian sample with ellipses, and hear it in both languages before keeping it.
 - DO keep the animals' voices clearly apart in pitch, age and pace from each other.
+- DO name a custom voice `chess-animals · <roster> · <id>` in ElevenLabs.
+- DO keep the Russian accent a Russian-sample voice carries into English under v3: `language_code` does not remove it, and it suits the animals.
+- DO raise `AT_ONCE` in `cli/voice/speak.ts` to the plan's concurrency; Free allows two.
+- NEVER stretch the quota with several free accounts: it breaks ElevenLabs' terms, and a public site needs the paid plan's commercial licence anyway.
 
 ## Workflow
 
