@@ -176,7 +176,6 @@ async function restart() {
 					{{ $t(`game.reason.${game.status.value.reason}`) }}
 				</span>
 				<span v-else-if="engines.loading.value">{{ $t("game.loading") }}</span>
-				<span v-else-if="engines.thinking.value">{{ $t("game.thinking") }}</span>
 				<span v-else>{{ $t(`game.toMove.${game.position.value.turn}`) }}</span>
 			</p>
 

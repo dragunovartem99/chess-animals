@@ -25,7 +25,6 @@ export default {
 		},
 	},
 	loading: "Загрузка…",
-	thinking: "Думает…",
 	turn: { white: "Белые", black: "Чёрные" },
 	toMove: { white: "Ход белых", black: "Ход чёрных" },
 	reason: {

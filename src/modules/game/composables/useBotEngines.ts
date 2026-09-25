@@ -1,5 +1,4 @@
 import { computed, onBeforeUnmount, ref } from "vue";
-import type { Ref } from "vue";
 
 import type { Animal } from "@/modules/bots/roster";
 import { createUciClient, createWorkerTransport } from "@/shared/engine";
@@ -54,28 +53,18 @@ function cachedEngine({
 async function askEngine({
 	engine,
 	depth,
-	thinking,
 	fen,
 	moves,
 }: {
 	engine: UciEngineClient;
 	depth: number;
-	thinking: Ref<boolean>;
 	fen?: string;
 	moves?: string[];
 }): Promise<{ move: string; score?: number }> {
-	// Loading is not thinking: the first move of a bot waits on its wasm, and for a monster
-	// on Stockfish too, which `prepare` has already shown as loading.
 	await engine.init();
+	engine.setPosition({ fen, moves });
 
-	thinking.value = true;
-	try {
-		engine.setPosition({ fen, moves });
-
-		return await engine.go({ depth });
-	} finally {
-		thinking.value = false;
-	}
+	return engine.go({ depth });
 }
 
 // One worker per animal, kept for as long as the view is open. Starting a worker costs a few
@@ -83,7 +72,6 @@ async function askEngine({
 // `ucinewgame` is what separates one game from the next.
 export function useBotEngines() {
 	const engines = new Map<string, UciEngineClient>();
-	const thinking = ref(false);
 	// A count rather than a flag: the picker can swap a bot while another is still loading, and
 	// the first to finish must not clear the state for the one still on its way.
 	const pending = ref(0);
@@ -101,7 +89,6 @@ export function useBotEngines() {
 		askEngine({
 			engine: engineFor(animal),
 			depth: animal.definition.search.depth,
-			thinking,
 			fen,
 			moves,
 		});
@@ -127,5 +114,5 @@ export function useBotEngines() {
 
 	const loading = computed(() => pending.value > 0);
 
-	return { askForMove, prepare, startNewGame, thinking, loading };
+	return { askForMove, prepare, startNewGame, loading };
 }

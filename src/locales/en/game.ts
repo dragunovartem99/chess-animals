@@ -25,7 +25,6 @@ export default {
 		},
 	},
 	loading: "Loading…",
-	thinking: "Thinking…",
 	turn: { white: "White", black: "Black" },
 	toMove: { white: "White to move", black: "Black to move" },
 	reason: {

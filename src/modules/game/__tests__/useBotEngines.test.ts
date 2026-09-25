@@ -46,14 +46,6 @@ describe("useBotEngines", () => {
 });
 
 describe("useBotEngines, over the view's life", () => {
-	it("is not thinking once a move comes back", async () => {
-		const { result } = mount();
-
-		await result.askForMove({ animal: DONKEY });
-
-		expect(result.thinking.value).toBe(false);
-	});
-
 	it("resets every engine it has started for a new game", async () => {
 		const { result } = mount();
 		await result.askForMove({ animal: DONKEY });
