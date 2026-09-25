@@ -1,7 +1,6 @@
 import { onBeforeUnmount, readonly, ref, toValue, watchEffect } from "vue";
 import type { MaybeRefOrGetter } from "vue";
 
-// `sea` waits for Maia's underwater animals; nothing asks for it until they land.
 export type Theme = "sea" | "monsters";
 
 const current = ref<Theme>();

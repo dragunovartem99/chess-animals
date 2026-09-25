@@ -1,6 +1,4 @@
-// What a feature measures — not where it came from. The weight editor groups its sliders by this
-// and takes each family's slider band from it, so a family that lumps unlike quantities together
-// gives them the wrong band.
+// What a feature measures — not where it came from.
 //
 // It used to be cut by origin instead, with a `behavioural` drawer for "the Elo World strategies".
 // That split the pairs animals are actually built from: `mobility` and `opponentMobility` are one
@@ -36,7 +34,7 @@ export type Feature = FeatureDefinition & {
 };
 
 // Assigns dense ids in declaration order and rejects a duplicate key, which would otherwise show
-// up much later as two sliders silently driving the same weight.
+// up much later as two keys silently driving the same weight.
 export function defineFeatures(definitions: readonly FeatureDefinition[]): Feature[] {
 	const seen = new Set<string>();
 

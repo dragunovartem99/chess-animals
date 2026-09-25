@@ -6,8 +6,8 @@ export type FeatureVector = Float32Array;
 // One weight per feature. A bot is one of these and nothing else.
 export type WeightVector = Float32Array;
 
-// The registry's suggested starting point — what the weight editor opens a brand-new bot on.
-// Deliberately *not* what an unnamed weight falls back to; see `weightsFromRecord`.
+// The registry's suggested starting point. Deliberately *not* what an unnamed weight falls back
+// to; see `weightsFromRecord`.
 export function defaultWeights(): WeightVector {
 	return Float32Array.from(FEATURES, (feature) => feature.defaultWeight);
 }
