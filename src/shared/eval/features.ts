@@ -2,7 +2,6 @@ export type FeatureDefinition = {
 	// Stable identifier. It is what a bot config stores, what a UCI `setoption` names, and what
 	// the locale files key their labels on, so renaming one breaks saved bots — don't.
 	key: string;
-	defaultWeight: number;
 };
 
 export type Feature = FeatureDefinition & {
@@ -39,11 +38,11 @@ export function defineFeatures(definitions: readonly FeatureDefinition[]): Featu
 export const FEATURES = defineFeatures([
 	// Piece values are features rather than constants, so a bot can be given its own — one that
 	// thinks a rook is worth two knights is one number away.
-	{ key: "materialPawn", defaultWeight: 100 },
-	{ key: "materialKnight", defaultWeight: 320 },
-	{ key: "materialBishop", defaultWeight: 330 },
-	{ key: "materialRook", defaultWeight: 500 },
-	{ key: "materialQueen", defaultWeight: 900 },
+	{ key: "materialPawn" },
+	{ key: "materialKnight" },
+	{ key: "materialBishop" },
+	{ key: "materialRook" },
+	{ key: "materialQueen" },
 
 	// Danger around the king rather than on it: what attacks the squares he stands among, ours
 	// minus theirs — so a negative weight buys safety and a positive one is `suicide_king`. It was
@@ -56,32 +55,32 @@ export const FEATURES = defineFeatures([
 	// count of the pawnless files beside him went the other way: two sweeps rated it +17 and +19,
 	// inside the noise, and nothing weighted it — `kingDanger` already reads the open line as
 	// the piece now aiming down it.
-	{ key: "kingDanger", defaultWeight: -12 },
+	{ key: "kingDanger" },
 
 	// The Elo World strategies. Each is a weight here rather than a separate player class, so a
 	// bot can be one part swarm, one part material, and rated on the same scale as the rest.
 	//
 	// All three distances are negated on the way out of the extractor, so more is nearer and a
 	// positive weight means the behaviour the key names. See `engine/src/eval/proximity.c`.
-	{ key: "swarm", defaultWeight: 0 },
-	{ key: "huddle", defaultWeight: 0 },
-	{ key: "kingProximity", defaultWeight: 0 },
+	{ key: "swarm" },
+	{ key: "huddle" },
+	{ key: "kingProximity" },
 	// Shape is a property of the whole board, not of a side, so unlike every other feature these
 	// read identically from either seat — which is why the animals on them must run at an even
 	// depth, negamax flipping a leaf's sign once per ply.
-	{ key: "sameColorSquares", defaultWeight: 0 },
+	{ key: "sameColorSquares" },
 	// The rank-flip mirror alone — the copycat symmetry, and the only one of the three an animal
 	// has ever wanted. A pawn on e4 facing a pawn on e5 costs nothing, so maximising it answers
 	// every move with the same move.
-	{ key: "mirrorRanks", defaultWeight: 0 },
+	{ key: "mirrorRanks" },
 	// The same measurement `mobility` takes of our own side, kept apart so a bot can price taking
 	// the opponent's moves away differently from having moves itself.
-	{ key: "opponentMobility", defaultWeight: 0 },
-	{ key: "pushDepth", defaultWeight: 0 },
+	{ key: "opponentMobility" },
+	{ key: "pushDepth" },
 	// Material a side leaves catchable, counted once per way it can be taken. `hanging` below is
 	// the same instinct as a count of undefended pieces, and the two together are the Hare — the
 	// lab's strongest pair.
-	{ key: "offeredMaterial", defaultWeight: 0 },
+	{ key: "offeredMaterial" },
 
 	// Properties of the move that produced the position. They are what let `cccp` and `pacifist`
 	// be weights rather than special-cased players. See `engine/src/eval/move.c` for the sign
@@ -93,15 +92,15 @@ export const FEATURES = defineFeatures([
 	// A `givesStalemate` preference sat beside it on the same scale, for the paper's complaint that
 	// `min_oppt_moves` cannot tell mate from stalemate. No animal ever wanted to, and the lab put it
 	// at +19 — inside the noise — so it went.
-	{ key: "givesMate", defaultWeight: 1 },
-	{ key: "givesCheck", defaultWeight: 0 },
-	{ key: "captureValue", defaultWeight: 0 },
+	{ key: "givesMate" },
+	{ key: "givesCheck" },
+	{ key: "captureValue" },
 
-	{ key: "centerControl", defaultWeight: 8 },
-	{ key: "space", defaultWeight: 2 },
-	{ key: "hanging", defaultWeight: -15 },
+	{ key: "centerControl" },
+	{ key: "space" },
+	{ key: "hanging" },
 
-	{ key: "mobility", defaultWeight: 4 },
+	{ key: "mobility" },
 
 	// A strategic stand-in for a piece-square table, role-agnostic on purpose: how far the minor
 	// and major pieces stand from the rim. It replaced twelve per-role weights (a centralization
@@ -111,31 +110,31 @@ export const FEATURES = defineFeatures([
 	// with the rest of pawn structure: every such weight the registry carried — passed, the lumped
 	// weakness, forwardness — measured at or below bare material in the lab, so they are gone
 	// rather than kept as dead weights.
-	{ key: "centralization", defaultWeight: 0 },
+	{ key: "centralization" },
 
 	// Our knights and bishops off the back rank minus theirs — a plain count of developed minors.
 	// There is no game-phase mechanism to gate it because the quantity decays to ~0 on its own
 	// once both sides' minors are out or traded.
-	{ key: "development", defaultWeight: 15 },
+	{ key: "development" },
 
 	// Our minors still on their home square while our queen is already out (and not traded), minus
-	// theirs — the queen-before-the-pieces mistake, as a positive count the negative default
-	// punishes. No phase gate either: it falls to 0 on its own once the minors
-	// develop or the queen comes home.
-	{ key: "earlyQueen", defaultWeight: -10 },
+	// theirs — the queen-before-the-pieces mistake, as a positive count a negative weight punishes.
+	// No phase gate either: it falls to 0 on its own once the minors develop or the queen comes
+	// home.
+	{ key: "earlyQueen" },
 
 	// Our king's distance from the rim minus theirs, scaled by the square of how little material is
 	// left — the endgame's "activate the king", held back until the ending really comes. Unlike the
 	// whole-board `kingProximity` it is a real side-to-move difference, so it needs no even depth.
 	// Opt-in, like `swarm`: it is phase-shaped inside its extractor (`engine/src/eval/endgame.c`), which
 	// is the one kind of phase-awareness the single weight vector allows.
-	{ key: "kingActivity", defaultWeight: 0 },
+	{ key: "kingActivity" },
 
 	// Our passed pawns weighted by how far they have run, minus theirs, scaled by how little
 	// material is left — "push the passers". It is the removed pawn-structure `passed` coming back
 	// in one narrower shape: silent in the middlegame, where the lab found the old term at or below
 	// bare material, and live only once the pieces are off. Opt-in, and on probation like it.
-	{ key: "passedPawnPush", defaultWeight: 0 },
+	{ key: "passedPawnPush" },
 
 	// An `attackEnemyPawns` term — enemy pawns we attack minus ours they attack, faded in the same
 	// way — landed with these two and was dropped unused: the Camel, the one endgame animal, never

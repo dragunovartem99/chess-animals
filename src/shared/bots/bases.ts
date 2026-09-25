@@ -4,10 +4,9 @@
 // worth", and the one line that was actually the animal got lost among them. The Fox is
 // greed with two instincts; that is what its file should say, and now it does.
 //
-// A base is **frozen literal numbers**, never derived from the registry's `defaultWeight`. That
-// is the whole point: `defaultWeight` is a suggestion the registry is free to retune, and if a
-// base tracked it then retuning one number would silently restrain every bot ever written on it,
-// every golden game and every cached tournament result. To change what a base means, add a new
+// A base is **frozen literal numbers**, never derived from anything else: if a base tracked some
+// other number, retuning it would silently rewrite every bot ever written on it, every golden
+// game and every cached tournament result. To change what a base means, add a new
 // base — `bases.test.ts` pins each of these to the numbers committed here.
 export const BASES = {
 	// Nothing at all. The paper's `random_move`, and what a bot gets if it names no base: a

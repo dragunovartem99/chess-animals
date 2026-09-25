@@ -8,8 +8,6 @@ export {
 	featureId,
 } from "./features";
 export {
-	defaultRecord,
-	defaultWeights,
 	type FeatureVector,
 	recordFromWeights,
 	type WeightVector,

@@ -2,32 +2,23 @@ import { describe, expect, it } from "vitest";
 
 import { defineFeatures, FEATURES, FEATURES_BY_KEY } from "../features";
 
-const definition = { defaultWeight: 0 } as const;
-
 describe("defineFeatures", () => {
 	it("assigns dense ids in declaration order", () => {
-		const features = defineFeatures([
-			{ ...definition, key: "one" },
-			{ ...definition, key: "two" },
-			{ ...definition, key: "three" },
-		]);
+		const features = defineFeatures([{ key: "one" }, { key: "two" }, { key: "three" }]);
 
 		expect(features.map((feature) => feature.id)).toEqual([0, 1, 2]);
 	});
 
 	it("derives an i18n key from the feature key", () => {
-		const [feature] = defineFeatures([{ ...definition, key: "swarm" }]);
+		const [feature] = defineFeatures([{ key: "swarm" }]);
 
 		expect(feature.i18nKey).toBe("feature.swarm");
 	});
 
 	it("rejects a duplicate key rather than shadowing a weight", () => {
-		expect(() =>
-			defineFeatures([
-				{ ...definition, key: "swarm" },
-				{ ...definition, key: "swarm" },
-			])
-		).toThrow('duplicate feature key "swarm"');
+		expect(() => defineFeatures([{ key: "swarm" }, { key: "swarm" }])).toThrow(
+			'duplicate feature key "swarm"'
+		);
 	});
 });
 

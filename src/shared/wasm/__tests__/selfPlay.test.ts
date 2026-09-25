@@ -5,13 +5,13 @@ import { describe, expect, it } from "vitest";
 import { afterMove, gameStatus, legalMoves, positionFromFen, repetitionKey } from "../../chess";
 import { seedState } from "../../engine";
 import { goSearch } from "../../test-support/wasm";
-import { defaultishWeights } from "../../test-support/weights";
+import { playerWeights } from "../../test-support/weights";
 
 const GREEDY = { depth: 1 };
 
 describe("a bot playing itself", () => {
 	it("plays a legal game through to a finish", () => {
-		const weights = defaultishWeights();
+		const weights = playerWeights();
 		let rngState = seedState("self-play");
 
 		let position = positionFromFen(INITIAL_FEN);

@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { playPair } from "../../test-support/play";
 import type { TestBot } from "../../test-support/play";
-import { defaultishWeights } from "../../test-support/weights";
+import { playerWeights } from "../../test-support/weights";
 
 // Four openings a few moves in, so the two bots do not simply replay one game. Colors are
 // swapped inside `playPair`, so what is measured is the search, not the first move.
@@ -13,7 +13,7 @@ const OPENINGS = [
 	"r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 4 3",
 ];
 
-const weights = defaultishWeights();
+const weights = playerWeights();
 
 const shallow: TestBot = { weights, search: { depth: 1 } };
 const deep: TestBot = { weights, search: { depth: 2 } };

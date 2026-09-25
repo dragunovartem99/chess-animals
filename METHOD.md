@@ -42,14 +42,14 @@ function**, and adding an animal is a data file.
 feature ids, the UCI options, the SPSA parameter space, the JSON schema for bot configs, and the
 locale files.
 
-| Measures | Count | Features, with the registry's default weight in centipawns                                                                                                                                                     |
-| -------- | ----: | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| material |     5 | one **tunable** weight per piece — `materialPawn` 100, `materialKnight` 320, `materialBishop` 330, `materialRook` 500, `materialQueen` 900                                                                     |
-| activity |    10 | reach, ground and good squares — `mobility` 4, `opponentMobility` 0, `centralization` 0, `space` 2, `centerControl` 8, `pushDepth` 0, `development` 15, `earlyQueen` −10, `kingActivity` 0, `passedPawnPush` 0 |
-| safety   |     3 | what is about to be lost, ours minus theirs — `hanging` −15, `offeredMaterial` 0, `kingDanger` −12                                                                                                             |
-| distance |     3 | where the army stands relative to a king, negated so more is nearer — `swarm` 0, `huddle` 0, `kingProximity` 0                                                                                                 |
-| shape    |     2 | whole-board properties, which read the same from either seat — `sameColorSquares` 0, `mirrorRanks` 0                                                                                                           |
-| move     |     3 | properties of the move played — `givesMate` 1, `givesCheck` 0, `captureValue` 0; `givesMate` is a preference in [−1, 1], not centipawns                                                                        |
+| Measures | Count | Features                                                                                                                                                                                |
+| -------- | ----: | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| material |     5 | one **tunable** weight per piece — `materialPawn`, `materialKnight`, `materialBishop`, `materialRook`, `materialQueen`                                                                  |
+| activity |    10 | reach, ground and good squares — `mobility`, `opponentMobility`, `centralization`, `space`, `centerControl`, `pushDepth`, `development`, `earlyQueen`, `kingActivity`, `passedPawnPush` |
+| safety   |     3 | what is about to be lost, ours minus theirs — `hanging`, `offeredMaterial`, `kingDanger`                                                                                                |
+| distance |     3 | where the army stands relative to a king, negated so more is nearer — `swarm`, `huddle`, `kingProximity`                                                                                |
+| shape    |     2 | whole-board properties, which read the same from either seat — `sameColorSquares`, `mirrorRanks`                                                                                        |
+| move     |     3 | properties of the move played — `givesMate`, `givesCheck`, `captureValue`; `givesMate` is a preference in [−1, 1], not centipawns                                                       |
 
 `centralization` is a stand-in for a piece-square table: one number — how far the pieces stand
 from the rim — instead of sixty-four per role. The lab rated per-role weights as noise and every
@@ -67,9 +67,8 @@ A definition is a **base** and the animal's own idea over the top of it. `zero` 
 is `base: "material"` and `{ huddle: 550 }`, and the one line that is the animal is the only
 line in the file. Naming a feature the base sets replaces it, so disagreeing costs one line too.
 
-A base is frozen literal numbers, never derived from the registry's suggested defaults: those are
-free to be retuned, and a base that tracked them would silently rewrite every bot ever written on
-it. Changing a base means changing every bot that names it; the safe move is to add another.
+A base is frozen literal numbers, never derived from anything else: a base that tracked some other
+number would silently rewrite every bot ever written on it whenever that number moved. Changing a base means changing every bot that names it; the safe move is to add another.
 
 ## Everything in centipawns
 
