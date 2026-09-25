@@ -11,7 +11,7 @@ const GREEDY = { depth: 1 };
 
 describe("a bot playing itself", () => {
 	it("plays a legal game through to a finish", () => {
-		const weights = defaultishWeights({ givesMate: 100000 });
+		const weights = defaultishWeights();
 		let rngState = seedState("self-play");
 
 		let position = positionFromFen(INITIAL_FEN);

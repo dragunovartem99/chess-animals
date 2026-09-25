@@ -13,7 +13,7 @@ const OPENINGS = [
 	"r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 4 3",
 ];
 
-const weights = defaultishWeights({ givesMate: 100000 });
+const weights = defaultishWeights();
 
 const shallow: TestBot = { weights, search: { depth: 1 } };
 const deep: TestBot = { weights, search: { depth: 2 } };
