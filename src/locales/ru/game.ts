@@ -1,6 +1,8 @@
 export default {
 	group: { underwater: "Под водой", land: "На суше", monsters: "Монстры" },
 	human: "Вы",
+	play: "Играть",
+	ready: "Нажмите «Играть», чтобы начать",
 	restart: "Заново",
 	swap: "Сменить цвет",
 	history: {

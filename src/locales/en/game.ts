@@ -1,6 +1,8 @@
 export default {
 	group: { underwater: "Underwater", land: "On land", monsters: "Monsters" },
 	human: "You",
+	play: "Play",
+	ready: "Press Play to begin",
 	restart: "Restart",
 	swap: "Change color",
 	history: {

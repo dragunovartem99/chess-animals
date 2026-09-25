@@ -43,11 +43,19 @@ const orientation = computed(() => humanColors.value[0] ?? "white");
 
 const history = useHistory({ fens: game.fens, turns: game.turns });
 
+// A browser plays no sound on a page nobody has clicked yet, so a game opened by a reload or a
+// pasted link waits for "Play" — the click that lets the animals be heard. One reached by a click
+// anywhere on the site starts at once, and so does every restart. Where the API is missing the
+// game never waits.
+const started = ref(navigator.userActivation?.hasBeenActive ?? true);
+
 // A finished game is a view, not a position to move from: `game.play` already rejects the move,
 // but the board only resyncs on a FEN change, so a drop after the result would otherwise linger.
 // A past position is only a view as well — a move from it would be played on the current one.
 const playable = computed(() =>
-	game.status.value.over || engines.loading.value || !history.live.value ? [] : humanColors.value
+	!started.value || game.status.value.over || engines.loading.value || !history.live.value
+		? []
+		: humanColors.value
 );
 
 // Every bot at the board is started as soon as it is picked, not on its first move: the board
@@ -97,7 +105,7 @@ const turn = computed(() =>
 watch(
 	turn,
 	async (key) => {
-		if (game.status.value.over) return;
+		if (!started.value || game.status.value.over) return;
 
 		const color = game.position.value.turn;
 		const animal = ANIMALS_BY_ID.get(players.value[color]);
@@ -135,6 +143,7 @@ function swapColors() {
 }
 
 async function restart() {
+	started.value = true;
 	game.reset();
 	history.last();
 	generation.value += 1;
@@ -166,7 +175,8 @@ async function restart() {
 			/>
 
 			<p class="status">
-				<span v-if="game.status.value.over">
+				<span v-if="!started">{{ $t("game.ready") }}</span>
+				<span v-else-if="game.status.value.over">
 					{{ $t(`game.reason.${game.status.value.reason}`) }}
 				</span>
 				<span v-else-if="engines.loading.value">{{ $t("game.loading") }}</span>
@@ -178,7 +188,7 @@ async function restart() {
 					type="button"
 					@click="restart"
 				>
-					{{ $t("game.restart") }}
+					{{ $t(started ? "game.restart" : "game.play") }}
 				</button>
 				<button
 					type="button"
