@@ -97,15 +97,12 @@ const voices = useVoice({ said: computed(() => said), locale: useI18n().locale, 
 	color: var(--color-ink-muted);
 }
 
-/* Sized to the two remarks it shows, so neither is ever cut: a fixed height clipped a wrapped
-   one mid-line. The floor of two lines, padding included, keeps it from jumping while it holds
-   fewer. */
+/* Sized to the remarks it shows, so none is ever cut: a fixed height clipped a wrapped one
+   mid-line, and a two-line floor left a blank row above a lone remark. */
 .lines {
 	display: flex;
 	flex-direction: column;
-	justify-content: flex-end;
 	gap: 0.25rem;
-	min-height: calc(2 * 1.4em + 0.25rem + 1rem);
 	margin: 0;
 	padding: 0.5rem 0.75rem;
 	list-style: none;
