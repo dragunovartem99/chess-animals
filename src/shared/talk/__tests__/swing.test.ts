@@ -1,33 +1,19 @@
 import { describe, expect, it } from "vitest";
 
-import { winChance } from "../score";
-import { gained, isQuiet, mateFor } from "../swing";
+import { isQuiet, isWin, mateFor } from "../swing";
 
-describe("winChance", () => {
-	it("is even at zero and certain at mate", () => {
-		expect(winChance({ cp: 0 })).toBe(0.5);
-		expect(winChance({ mate: 3 })).toBe(1);
-		expect(winChance({ mate: -1 })).toBe(0);
+describe("isWin", () => {
+	it("counts a piece taken in a won game, but not a pawn", () => {
+		expect(isWin({ from: { cp: 0 }, to: { cp: 300 }, side: "white" })).toBe(true);
+		expect(isWin({ from: { cp: 900 }, to: { cp: 1200 }, side: "white" })).toBe(true);
+		expect(isWin({ from: { cp: -900 }, to: { cp: -1200 }, side: "black" })).toBe(true);
+		expect(isWin({ from: { cp: 900 }, to: { cp: 1000 }, side: "white" })).toBe(false);
+		expect(isWin({ from: { cp: 900 }, to: { cp: 1200 }, side: "black" })).toBe(false);
 	});
 
-	it("is symmetric between the sides", () => {
-		expect(winChance({ cp: 250 }) + winChance({ cp: -250 })).toBeCloseTo(1);
-	});
-});
-
-describe("gained", () => {
-	it("weighs a pawn more in a level game than in a won one", () => {
-		const level = gained({ from: { cp: 0 }, to: { cp: 300 }, side: "white" });
-		const won = gained({ from: { cp: 900 }, to: { cp: 1200 }, side: "white" });
-
-		expect(level).toBeGreaterThan(0.25);
-		expect(won).toBeLessThan(0.05);
-	});
-
-	it("is the other side's loss", () => {
-		expect(gained({ from: { cp: 0 }, to: { cp: 300 }, side: "black" })).toBeCloseTo(
-			-gained({ from: { cp: 0 }, to: { cp: 300 }, side: "white" })
-		);
+	it("leaves a mate to the mate remark", () => {
+		expect(isWin({ from: { cp: 0 }, to: { mate: 3 }, side: "white" })).toBe(false);
+		expect(isWin({ from: { mate: 5 }, to: { cp: 900 }, side: "white" })).toBe(false);
 	});
 });
 

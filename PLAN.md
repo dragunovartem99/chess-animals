@@ -17,7 +17,7 @@ An opt-in speech panel on `/play`: the animals talk, and in a bot-vs-bot game bo
 remark is about the move just played — the piece it took, the check it gave — and said plainly,
 in the animal's own attitude rather than a catchphrase. Most moves say nothing: a capture speaks
 only when an observer, a Stockfish of its own on fixed nodes and never a monster's, sees it win
-something, judged in win chance so an even trade stays quiet. The observer loads with the panel,
+something, judged in material that holds so an even trade stays quiet. The observer loads with the panel,
 so a land game without it still never fetches Stockfish.
 
 - Remarks, from the speaker's side: greeting, check, taking a piece, losing one, mate seen, win,

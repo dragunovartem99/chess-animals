@@ -4,7 +4,7 @@ import type { GameResult } from "../chess";
 import type { Facts } from "./facts";
 import type { Verdict } from "./observer";
 import type { Remark } from "./remark";
-import { gained, isQuiet, mateFor, SWING } from "./swing";
+import { isQuiet, isWin, mateFor } from "./swing";
 
 // One bot, one remark, and the piece it is about. The line itself is picked later, from the locale.
 export type Spoken = { color: Color; remark: Remark; piece?: Role };
@@ -42,7 +42,7 @@ type Moment = {
 // move is one remark and not a dialogue. Nothing about a position the game has left behind, and
 // nothing inside the cooldown of the last remark.
 //
-// A mate found comes first, said by the side that has it, then a capture that won something, then a check. A capture is judged
+// A mate found comes first, said by the side that has it, then a capture that netted material, then a check. A capture is judged
 // over two plies, from before the move that left the piece hanging: the observer saw the gift
 // coming then, so the capture itself swings nothing, and an even trade swings nothing either way.
 // It is said when the piece is taken, never when it is left hanging, which would give it away.
@@ -62,7 +62,7 @@ export function react({ verdicts, verdict, facts, bots, livePly, lastPly }: Mome
 
 	const from = (verdicts[ply - 2] ?? before).score;
 	const piece = facts.captured;
-	if (piece && gained({ from, to: score, side: mover }) >= SWING) {
+	if (piece && isWin({ from, to: score, side: mover })) {
 		const taken = say(mover, "take", piece);
 		return taken.length > 0 ? taken : say(other(mover), "lose", piece);
 	}
