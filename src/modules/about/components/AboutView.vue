@@ -33,7 +33,7 @@ const ENGINES = [
 				v-for="roster in ROSTERS"
 				:key="roster"
 			>
-				<strong>{{ $t(`about.bots.${roster}.name`) }}</strong>
+				<strong>{{ $t(`about.bots.${roster}.name`) }}:</strong>
 				{{ $t(`about.bots.${roster}.text`) }}
 			</li>
 		</ul>

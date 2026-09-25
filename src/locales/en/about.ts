@@ -6,15 +6,15 @@ export default {
 		body: "The bots come in three rosters, and each runs on its own engine:",
 		land: {
 			name: "Land animals",
-			text: "share one small engine written for this site. A move is scored as the dot product of a feature vector describing the position and a weight vector unique to each animal: the Wolf drives straight at the enemy king, the Goat chases checks and captures, the Donkey leaves every weight at zero and moves at random.",
+			text: "one small engine written for this site. A move is scored as the dot product of a feature vector describing the position and a weight vector unique to each animal.",
 		},
 		underwater: {
 			name: "Underwater animals",
-			text: "are Maia, a network trained on Lichess games to play like people. Each one is asked to play at a different rating, from the Shrimp to the Whale.",
+			text: "Maia, a network trained on Lichess games to play like people. Each one is asked to play at a different rating.",
 		},
 		monsters: {
 			name: "Monsters",
-			text: "are Stockfish, one of the strongest engines there is, held back. Each looks at its best few moves and now and then picks a worse one; the weaker the monster, the more often and the worse. The Dragon never slips.",
+			text: "Stockfish, one of the strongest engines there is, held back. Each looks at its best few moves and now and then picks a worse one; the weaker the monster, the more often and the worse.",
 		},
 	},
 	points: {
