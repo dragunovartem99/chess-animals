@@ -33,7 +33,8 @@ const ENGINES = [
 				v-for="roster in ROSTERS"
 				:key="roster"
 			>
-				{{ $t(`about.bots.${roster}`) }}
+				<strong>{{ $t(`about.bots.${roster}.name`) }}</strong>
+				{{ $t(`about.bots.${roster}.text`) }}
 			</li>
 		</ul>
 
@@ -116,7 +117,7 @@ ul {
 	gap: 0.35rem;
 }
 
-.engines strong {
+li strong {
 	color: var(--color-ink);
 }
 
