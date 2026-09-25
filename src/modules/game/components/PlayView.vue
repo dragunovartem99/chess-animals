@@ -16,6 +16,7 @@ import { useLines } from "../composables/useLines";
 import { usePace } from "../composables/usePace";
 import { usePlayers } from "../composables/usePlayers";
 import { useTalk } from "../composables/useTalk";
+import { worldOf } from "../utils/world";
 import HistoryControls from "./HistoryControls.vue";
 import MoveList from "./MoveList.vue";
 import PlayerPicker from "./PlayerPicker.vue";
@@ -32,15 +33,7 @@ const players = usePlayers({
 	onQueryChange: restart,
 });
 
-// Into a roster's world for as long as one of its animals is at the board, whoever picked it — the
-// monsters' first, when an underwater animal plays one, as the stronger of the two.
-const WORLDS = [
-	{ theme: "monsters", ids: new Set(MONSTERS.map((animal) => animal.definition.id)) },
-	{ theme: "sea", ids: new Set(UNDERWATER.map((animal) => animal.definition.id)) },
-] as const;
-useTheme(
-	() => WORLDS.find(({ ids }) => Object.values(players.value).some((id) => ids.has(id)))?.theme
-);
+useTheme(() => worldOf(Object.values(players.value)));
 
 const talk = useTalk({ game, players, linesFor: useLines() });
 const pace = usePace({ players, isBot: (id) => ANIMALS_BY_ID.has(id) });
