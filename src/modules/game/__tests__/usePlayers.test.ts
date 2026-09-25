@@ -25,7 +25,9 @@ function setup(query: Record<string, string> = {}) {
 	const onQueryChange = vi.fn<() => void>();
 	const scope = effectScope();
 	scopes.push(scope);
-	const players = scope.run(() => usePlayers({ defaults: DEFAULTS, onQueryChange }))!;
+	const players = scope.run(() =>
+		usePlayers({ defaults: DEFAULTS, human: "human", onQueryChange })
+	)!;
 
 	return { players, onQueryChange, route: useRoute(), replace: useRouter().replace };
 }
@@ -37,6 +39,13 @@ describe("usePlayers", () => {
 
 	it("starts from an animal named in the URL, per color", () => {
 		expect(setup({ black: "wolf" }).players.value).toEqual({ white: "human", black: "wolf" });
+	});
+
+	it("starts from the person's seat named in the URL", () => {
+		expect(setup({ white: "wolf", black: "human" }).players.value).toEqual({
+			white: "wolf",
+			black: "human",
+		});
 	});
 
 	it("ignores an id that is not on the roster", () => {
@@ -80,14 +89,14 @@ describe("usePlayers writing the URL", () => {
 		await nextTick();
 
 		expect(replace).toHaveBeenCalledWith({
-			query: { ...route.query, white: undefined, black: "wolf" },
+			query: { ...route.query, white: "human", black: "wolf" },
 		});
 	});
 
 	it("does not rewrite a URL that already says the same", async () => {
-		const { replace, route } = setup({ black: "wolf" });
+		const { replace, route } = setup({ white: "human", black: "wolf" });
 
-		route.query = { black: "donkey" };
+		route.query = { white: "human", black: "donkey" };
 		await nextTick();
 
 		expect(replace).not.toHaveBeenCalled();

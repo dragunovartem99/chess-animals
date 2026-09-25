@@ -28,6 +28,7 @@ const engines = useBotEngines();
 
 const players = usePlayers({
 	defaults: { white: HUMAN, black: "fox" },
+	human: HUMAN,
 	onQueryChange: restart,
 });
 
