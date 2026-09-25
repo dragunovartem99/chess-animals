@@ -1,8 +1,8 @@
 export default {
 	group: { underwater: "Под водой", land: "На суше", monsters: "Монстры" },
 	human: "Вы",
-	restart: "Новая партия",
-	swap: "Поменять цвета",
+	restart: "Заново",
+	swap: "Сменить цвет",
 	history: {
 		first: "К началу",
 		previous: "Предыдущий ход",

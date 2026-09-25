@@ -1,8 +1,8 @@
 export default {
 	group: { underwater: "Underwater", land: "On land", monsters: "Monsters" },
 	human: "You",
-	restart: "New game",
-	swap: "Swap colors",
+	restart: "Restart",
+	swap: "Change color",
 	history: {
 		first: "First move",
 		previous: "Previous move",
