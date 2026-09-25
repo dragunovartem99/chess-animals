@@ -2,7 +2,6 @@ export {
 	defineFeatures,
 	type Feature,
 	type FeatureDefinition,
-	type FeatureFamily,
 	FEATURE_COUNT,
 	FEATURES,
 	FEATURES_BY_KEY,

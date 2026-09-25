@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { defineFeatures, FEATURES, FEATURES_BY_KEY } from "../features";
 
-const definition = { family: "material", defaultWeight: 0 } as const;
+const definition = { defaultWeight: 0 } as const;
 
 describe("defineFeatures", () => {
 	it("assigns dense ids in declaration order", () => {
@@ -21,7 +21,7 @@ describe("defineFeatures", () => {
 		expect(feature.i18nKey).toBe("feature.swarm");
 	});
 
-	it("rejects a duplicate key rather than shadowing a slider", () => {
+	it("rejects a duplicate key rather than shadowing a weight", () => {
 		expect(() =>
 			defineFeatures([
 				{ ...definition, key: "swarm" },

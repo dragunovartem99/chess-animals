@@ -1,29 +1,7 @@
-// What a feature measures — not where it came from.
-//
-// It used to be cut by origin instead, with a `behavioural` drawer for "the Elo World strategies".
-// That split the pairs animals are actually built from: `mobility` and `opponentMobility` are one
-// measurement taken of the two sides yet sat in different families on different scales, and
-// `hanging` and `offeredMaterial` — the Hare, and the lab's two strongest features — did the same.
-// Origin is what the comments beside the entries are for.
-export type FeatureFamily =
-	// What each side's pieces are worth.
-	| "material"
-	// Reach, ground and good squares: what a side can do.
-	| "activity"
-	// What is about to be lost — ours and theirs, since every feature is a difference.
-	| "safety"
-	// Where the army stands relative to a king. The paper's distance strategies.
-	| "distance"
-	// Properties of the whole board rather than of a side, so they read the same from either seat.
-	| "shape"
-	// A property of the move that produced the position, not of the position itself.
-	| "move";
-
 export type FeatureDefinition = {
 	// Stable identifier. It is what a bot config stores, what a UCI `setoption` names, and what
 	// the locale files key their labels on, so renaming one breaks saved bots — don't.
 	key: string;
-	family: FeatureFamily;
 	defaultWeight: number;
 };
 
@@ -61,11 +39,11 @@ export function defineFeatures(definitions: readonly FeatureDefinition[]): Featu
 export const FEATURES = defineFeatures([
 	// Piece values are features rather than constants, so a bot can be given its own — one that
 	// thinks a rook is worth two knights is one number away.
-	{ key: "materialPawn", family: "material", defaultWeight: 100 },
-	{ key: "materialKnight", family: "material", defaultWeight: 320 },
-	{ key: "materialBishop", family: "material", defaultWeight: 330 },
-	{ key: "materialRook", family: "material", defaultWeight: 500 },
-	{ key: "materialQueen", family: "material", defaultWeight: 900 },
+	{ key: "materialPawn", defaultWeight: 100 },
+	{ key: "materialKnight", defaultWeight: 320 },
+	{ key: "materialBishop", defaultWeight: 330 },
+	{ key: "materialRook", defaultWeight: 500 },
+	{ key: "materialQueen", defaultWeight: 900 },
 
 	// Danger around the king rather than on it: what attacks the squares he stands among, ours
 	// minus theirs — so a negative weight buys safety and a positive one is `suicide_king`. It was
@@ -78,37 +56,35 @@ export const FEATURES = defineFeatures([
 	// count of the pawnless files beside him went the other way: two sweeps rated it +17 and +19,
 	// inside the noise, and nothing weighted it — `kingDanger` already reads the open line as
 	// the piece now aiming down it.
-	{ key: "kingDanger", family: "safety", defaultWeight: -12 },
+	{ key: "kingDanger", defaultWeight: -12 },
 
 	// The Elo World strategies. Each is a weight here rather than a separate player class, so a
-	// bot can be one part swarm, one part material, and rated on the same scale as the rest —
-	// which is also why they are filed by what they measure like everything else, and not in a
-	// drawer of their own.
+	// bot can be one part swarm, one part material, and rated on the same scale as the rest.
 	//
 	// All three distances are negated on the way out of the extractor, so more is nearer and a
-	// positive weight means the behaviour the key names. See `families/proximity.ts`.
-	{ key: "swarm", family: "distance", defaultWeight: 0 },
-	{ key: "huddle", family: "distance", defaultWeight: 0 },
-	{ key: "kingProximity", family: "distance", defaultWeight: 0 },
+	// positive weight means the behaviour the key names. See `engine/src/eval/proximity.c`.
+	{ key: "swarm", defaultWeight: 0 },
+	{ key: "huddle", defaultWeight: 0 },
+	{ key: "kingProximity", defaultWeight: 0 },
 	// Shape is a property of the whole board, not of a side, so unlike every other feature these
 	// read identically from either seat — which is why the animals on them must run at an even
 	// depth, negamax flipping a leaf's sign once per ply.
-	{ key: "sameColorSquares", family: "shape", defaultWeight: 0 },
+	{ key: "sameColorSquares", defaultWeight: 0 },
 	// The rank-flip mirror alone — the copycat symmetry, and the only one of the three an animal
 	// has ever wanted. A pawn on e4 facing a pawn on e5 costs nothing, so maximising it answers
 	// every move with the same move.
-	{ key: "mirrorRanks", family: "shape", defaultWeight: 0 },
+	{ key: "mirrorRanks", defaultWeight: 0 },
 	// The same measurement `mobility` takes of our own side, kept apart so a bot can price taking
 	// the opponent's moves away differently from having moves itself.
-	{ key: "opponentMobility", family: "activity", defaultWeight: 0 },
-	{ key: "pushDepth", family: "activity", defaultWeight: 0 },
+	{ key: "opponentMobility", defaultWeight: 0 },
+	{ key: "pushDepth", defaultWeight: 0 },
 	// Material a side leaves catchable, counted once per way it can be taken. `hanging` below is
 	// the same instinct as a count of undefended pieces, and the two together are the Hare — the
-	// lab's strongest pair, which is why they share a family and a slider band.
-	{ key: "offeredMaterial", family: "safety", defaultWeight: 0 },
+	// lab's strongest pair.
+	{ key: "offeredMaterial", defaultWeight: 0 },
 
 	// Properties of the move that produced the position. They are what let `cccp` and `pacifist`
-	// be weights rather than special-cased players. See `families/move.ts` for the sign
+	// be weights rather than special-cased players. See `engine/src/eval/move.c` for the sign
 	// convention: a positive weight always means "the mover wants this".
 	// `givesMate` is a **preference in [-1, 1]**, not a score: +1 chases mate, -1 flees it, 0
 	// cannot see it. It is the only weight that is not centipawns, because the thing it prices is
@@ -117,50 +93,49 @@ export const FEATURES = defineFeatures([
 	// A `givesStalemate` preference sat beside it on the same scale, for the paper's complaint that
 	// `min_oppt_moves` cannot tell mate from stalemate. No animal ever wanted to, and the lab put it
 	// at +19 — inside the noise — so it went.
-	{ key: "givesMate", family: "move", defaultWeight: 1 },
-	{ key: "givesCheck", family: "move", defaultWeight: 0 },
-	{ key: "captureValue", family: "move", defaultWeight: 0 },
+	{ key: "givesMate", defaultWeight: 1 },
+	{ key: "givesCheck", defaultWeight: 0 },
+	{ key: "captureValue", defaultWeight: 0 },
 
-	{ key: "centerControl", family: "activity", defaultWeight: 8 },
-	{ key: "space", family: "activity", defaultWeight: 2 },
-	{ key: "hanging", family: "safety", defaultWeight: -15 },
+	{ key: "centerControl", defaultWeight: 8 },
+	{ key: "space", defaultWeight: 2 },
+	{ key: "hanging", defaultWeight: -15 },
 
-	{ key: "mobility", family: "activity", defaultWeight: 4 },
+	{ key: "mobility", defaultWeight: 4 },
 
 	// A strategic stand-in for a piece-square table, role-agnostic on purpose: how far the minor
-	// and major pieces stand from the rim. It replaced twelve per-role sliders (a centralization
+	// and major pieces stand from the rim. It replaced twelve per-role weights (a centralization
 	// and an advancement for each of the six roles) that no animal used, and the lab then rated it
 	// a top-three feature on its own — a knight wanting the centre and a rook wanting the seventh
 	// are the same instinct, and one number says it. The paired `advancement` term for pawns went
-	// with the rest of the pawn family: every pawn-structure weight the registry carried — passed,
-	// the lumped weakness, forwardness — measured at or below bare material in the lab, so the
-	// family is gone rather than kept as a drawer of dead sliders.
-	{ key: "centralization", family: "activity", defaultWeight: 0 },
+	// with the rest of pawn structure: every such weight the registry carried — passed, the lumped
+	// weakness, forwardness — measured at or below bare material in the lab, so they are gone
+	// rather than kept as dead weights.
+	{ key: "centralization", defaultWeight: 0 },
 
 	// Our knights and bishops off the back rank minus theirs — a plain count of developed minors.
-	// It joins `activity` rather than a family of its own: "reach, ground and good squares" covers
-	// getting a piece into play, and there is no game-phase mechanism to gate it because the
-	// quantity decays to ~0 on its own once both sides' minors are out or traded.
-	{ key: "development", family: "activity", defaultWeight: 15 },
+	// There is no game-phase mechanism to gate it because the quantity decays to ~0 on its own
+	// once both sides' minors are out or traded.
+	{ key: "development", defaultWeight: 15 },
 
 	// Our minors still on their home square while our queen is already out (and not traded), minus
 	// theirs — the queen-before-the-pieces mistake, as a positive count the negative default
-	// punishes. Also `activity`, also no phase gate: it falls to 0 on its own once the minors
+	// punishes. No phase gate either: it falls to 0 on its own once the minors
 	// develop or the queen comes home.
-	{ key: "earlyQueen", family: "activity", defaultWeight: -10 },
+	{ key: "earlyQueen", defaultWeight: -10 },
 
 	// Our king's distance from the rim minus theirs, scaled by the square of how little material is
 	// left — the endgame's "activate the king", held back until the ending really comes. Unlike the
 	// whole-board `kingProximity` it is a real side-to-move difference, so it needs no even depth.
-	// Opt-in, like `swarm`: it is phase-shaped inside its extractor (`families/endgame.ts`), which
+	// Opt-in, like `swarm`: it is phase-shaped inside its extractor (`engine/src/eval/endgame.c`), which
 	// is the one kind of phase-awareness the single weight vector allows.
-	{ key: "kingActivity", family: "activity", defaultWeight: 0 },
+	{ key: "kingActivity", defaultWeight: 0 },
 
 	// Our passed pawns weighted by how far they have run, minus theirs, scaled by how little
-	// material is left — "push the passers". It is the removed pawn family's `passed` coming back
+	// material is left — "push the passers". It is the removed pawn-structure `passed` coming back
 	// in one narrower shape: silent in the middlegame, where the lab found the old term at or below
 	// bare material, and live only once the pieces are off. Opt-in, and on probation like it.
-	{ key: "passedPawnPush", family: "activity", defaultWeight: 0 },
+	{ key: "passedPawnPush", defaultWeight: 0 },
 
 	// An `attackEnemyPawns` term — enemy pawns we attack minus ours they attack, faded in the same
 	// way — landed with these two and was dropped unused: the Camel, the one endgame animal, never
