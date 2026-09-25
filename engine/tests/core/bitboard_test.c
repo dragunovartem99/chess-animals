@@ -25,10 +25,4 @@ TEST(pops_squares_in_ascending_order) {
 	CHECK(bb == 0);
 }
 
-TEST(flips_ranks_and_keeps_files) {
-	CHECK(bb_flip(square_bb(A1)) == square_bb(A8));
-	CHECK(bb_flip(square_bb(E4)) == square_bb(E4 + 8));
-	CHECK(bb_flip(bb_flip(0x0123456789abcdefU)) == 0x0123456789abcdefU);
-}
-
 TEST(names_the_opposite_colour) { CHECK(opposite(WHITE) == BLACK && opposite(BLACK) == WHITE); }

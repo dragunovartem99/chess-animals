@@ -36,8 +36,4 @@ static inline Square bb_pop(Bitboard *bb) {
 	return square;
 }
 
-// Mirrors the board top to bottom, a1 <-> a8: evaluating Black as if it were White is how the
-// side-to-move rule stays free of colour-specific code.
-static inline Bitboard bb_flip(Bitboard bb) { return __builtin_bswap64(bb); }
-
 #endif
