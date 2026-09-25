@@ -31,8 +31,6 @@ export const BASES = {
 
 export type BaseName = keyof typeof BASES;
 
-export const BASE_NAMES = Object.keys(BASES) as BaseName[];
-
 // A bot's weights: its base, with everything the definition names written over the top. Naming a
 // feature the base already sets replaces it rather than adding to it, so an animal can always
 // disagree with its base in one line.

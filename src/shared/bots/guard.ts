@@ -57,8 +57,8 @@ function checkMaia({ id, candidate }: { id: string; candidate: Record<string, un
 	}
 }
 
-// Bots arrive from files a person edited, from the weight editor, from a tuner run, and from
-// localStorage written by an older version of this app. None of those are trustworthy, and a bot
+// Bots arrive from files a person edited, from a lab candidate and from a tuner run. None of those
+// is trustworthy, and a bot
 // that is quietly wrong plays a whole tournament before anyone notices, so it is rejected loudly
 // at the door instead.
 export function assertBotDefinition(value: unknown): asserts value is BotDefinition {
@@ -85,13 +85,4 @@ export function assertBotDefinition(value: unknown): asserts value is BotDefinit
 	checkStockfish({ id, stockfish: candidate.stockfish });
 	checkMaia({ id, candidate });
 	checkWeights({ id, record: candidate.weights });
-}
-
-export function isBotDefinition(value: unknown): value is BotDefinition {
-	try {
-		assertBotDefinition(value);
-		return true;
-	} catch {
-		return false;
-	}
 }

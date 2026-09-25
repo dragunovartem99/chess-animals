@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { assertBotDefinition, isBotDefinition } from "../guard";
+import { assertBotDefinition } from "../guard";
 import type { BotDefinition } from "../types";
 
 const SHRIMP: BotDefinition = {
@@ -12,19 +12,25 @@ const SHRIMP: BotDefinition = {
 
 describe("assertBotDefinition on an underwater animal", () => {
 	it("accepts a rating, greedy or not", () => {
-		expect(isBotDefinition(SHRIMP)).toBe(true);
-		expect(isBotDefinition({ ...SHRIMP, maia: { elo: 2500, greedy: true } })).toBe(true);
+		expect(() => assertBotDefinition(SHRIMP)).not.toThrow();
+		expect(() =>
+			assertBotDefinition({ ...SHRIMP, maia: { elo: 2500, greedy: true } })
+		).not.toThrow();
 	});
 
 	it.each([{ elo: 0 }, { elo: -600 }, { elo: Infinity }, { elo: "600" }, {}, "maia", null])(
 		"rejects maia options %j",
 		(maia) => {
-			expect(isBotDefinition({ ...SHRIMP, maia })).toBe(false);
+			expect(() => assertBotDefinition({ ...SHRIMP, maia })).toThrow(
+				"maia.elo must be a positive number"
+			);
 		}
 	);
 
 	it("rejects a greedy that is not a flag", () => {
-		expect(isBotDefinition({ ...SHRIMP, maia: { elo: 600, greedy: "yes" } })).toBe(false);
+		expect(() => assertBotDefinition({ ...SHRIMP, maia: { elo: 600, greedy: "yes" } })).toThrow(
+			"maia.greedy must be true or false"
+		);
 	});
 
 	it("rejects a bot played by Maia and Stockfish both", () => {

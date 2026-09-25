@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { assertBotDefinition, isBotDefinition } from "../guard";
+import { assertBotDefinition } from "../guard";
 import type { BotDefinition } from "../types";
 
 const VALID: BotDefinition = {
@@ -22,22 +22,28 @@ describe("assertBotDefinition", () => {
 
 	it("rejects an id that could not be a url segment or a cache key", () => {
 		for (const id of ["Swarm Wolf", "", "3wolves", "wolf_2"]) {
-			expect(isBotDefinition({ ...VALID, id })).toBe(false);
+			expect(() => assertBotDefinition({ ...VALID, id })).toThrow(
+				"id must be lower-case letters, digits and dashes"
+			);
 		}
 	});
 
 	it("rejects a search depth below one", () => {
-		expect(isBotDefinition({ ...VALID, search: { depth: 0 } })).toBe(false);
-		expect(isBotDefinition({ ...VALID, search: { depth: 1.5 } })).toBe(false);
+		expect(() => assertBotDefinition({ ...VALID, search: { depth: 0 } })).toThrow(
+			"search.depth must be a whole number of at least 1"
+		);
+		expect(() => assertBotDefinition({ ...VALID, search: { depth: 1.5 } })).toThrow(
+			"search.depth must be a whole number of at least 1"
+		);
 	});
 
 	it("rejects anything that is not an object at all", () => {
 		for (const value of [null, undefined, 42, "wolf", []])
-			expect(isBotDefinition(value)).toBe(false);
+			expect(() => assertBotDefinition(value)).toThrow('invalid bot "?"');
 	});
 });
 
-describe("assertBotDefinition on weights, bases and monsters", () => {
+describe("assertBotDefinition on weights and bases", () => {
 	it("rejects a weight naming a feature that does not exist", () => {
 		expect(() => assertBotDefinition({ ...VALID, weights: { swrm: 1 } })).toThrow(
 			'unknown feature "swrm"'
@@ -45,25 +51,37 @@ describe("assertBotDefinition on weights, bases and monsters", () => {
 	});
 
 	it("rejects a weight that is not a finite number", () => {
-		expect(isBotDefinition({ ...VALID, weights: { swarm: Infinity } })).toBe(false);
-		expect(isBotDefinition({ ...VALID, weights: { swarm: "-12" } })).toBe(false);
+		expect(() => assertBotDefinition({ ...VALID, weights: { swarm: Infinity } })).toThrow(
+			'weight "swarm" is not a finite number'
+		);
+		expect(() => assertBotDefinition({ ...VALID, weights: { swarm: "-12" } })).toThrow(
+			'weight "swarm" is not a finite number'
+		);
 	});
 
 	it("rejects weights that are not a flat record of feature keys", () => {
-		expect(isBotDefinition({ ...VALID, weights: { middlegame: { swarm: -12 } } })).toBe(false);
-		expect(isBotDefinition({ ...VALID, weights: undefined })).toBe(false);
+		expect(() =>
+			assertBotDefinition({ ...VALID, weights: { middlegame: { swarm: -12 } } })
+		).toThrow('unknown feature "middlegame"');
+		expect(() => assertBotDefinition({ ...VALID, weights: undefined })).toThrow(
+			"weights are not an object"
+		);
 	});
 
 	it("rejects a base that does not exist", () => {
-		expect(isBotDefinition({ ...VALID, base: "matrial" })).toBe(false);
-		expect(isBotDefinition({ ...VALID, base: 7 })).toBe(false);
-		expect(isBotDefinition({ ...VALID, base: "material" })).toBe(true);
+		expect(() => assertBotDefinition({ ...VALID, base: "matrial" })).toThrow(
+			'unknown base "matrial"'
+		);
+		expect(() => assertBotDefinition({ ...VALID, base: 7 })).toThrow('unknown base "7"');
+		expect(() => assertBotDefinition({ ...VALID, base: "material" })).not.toThrow();
 	});
+});
 
+describe("assertBotDefinition on monsters", () => {
 	it("accepts a monster, and one without stockfish options", () => {
-		expect(
-			isBotDefinition({ ...VALID, stockfish: { nodes: 50, lines: 1, temperature: 0 } })
-		).toBe(true);
+		expect(() =>
+			assertBotDefinition({ ...VALID, stockfish: { nodes: 50, lines: 1, temperature: 0 } })
+		).not.toThrow();
 	});
 
 	it.each([
@@ -79,6 +97,6 @@ describe("assertBotDefinition on weights, bases and monsters", () => {
 		"stockfish",
 		null,
 	])("rejects stockfish options %j", (stockfish) => {
-		expect(isBotDefinition({ ...VALID, stockfish })).toBe(false);
+		expect(() => assertBotDefinition({ ...VALID, stockfish })).toThrow("stockfish.");
 	});
 });
