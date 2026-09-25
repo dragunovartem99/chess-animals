@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { FEATURES_BY_KEY } from "../features";
-import { recordFromWeights, weightsFromRecord } from "../vector";
+import { weightsFromRecord } from "../vector";
 
 describe("weightsFromRecord", () => {
 	it("leaves unnamed features at zero, so appending a feature cannot rewrite a saved bot", () => {
@@ -16,17 +16,5 @@ describe("weightsFromRecord", () => {
 
 	it("rejects a key no feature answers to, rather than dropping it silently", () => {
 		expect(() => weightsFromRecord({ swrm: 1 })).toThrow('unknown feature key "swrm"');
-	});
-});
-
-describe("recordFromWeights", () => {
-	it("omits everything that does nothing", () => {
-		expect(recordFromWeights(weightsFromRecord({}))).toEqual({});
-	});
-
-	it("round-trips the values it does keep", () => {
-		const record = { mobility: 42 };
-
-		expect(recordFromWeights(weightsFromRecord(record))).toEqual(record);
 	});
 });

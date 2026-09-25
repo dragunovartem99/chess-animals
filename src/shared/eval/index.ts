@@ -7,10 +7,5 @@ export {
 	FEATURES_BY_KEY,
 	featureId,
 } from "./features";
-export {
-	type FeatureVector,
-	recordFromWeights,
-	type WeightVector,
-	weightsFromRecord,
-} from "./vector";
+export { type FeatureVector, type WeightVector, weightsFromRecord } from "./vector";
 export { MATE_SCORE } from "./terminal";

@@ -1,4 +1,4 @@
-import { FEATURE_COUNT, FEATURES, FEATURES_BY_KEY } from "./features";
+import { FEATURE_COUNT, FEATURES_BY_KEY } from "./features";
 
 // One scalar per feature, read off a position — the engine's float32s, as `extract` returns them.
 export type FeatureVector = Float32Array;
@@ -24,15 +24,4 @@ export function weightsFromRecord(record: Readonly<Record<string, number>>): Wei
 	}
 
 	return weights;
-}
-
-// The inverse, keeping every weight that does anything — the shape a tuned bot is exported in.
-export function recordFromWeights(weights: WeightVector): Record<string, number> {
-	const record: Record<string, number> = {};
-
-	for (const feature of FEATURES) {
-		if (weights[feature.id] !== 0) record[feature.key] = weights[feature.id];
-	}
-
-	return record;
 }
