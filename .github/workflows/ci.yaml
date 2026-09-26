@@ -3,12 +3,12 @@ name: CI
 # Pushes to main run this through deploy.yaml, which waits for it before shipping.
 on:
     pull_request:
-        branches: [main]
+        branches: ["main"]
     workflow_call:
 
 jobs:
     pipes:
-        uses: dragunovartem99/pipes/.github/workflows/ci-node.yaml@v1.1.0
+        uses: dragunovartem99/pipes/.github/workflows/ci-node.yaml@v1.2.0
         with:
             checks: '["format:check", "types:check", "lint:check", "test:coverage", "build"]'
             # Pinned to the major the engine is formatted with: clang-format's output drifts

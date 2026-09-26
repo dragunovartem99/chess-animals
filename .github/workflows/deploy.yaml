@@ -2,7 +2,7 @@ name: Deploy
 
 on:
     push:
-        branches: [main]
+        branches: ["main"]
 
 jobs:
     # A red CI run blocks the deploy: it only starts once the same checks that gate pull
@@ -12,7 +12,7 @@ jobs:
 
     deploy:
         needs: ci
-        uses: dragunovartem99/pipes/.github/workflows/deploy-vps.yaml@v1.1.0
+        uses: dragunovartem99/pipes/.github/workflows/deploy-vps.yaml@v1.2.0
         with:
             strategy: release
             setup: node
