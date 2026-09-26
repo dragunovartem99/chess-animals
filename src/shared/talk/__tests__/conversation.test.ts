@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { createConversation, MAX_SAID } from "../conversation";
 import type { LinesFor } from "../conversation";
+import { REMARKS } from "../remark";
 
 const PLAYERS = { white: "human", black: "donkey" } as const;
 const CHECK = [{ color: "black", remark: "check" }] as const;
@@ -39,5 +40,29 @@ describe("createConversation", () => {
 		conversation.begin();
 
 		expect(checks({ conversation, times: 1 })).not.toEqual([undefined]);
+	});
+
+	it("keeps no cooldown for a remark it had no line left to say", () => {
+		const lines = Object.fromEntries(REMARKS.map((remark) => [remark, [`${remark} 1`]]));
+		lines.check = [];
+		const conversation = createConversation({
+			linesFor: ({ remark }) => lines[remark]!,
+			seed: () => "seed",
+		});
+		const hear = (ply: number) =>
+			conversation.hear({
+				verdict: { ply, score: { cp: 0 } },
+				facts: { check: true },
+				bots: ["black"],
+				livePly: ply,
+				players: PLAYERS,
+			});
+
+		for (const ply of [0, 1, 2, 3]) hear(ply);
+		lines.check = ["check 1"];
+
+		expect(hear(4)).toEqual([
+			{ color: "black", remark: "check", key: 1, id: "donkey", index: 0 },
+		]);
 	});
 });

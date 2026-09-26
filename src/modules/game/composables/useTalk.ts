@@ -7,7 +7,7 @@ import type { Ref } from "vue";
 import type { GameStatus } from "@/shared/chess";
 import type { PlayedTurn } from "@/shared/game";
 import { createConversation, farewell, greet, moveFacts } from "@/shared/talk";
-import type { Line, LinesFor, Observer, Spoken } from "@/shared/talk";
+import type { Line, LinesFor, Observer, Spoken, Verdict } from "@/shared/talk";
 import { useStoredFlag } from "@/shared/ui";
 
 import { spawnObserver, useObserver } from "./spawnObserver";
@@ -24,12 +24,22 @@ type Options = {
 // A fresh game's stream, as the engines get: the talk replays only where a test fixes the seed.
 const randomSeed = () => crypto.randomUUID();
 
-// What the move that made `ply` did, read from the position it was played in.
-function factsOf({ turns, fens, ply }: { turns: PlayedTurn[]; fens: string[]; ply: number }) {
-	const played = turns[ply - 1];
-	const fen = fens[ply - 1];
+// The verdict on a ply, with what the move that made it did, read from the position it was played
+// in, and how far the game has gone since.
+function hearing({
+	turns,
+	fens,
+	verdict,
+}: {
+	turns: PlayedTurn[];
+	fens: string[];
+	verdict: Verdict;
+}) {
+	const played = turns[verdict.ply - 1];
+	const fen = fens[verdict.ply - 1];
+	const facts = played && fen ? moveFacts({ fen, uci: played.uci }) : { check: false };
 
-	return played && fen ? moveFacts({ fen, uci: played.uci }) : { check: false };
+	return { verdict, facts, livePly: turns.length };
 }
 
 // Only a bot has lines; a human, or an animal nobody has written for yet, says nothing.
@@ -59,8 +69,8 @@ export function useTalk(options: Options) {
 		const verdict = await observer()?.observe({ fen: INITIAL_FEN, moves });
 		if (!verdict || status.value.over) return;
 
-		const facts = factsOf({ turns: turns.value, fens: fens.value, ply: verdict.ply });
-		speak(conversation.hear({ verdict, facts, bots: bots.value, livePly: turns.value.length }));
+		const heard = hearing({ turns: turns.value, fens: fens.value, verdict });
+		said.value = conversation.hear({ ...heard, bots: bots.value, players: players.value });
 	}
 
 	function begin() {

@@ -56,7 +56,14 @@ function lineFor({
 	return index;
 }
 
-type Hearing = { verdict: Verdict; facts: Facts; bots: readonly Color[]; livePly: number };
+type Players = { players: Record<Color, string> };
+
+type Hearing = Players & {
+	verdict: Verdict;
+	facts: Facts;
+	bots: readonly Color[];
+	livePly: number;
+};
 
 // Everything a game's talk remembers, with no framework and no Stockfish in it: the seeded
 // stream, the verdicts so far, when the last remark was made, the last few remarks, how often
@@ -72,6 +79,18 @@ export function createConversation({ linesFor, seed }: { linesFor: LinesFor; see
 	let timesSaid = new Map<string, number>();
 	const lastLine = new Map<string, number>();
 
+	// The lines the bots actually say to `spoken`, kept in the transcript.
+	function utter({ spoken, players }: Players & { spoken: Spoken[] }): Line[] {
+		const lines = spoken.flatMap((one): Line[] => {
+			const id = players[one.color];
+			const index = lineFor({ ...one, id, linesFor, lastLine, timesSaid, rng });
+			return index === undefined ? [] : [{ ...one, key: (said += 1), id, index }];
+		});
+		transcript = [...transcript, ...lines].slice(-KEPT);
+
+		return lines;
+	}
+
 	return {
 		// A new game: a fresh stream, no verdicts, a clean slate and every line fresh again, but
 		// the same memory of what was said last.
@@ -83,24 +102,20 @@ export function createConversation({ linesFor, seed }: { linesFor: LinesFor; see
 			transcript = [];
 		},
 		// Has the bots say what they want to, in order, and gives back the last few remarks.
-		say({ spoken, players }: { spoken: Spoken[]; players: Record<Color, string> }): Line[] {
-			const lines = spoken.flatMap((one): Line[] => {
-				const id = players[one.color];
-				const index = lineFor({ ...one, id, linesFor, lastLine, timesSaid, rng });
-				return index === undefined ? [] : [{ ...one, key: (said += 1), id, index }];
-			});
-			transcript = [...transcript, ...lines].slice(-KEPT);
+		say({ spoken, players }: Players & { spoken: Spoken[] }): Line[] {
+			utter({ spoken, players });
 
 			return transcript;
 		},
-		// What the bots want to say to a verdict on the move just played; a remark starts the
-		// cooldown.
-		hear({ verdict, facts, bots, livePly }: Hearing): Spoken[] {
+		// Has the bots say what they want to about a verdict on the move just played, and gives
+		// back the last few remarks. Only a line actually said starts the cooldown: a remark whose
+		// lines are all spent is silence, and silence must not keep the next remark from coming.
+		hear({ verdict, facts, bots, livePly, players }: Hearing): Line[] {
 			const spoken = react({ verdicts, verdict, facts, bots, livePly, lastPly });
 			verdicts[verdict.ply] = verdict;
-			if (spoken.length > 0) lastPly = verdict.ply;
+			if (utter({ spoken, players }).length > 0) lastPly = verdict.ply;
 
-			return spoken;
+			return transcript;
 		},
 	};
 }
