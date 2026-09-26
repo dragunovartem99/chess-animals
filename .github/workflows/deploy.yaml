@@ -5,13 +5,7 @@ on:
         branches: ["main"]
 
 jobs:
-    # A red CI run blocks the deploy: it only starts once the same checks that gate pull
-    # requests have passed on this commit.
-    ci:
-        uses: ./.github/workflows/ci.yaml
-
     deploy:
-        needs: ci
         uses: dragunovartem99/pipes/.github/workflows/deploy-vps.yaml@v1.2.0
         with:
             strategy: release

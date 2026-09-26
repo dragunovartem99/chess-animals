@@ -50,8 +50,8 @@ npm run dev
 | `npm run engine:features`           | regenerate the C engine's feature-id header from the registry           |
 
 Linting and formatting via [oxlint](https://oxc.rs)/[oxfmt](https://oxc.rs), type-checking via
-`vue-tsc`, tests via Vitest. CI runs all of them plus the build on every pull request;
-`main` runs them again and, once green, deploys to [chess-animals.com](https://chess-animals.com/).
+`vue-tsc`, tests via Vitest. CI runs all of them plus the build on every pull request, and
+merging requires them to pass; every push to `main` deploys to [chess-animals.com](https://chess-animals.com/).
 
 ## Documentation
 
