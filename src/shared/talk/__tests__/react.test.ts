@@ -57,14 +57,18 @@ describe("react to a check or a mate", () => {
 		expect(react({ ...TAKE, facts: { check: true }, bots: ["black"] })).toEqual([]);
 	});
 
-	it("puts a mate found before anything else, and only once", () => {
+	it("puts a mate found before anything else, once a side", () => {
 		const mate = { ...TAKE, verdict: { ply: 5, score: { mate: 3 } } };
-		const again = { ...mate, verdicts: at({ ply: 4, score: { mate: 4 } }) };
+		const again = { ...mate, last: { mating: "white" } } as const;
+		const late = { ...mate, verdicts: at({ ply: 4, score: { mate: 4 } }) };
 
 		expect(react({ ...mate, facts: { check: true }, bots: BOTH })).toEqual([
 			{ color: "white", remark: "mating" },
 		]);
 		expect(react({ ...again, facts: QUIET, bots: BOTH })).toEqual([]);
+		expect(react({ ...late, facts: QUIET, bots: BOTH })).toEqual([
+			{ color: "white", remark: "mating" },
+		]);
 		expect(
 			react({ ...mate, verdict: { ply: 5, score: { mate: -2 } }, facts: QUIET, bots: BOTH })
 		).toEqual([{ color: "black", remark: "mating" }]);

@@ -28,8 +28,9 @@ export const farewell = ({ result, bots }: { result: GameResult; bots: readonly 
 		return { color, remark: result === color ? "win" : "loss" };
 	});
 
-// The ply of the last remark, and of the last that was news: a capture or a mate.
-export type Last = { remark?: number; news?: number };
+// The ply of the last remark, and of the last that was news: a capture or a mate; and the side
+// whose mate was said last.
+export type Last = { remark?: number; news?: number; mating?: Color };
 
 // What is remembered once `said` has been said about `ply`: only a remark actually said starts a
 // cooldown, since a remark whose lines are all spent is silence, and silence must not keep the
@@ -45,9 +46,9 @@ export function remember({
 }) {
 	if (said.length === 0) return last;
 
-	return said.some((one) => one.remark !== "check")
-		? { remark: ply, news: ply }
-		: { ...last, remark: ply };
+	const isNews = said.some((one) => one.remark !== "check");
+	const mating = said.find((one) => one.remark === "mating")?.color ?? last.mating;
+	return { remark: ply, news: isNews ? ply : last.news, mating };
 }
 
 type Moment = {
@@ -72,13 +73,14 @@ const say = ({ bots, color, remark, piece }: Spoken & { bots: readonly Color[] }
 // saw the gift coming then, so the capture itself swings nothing, and an even trade swings nothing
 // either way. It is said when the piece is taken, never when it is left hanging, which would give
 // it away.
-function news({ verdicts, verdict, facts, bots, before }: Moment & { before: Verdict }): Spoken[] {
+function news(moment: Moment & { before: Verdict }): Spoken[] {
+	const { verdicts, verdict, facts, bots, before, last } = moment;
 	const { ply, score } = verdict;
 
 	// Whoever's move showed it: a mate often appears only once the losing side has moved into it.
+	// Once a side, rather than once a verdict, so a mate found inside a cooldown is said after it.
 	const mating = mateFor(score);
-	if (mating && mateFor(before.score) !== mating)
-		return say({ bots, color: mating, remark: "mating" });
+	if (mating && mating !== last.mating) return say({ bots, color: mating, remark: "mating" });
 
 	const mover = moverOf(ply);
 	const from = (verdicts[ply - 2] ?? before).score;
