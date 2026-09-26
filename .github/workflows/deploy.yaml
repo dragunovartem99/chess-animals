@@ -3,9 +3,10 @@ name: Deploy
 on:
     push:
         branches: ["main"]
+    workflow_dispatch:
 
 jobs:
-    deploy:
+    pipes:
         uses: dragunovartem99/pipes/.github/workflows/deploy-vps.yaml@v1.2.0
         with:
             strategy: release
