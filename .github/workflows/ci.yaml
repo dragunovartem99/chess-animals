@@ -6,9 +6,7 @@ on:
 
 jobs:
     pipes:
-        uses: dragunovartem99/pipes/.github/workflows/ci-node.yaml@v1.2.0
+        uses: dragunovartem99/pipes/.github/workflows/ci-node.yaml@v1.3.0
         with:
             checks: '["format:check", "types:check", "lint:check", "test:coverage", "build"]'
-            # Pinned to the major the engine is formatted with: clang-format's output drifts
-            # between versions, and a local 22 against a CI 19 would fail `format:check`.
-            llvm-version: "22"
+            before: sh scripts/install-llvm.sh
