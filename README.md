@@ -26,7 +26,7 @@ way down — see [METHOD.md](./METHOD.md).
 
 ## Development
 
-Requires Node.js ≥ 24, and clang 22 with lld, clang-tidy, clang-format and llvm for the C
+Requires Node.js ≥ 24, and clang (major in `.llvm-version`) with lld, clang-tidy, clang-format and llvm for the C
 engine under `engine/`.
 
 ```sh
