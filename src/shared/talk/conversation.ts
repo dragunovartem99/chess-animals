@@ -3,6 +3,7 @@ import type { Color, Role } from "chessops/types";
 import { createRng } from "../engine";
 import type { Rng } from "../engine";
 import type { Facts } from "./facts";
+import type { Heard } from "./gain";
 import type { Verdict } from "./observer";
 import { pickRemark } from "./pick";
 import { react, remember } from "./react";
@@ -66,14 +67,14 @@ type Hearing = Players & {
 };
 
 // Everything a game's talk remembers, with no framework and no Stockfish in it: the seeded
-// stream, the verdicts so far, when the last remark and the last news were made, the last few
+// stream, every ply heard so far, when the last remark and the last news were made, the last few
 // remarks, how often each line has come up this game, and which line each bot said last for each
 // remark — the last kept across games, so a bot does not open two games with the same hello. By
 // position in the list rather than by text, since `{piece}` changes the text of what is still the
 // same line.
 export function createConversation({ linesFor, seed }: { linesFor: LinesFor; seed: () => string }) {
 	let rng: Rng = createRng(seed());
-	let verdicts: Verdict[] = [];
+	let heard: Heard[] = [];
 	let last: Last = {};
 	let transcript: Line[] = [];
 	let said = 0;
@@ -93,12 +94,12 @@ export function createConversation({ linesFor, seed }: { linesFor: LinesFor; see
 	}
 
 	return {
-		// A new game: a fresh stream, no verdicts, a clean slate and every line fresh again, but
+		// A new game: a fresh stream, nothing heard, a clean slate and every line fresh again, but
 		// the same memory of what was said last.
 		begin() {
 			rng = createRng(seed());
 			timesSaid = new Map();
-			verdicts = [];
+			heard = [];
 			last = {};
 			transcript = [];
 		},
@@ -111,8 +112,8 @@ export function createConversation({ linesFor, seed }: { linesFor: LinesFor; see
 		// Has the bots say what they want to about a verdict on the move just played, and gives
 		// back the last few remarks.
 		hear({ verdict, facts, bots, livePly, players }: Hearing): Line[] {
-			const spoken = react({ verdicts, verdict, facts, bots, livePly, last });
-			verdicts[verdict.ply] = verdict;
+			heard[verdict.ply] = { verdict, facts };
+			const spoken = react({ heard, ply: verdict.ply, bots, livePly, last });
 			last = remember({ last, said: utter({ spoken, players }), ply: verdict.ply });
 
 			return transcript;

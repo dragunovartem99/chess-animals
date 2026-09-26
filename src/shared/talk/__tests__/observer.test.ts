@@ -52,10 +52,10 @@ describe("the observer", () => {
 			Promise.resolve()
 		);
 
-		expect(await white).toEqual({ ply: 0, score: { cp: 30 } });
-		expect(await black).toEqual({ ply: 1, score: { cp: -40 } });
-		expect(await fromBlack).toEqual({ ply: 0, score: { cp: 25 } });
-		expect(await mated).toEqual({ ply: 3, score: { mate: -1 } });
+		expect(await white).toEqual({ ply: 0, score: { cp: 30 }, reply: "e2e4" });
+		expect(await black).toEqual({ ply: 1, score: { cp: -40 }, reply: "e2e4" });
+		expect(await fromBlack).toEqual({ ply: 0, score: { cp: 25 }, reply: "e2e4" });
+		expect(await mated).toEqual({ ply: 3, score: { mate: -1 }, reply: "e2e4" });
 	});
 
 	it("asks one question at a time, in order, on a fixed budget", async () => {
@@ -90,7 +90,7 @@ describe("the observer, once the game has moved on", () => {
 
 		expect(await out).toBeUndefined();
 		expect(await waiting).toBeUndefined();
-		expect(await fresh).toEqual({ ply: 0, score: { cp: 10 } });
+		expect(await fresh).toEqual({ ply: 0, score: { cp: 10 }, reply: "e2e4" });
 		expect(asked).toEqual([0, 0]);
 		expect(said).toEqual(["go nodes 50000", "ucinewgame", "go nodes 50000"]);
 	});

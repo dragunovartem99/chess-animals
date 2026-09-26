@@ -24,6 +24,9 @@ type Options = {
 // A fresh game's stream, as the engines get: the talk replays only where a test fixes the seed.
 const randomSeed = () => crypto.randomUUID();
 
+// The opening position, as if a move had made it: level, with nothing taken.
+const OPENING = { check: false, material: 0, settled: 0 };
+
 // The verdict on a ply, with what the move that made it did, read from the position it was played
 // in, and how far the game has gone since.
 function hearing({
@@ -37,7 +40,8 @@ function hearing({
 }) {
 	const played = turns[verdict.ply - 1];
 	const fen = fens[verdict.ply - 1];
-	const facts = played && fen ? moveFacts({ fen, uci: played.uci }) : { check: false };
+	const facts =
+		played && fen ? moveFacts({ fen, uci: played.uci, reply: verdict.reply }) : OPENING;
 
 	return { verdict, facts, livePly: turns.length };
 }
