@@ -13,7 +13,7 @@ jobs:
     deploy:
         needs: ci
         # One deploy at a time: releases share a directory, the live path is a single
-        # symlink, and the pruning `rm -rf` at the end can otherwise delete a release a
+        # symlink, and the pruning at the end can otherwise delete a release a
         # concurrent deploy just activated. A running deploy is left to finish.
         concurrency:
             group: deploy-production
@@ -52,7 +52,7 @@ jobs:
 
             # The live path is a symlink into the releases directory; renaming a
             # fresh symlink over it is atomic, so the site never disappears
-            # mid-deploy. Roll back by pointing the symlink at a kept release.
+            # mid-deploy.
             - name: Activate release and reload Caddy
               run: |
                   set -eu
@@ -68,6 +68,6 @@ jobs:
                   chmod +x deploy.sh
                   ./deploy.sh
 
-                  # Keep the two previous releases for instant rollback.
-                  ls -dt "$releases"/* | tail -n +4 | xargs -r rm -rf
+                  # Only the live release is kept.
+                  find "$releases" -mindepth 1 -maxdepth 1 -type d ! -path "$RELEASE" -exec rm -rf {} +
                   SCRIPT
