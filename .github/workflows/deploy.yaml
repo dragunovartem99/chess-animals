@@ -5,69 +5,19 @@ on:
         branches: [main]
 
 jobs:
-    # A red CI run blocks the deploy: the release job only starts once the same
-    # checks that gate pull requests have passed on this commit.
+    # A red CI run blocks the deploy: it only starts once the same checks that gate pull
+    # requests have passed on this commit.
     ci:
         uses: ./.github/workflows/ci.yaml
 
     deploy:
         needs: ci
-        # One deploy at a time: releases share a directory, the live path is a single
-        # symlink, and the pruning `rm -rf` at the end can otherwise delete a release a
-        # concurrent deploy just activated. A running deploy is left to finish.
-        concurrency:
-            group: deploy-production
-            cancel-in-progress: false
-        runs-on: ubuntu-latest
-        environment:
-            name: production
+        uses: dragunovartem99/pipes/.github/workflows/deploy-vps.yaml@v1.1.0
+        with:
+            strategy: release
+            setup: node
+            llvm-version: "22"
+            build: npm run build
+            upload: dist/ Caddyfile deploy.sh
             url: https://chess-animals.com
-        env:
-            SSH_TARGET: ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}
-            PROJECT_PATH: ${{ secrets.VPS_PROJECT_PATH }}
-        steps:
-            - uses: actions/checkout@v4
-
-            - uses: ./.github/actions/setup
-
-            - run: npm run build
-
-            - uses: webfactory/ssh-agent@v0.9.1
-              with:
-                  ssh-private-key: ${{ secrets.VPS_SSH_KEY }}
-
-            # Each deploy is staged as its own release directory. rsync only
-            # transfers changed files; unchanged ones are hardlinked against the
-            # live release, so releases are cheap on disk too.
-            - name: Upload release
-              run: |
-                  set -eu
-                  release="$PROJECT_PATH-releases/$GITHUB_SHA"
-                  ssh -o StrictHostKeyChecking=accept-new "$SSH_TARGET" "mkdir -p '$release'"
-                  rsync -az --delete \
-                      --link-dest="$PROJECT_PATH/" \
-                      -e "ssh -o StrictHostKeyChecking=accept-new" \
-                      dist/ Caddyfile deploy.sh \
-                      "$SSH_TARGET:$release/"
-
-            # The live path is a symlink into the releases directory; renaming a
-            # fresh symlink over it is atomic, so the site never disappears
-            # mid-deploy. Roll back by pointing the symlink at a kept release.
-            - name: Activate release and reload Caddy
-              run: |
-                  set -eu
-                  ssh -o StrictHostKeyChecking=accept-new "$SSH_TARGET" \
-                      "PROJECT_PATH='$PROJECT_PATH' RELEASE='$PROJECT_PATH-releases/$GITHUB_SHA' sh -s" <<'SCRIPT'
-                  set -eu
-                  releases="${RELEASE%/*}"
-
-                  ln -sfn "$RELEASE" "$PROJECT_PATH.tmp"
-                  mv -T "$PROJECT_PATH.tmp" "$PROJECT_PATH"
-
-                  cd "$RELEASE"
-                  chmod +x deploy.sh
-                  ./deploy.sh
-
-                  # Keep the two previous releases for instant rollback.
-                  ls -dt "$releases"/* | tail -n +4 | xargs -r rm -rf
-                  SCRIPT
+        secrets: inherit

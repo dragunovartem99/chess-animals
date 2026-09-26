@@ -7,13 +7,10 @@ on:
     workflow_call:
 
 jobs:
-    check:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v4
-            - uses: ./.github/actions/setup
-            - run: npm run format:check
-            - run: npm run types:check
-            - run: npm run lint:check
-            - run: npm run test:coverage
-            - run: npm run build
+    pipes:
+        uses: dragunovartem99/pipes/.github/workflows/ci-node.yaml@v1.1.0
+        with:
+            checks: '["format:check", "types:check", "lint:check", "test:coverage", "build"]'
+            # Pinned to the major the engine is formatted with: clang-format's output drifts
+            # between versions, and a local 22 against a CI 19 would fail `format:check`.
+            llvm-version: "22"
