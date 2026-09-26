@@ -1,9 +1,7 @@
 import type { Color } from "chessops/types";
 import { describe, expect, it } from "vitest";
 
-import { createRng } from "../../engine";
 import type { Verdict } from "../observer";
-import { PAUSE, pauseFor } from "../pause";
 import { farewell, greet, react } from "../react";
 
 const BOTH: Color[] = ["white", "black"];
@@ -22,7 +20,7 @@ const TAKE = {
 	verdicts: HUNG,
 	verdict: { ply: 5, score: { cp: 340 } },
 	livePly: 5,
-	lastPly: undefined,
+	last: {},
 };
 
 describe("react to a capture", () => {
@@ -79,8 +77,17 @@ describe("react's timing", () => {
 
 		expect(react({ ...check, livePly: 6 })).toHaveLength(1);
 		expect(react({ ...check, livePly: 7 })).toEqual([]);
-		expect(react({ ...check, lastPly: 2 })).toEqual([]);
+		expect(react({ ...check, last: { remark: 2 } })).toEqual([]);
 		expect(react({ ...check, verdicts: [] })).toEqual([]);
+	});
+
+	it("lets a check's cooldown pass news, and news's cooldown hold both", () => {
+		const facts = { captured: "knight", check: true } as const;
+		const taken = [{ color: "white", remark: "take", piece: "knight" }];
+
+		expect(react({ ...TAKE, facts, bots: BOTH, last: { remark: 3 } })).toEqual(taken);
+		expect(react({ ...TAKE, facts, bots: BOTH, last: { remark: 3, news: 3 } })).toEqual([]);
+		expect(react({ ...TAKE, facts: QUIET, bots: BOTH, last: { news: 3 } })).toEqual([]);
 	});
 });
 
@@ -100,16 +107,5 @@ describe("greet and farewell", () => {
 		expect(farewell({ result: null, bots: ["black"] })).toEqual([
 			{ color: "black", remark: "draw" },
 		]);
-	});
-});
-
-describe("pauseFor", () => {
-	it("follows the seed, inside the bounds", () => {
-		const rng = createRng(1);
-		const pauses = Array.from({ length: 50 }, () => pauseFor(rng));
-
-		expect(pauses.slice(0, 3)).toEqual([2368, 1446, 1539]);
-		expect(Math.min(...pauses)).toBeGreaterThanOrEqual(PAUSE.min);
-		expect(Math.max(...pauses)).toBeLessThan(PAUSE.max);
 	});
 });

@@ -5,8 +5,8 @@ import type { Rng } from "../engine";
 import type { Facts } from "./facts";
 import type { Verdict } from "./observer";
 import { pickRemark } from "./pick";
-import { react } from "./react";
-import type { Spoken } from "./react";
+import { react, remember } from "./react";
+import type { Last, Spoken } from "./react";
 import type { Remark } from "./remark";
 
 // One remark as said: which of the bot's lines it was, not its text, so it is read out in whatever
@@ -66,14 +66,15 @@ type Hearing = Players & {
 };
 
 // Everything a game's talk remembers, with no framework and no Stockfish in it: the seeded
-// stream, the verdicts so far, when the last remark was made, the last few remarks, how often
-// each line has come up this game, and which line each bot said last for each remark — the last
-// kept across games, so a bot does not open two games with the same hello. By position in the list rather than by text, since `{piece}` changes the
-// text of what is still the same line.
+// stream, the verdicts so far, when the last remark and the last news were made, the last few
+// remarks, how often each line has come up this game, and which line each bot said last for each
+// remark — the last kept across games, so a bot does not open two games with the same hello. By
+// position in the list rather than by text, since `{piece}` changes the text of what is still the
+// same line.
 export function createConversation({ linesFor, seed }: { linesFor: LinesFor; seed: () => string }) {
 	let rng: Rng = createRng(seed());
 	let verdicts: Verdict[] = [];
-	let lastPly: number | undefined;
+	let last: Last = {};
 	let transcript: Line[] = [];
 	let said = 0;
 	let timesSaid = new Map<string, number>();
@@ -98,7 +99,7 @@ export function createConversation({ linesFor, seed }: { linesFor: LinesFor; see
 			rng = createRng(seed());
 			timesSaid = new Map();
 			verdicts = [];
-			lastPly = undefined;
+			last = {};
 			transcript = [];
 		},
 		// Has the bots say what they want to, in order, and gives back the last few remarks.
@@ -108,12 +109,11 @@ export function createConversation({ linesFor, seed }: { linesFor: LinesFor; see
 			return transcript;
 		},
 		// Has the bots say what they want to about a verdict on the move just played, and gives
-		// back the last few remarks. Only a line actually said starts the cooldown: a remark whose
-		// lines are all spent is silence, and silence must not keep the next remark from coming.
+		// back the last few remarks.
 		hear({ verdict, facts, bots, livePly, players }: Hearing): Line[] {
-			const spoken = react({ verdicts, verdict, facts, bots, livePly, lastPly });
+			const spoken = react({ verdicts, verdict, facts, bots, livePly, last });
 			verdicts[verdict.ply] = verdict;
-			if (utter({ spoken, players }).length > 0) lastPly = verdict.ply;
+			last = remember({ last, said: utter({ spoken, players }), ply: verdict.ply });
 
 			return transcript;
 		},
