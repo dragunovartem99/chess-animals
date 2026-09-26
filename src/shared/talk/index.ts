@@ -1,7 +1,9 @@
 export type { Score } from "./score";
 export type { Facts } from "./facts";
 export { moveFacts } from "./facts";
-export { COOLDOWN, isQuiet, isWin, MATERIAL, mateFor } from "./swing";
+export type { Heard } from "./gain";
+export { MATERIAL, pieceWon } from "./gain";
+export { COOLDOWN, isQuiet, mateFor } from "./swing";
 export type { Observer, Verdict } from "./observer";
 export { createObserver, NODES } from "./observer";
 export { pickRemark } from "./pick";

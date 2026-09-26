@@ -2,8 +2,9 @@ import type { Stockfish } from "../monsters";
 import { MATE } from "../monsters/lines";
 import type { Score } from "./score";
 
-// What the observer made of the position after `ply` moves of the game.
-export type Verdict = { ply: number; score: Score };
+// What the observer made of the position after `ply` moves of the game, and the reply it would
+// play there, which tells a capture that holds from one about to be taken back.
+export type Verdict = { ply: number; score: Score; reply?: string };
 
 export type Observer = {
 	// The verdict on the game so far, or `undefined` once the game is over or was reset while the
@@ -58,7 +59,7 @@ export function createObserver({
 			const [best] = await stockfish.lines({ fen, moves, nodes, lines: 1 });
 			if (!best || asked !== generation) return undefined;
 
-			return { ply, score: fromWhite({ score: best.score, fen, ply }) };
+			return { ply, score: fromWhite({ score: best.score, fen, ply }), reply: best.move };
 		});
 		// One failed question must not jam every one after it.
 		queue = answer.catch(() => undefined);

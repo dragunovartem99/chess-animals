@@ -3,10 +3,11 @@ import type { Color, Role } from "chessops/types";
 import { createRng } from "../engine";
 import type { Rng } from "../engine";
 import type { Facts } from "./facts";
+import type { Heard } from "./gain";
 import type { Verdict } from "./observer";
 import { pickRemark } from "./pick";
-import { react } from "./react";
-import type { Spoken } from "./react";
+import { react, remember } from "./react";
+import type { Last, Spoken } from "./react";
 import type { Remark } from "./remark";
 
 // One remark as said: which of the bot's lines it was, not its text, so it is read out in whatever
@@ -56,51 +57,66 @@ function lineFor({
 	return index;
 }
 
-type Hearing = { verdict: Verdict; facts: Facts; bots: readonly Color[]; livePly: number };
+type Players = { players: Record<Color, string> };
+
+type Hearing = Players & {
+	verdict: Verdict;
+	facts: Facts;
+	bots: readonly Color[];
+	livePly: number;
+};
 
 // Everything a game's talk remembers, with no framework and no Stockfish in it: the seeded
-// stream, the verdicts so far, when the last remark was made, the last few remarks, how often
-// each line has come up this game, and which line each bot said last for each remark — the last
-// kept across games, so a bot does not open two games with the same hello. By position in the list rather than by text, since `{piece}` changes the
-// text of what is still the same line.
+// stream, every ply heard so far, when the last remark and the last news were made, the last few
+// remarks, how often each line has come up this game, and which line each bot said last for each
+// remark — the last kept across games, so a bot does not open two games with the same hello. By
+// position in the list rather than by text, since `{piece}` changes the text of what is still the
+// same line.
 export function createConversation({ linesFor, seed }: { linesFor: LinesFor; seed: () => string }) {
 	let rng: Rng = createRng(seed());
-	let verdicts: Verdict[] = [];
-	let lastPly: number | undefined;
+	let heard: Heard[] = [];
+	let last: Last = {};
 	let transcript: Line[] = [];
 	let said = 0;
 	let timesSaid = new Map<string, number>();
 	const lastLine = new Map<string, number>();
 
+	// The lines the bots actually say to `spoken`, kept in the transcript.
+	function utter({ spoken, players }: Players & { spoken: Spoken[] }): Line[] {
+		const lines = spoken.flatMap((one): Line[] => {
+			const id = players[one.color];
+			const index = lineFor({ ...one, id, linesFor, lastLine, timesSaid, rng });
+			return index === undefined ? [] : [{ ...one, key: (said += 1), id, index }];
+		});
+		transcript = [...transcript, ...lines].slice(-KEPT);
+
+		return lines;
+	}
+
 	return {
-		// A new game: a fresh stream, no verdicts, a clean slate and every line fresh again, but
+		// A new game: a fresh stream, nothing heard, a clean slate and every line fresh again, but
 		// the same memory of what was said last.
 		begin() {
 			rng = createRng(seed());
 			timesSaid = new Map();
-			verdicts = [];
-			lastPly = undefined;
+			heard = [];
+			last = {};
 			transcript = [];
 		},
 		// Has the bots say what they want to, in order, and gives back the last few remarks.
-		say({ spoken, players }: { spoken: Spoken[]; players: Record<Color, string> }): Line[] {
-			const lines = spoken.flatMap((one): Line[] => {
-				const id = players[one.color];
-				const index = lineFor({ ...one, id, linesFor, lastLine, timesSaid, rng });
-				return index === undefined ? [] : [{ ...one, key: (said += 1), id, index }];
-			});
-			transcript = [...transcript, ...lines].slice(-KEPT);
+		say({ spoken, players }: Players & { spoken: Spoken[] }): Line[] {
+			utter({ spoken, players });
 
 			return transcript;
 		},
-		// What the bots want to say to a verdict on the move just played; a remark starts the
-		// cooldown.
-		hear({ verdict, facts, bots, livePly }: Hearing): Spoken[] {
-			const spoken = react({ verdicts, verdict, facts, bots, livePly, lastPly });
-			verdicts[verdict.ply] = verdict;
-			if (spoken.length > 0) lastPly = verdict.ply;
+		// Has the bots say what they want to about a verdict on the move just played, and gives
+		// back the last few remarks.
+		hear({ verdict, facts, bots, livePly, players }: Hearing): Line[] {
+			heard[verdict.ply] = { verdict, facts };
+			const spoken = react({ heard, ply: verdict.ply, bots, livePly, last });
+			last = remember({ last, said: utter({ spoken, players }), ply: verdict.ply });
 
-			return spoken;
+			return transcript;
 		},
 	};
 }
