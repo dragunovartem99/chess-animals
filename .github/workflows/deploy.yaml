@@ -7,7 +7,7 @@ on:
 
 jobs:
     pipes:
-        uses: dragunovartem99/pipes/.github/workflows/deploy-vps.yaml@build-env-history-cache
+        uses: dragunovartem99/pipes/.github/workflows/deploy-vps.yaml@v1.3.0
         with:
             strategy: release
             setup: node
