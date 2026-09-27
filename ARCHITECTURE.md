@@ -206,7 +206,9 @@ move, since Maia only sees White's side), 4352 logits come out, the legal ones a
 the move is drawn from the seeded stream — or, `greedy`, the likeliest is played. The sixteen
 differ in `elo` alone, bar the Whale, the one greedy animal.
 
-The model is vendored at `public/maia3/`, 46 MB, with its AGPL-3.0 licence beside it, and run by
+The model is vendored at `public/maia3/`, 23 MB, with its AGPL-3.0 licence beside it: upstream's
+fp16 weights stored as int8 by `cli/maia/quantize.py`, which halves the download and leaves the
+move almost untouched — 99% the same likeliest move, under 1% of the probability shifted. It is run by
 `onnxruntime-web` in the browser and under node alike (`onnxruntime-node` segfaults loading it).
 The runtime and the model load on the first underwater move: the worker's `isready` waits for
 them, so the board's loading state covers the download, and the land and monster rosters never

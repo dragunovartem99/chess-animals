@@ -16,8 +16,8 @@ import type { WasmEngine } from "@/shared/wasm";
 const STOCKFISH_URL = `${import.meta.env.BASE_URL}stockfish/stockfish-19-lite-single.js`;
 
 // Vendored in `public/` for the same reason, and fetched by the first underwater animal that plays:
-// nobody else pays for its 46 MB.
-const MAIA_MODEL_URL = `${import.meta.env.BASE_URL}maia3/maia3_simplified.onnx`;
+// nobody else pays for its 23 MB.
+const MAIA_MODEL_URL = `${import.meta.env.BASE_URL}maia3/maia3_int8.onnx`;
 
 async function fetchModel(): Promise<Uint8Array> {
 	const response = await fetch(MAIA_MODEL_URL);
