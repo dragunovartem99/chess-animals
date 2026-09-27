@@ -19,7 +19,8 @@ const linesFor = useLines();
 const text = (line: Line) => linesFor(line)[line.index];
 
 // The last two remarks, whole: a bot-vs-bot game keeps the reply and what it answered.
-const recent = computed(() => said.slice(-2));
+// Newest first, so the fresh remark sits where the eye lands instead of shifting down.
+const recent = computed(() => said.slice(-2).toReversed());
 
 const voices = useVoice({ said: computed(() => said), locale: useI18n().locale });
 </script>
