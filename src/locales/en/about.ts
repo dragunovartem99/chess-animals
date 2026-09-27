@@ -29,7 +29,7 @@ export default {
 		title: "Open source inside",
 		stockfish: {
 			name: "Stockfish.js 19",
-			role: "plays the monsters and tells the animals when to speak.",
+			role: "plays the monsters.",
 			license: "GNU GPL v3",
 		},
 		maia: {
