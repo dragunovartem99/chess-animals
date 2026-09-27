@@ -7,6 +7,7 @@ export default {
 	take: ["Mine. No refunds.", "Grabbed it. Should've watched it."],
 	lose: ["Hey! That was mine!", "Fine. I didn't want it anyway."],
 	mating: ["Nowhere left to run. I've got a good grip now."],
+	mated: ["My king's stuck. Hmph. So you've got a grip too."],
 	win: ["Told you. Mine, all of it."],
 	loss: ["You won. Hmph. Don't get used to it."],
 	draw: ["A draw. Nobody gets anything. Typical."],

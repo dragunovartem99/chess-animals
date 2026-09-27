@@ -1,13 +1,14 @@
 import type { Rng } from "../engine";
 
-// One of Stockfish's candidate moves, scored in centipawns from the side to move's view.
-export type Line = { move: string; score: number };
+// One of Stockfish's candidate moves, scored in centipawns from the side to move's view, and the
+// line it expects to follow from it, the move first.
+export type Line = { move: string; score: number; pv?: readonly string[] };
 
 // Mate folded into centipawns past anything material can reach, sooner mates further out, so a
 // forced mate outweighs every line and being mated is worse the faster it comes.
 export const MATE = 100_000;
 
-const INFO = /\bmultipv (\d+) score (cp|mate) (-?\d+)\b.*?\bpv (\S+)/u;
+const INFO = /\bmultipv (\d+) score (cp|mate) (-?\d+)\b.*?\bpv (\S+(?: \S+)*)/u;
 
 // The candidates a search ended on, best first. Stockfish prints its lines again, `multipv 1`
 // first, every time it finishes a depth, so the last batch wins — keeping each index's last word
@@ -21,11 +22,12 @@ export function parseLines(output: readonly string[]): Line[] {
 		const match = INFO.exec(line);
 		if (!match) continue;
 
-		const [, index, kind, value, move] = match;
+		const [, index, kind, value, moves] = match;
+		const pv = moves!.split(" ");
 		const number = Number(value);
 		const score = kind === "cp" ? number : Math.sign(number) * MATE - number;
 		if (index === "1") batch = [];
-		batch.push({ move: move!, score });
+		batch.push({ move: pv[0]!, score, pv });
 	}
 
 	return batch;

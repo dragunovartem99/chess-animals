@@ -7,6 +7,7 @@ export default {
 	take: ["Oh, lovely. I'll keep that on my tummy.", "That one's mine now. Thanks ever so."],
 	lose: ["Ah. Well, I've got plenty more.", "Fair enough. Good one."],
 	mating: ["I'm afraid your king's run out of room. Sorry about that."],
+	mated: ["My king's run out of room. Oh well. It was a lovely swim."],
 	win: ["I won. Lovely. Time for a nap."],
 	loss: ["You won. Well played. I'll just float here a while."],
 	draw: ["A draw. Perfect. Nobody has to get up."],

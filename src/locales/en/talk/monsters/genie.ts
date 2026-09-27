@@ -10,6 +10,7 @@ export default {
 	take: ["One piece, as wished. As I wished.", "Gone! Should've read the fine print."],
 	lose: ["Hey, I never granted that one!", "Keeping it? Fine. Call it wish number one."],
 	mating: ["And now, the grand finale! Your king, vanishing forever!"],
+	mated: ["Wait, my king is vanishing? That's my trick!"],
 	win: ["Ta-da! Thank you, thank you, I'm here all week."],
 	loss: ["You won. Well, that wish was yours. Don't waste the other two."],
 	draw: ["A draw! No wishes for anyone. House rules."],

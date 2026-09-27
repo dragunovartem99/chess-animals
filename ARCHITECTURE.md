@@ -223,17 +223,22 @@ the two is at the board, the monsters' first.
 ### Talk
 
 An opt-in speech panel on `/play`: the animals talk, and in a bot-vs-bot game both of them do. A
-remark is about the move just played — the piece it took, the check it gave — in the animal's own
+remark is about the move just played — a piece it took, the check it gave — in the animal's own
 attitude rather than a catchphrase. Most moves say nothing: a capture speaks only when it wins a
-piece that holds, counted on the board from before the exchange to after the reply the observer —
-a Stockfish of its own on fixed nodes, never a monster's — would play, so an even trade stays
-quiet and a piece won by a fork the observer saw coming still counts. The observer loads with the
-panel, so a land game without it still never fetches Stockfish.
+piece that holds, counted on the board from before the exchange to three plies into the line the
+observer — a Stockfish of its own on fixed nodes, never a monster's — expects, so an even trade
+stays quiet, a recapture behind an in-between check still counts as one, and a piece won by a fork
+the observer saw coming still counts. The run is read from the game's positions, so only that line
+needs the observer, and a verdict lost for an earlier ply silences nothing after it. The observer loads with the panel, so a land game without it still
+never fetches Stockfish.
 
-- Remarks, from the speaker's side: greeting, check, taking a piece, losing one, mate seen, win,
-  loss, draw. One voice a move, and a few plies of cooldown after it: a check keeps quiet after
-  any remark, a capture or a mate only after another, so a check never swallows the piece it wins.
-- A mate is said once a side, not once a verdict, so one found inside a cooldown is said after it.
+- Remarks, from the speaker's side: greeting, check, taking a piece, losing one, mate seen, mate
+  faced, win, loss, draw. One voice a move, in order: a mate found, a piece won, a check. Only a
+  check waits out a few plies after any remark; a mate in two must not wait behind the capture
+  that set it up, and a piece won is counted from the start of its exchange, so the recapture
+  nets nothing on its own.
+- A mate is said once a side, not once a verdict — by the side that has it, or by the bot facing
+  a human's.
 - A hanging piece is remarked on when it is taken, never before: saying so would give it away.
 - The observer's answer is tagged by ply and dropped if the game has moved on, so a remark never
   lands a move late.

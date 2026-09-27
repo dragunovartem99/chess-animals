@@ -1,18 +1,26 @@
 import type { Chess } from "chessops/chess";
 import { ROLES } from "chessops/types";
-import type { Color, Role } from "chessops/types";
+import type { Color, NormalMove, Role } from "chessops/types";
+import { opposite } from "chessops/util";
 
 import { afterMove, positionFromFen } from "../chess";
 import { fromUci } from "../engine/uci/moves";
 
-// What a move did: the piece it took, whether it gave check, and the material on the board after
-// it, White's minus Black's, in pawns — and again once the observer's reply to it is played, so a
-// piece taken into a recapture is seen to net nothing.
-export type Facts = { captured?: Role; check: boolean; material: number; settled: number };
+// What a move did: whether it gave check, and whether it won a piece.
+export type Facts = { check: boolean; won: boolean };
+
+// A game on `/play` as far as it has gone: the position before every ply, the opening position
+// first, and the moves played from them.
+export type Played = { fens: readonly string[]; moves: readonly string[] };
+
+// Pawns an exchange must net for the capturer to be remarked on. Two, not a minor piece's three:
+// a knight given for a pawn, or a rook for a bishop, is a piece lost all the same, and it nets
+// only two. A pawn, or a pawn and some position, does not clear it.
+export const MATERIAL = 2;
 
 // The count everyone knows rather than an engine's, since a remark is about what was taken and
 // the king is never taken.
-export const VALUES: Record<Role, number> = {
+const VALUES: Record<Role, number> = {
 	pawn: 1,
 	knight: 3,
 	bishop: 3,
@@ -30,42 +38,69 @@ const materialOf = ({ board }: Chess): number =>
 		return sum + VALUES[role] * pieces;
 	}, 0);
 
-// The material after `reply`, if it is one, in `position`.
-function settle({ position, reply }: { position: Chess; reply: string | undefined }): number {
-	const move = reply === undefined ? undefined : fromUci({ position, uci: reply });
+type Ply = { position: Chess; move: NormalMove; captures: boolean };
 
-	return materialOf(move ? afterMove({ position, move }) : position);
-}
-
-// The facts of `uci` played from `fen`, answered by `reply`. En passant takes a pawn from a square
+// The move that made `ply`, and whether it took something. En passant takes a pawn from a square
 // the move does not land on, and castling lands on a rook of the mover's own, which is not a
 // capture.
-export function moveFacts({
-	fen,
-	uci,
-	reply,
-}: {
-	fen: string;
-	uci: string;
-	reply?: string;
-}): Facts {
+function plyOf({ fens, moves, ply }: Played & { ply: number }): Ply | undefined {
+	const fen = fens[ply - 1];
+	const uci = moves[ply - 1];
+	if (fen === undefined || uci === undefined) return undefined;
+
 	const position = positionFromFen(fen);
 	const move = fromUci({ position, uci });
-	if (!move) {
-		const material = materialOf(position);
-		return { check: false, material, settled: material };
-	}
+	if (!move) return undefined;
 
 	const target = position.board.get(move.to);
 	const passant = move.to === position.epSquare && position.board.getRole(move.from) === "pawn";
-	const captured =
-		target && target.color !== position.turn ? target.role : passant ? "pawn" : undefined;
-	const after = afterMove({ position, move });
-	const facts = {
-		check: after.isCheck(),
-		material: materialOf(after),
-		settled: settle({ position: after, reply }),
-	};
+	return { position, move, captures: target?.color === opposite(position.turn) || passant };
+}
 
-	return captured ? { captured, ...facts } : facts;
+// Plies of the observer's line an exchange is settled over. One, the reply, is not enough: when a
+// check in between scores as well as the recapture, the observer's reply may be the check, and a
+// knight given for a bishop would look like a knight won. Three see the recapture behind it.
+const SETTLE = 3;
+
+// The material once the first `SETTLE` moves of the observer's `line` are played.
+function settle({ after, line }: { after: Chess; line: readonly string[] }): number {
+	let position = after;
+	for (const uci of line.slice(0, SETTLE)) {
+		const move = fromUci({ position, uci });
+		if (!move) break;
+		position = afterMove({ position, move });
+	}
+
+	return materialOf(position);
+}
+
+// The facts of `ply`, answered by the observer's `line`.
+//
+// A capture wins a piece when the run of captures it ends nets `MATERIAL`, judged on the board from
+// before the run began to after the line is settled, rather than by a swing in the observer's score: the
+// observer sees a fork or a pin a move or two ahead, so by the capture the gain is long priced in
+// and swings nothing. The line is what tells a piece won from the first half of a trade. Read from
+// the positions alone, so a verdict that never came for an earlier ply cannot silence this one.
+export function moveFacts({
+	fens,
+	moves,
+	ply,
+	line = [],
+}: Played & { ply: number; line?: readonly string[] }): Facts {
+	const now = plyOf({ fens, moves, ply });
+	if (!now) return { check: false, won: false };
+
+	const after = afterMove(now);
+	const check = after.isCheck();
+	if (!now.captures) return { check, won: false };
+
+	// Back to the position before the first capture of the run.
+	let start = now.position;
+	for (let at = ply - 1; at > 0; at -= 1) {
+		const one = plyOf({ fens, moves, ply: at });
+		if (!one?.captures) break;
+		start = one.position;
+	}
+	const sign = now.position.turn === "white" ? 1 : -1;
+	return { check, won: sign * (settle({ after, line }) - materialOf(start)) >= MATERIAL };
 }

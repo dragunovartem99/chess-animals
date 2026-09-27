@@ -1,15 +1,14 @@
-import type { Color, Role } from "chessops/types";
+import type { Color } from "chessops/types";
 
 import type { GameResult } from "../chess";
 import { moverOf } from "./facts";
-import { pieceWon } from "./gain";
-import type { Heard } from "./gain";
+import type { Facts } from "./facts";
+import type { Verdict } from "./observer";
 import type { Remark } from "./remark";
-import type { Score } from "./score";
 import { isQuiet, mateFor } from "./swing";
 
-// One bot, one remark, and the piece it is about. The line itself is picked later, from the locale.
-export type Spoken = { color: Color; remark: Remark; piece?: Role };
+// One bot and one remark. The line itself is picked later, from the locale.
+export type Spoken = { color: Color; remark: Remark };
 
 // How many plies behind the game a verdict may land and still be spoken. One, because a bot
 // answers a human in milliseconds: the observer's verdict on the human's move always lands after
@@ -30,9 +29,12 @@ export const farewell = ({ result, bots }: { result: GameResult; bots: readonly 
 		return { color, remark: result === color ? "win" : "loss" };
 	});
 
-// The ply of the last remark, and of the last that was news: a capture or a mate; and the side
-// whose mate was said last.
-export type Last = { remark?: number; news?: number; mating?: Color };
+// The ply of the last remark, and the side whose mate was said last.
+export type Last = { remark?: number; mating?: Color };
+
+// The side a mate remark is about: the one saying `mating` has it, the one saying `mated` faces it.
+const mateOf = ({ color, remark }: Spoken) =>
+	remark === "mating" ? color : remark === "mated" ? other(color) : undefined;
 
 // What is remembered once `said` has been said about `ply`: only a remark actually said starts a
 // cooldown, since a remark whose lines are all spent is silence, and silence must not keep the
@@ -45,58 +47,54 @@ export function remember({
 	last: Last;
 	said: readonly Spoken[];
 	ply: number;
-}) {
+}): Last {
 	if (said.length === 0) return last;
 
-	const isNews = said.some((one) => one.remark !== "check");
-	const mating = said.find((one) => one.remark === "mating")?.color ?? last.mating;
-	return { remark: ply, news: isNews ? ply : last.news, mating };
+	return {
+		remark: ply,
+		mating: said.map((one) => mateOf(one)).find((color) => color !== undefined) ?? last.mating,
+	};
 }
 
-type Moment = {
-	// Everything heard so far, by ply, up to and including `ply`, the move to react to.
-	heard: readonly (Heard | undefined)[];
-	ply: number;
+// A ply as the talk heard it: the observer's verdict on it and what the move did.
+export type Heard = { verdict: Verdict; facts: Facts };
+
+type Moment = Heard & {
 	bots: readonly Color[];
 	livePly: number;
 	last: Last;
 };
 
 // `remark` in the mouth of `color`, if a bot plays it.
-const say = ({ bots, color, remark, piece }: Spoken & { bots: readonly Color[] }): Spoken[] =>
-	bots.includes(color) ? [piece ? { color, remark, piece } : { color, remark }] : [];
+const say = ({ bots, color, remark }: Spoken & { bots: readonly Color[] }): Spoken[] =>
+	bots.includes(color) ? [{ color, remark }] : [];
 
-// A mate found comes first, said by the side that has it, then a piece won. The piece is said
-// when it is taken, never when it is left hanging, which would give it away.
-function news({ heard, ply, bots, last, score }: Moment & { score: Score }): Spoken[] {
-	// Whoever's move showed it: a mate often appears only once the losing side has moved into it.
-	// Once a side, rather than once a verdict, so a mate found inside a cooldown is said after it.
-	const mating = mateFor(score);
-	if (mating && mating !== last.mating) return say({ bots, color: mating, remark: "mating" });
-
-	const mover = moverOf(ply);
-	const piece = pieceWon({ heard, ply });
-	if (!piece) return [];
-
-	const taken = say({ bots, color: mover, remark: "take", piece });
-	return taken.length > 0 ? taken : say({ bots, color: other(mover), remark: "lose", piece });
+// `remark` from `color`, or when a human plays it, `answer` from the bot across the board.
+function either({ answer, ...spoken }: Spoken & { answer: Remark; bots: readonly Color[] }) {
+	const said = say(spoken);
+	return said.length > 0 ? said : say({ ...spoken, color: other(spoken.color), remark: answer });
 }
 
-// What a bot says about the move that made `ply`, if anything — one voice at most, so a move is
-// one remark and not a dialogue — failing news, a check. Nothing about a position the game has
-// left behind.
+// What a bot says about the move that made `ply`, if anything: a mate found, else a piece won,
+// else a check. One voice at most, so a move is one remark and not a dialogue, and nothing about a
+// position the game has left behind.
 //
-// A check keeps quiet inside the cooldown of any remark, but news only inside the cooldown of news:
-// an attack comes with checks, and a check said must not swallow the piece or the mate it wins.
-export function react(moment: Moment): Spoken[] {
-	const { heard, ply, bots, livePly, last } = moment;
-	const now = heard[ply];
-	if (!now || !heard[ply - 1] || livePly - ply > LATE) return [];
+// Only a check waits out the cooldown. A mate is said once a side, and a mate in two must not wait
+// four plies behind the capture that set it up; a piece won is counted from the start of its
+// exchange, so the recapture that follows it nets nothing and says nothing on its own. The piece is
+// said when it is taken, never when it is left hanging, which would give it away.
+export function react({ verdict, facts, bots, livePly, last }: Moment): Spoken[] {
+	const { ply, score } = verdict;
+	if (livePly - ply > LATE) return [];
 
-	const said = isQuiet({ ply, lastPly: last.news })
-		? []
-		: news({ ...moment, score: now.verdict.score });
-	if (said.length > 0 || !now.facts.check || isQuiet({ ply, lastPly: last.remark })) return said;
+	// Whoever's move showed it: a mate often appears only once the losing side has moved into it.
+	const mating = mateFor(score);
+	if (mating && mating !== last.mating)
+		return either({ bots, color: mating, remark: "mating", answer: "mated" });
 
-	return say({ bots, color: moverOf(ply), remark: "check" });
+	const mover = moverOf(ply);
+	if (facts.won) return either({ bots, color: mover, remark: "take", answer: "lose" });
+	if (!facts.check || isQuiet({ ply, lastPly: last.remark })) return [];
+
+	return say({ bots, color: mover, remark: "check" });
 }

@@ -7,6 +7,7 @@ export default {
 	take: ["Oh, I took that? Okay, sure.", "Huh. It just kind of floated my way."],
 	lose: ["Oh... that's gone now. That's okay.", "Easy come, easy go, you know?"],
 	mating: ["Whoa... your king's got nowhere to drift. Heavy."],
+	mated: ["Whoa... my king's all tangled up. That's okay. Go with the flow."],
 	win: ["I won? Wow. Didn't see that coming."],
 	loss: ["You won. Nice. Good vibes all round."],
 	draw: ["A draw. Everybody just floats on. Nice."],

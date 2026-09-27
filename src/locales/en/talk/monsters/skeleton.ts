@@ -16,6 +16,7 @@ export default {
 		"Took that one? No hard feelings. I've got no feelings at all.",
 	],
 	mating: ["Your king's done for. Take it from someone who knows."],
+	mated: ["My king's done for. Don't worry, it's not so bad on the other side."],
 	win: ["I won! Haven't felt this lively in ages."],
 	loss: ["You won. That's alright, I've been through worse. I died once."],
 	draw: ["A draw. Dead even. Get it? Dead."],

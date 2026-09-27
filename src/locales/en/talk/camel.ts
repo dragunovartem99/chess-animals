@@ -7,6 +7,7 @@ export default {
 	take: ["I'll add it to the load.", "Took it. Don't make a scene."],
 	lose: ["Of course. Why not.", "I've lost worse. Water, mostly."],
 	mating: ["It's over for your king. Don't drag it out."],
+	mated: ["My king's done for. I can see it. Just get on with it."],
 	win: ["I won. Can I go now?"],
 	loss: ["You won. Congratulations. I'm thrilled."],
 	draw: ["A draw. How very dramatic."],

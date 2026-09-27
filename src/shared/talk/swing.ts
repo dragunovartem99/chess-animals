@@ -2,8 +2,8 @@ import type { Color } from "chessops/types";
 
 import type { Score } from "./score";
 
-// Plies a side stays quiet after a remark, so one exchange — a capture, the recapture, the check
-// that follows — is one remark rather than three.
+// Plies a check stays unsaid after any remark, so an attack — the piece it wins, the mate it finds,
+// the checks between — is not a remark every move.
 export const COOLDOWN = 4;
 
 export const mateFor = (score: Score): Color | undefined => {

@@ -7,6 +7,7 @@ export default {
 	take: ["One bite.", "It was weak. I could smell it."],
 	lose: ["Hm. You bite too.", "A scratch. I don't mind a scratch."],
 	mating: ["Your king can't swim away now."],
+	mated: ["My king can't swim away. This time I'm the one being hunted."],
 	win: ["I won. I always find the weak spot."],
 	loss: ["You won. No weak spots. Interesting."],
 	draw: ["A draw. I'll keep circling."],

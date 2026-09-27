@@ -21,7 +21,7 @@ const text = (line: Line) => linesFor(line)[line.index];
 // The last two remarks, whole: a bot-vs-bot game keeps the reply and what it answered.
 const recent = computed(() => said.slice(-2));
 
-const voices = useVoice({ said: computed(() => said), locale: useI18n().locale, linesFor });
+const voices = useVoice({ said: computed(() => said), locale: useI18n().locale });
 </script>
 
 <template>

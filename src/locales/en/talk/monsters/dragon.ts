@@ -7,6 +7,7 @@ export default {
 	take: ["I'll keep that. I keep everything.", "Thank you. Put it with the rest."],
 	lose: ["Took it. Well, well. How brave.", "Keep it. For now."],
 	mating: ["Your king can't get out. I saw it long ago. Didn't want to spoil it."],
+	mated: ["My king is trapped. Hm. I can't remember the last time."],
 	win: ["There. Now let me sleep."],
 	loss: ["You won. Interesting. I haven't been interested in a long time."],
 	draw: ["A draw. Clever. Come back when you're older."],

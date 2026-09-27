@@ -1,13 +1,10 @@
-import type { Color, Role } from "chessops/types";
+import type { Color } from "chessops/types";
 
 import { createRng } from "../engine";
 import type { Rng } from "../engine";
-import type { Facts } from "./facts";
-import type { Heard } from "./gain";
-import type { Verdict } from "./observer";
 import { pickRemark } from "./pick";
 import { react, remember } from "./react";
-import type { Last, Spoken } from "./react";
+import type { Heard, Last, Spoken } from "./react";
 import type { Remark } from "./remark";
 
 // One remark as said: which of the bot's lines it was, not its text, so it is read out in whatever
@@ -15,8 +12,8 @@ import type { Remark } from "./remark";
 // whole talk so a list can key on it.
 export type Line = Spoken & { key: number; id: string; index: number };
 
-// A bot's lines for a remark, with the piece already filled in where the remark has one.
-export type LinesFor = (request: { id: string; remark: Remark; piece?: Role }) => readonly string[];
+// A bot's lines for a remark.
+export type LinesFor = (request: { id: string; remark: Remark }) => readonly string[];
 
 // Enough to follow the last exchange: the panel is a fixed box, and older remarks drop off its
 // top rather than push the move list down.
@@ -31,7 +28,6 @@ export const MAX_SAID = 2;
 function lineFor({
 	id,
 	remark,
-	piece,
 	linesFor,
 	lastLine,
 	timesSaid,
@@ -44,7 +40,7 @@ function lineFor({
 	rng: Rng;
 }) {
 	const key = `${id}.${remark}`;
-	const lines = linesFor(piece ? { id, remark, piece } : { id, remark });
+	const lines = linesFor({ id, remark });
 	const fresh = lines.filter((_, index) => (timesSaid.get(`${key}.${index}`) ?? 0) < MAX_SAID);
 	const last = lastLine.get(key);
 	const lastText = last === undefined ? undefined : lines[last];
@@ -59,22 +55,19 @@ function lineFor({
 
 type Players = { players: Record<Color, string> };
 
-type Hearing = Players & {
-	verdict: Verdict;
-	facts: Facts;
-	bots: readonly Color[];
-	livePly: number;
-};
+type Hearing = Players &
+	Heard & {
+		bots: readonly Color[];
+		livePly: number;
+	};
 
 // Everything a game's talk remembers, with no framework and no Stockfish in it: the seeded
-// stream, every ply heard so far, when the last remark and the last news were made, the last few
-// remarks, how often each line has come up this game, and which line each bot said last for each
-// remark — the last kept across games, so a bot does not open two games with the same hello. By
-// position in the list rather than by text, since `{piece}` changes the text of what is still the
-// same line.
+// stream, when the last remark and the last news were made, the last few remarks, how often each
+// line has come up this game, and which line each bot said last for each remark — the last kept
+// across games, so a bot does not open two games with the same hello. By position in the list
+// rather than by text, since a clip is found by its position.
 export function createConversation({ linesFor, seed }: { linesFor: LinesFor; seed: () => string }) {
 	let rng: Rng = createRng(seed());
-	let heard: Heard[] = [];
 	let last: Last = {};
 	let transcript: Line[] = [];
 	let said = 0;
@@ -99,7 +92,6 @@ export function createConversation({ linesFor, seed }: { linesFor: LinesFor; see
 		begin() {
 			rng = createRng(seed());
 			timesSaid = new Map();
-			heard = [];
 			last = {};
 			transcript = [];
 		},
@@ -112,8 +104,7 @@ export function createConversation({ linesFor, seed }: { linesFor: LinesFor; see
 		// Has the bots say what they want to about a verdict on the move just played, and gives
 		// back the last few remarks.
 		hear({ verdict, facts, bots, livePly, players }: Hearing): Line[] {
-			heard[verdict.ply] = { verdict, facts };
-			const spoken = react({ heard, ply: verdict.ply, bots, livePly, last });
+			const spoken = react({ verdict, facts, bots, livePly, last });
 			last = remember({ last, said: utter({ spoken, players }), ply: verdict.ply });
 
 			return transcript;

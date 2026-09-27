@@ -1,10 +1,9 @@
 import { watch } from "vue";
 import type { Ref } from "vue";
 
-import type { Line, LinesFor } from "@/shared/talk";
+import { clipPath } from "@/shared/talk";
+import type { Line } from "@/shared/talk";
 import { useStoredFlag } from "@/shared/ui";
-
-import { clipOf } from "../utils/clip";
 
 // What playing a clip needs from an `<audio>`: a test hands in a fake.
 export type Player = {
@@ -34,12 +33,10 @@ function audioPlayer(url: string): Player {
 export function useVoice({
 	said,
 	locale,
-	linesFor,
 	player = audioPlayer,
 }: {
 	said: Ref<Line[]>;
 	locale: Ref<string>;
-	linesFor: LinesFor;
 	player?: (url: string) => Player;
 }) {
 	const enabled = useStoredFlag("chess-animals:voices");
@@ -52,7 +49,7 @@ export function useVoice({
 	}
 
 	const urlOf = (line: Line) =>
-		`${import.meta.env.BASE_URL}${clipOf({ line, locale: locale.value, linesFor })}`;
+		`${import.meta.env.BASE_URL}${clipPath({ ...line, locale: locale.value })}`;
 
 	function playFrom(lines: Line[]) {
 		const [line, ...rest] = lines;

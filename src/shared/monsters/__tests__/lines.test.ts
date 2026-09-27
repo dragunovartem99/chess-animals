@@ -18,8 +18,8 @@ describe("parseLines", () => {
 		];
 
 		expect(parseLines(said)).toEqual([
-			{ move: "e2e4", score: 35 },
-			{ move: "g1f3", score: 25 },
+			{ move: "e2e4", score: 35, pv: ["e2e4", "e7e5"] },
+			{ move: "g1f3", score: 25, pv: ["g1f3", "e7e5"] },
 		]);
 	});
 
@@ -27,8 +27,8 @@ describe("parseLines", () => {
 		const said = [info(1, "cp 30", "d2d4"), info(2, "cp 17 upperbound", "e2e3")];
 
 		expect(parseLines(said)).toEqual([
-			{ move: "d2d4", score: 30 },
-			{ move: "e2e3", score: 17 },
+			{ move: "d2d4", score: 30, pv: ["d2d4", "e7e5"] },
+			{ move: "e2e3", score: 17, pv: ["e2e3", "e7e5"] },
 		]);
 	});
 

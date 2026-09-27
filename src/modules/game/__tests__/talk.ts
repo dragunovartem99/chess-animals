@@ -12,11 +12,9 @@ import { withSetup } from "@/shared/test-support/component";
 
 import { useTalk } from "../composables/useTalk";
 
-// Two lines a remark for the donkey and the wolf, the piece named in them; none for anyone else.
-const linesFor: LinesFor = ({ id, remark, piece = "" }) =>
-	["donkey", "wolf"].includes(id)
-		? [`${id} ${remark}${piece} 1`, `${id} ${remark}${piece} 2`]
-		: [];
+// Two lines a remark for the donkey and the wolf; none for anyone else.
+const linesFor: LinesFor = ({ id, remark }) =>
+	["donkey", "wolf"].includes(id) ? [`${id} ${remark} 1`, `${id} ${remark} 2`] : [];
 
 // An observer that knows the verdict on every ply in advance, level unless told otherwise.
 function fakeObserver(scores: Score[]) {
