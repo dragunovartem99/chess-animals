@@ -3,8 +3,6 @@ export default {
 	check: ["Check. I warned you about coming close.", "Check. Snap."],
 	take: ["Pinched. Told you I would.", "Too close. That one's mine."],
 	lose: ["Hey! Hands off!", "Through my guard? Nobody gets through."],
-	mating: ["Your king's caught in my claws. Nowhere to go."],
-	mated: ["My king's caught. Nobody catches me. Well, somebody does."],
 	win: ["Told you. Nobody gets past these claws."],
 	loss: ["You won. Fine. The claws didn't hold. Once."],
 	draw: ["A draw. Nobody got pinched. Good."],

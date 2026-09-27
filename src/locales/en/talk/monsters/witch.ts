@@ -9,8 +9,6 @@ export default {
 	],
 	take: ["Mine. Into the cauldron it goes.", "Oh, that worked! I wasn't sure it would."],
 	lose: ["Wait, wrong spell. Wrong spell!", "Hmph. I'll curse you later. Once I find the page."],
-	mating: ["Last spell. And this time I know every word."],
-	mated: ["My king's trapped? Somebody's been reading my spellbook."],
 	win: ["I won! And nobody turned into anything. Almost nobody."],
 	loss: ["You won? Some sort of counter-spell. Where do they teach that?"],
 	draw: ["A draw. Fine. Nobody gets turned into a toad today."],

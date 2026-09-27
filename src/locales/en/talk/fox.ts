@@ -6,8 +6,6 @@ export default {
 	check: ["Check, darling. Did I startle you?", "Check. Oh, don't pout."],
 	take: ["Mine now. Thank you, sweetie.", "Oops. That just fell into my paws."],
 	lose: ["Well, well. You're sharper than you look.", "Take it. Enjoy it while it lasts."],
-	mating: ["All the doors are shut, darling. I checked."],
-	mated: ["Oh, my king's in a trap. Clever, clever."],
 	win: ["Told you I play fair. Mostly."],
 	loss: ["You won. Clever thing. I'll get you next time."],
 	draw: ["A draw. How sweet. Nobody gets hurt."],

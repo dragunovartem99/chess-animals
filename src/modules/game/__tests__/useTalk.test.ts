@@ -6,18 +6,16 @@ import { mountTalk } from "./talk";
 const QUEEN = ["e2e4", "e7e5", "g1f3", "d8h4", "f3h4"];
 
 describe("useTalk", () => {
-	it("stays silent and spawns nothing until it is switched on", async () => {
-		const { talk, spawn, play } = mountTalk();
+	it("stays silent until it is switched on", async () => {
+		const { talk, play } = mountTalk();
 
 		await play(["e2e4"]);
 
-		expect(spawn).not.toHaveBeenCalled();
 		expect(talk.said.value).toEqual([]);
 	});
 
 	it("greets, and says when it loses a piece", async () => {
-		const scores = [{ cp: 0 }, { cp: 0 }, { cp: 0 }, { cp: 0 }, { cp: 900 }, { cp: 900 }];
-		const { switchOn, play, texts } = mountTalk({ scores });
+		const { switchOn, play, texts } = mountTalk();
 
 		await switchOn();
 		await play(QUEEN);
@@ -39,7 +37,7 @@ describe("useTalk", () => {
 
 describe("useTalk, from game to game", () => {
 	it("says goodbye with the result, and starts over on a new game", async () => {
-		const { talk, status, calls, switchOn, play, texts } = mountTalk({ white: "wolf" });
+		const { talk, status, switchOn, play, texts } = mountTalk({ white: "wolf" });
 		await switchOn();
 
 		status.value = { over: true, result: "white", reason: "checkmate" };
@@ -48,18 +46,6 @@ describe("useTalk, from game to game", () => {
 
 		// The same seed again, but not the same hello twice running.
 		talk.newGame();
-		expect(calls.reset).toBe(2);
 		expect(texts()).toEqual(["wolf greet 2", "donkey greet 2"]);
-	});
-
-	it("lets go of the observer when switched off", async () => {
-		const { talk, calls, switchOn, play, unmount } = mountTalk();
-		await switchOn();
-
-		talk.enabled.value = false;
-		await play([]);
-		unmount();
-
-		expect(calls.dispose).toBe(1);
 	});
 });

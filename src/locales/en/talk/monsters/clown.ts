@@ -15,8 +15,6 @@ export default {
 		"Hey! That was my best juggling ball.",
 		"Oh, it's gone. That's not funny. That's not funny at all.",
 	],
-	mating: ["Here comes the big finale. Your king's in it."],
-	mated: ["Hold on. My king's in the finale? That's not in the script."],
 	win: ["And that's the show! Everybody bow. Not you."],
 	loss: ["You won. Funny. Very funny. I'll remember your face."],
 	draw: ["A draw? Where's the punchline? Terrible show."],

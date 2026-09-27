@@ -9,8 +9,6 @@ export default {
 		"They took Ogre's piece. Ogre is... fine. Ogre is FINE!",
 		"No! NO! ...Ogre breathes. Ogre is nice today.",
 	],
-	mating: ["Small king cannot run. Ogre is very happy."],
-	mated: ["Ogre's king cannot run. Ogre is... breathing slowly."],
 	win: ["Ogre won! Ogre hardly broke anything."],
 	loss: ["Ogre lost. Ogre is... not angry. Ogre will go outside for a bit."],
 	draw: ["Draw. Ogre does not understand. But Ogre is calm."],

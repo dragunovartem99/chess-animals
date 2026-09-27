@@ -12,8 +12,6 @@ export default {
 		"It's gone... Now it's even lonelier here.",
 		"Please give it back. I don't have many friends.",
 	],
-	mating: ["Your king can't leave now. Nobody leaves."],
-	mated: ["My king can't leave either. Now we're both stuck here."],
 	win: ["I won. Now you have to stay. That's the rule."],
 	loss: ["You won. So you'll go now? Everybody goes."],
 	draw: ["A draw. Then play again. Please. Just once more."],

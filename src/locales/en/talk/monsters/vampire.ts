@@ -9,8 +9,6 @@ export default {
 	],
 	take: ["Thank you. Just a sip.", "Delicious. I'll have another, if I may."],
 	lose: ["How rude. And I thought we were getting along.", "You bite back. How charming."],
-	mating: ["Your king's time is up. He won't see the dawn."],
-	mated: ["My king is cornered. And the sun is coming up."],
 	win: ["A lovely evening. Will you stay for dinner? As dinner?"],
 	loss: ["Your victory. Bravo. We'll meet again. At night."],
 	draw: ["A draw. Then we part as friends. Until sundown."],

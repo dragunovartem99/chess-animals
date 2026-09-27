@@ -12,8 +12,6 @@ export default {
 		"Hey, where'd that go? It was just here.",
 		"Oh, you took one. That's okay, I have more. I think.",
 	],
-	mating: ["Hang on. Your king looks really stuck."],
-	mated: ["Hey, where's my king going to go? Oh. Nowhere. Hm."],
 	win: ["I won? Me? Wow. What did I do?"],
 	loss: ["Oh, it's over? That was fun. Again!"],
 	draw: ["Nobody won? So we both won! Right?"],

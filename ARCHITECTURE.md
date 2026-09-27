@@ -55,23 +55,23 @@ own lazy chunk.
 One flat area per folder, each with its own `index.ts`, and deliberately **no root barrel**.
 `shared/` depends on nothing else in the repo.
 
-| Area           | What it holds                                                                                                                                                                                                                                       |
-| -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `chess`        | chessops wrappers — FEN in/out, legal moves, `afterMove`, repetition keys, and game-over detection                                                                                                                                                  |
-| `eval`         | the feature registry, feature and weight vectors, `MATE_SCORE` — what a bot is, where `engine/` is what it does                                                                                                                                     |
-| `engine`       | the seeded RNG, the UCI codec, the UCI engine over a `goSearch`, the engine client and its transports                                                                                                                                               |
-| `monsters`     | the monsters: Stockfish over a `UciTransport`, and the engine that samples its MultiPV lines                                                                                                                                                        |
-| `underwater`   | Maia: the board as its tokens, the legal moves as its logits, the pick from the seeded stream, the ONNX session and `withMaia` for the arena                                                                                                        |
-| `wasm`         | the binding to `engine/build/engine.wasm` — loading, the linear-memory arena, `search`/`extract`/`perft`, and the `goSearch` over it                                                                                                                |
-| `talk`         | what the animals say: the Stockfish observer and its verdicts from White's view, the material gains worth a remark, who answers one with what, what a move took or checked, and the conversation that picks the seeded lines and keeps the cooldown |
-| `game`         | `useGame` — one game with its move list, positions and repetition history, owned by the view that mounts it (`/play`)                                                                                                                               |
-| `ui`           | `useTheme` — the world a view puts the page in                                                                                                                                                                                                      |
-| `bots`         | `BotDefinition` (JSON on disk) and `BotConfig` (compiled), the frozen weight bases, the guard, and `compileBot` between them                                                                                                                        |
-| `openings`     | the curated paired opening set (JSON) and its validation                                                                                                                                                                                            |
-| `rating`       | Bradley–Terry MLE with a white advantage and Rao–Kupper draw term, CIs from the Hessian, and the Markov champion iteration                                                                                                                          |
-| `scheduler`    | the pure `runGame`, a `worker_threads` pool, the result cache, adaptive pairing, and `runTournament` over all of it                                                                                                                                 |
-| `tuner`        | SPSA — the decaying gain sequences, the Rademacher perturbation, the ascent loop, and the bot-weights ↔ parameter-vector mapping                                                                                                                    |
-| `test-support` | fixtures and helpers shared by specs — the wasm engine, component mounting, played games, weight vectors, a fake worker                                                                                                                             |
+| Area           | What it holds                                                                                                                                                                      |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `chess`        | chessops wrappers — FEN in/out, legal moves, `afterMove`, repetition keys, and game-over detection                                                                                 |
+| `eval`         | the feature registry, feature and weight vectors, `MATE_SCORE` — what a bot is, where `engine/` is what it does                                                                    |
+| `engine`       | the seeded RNG, the UCI codec, the UCI engine over a `goSearch`, the engine client and its transports                                                                              |
+| `monsters`     | the monsters: Stockfish over a `UciTransport`, and the engine that samples its MultiPV lines                                                                                       |
+| `underwater`   | Maia: the board as its tokens, the legal moves as its logits, the pick from the seeded stream, the ONNX session and `withMaia` for the arena                                       |
+| `wasm`         | the binding to `engine/build/engine.wasm` — loading, the linear-memory arena, `search`/`extract`/`perft`, and the `goSearch` over it                                               |
+| `talk`         | what the animals say: what a move took or checked and when an exchange is over, who answers one with what, and the conversation that picks the seeded lines and keeps the cooldown |
+| `game`         | `useGame` — one game with its move list, positions and repetition history, owned by the view that mounts it (`/play`)                                                              |
+| `ui`           | `useTheme` — the world a view puts the page in                                                                                                                                     |
+| `bots`         | `BotDefinition` (JSON on disk) and `BotConfig` (compiled), the frozen weight bases, the guard, and `compileBot` between them                                                       |
+| `openings`     | the curated paired opening set (JSON) and its validation                                                                                                                           |
+| `rating`       | Bradley–Terry MLE with a white advantage and Rao–Kupper draw term, CIs from the Hessian, and the Markov champion iteration                                                         |
+| `scheduler`    | the pure `runGame`, a `worker_threads` pool, the result cache, adaptive pairing, and `runTournament` over all of it                                                                |
+| `tuner`        | SPSA — the decaying gain sequences, the Rademacher perturbation, the ascent loop, and the bot-weights ↔ parameter-vector mapping                                                   |
+| `test-support` | fixtures and helpers shared by specs — the wasm engine, component mounting, played games, weight vectors, a fake worker                                                            |
 
 `shared/bots` sits below both `eval` and `engine` in the dependency order rather than beside the
 roster, because the worker and the cache key need to read a bot definition without pulling a Vue
@@ -225,24 +225,18 @@ the two is at the board, the monsters' first.
 
 An opt-in speech panel on `/play`: the animals talk, and in a bot-vs-bot game both of them do. A
 remark is about the move just played — a piece it took, the check it gave — in the animal's own
-attitude rather than a catchphrase. Most moves say nothing: a capture speaks only when it wins a
-piece that holds, counted on the board from before the exchange to three plies into the line the
-observer — a Stockfish of its own on fixed nodes, never a monster's — expects, so an even trade
-stays quiet, a recapture behind an in-between check still counts as one, and a piece won by a fork
-the observer saw coming still counts. The run is read from the game's positions, so only that line
-needs the observer, and a verdict lost for an earlier ply silences nothing after it. The observer loads with the panel, so a land game without it still
-never fetches Stockfish.
+attitude rather than a catchphrase. Most moves say nothing. Everything is read off the board as the
+move is played, with no engine behind it, so the panel costs no download.
 
-- Remarks, from the speaker's side: greeting, check, taking a piece, losing one, mate seen, mate
-  faced, win, loss, draw. One voice a move, in order: a mate found, a piece won, a check. Only a
-  check waits out a few plies after any remark; a mate in two must not wait behind the capture
-  that set it up, and a piece won is counted from the start of its exchange, so the recapture
-  nets nothing on its own.
-- A mate is said once a side, not once a verdict — by the side that has it, or by the bot facing
-  a human's.
-- A hanging piece is remarked on when it is taken, never before: saying so would give it away.
-- The observer's answer is tagged by ply and dropped if the game has moved on, so a remark never
-  lands a move late.
+- Remarks, from the speaker's side: greeting, check, taking a piece, losing one, win, loss, draw.
+  One voice a move: a piece won, else a check, and nothing for a few plies after any remark, which
+  also keeps the rest of an exchange from saying it again.
+- A piece is won by a capture that nets two pawns on its square even after the best recapture: the
+  captures played there in a row, less a static exchange over the legal moves for what is left. So
+  a queen taken by a knight is said on the spot, an even trade stays quiet, and a capture elsewhere
+  is never folded into it.
+- A hanging piece is remarked on when it is taken, never before, and no mate is announced: either
+  would give it away.
 - Lines live in `talk.<id>.<remark>` in both locales, picked from a seeded stream: never the same
   line twice running, and none more than twice a game.
 - A bot-vs-bot game pauses a seeded while before each move, talk or no talk, so it can be followed.

@@ -3,8 +3,6 @@ export default {
 	check: ["Check. Shh. Don't panic.", "Check. I can hear your heart."],
 	take: ["Thank you. Delicious.", "You didn't even hear me."],
 	lose: ["Interesting. You have claws.", "Bold. I like bold."],
-	mating: ["Shh. It's almost over. Close your eyes."],
-	mated: ["So my king is the prey this time. Finish it cleanly."],
 	win: ["There. That didn't hurt much, did it?"],
 	loss: ["You won. Enjoy it. I'll be watching."],
 	draw: ["A draw. We'll meet again."],
