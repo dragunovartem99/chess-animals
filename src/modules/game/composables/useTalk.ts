@@ -35,7 +35,7 @@ function hearing({
 	verdict: Verdict;
 }) {
 	const moves = turns.map((turn) => turn.uci);
-	const facts = moveFacts({ fens, moves, ply: verdict.ply, reply: verdict.reply });
+	const facts = moveFacts({ fens, moves, ply: verdict.ply, line: verdict.line });
 
 	return { verdict, facts, livePly: turns.length };
 }

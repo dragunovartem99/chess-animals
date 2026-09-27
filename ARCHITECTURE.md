@@ -225,11 +225,11 @@ the two is at the board, the monsters' first.
 An opt-in speech panel on `/play`: the animals talk, and in a bot-vs-bot game both of them do. A
 remark is about the move just played — a piece it took, the check it gave — in the animal's own
 attitude rather than a catchphrase. Most moves say nothing: a capture speaks only when it wins a
-piece that holds, counted on the board from before the exchange to after the reply the observer —
-a Stockfish of its own on fixed nodes, never a monster's — would play, so an even trade stays
-quiet and a piece won by a fork the observer saw coming still counts. The run is read from the
-game's positions, so only the reply needs the observer, and a verdict lost for an earlier ply
-silences nothing after it. The observer loads with the panel, so a land game without it still
+piece that holds, counted on the board from before the exchange to three plies into the line the
+observer — a Stockfish of its own on fixed nodes, never a monster's — expects, so an even trade
+stays quiet, a recapture behind an in-between check still counts as one, and a piece won by a fork
+the observer saw coming still counts. The run is read from the game's positions, so only that line
+needs the observer, and a verdict lost for an earlier ply silences nothing after it. The observer loads with the panel, so a land game without it still
 never fetches Stockfish.
 
 - Remarks, from the speaker's side: greeting, check, taking a piece, losing one, mate seen, mate

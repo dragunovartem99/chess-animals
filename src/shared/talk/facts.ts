@@ -57,26 +57,36 @@ function plyOf({ fens, moves, ply }: Played & { ply: number }): Ply | undefined 
 	return { position, move, captures: target?.color === opposite(position.turn) || passant };
 }
 
-// The material once the observer's `reply`, if it is one, is played.
-function settle({ after, reply }: { after: Chess; reply?: string }): number {
-	const answer = reply === undefined ? undefined : fromUci({ position: after, uci: reply });
+// Plies of the observer's line an exchange is settled over. One, the reply, is not enough: when a
+// check in between scores as well as the recapture, the observer's reply may be the check, and a
+// knight given for a bishop would look like a knight won. Three see the recapture behind it.
+const SETTLE = 3;
 
-	return materialOf(answer ? afterMove({ position: after, move: answer }) : after);
+// The material once the first `SETTLE` moves of the observer's `line` are played.
+function settle({ after, line }: { after: Chess; line: readonly string[] }): number {
+	let position = after;
+	for (const uci of line.slice(0, SETTLE)) {
+		const move = fromUci({ position, uci });
+		if (!move) break;
+		position = afterMove({ position, move });
+	}
+
+	return materialOf(position);
 }
 
-// The facts of `ply`, answered by the observer's `reply`.
+// The facts of `ply`, answered by the observer's `line`.
 //
 // A capture wins a piece when the run of captures it ends nets `MATERIAL`, judged on the board from
-// before the run began to after the reply, rather than by a swing in the observer's score: the
+// before the run began to after the line is settled, rather than by a swing in the observer's score: the
 // observer sees a fork or a pin a move or two ahead, so by the capture the gain is long priced in
-// and swings nothing. The reply is what tells a piece won from the first half of a trade. Read from
+// and swings nothing. The line is what tells a piece won from the first half of a trade. Read from
 // the positions alone, so a verdict that never came for an earlier ply cannot silence this one.
 export function moveFacts({
 	fens,
 	moves,
 	ply,
-	reply,
-}: Played & { ply: number; reply?: string }): Facts {
+	line = [],
+}: Played & { ply: number; line?: readonly string[] }): Facts {
 	const now = plyOf({ fens, moves, ply });
 	if (!now) return { check: false, won: false };
 
@@ -92,5 +102,5 @@ export function moveFacts({
 		start = one.position;
 	}
 	const sign = now.position.turn === "white" ? 1 : -1;
-	return { check, won: sign * (settle({ after, reply }) - materialOf(start)) >= MATERIAL };
+	return { check, won: sign * (settle({ after, line }) - materialOf(start)) >= MATERIAL };
 }
