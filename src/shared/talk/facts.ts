@@ -12,9 +12,10 @@ export type Facts = { check: boolean; won?: Role };
 // first, and the moves played from them.
 export type Played = { fens: readonly string[]; moves: readonly string[] };
 
-// Pawns an exchange must net for the capturer to be remarked on. A clean minor piece clears it; a
-// pawn, or a pawn and some position, does not.
-export const MATERIAL = 3;
+// Pawns an exchange must net for the capturer to be remarked on. Two, not a minor piece's three:
+// a knight given for a pawn, or a rook for a bishop, is a piece lost all the same, and it nets
+// only two. A pawn, or a pawn and some position, does not clear it.
+export const MATERIAL = 2;
 
 // The count everyone knows rather than an engine's, since a remark is about what was taken and
 // the king is never taken.

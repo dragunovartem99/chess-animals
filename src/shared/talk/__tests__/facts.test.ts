@@ -31,6 +31,20 @@ describe("moveFacts, on a piece won", () => {
 		});
 	});
 
+	it("names a piece given for less, as a knight for a pawn or a rook for a bishop", () => {
+		const knight = "4k3/8/4p3/3p4/8/2N5/8/4K3 w - - 0 1";
+		const exchange = "4k3/8/4p3/3b4/8/8/8/3RK3 w - - 0 1";
+
+		expect(factsOf({ fen: knight, moves: ["c3d5", "e6d5"], reply: "e1e2" })).toEqual({
+			check: false,
+			won: "knight",
+		});
+		expect(factsOf({ fen: exchange, moves: ["d1d5", "e6d5"], reply: "e1e2" })).toEqual({
+			check: false,
+			won: "rook",
+		});
+	});
+
 	it("names a piece the observer saw coming, as after a fork", () => {
 		const fen = "r3k3/8/8/1N6/8/8/8/4K3 w - - 0 1";
 
@@ -42,10 +56,10 @@ describe("moveFacts, on a piece won", () => {
 	});
 
 	it("counts the whole run of captures, and names the best piece of it", () => {
-		const fen = "4k3/8/4p3/3r4/8/2N5/8/3RK3 w - - 0 1";
+		const fen = "4k3/8/4b3/3r4/8/8/3R4/3RK3 w - - 0 1";
 
-		expect(factsOf({ fen, moves: ["c3d5"], reply: "e6d5" })).toEqual({ check: false });
-		expect(factsOf({ fen, moves: ["c3d5", "e6d5", "d1d5"], reply: "e8e7" })).toEqual({
+		expect(factsOf({ fen, moves: ["d2d5"], reply: "e6d5" })).toEqual({ check: false });
+		expect(factsOf({ fen, moves: ["d2d5", "e6d5", "d1d5"], reply: "e8e7" })).toEqual({
 			check: false,
 			won: "rook",
 		});
