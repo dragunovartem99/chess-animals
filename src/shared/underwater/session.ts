@@ -5,7 +5,7 @@ import type { MaiaSession } from "./maia";
 // page plays.
 //
 // The runtime and the model both load on the first move, not when the session is made: a game
-// with no underwater animal in it, or a thread that never meets one, never pays the ~46 MB.
+// with no underwater animal in it, or a thread that never meets one, never pays the ~23 MB.
 export function createMaiaSession({ load }: { load: () => Promise<Uint8Array> }): MaiaSession {
 	let opened: ReturnType<typeof open> | undefined;
 	const start = () => (opened ??= open(load));
