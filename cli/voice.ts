@@ -1,5 +1,3 @@
-import type { Role } from "chessops/types";
-
 import { locales, messages } from "@/locales";
 import { MONSTERS, ROSTER, UNDERWATER } from "@/modules/bots/roster";
 import { clipsFor } from "@/shared/talk";
@@ -21,15 +19,9 @@ type Lines = Partial<Record<Remark, readonly string[]>>;
 
 // Every clip one animal has, in every language.
 function clipsOf(id: string): Clip[] {
-	return locales.flatMap((locale) => {
-		const words = messages[locale];
-		return clipsFor({
-			locale,
-			id,
-			lines: (words.talk as Record<string, Lines>)[id] ?? {},
-			pieces: words.game.talk.piece as Record<Role, string>,
-		});
-	});
+	return locales.flatMap((locale) =>
+		clipsFor({ locale, id, lines: (messages[locale].talk as Record<string, Lines>)[id] ?? {} })
+	);
 }
 
 const jobs = [...ROSTER, ...UNDERWATER, ...MONSTERS].flatMap((animal) => {

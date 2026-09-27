@@ -223,7 +223,7 @@ the two is at the board, the monsters' first.
 ### Talk
 
 An opt-in speech panel on `/play`: the animals talk, and in a bot-vs-bot game both of them do. A
-remark is about the move just played — the piece it took, the check it gave — in the animal's own
+remark is about the move just played — a piece it took, the check it gave — in the animal's own
 attitude rather than a catchphrase. Most moves say nothing: a capture speaks only when it wins a
 piece that holds, counted on the board from before the exchange to after the reply the observer —
 a Stockfish of its own on fixed nodes, never a monster's — would play, so an even trade stays

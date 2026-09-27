@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { nextTick, ref } from "vue";
 
-import type { Line, LinesFor } from "@/shared/talk";
+import type { Line } from "@/shared/talk";
 import { withSetup } from "@/shared/test-support/component";
 
 import { useVoice } from "../composables/useVoice";
@@ -32,15 +32,11 @@ function fakePlayers() {
 	return { player, played, paused, finish };
 }
 
-const linesFor: LinesFor = () => ["Hello."];
-
 function mount() {
 	const said = ref<Line[]>([]);
 	const locale = ref("en");
 	const players = fakePlayers();
-	const { result: enabled } = withSetup(() =>
-		useVoice({ said, locale, linesFor, player: players.player })
-	);
+	const { result: enabled } = withSetup(() => useVoice({ said, locale, player: players.player }));
 
 	return { said, locale, enabled, ...players };
 }

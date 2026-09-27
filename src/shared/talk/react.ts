@@ -1,4 +1,4 @@
-import type { Color, Role } from "chessops/types";
+import type { Color } from "chessops/types";
 
 import type { GameResult } from "../chess";
 import { moverOf } from "./facts";
@@ -7,8 +7,8 @@ import type { Verdict } from "./observer";
 import type { Remark } from "./remark";
 import { isQuiet, mateFor } from "./swing";
 
-// One bot, one remark, and the piece it is about. The line itself is picked later, from the locale.
-export type Spoken = { color: Color; remark: Remark; piece?: Role };
+// One bot and one remark. The line itself is picked later, from the locale.
+export type Spoken = { color: Color; remark: Remark };
 
 // How many plies behind the game a verdict may land and still be spoken. One, because a bot
 // answers a human in milliseconds: the observer's verdict on the human's move always lands after
@@ -66,8 +66,8 @@ type Moment = Heard & {
 };
 
 // `remark` in the mouth of `color`, if a bot plays it.
-const say = ({ bots, color, remark, piece }: Spoken & { bots: readonly Color[] }): Spoken[] =>
-	bots.includes(color) ? [piece ? { color, remark, piece } : { color, remark }] : [];
+const say = ({ bots, color, remark }: Spoken & { bots: readonly Color[] }): Spoken[] =>
+	bots.includes(color) ? [{ color, remark }] : [];
 
 // `remark` from `color`, or when a human plays it, `answer` from the bot across the board.
 function either({ answer, ...spoken }: Spoken & { answer: Remark; bots: readonly Color[] }) {
@@ -93,8 +93,7 @@ export function react({ verdict, facts, bots, livePly, last }: Moment): Spoken[]
 		return either({ bots, color: mating, remark: "mating", answer: "mated" });
 
 	const mover = moverOf(ply);
-	if (facts.won)
-		return either({ bots, color: mover, remark: "take", answer: "lose", piece: facts.won });
+	if (facts.won) return either({ bots, color: mover, remark: "take", answer: "lose" });
 	if (!facts.check || isQuiet({ ply, lastPly: last.remark })) return [];
 
 	return say({ bots, color: mover, remark: "check" });

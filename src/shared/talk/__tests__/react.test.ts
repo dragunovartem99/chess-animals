@@ -8,7 +8,7 @@ const BOTH: Color[] = ["white", "black"];
 // White takes a knight at ply 5 that it keeps.
 const TAKE = {
 	verdict: { ply: 5, score: { cp: 340 } },
-	facts: { check: false, won: "knight" },
+	facts: { check: false, won: true },
 	livePly: 5,
 	last: {},
 } as const;
@@ -16,7 +16,7 @@ const TAKE = {
 // White gives check at ply 5, and nothing else happens.
 const CHECK = {
 	...TAKE,
-	facts: { check: true },
+	facts: { check: true, won: false },
 	verdict: { ply: 5, score: { cp: 0 } },
 	bots: BOTH,
 };
@@ -26,12 +26,8 @@ const MATE = { ...CHECK, verdict: { ply: 5, score: { mate: 3 } } };
 
 describe("react to a capture", () => {
 	it("lets the taker speak, or the loser when the taker is human", () => {
-		expect(react({ ...TAKE, bots: BOTH })).toEqual([
-			{ color: "white", remark: "take", piece: "knight" },
-		]);
-		expect(react({ ...TAKE, bots: ["black"] })).toEqual([
-			{ color: "black", remark: "lose", piece: "knight" },
-		]);
+		expect(react({ ...TAKE, bots: BOTH })).toEqual([{ color: "white", remark: "take" }]);
+		expect(react({ ...TAKE, bots: ["black"] })).toEqual([{ color: "black", remark: "lose" }]);
 	});
 
 	it("says nothing with nobody to say it", () => {
@@ -60,7 +56,7 @@ describe("react to a check or a mate", () => {
 	});
 
 	it("says a mate or a piece won through the cooldown, but not a check", () => {
-		const taken = [{ color: "white", remark: "take", piece: "knight" }];
+		const taken = [{ color: "white", remark: "take" }];
 
 		expect(react({ ...MATE, last: { remark: 4 } })).toEqual([
 			{ color: "white", remark: "mating" },

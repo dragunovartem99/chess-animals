@@ -8,7 +8,7 @@ description: Write, rewrite or record what the animals say in the talk panel —
 - DO give each animal one vivid personality (cocky, shy, lazy, pompous, creepy…) and let every line come from it.
 - DO react to the event the remark is about — check, a capture, a loss, a mate coming, the result — never a line that fits any game.
 - NEVER mention how the bot plays or what it weighs: no algorithm, no heuristic, no "my king walks", no "own colour".
-- NEVER put `{piece}` in a line: a line that names the piece is recorded five times over.
+- NEVER name the piece in a `take` or `lose` line: the lines are not told which piece it was.
 - DO keep a line to one to three short sentences; the character shows in how it reacts, not in a catchphrase or an animal noise.
 - DO keep the count per remark as it is (two greet/check/take/lose, one mating/win/loss/draw) unless asked.
 

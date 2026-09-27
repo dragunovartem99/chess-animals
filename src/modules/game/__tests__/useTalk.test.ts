@@ -15,14 +15,14 @@ describe("useTalk", () => {
 		expect(talk.said.value).toEqual([]);
 	});
 
-	it("greets, and names the piece it loses", async () => {
+	it("greets, and says when it loses a piece", async () => {
 		const scores = [{ cp: 0 }, { cp: 0 }, { cp: 0 }, { cp: 0 }, { cp: 900 }, { cp: 900 }];
 		const { switchOn, play, texts } = mountTalk({ scores });
 
 		await switchOn();
 		await play(QUEEN);
 
-		expect(texts()).toEqual(["donkey greet 1", "donkey losequeen 1"]);
+		expect(texts()).toEqual(["donkey greet 1", "donkey lose 1"]);
 	});
 
 	it("says check when it gives one, and nothing to a quiet move", async () => {
