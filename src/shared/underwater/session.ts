@@ -30,6 +30,13 @@ export function createMaiaSession({ load }: { load: () => Promise<Uint8Array> })
 	};
 }
 
+// How the session is built, part of what decides Maia's move — so the arena's result cache keys
+// on it beside the model. The int8 weights are stored as `DequantizeLinear` + `Cast` to fp16, and
+// onnxruntime keeps quantization nodes out of constant folding by default, for its int8 fusions.
+// Here that left the weights dequantized on every move: ~160 ms a move against ~110 with it off.
+// Folded once at load, the moves sit exactly as close to upstream's as before.
+export const MAIA_SESSION_OPTIONS = { extra: { session: { disable_quant_qdq: "1" } } };
+
 // The wasm-only build: the default one carries WebGPU too, twice the download for a backend this
 // never asks for.
 async function open(load: () => Promise<Uint8Array>) {
@@ -37,7 +44,7 @@ async function open(load: () => Promise<Uint8Array>) {
 	// One thread: several would need a cross-origin-isolated page in the browser, and the arena
 	// already runs a game per core.
 	ort.env.wasm.numThreads = 1;
-	const session = await ort.InferenceSession.create(await load());
+	const session = await ort.InferenceSession.create(await load(), MAIA_SESSION_OPTIONS);
 
 	return { ort, session };
 }

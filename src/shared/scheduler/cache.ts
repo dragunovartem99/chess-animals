@@ -4,6 +4,7 @@ import { join } from "node:path";
 
 import { STOCKFISH_WASM_URL } from "../monsters/process";
 import { MAIA_MODEL_URL } from "../underwater/model";
+import { MAIA_SESSION_OPTIONS } from "../underwater/session";
 import { ENGINE_URL } from "../wasm";
 import type { GameReport, GameSpec } from "./types";
 
@@ -56,8 +57,11 @@ export function gameKey(spec: GameSpec): string {
 			spec.white.stockfish || spec.black.stockfish
 				? fileDigest(STOCKFISH_WASM_URL)
 				: undefined,
-		// The same for Maia's model.
-		maia: spec.white.maia || spec.black.maia ? fileDigest(MAIA_MODEL_URL) : undefined,
+		// The same for Maia's model, and for how its session is built.
+		maia:
+			spec.white.maia || spec.black.maia
+				? [fileDigest(MAIA_MODEL_URL), MAIA_SESSION_OPTIONS]
+				: undefined,
 		// And our own engine: only a land animal searches with it. A game between two animals
 		// that ask Maia or Stockfish never calls it, so an engine rebuild must not throw away
 		// the arena's slowest games.
