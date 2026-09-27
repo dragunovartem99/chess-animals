@@ -2,24 +2,27 @@ import type { Color } from "chessops/types";
 import { describe, expect, it } from "vitest";
 
 import { farewell, greet, react } from "../react";
-import { game, level } from "./heard";
 
 const BOTH: Color[] = ["white", "black"];
-const KNIGHT = { captured: "knight", material: 3 } as const;
 
-// Black leaves a knight hanging at ply 4; White takes it at ply 5.
+// White takes a knight at ply 5 that it keeps.
 const TAKE = {
-	heard: game(...level(4), [{ cp: 350 }], [{ cp: 340 }, KNIGHT]),
-	ply: 5,
+	verdict: { ply: 5, score: { cp: 340 } },
+	facts: { check: false, won: "knight" },
 	livePly: 5,
 	last: {},
-};
+} as const;
 
 // White gives check at ply 5, and nothing else happens.
-const CHECK = { ...TAKE, heard: game(...level(5), [{ cp: 0 }, { check: true }]), bots: BOTH };
+const CHECK = {
+	...TAKE,
+	facts: { check: true },
+	verdict: { ply: 5, score: { cp: 0 } },
+	bots: BOTH,
+};
 
-// White finds a mate at ply 5.
-const MATE = { ...TAKE, heard: game(...level(5), [{ mate: 3 }, { check: true }]), bots: BOTH };
+// White finds a mate at ply 5 with a check.
+const MATE = { ...CHECK, verdict: { ply: 5, score: { mate: 3 } } };
 
 describe("react to a capture", () => {
 	it("lets the taker speak, or the loser when the taker is human", () => {
@@ -31,10 +34,7 @@ describe("react to a capture", () => {
 		]);
 	});
 
-	it("says nothing about the first half of a trade, or with nobody to say it", () => {
-		const trade = game(...level(5), [{ cp: 0 }, { ...KNIGHT, settled: 0 }]);
-
-		expect(react({ ...TAKE, heard: trade, bots: BOTH })).toEqual([]);
+	it("says nothing with nobody to say it", () => {
 		expect(react({ ...TAKE, bots: [] })).toEqual([]);
 	});
 });
@@ -46,20 +46,18 @@ describe("react to a check or a mate", () => {
 	});
 
 	it("puts a mate found before anything else, once a side", () => {
-		const black = game(...level(5), [{ mate: -2 }]);
+		const black = { ply: 5, score: { mate: -2 } };
 
 		expect(react(MATE)).toEqual([{ color: "white", remark: "mating" }]);
 		expect(react({ ...MATE, last: { mating: "white" } })).toEqual([
 			{ color: "white", remark: "check" },
 		]);
-		expect(react({ ...MATE, heard: black })).toEqual([{ color: "black", remark: "mating" }]);
+		expect(react({ ...MATE, verdict: black })).toEqual([{ color: "black", remark: "mating" }]);
 	});
 
 	it("says a mate found inside a cooldown once the cooldown is over", () => {
-		const found = game(...level(3), [{ mate: 5 }], [{ mate: 4 }], [{ mate: 4 }]);
-
-		expect(react({ ...MATE, heard: found, last: { remark: 3, news: 3 } })).toEqual([]);
-		expect(react({ ...MATE, heard: found, ply: 5, last: { remark: 1, news: 1 } })).toEqual([
+		expect(react({ ...MATE, last: { remark: 3, news: 3 } })).toEqual([]);
+		expect(react({ ...MATE, last: { remark: 1, news: 1 } })).toEqual([
 			{ color: "white", remark: "mating" },
 		]);
 	});
@@ -70,7 +68,6 @@ describe("react's timing", () => {
 		expect(react({ ...CHECK, livePly: 6 })).toHaveLength(1);
 		expect(react({ ...CHECK, livePly: 7 })).toEqual([]);
 		expect(react({ ...CHECK, last: { remark: 2 } })).toEqual([]);
-		expect(react({ ...CHECK, heard: Object.assign([], { 5: CHECK.heard[5] }) })).toEqual([]);
 	});
 
 	it("lets a check's cooldown pass news, and news's cooldown hold both", () => {

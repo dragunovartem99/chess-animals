@@ -2,10 +2,9 @@ import type { Color, Role } from "chessops/types";
 
 import type { GameResult } from "../chess";
 import { moverOf } from "./facts";
-import { pieceWon } from "./gain";
-import type { Heard } from "./gain";
+import type { Facts } from "./facts";
+import type { Verdict } from "./observer";
 import type { Remark } from "./remark";
-import type { Score } from "./score";
 import { isQuiet, mateFor } from "./swing";
 
 // One bot, one remark, and the piece it is about. The line itself is picked later, from the locale.
@@ -53,10 +52,10 @@ export function remember({
 	return { remark: ply, news: isNews ? ply : last.news, mating };
 }
 
-type Moment = {
-	// Everything heard so far, by ply, up to and including `ply`, the move to react to.
-	heard: readonly (Heard | undefined)[];
-	ply: number;
+// A ply as the talk heard it: the observer's verdict on it and what the move did.
+export type Heard = { verdict: Verdict; facts: Facts };
+
+type Moment = Heard & {
 	bots: readonly Color[];
 	livePly: number;
 	last: Last;
@@ -68,16 +67,16 @@ const say = ({ bots, color, remark, piece }: Spoken & { bots: readonly Color[] }
 
 // A mate found comes first, said by the side that has it, then a piece won. The piece is said
 // when it is taken, never when it is left hanging, which would give it away.
-function news({ heard, ply, bots, last, score }: Moment & { score: Score }): Spoken[] {
+function news({ verdict, facts, bots, last }: Moment): Spoken[] {
 	// Whoever's move showed it: a mate often appears only once the losing side has moved into it.
 	// Once a side, rather than once a verdict, so a mate found inside a cooldown is said after it.
-	const mating = mateFor(score);
+	const mating = mateFor(verdict.score);
 	if (mating && mating !== last.mating) return say({ bots, color: mating, remark: "mating" });
 
-	const mover = moverOf(ply);
-	const piece = pieceWon({ heard, ply });
+	const piece = facts.won;
 	if (!piece) return [];
 
+	const mover = moverOf(verdict.ply);
 	const taken = say({ bots, color: mover, remark: "take", piece });
 	return taken.length > 0 ? taken : say({ bots, color: other(mover), remark: "lose", piece });
 }
@@ -89,14 +88,12 @@ function news({ heard, ply, bots, last, score }: Moment & { score: Score }): Spo
 // A check keeps quiet inside the cooldown of any remark, but news only inside the cooldown of news:
 // an attack comes with checks, and a check said must not swallow the piece or the mate it wins.
 export function react(moment: Moment): Spoken[] {
-	const { heard, ply, bots, livePly, last } = moment;
-	const now = heard[ply];
-	if (!now || !heard[ply - 1] || livePly - ply > LATE) return [];
+	const { verdict, facts, bots, livePly, last } = moment;
+	const { ply } = verdict;
+	if (livePly - ply > LATE) return [];
 
-	const said = isQuiet({ ply, lastPly: last.news })
-		? []
-		: news({ ...moment, score: now.verdict.score });
-	if (said.length > 0 || !now.facts.check || isQuiet({ ply, lastPly: last.remark })) return said;
+	const said = isQuiet({ ply, lastPly: last.news }) ? [] : news(moment);
+	if (said.length > 0 || !facts.check || isQuiet({ ply, lastPly: last.remark })) return said;
 
 	return say({ bots, color: moverOf(ply), remark: "check" });
 }
