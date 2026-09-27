@@ -4,7 +4,7 @@ import { createRng } from "../engine";
 import type { Rng } from "../engine";
 import { pickRemark } from "./pick";
 import { react, remember } from "./react";
-import type { Heard, Last, Spoken } from "./react";
+import type { Heard, Spoken } from "./react";
 import type { Remark } from "./remark";
 
 // One remark as said: which of the bot's lines it was, not its text, so it is read out in whatever
@@ -58,17 +58,16 @@ type Players = { players: Record<Color, string> };
 type Hearing = Players &
 	Heard & {
 		bots: readonly Color[];
-		livePly: number;
 	};
 
 // Everything a game's talk remembers, with no framework and no Stockfish in it: the seeded
-// stream, when the last remark and the last news were made, the last few remarks, how often each
+// stream, when the last remark was made, the last few remarks, how often each
 // line has come up this game, and which line each bot said last for each remark — the last kept
 // across games, so a bot does not open two games with the same hello. By position in the list
 // rather than by text, since a clip is found by its position.
 export function createConversation({ linesFor, seed }: { linesFor: LinesFor; seed: () => string }) {
 	let rng: Rng = createRng(seed());
-	let last: Last = {};
+	let last: number | undefined;
 	let transcript: Line[] = [];
 	let said = 0;
 	let timesSaid = new Map<string, number>();
@@ -92,7 +91,7 @@ export function createConversation({ linesFor, seed }: { linesFor: LinesFor; see
 		begin() {
 			rng = createRng(seed());
 			timesSaid = new Map();
-			last = {};
+			last = undefined;
 			transcript = [];
 		},
 		// Has the bots say what they want to, in order, and gives back the last few remarks.
@@ -101,11 +100,11 @@ export function createConversation({ linesFor, seed }: { linesFor: LinesFor; see
 
 			return transcript;
 		},
-		// Has the bots say what they want to about a verdict on the move just played, and gives
-		// back the last few remarks.
-		hear({ verdict, facts, bots, livePly, players }: Hearing): Line[] {
-			const spoken = react({ verdict, facts, bots, livePly, last });
-			last = remember({ last, said: utter({ spoken, players }), ply: verdict.ply });
+		// Has the bots say what they want to about the move just played, and gives back the last
+		// few remarks.
+		hear({ ply, facts, bots, players }: Hearing): Line[] {
+			const spoken = react({ ply, facts, bots, last });
+			last = remember({ last, said: utter({ spoken, players }), ply });
 
 			return transcript;
 		},

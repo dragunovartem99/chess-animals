@@ -51,10 +51,9 @@ describe("createConversation", () => {
 		});
 		const hear = (ply: number) =>
 			conversation.hear({
-				verdict: { ply, score: { cp: 0 } },
+				ply,
 				facts: { check: true, won: false },
 				bots: ["black"],
-				livePly: ply,
 				players: PLAYERS,
 			});
 

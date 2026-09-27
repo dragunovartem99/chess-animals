@@ -6,8 +6,6 @@ export default {
 	check: ["Check. Mind your posture.", "Check. I saw this coming in nineteen seventy-one."],
 	take: ["A classic mistake, young one.", "I'll take that. You'll remember this lesson."],
 	lose: ["Hm. I shall remember that.", "Not bad. Not good either."],
-	mating: ["Your king has run out of squares, I'm afraid."],
-	mated: ["Ah. My king is trapped. I should have seen that sooner."],
 	win: ["Well played. By me. Study harder."],
 	loss: ["You won. Good. I'll remember your name."],
 	draw: ["A draw. Perfectly respectable."],

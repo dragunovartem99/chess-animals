@@ -9,8 +9,6 @@ export default {
 	],
 	take: ["I got one! Can I keep it?", "Ooh, look what I found!"],
 	lose: ["Hey! Oh wait, you're allowed to do that.", "Aww. I liked that one."],
-	mating: ["Wait... is your king stuck? I think your king is stuck!"],
-	mated: ["Wait, my king's stuck? Oh no. Oh no no no."],
 	win: ["I won? I won! Can we play again?"],
 	loss: ["You won! That was so fun. Again?"],
 	draw: ["A draw? So everybody won? Cool!"],

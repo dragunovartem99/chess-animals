@@ -1,13 +1,12 @@
 import { INITIAL_FEN } from "chessops/fen";
 import type { Color } from "chessops/types";
-import { vi } from "vitest";
 import { nextTick, ref } from "vue";
 
 import { afterMove, fenFromPosition, positionFromFen } from "@/shared/chess";
 import type { GameStatus } from "@/shared/chess";
 import { fromUci } from "@/shared/engine/uci/moves";
 import type { PlayedTurn } from "@/shared/game";
-import type { LinesFor, Observer, Score } from "@/shared/talk";
+import type { LinesFor } from "@/shared/talk";
 import { withSetup } from "@/shared/test-support/component";
 
 import { useTalk } from "../composables/useTalk";
@@ -15,23 +14,6 @@ import { useTalk } from "../composables/useTalk";
 // Two lines a remark for the donkey and the wolf; none for anyone else.
 const linesFor: LinesFor = ({ id, remark }) =>
 	["donkey", "wolf"].includes(id) ? [`${id} ${remark} 1`, `${id} ${remark} 2`] : [];
-
-// An observer that knows the verdict on every ply in advance, level unless told otherwise.
-function fakeObserver(scores: Score[]) {
-	const calls = { reset: 0, dispose: 0 };
-	const observer: Observer = {
-		observe: ({ moves }) =>
-			Promise.resolve({ ply: moves.length, score: scores[moves.length] ?? { cp: 0 } }),
-		reset: () => {
-			calls.reset += 1;
-		},
-		dispose: () => {
-			calls.dispose += 1;
-		},
-	};
-
-	return { observer, calls };
-}
 
 // The turns and positions of a game played from the opening position.
 function replay(moves: readonly string[]) {
@@ -54,24 +36,20 @@ const settle = async () => {
 };
 
 // `useTalk` over a game the test plays by hand, on a fixed seed.
-export function mountTalk({ white = "human", black = "donkey", scores = [] as Score[] } = {}) {
+export function mountTalk({ white = "human", black = "donkey" } = {}) {
 	const game = {
 		turns: ref<PlayedTurn[]>([]),
 		fens: ref([INITIAL_FEN]),
 		status: ref<GameStatus>({ over: false }),
 	};
 	const players = ref<Record<Color, string>>({ white, black });
-	const { observer, calls } = fakeObserver(scores);
-	const spawn = vi.fn<() => Observer>(() => observer);
-	const setup = withSetup(() => useTalk({ game, players, linesFor, spawn, seed: () => "talk" }));
+	const setup = withSetup(() => useTalk({ game, players, linesFor, seed: () => "talk" }));
 	const talk = setup.result;
 
 	return {
 		...setup,
 		talk,
 		status: game.status,
-		spawn,
-		calls,
 		texts: () => talk.said.value.map((line) => linesFor(line)[line.index]),
 		switchOn: async () => {
 			talk.enabled.value = true;

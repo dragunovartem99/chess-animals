@@ -6,8 +6,6 @@ export default {
 	check: ["Check! Check! Pretty check!", "Check! I heard that somewhere. Check!"],
 	take: ["Mine now! Mine now!", "Ooh, shiny! Shiny!"],
 	lose: ["Thief! Thief!", "Robbed! I'm telling everyone! Everyone!"],
-	mating: ["Stuck! The king is stuck! Everybody look!"],
-	mated: ["Stuck! My king is stuck! Oh no! Oh no!"],
 	win: ["Winner! Winner! Who's a winner? Me!"],
 	loss: ["Good game! Good game! I heard that too."],
 	draw: ["Draw! Draw! Nobody wins! Nobody!"],

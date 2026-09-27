@@ -3,8 +3,6 @@ export default {
 	check: ["Check! Move it!", "Check! Again! What, scared?"],
 	take: ["Gone. Next!", "Headbutt! Bye-bye!"],
 	lose: ["Who cares. Charge!", "Big deal. I'm still coming."],
-	mating: ["Nowhere to run now. Ha!"],
-	mated: ["My king's stuck? No way. I'm not giving up!"],
 	win: ["Told you. Nobody stops me."],
 	loss: ["Whatever. Rematch. Now."],
 	draw: ["A draw? Boring. Let's go again."],

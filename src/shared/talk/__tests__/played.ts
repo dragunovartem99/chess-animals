@@ -2,8 +2,8 @@ import { afterMove, fenFromPosition, positionFromFen } from "../../chess";
 import { fromUci } from "../../engine/uci/moves";
 import { moveFacts } from "../facts";
 
-// The facts of the last of `moves` played from `fen`, answered by the observer's `line`.
-export function factsOf({ fen, moves, line }: { fen: string; moves: string[]; line?: string[] }) {
+// The facts of the last of `moves` played from `fen`.
+export function factsOf({ fen, moves }: { fen: string; moves: string[] }) {
 	let position = positionFromFen(fen);
 	const fens = [fen];
 	for (const uci of moves.slice(0, -1)) {
@@ -11,5 +11,5 @@ export function factsOf({ fen, moves, line }: { fen: string; moves: string[]; li
 		fens.push(fenFromPosition(position));
 	}
 
-	return moveFacts({ fens, moves, ply: moves.length, line });
+	return moveFacts({ fens, moves, ply: moves.length });
 }

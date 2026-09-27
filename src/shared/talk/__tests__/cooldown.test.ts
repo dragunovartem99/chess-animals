@@ -1,14 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { isQuiet, mateFor } from "../swing";
-
-describe("mateFor", () => {
-	it("names the side that mates, and nobody without a mate", () => {
-		expect(mateFor({ mate: 2 })).toBe("white");
-		expect(mateFor({ mate: -4 })).toBe("black");
-		expect(mateFor({ cp: 5000 })).toBeUndefined();
-	});
-});
+import { isQuiet } from "../cooldown";
 
 describe("isQuiet", () => {
 	it("holds the cooldown after a remark and lifts it after", () => {
