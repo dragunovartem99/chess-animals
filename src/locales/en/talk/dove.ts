@@ -4,6 +4,7 @@ export default {
 	take: ["I'm so sorry. I had to take it.", "I took that. Are you okay?"],
 	lose: ["Oh. That was mine. No, it's fine. Really.", "You can have it. I didn't need it. Much."],
 	mating: ["I think your king is stuck. I'm really sorry."],
+	mated: ["Oh no. My king can't get away, can he? That's all right."],
 	win: ["I won? Oh. Sorry. Good game, though."],
 	loss: ["You won. Well done. I knew you would."],
 	draw: ["A draw. Good. Nobody's sad."],

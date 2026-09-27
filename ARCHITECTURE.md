@@ -232,10 +232,13 @@ game's positions, so only the reply needs the observer, and a verdict lost for a
 silences nothing after it. The observer loads with the panel, so a land game without it still
 never fetches Stockfish.
 
-- Remarks, from the speaker's side: greeting, check, taking a piece, losing one, mate seen, win,
-  loss, draw. One voice a move, and a few plies of cooldown after it: a check keeps quiet after
-  any remark, a capture or a mate only after another, so a check never swallows the piece it wins.
-- A mate is said once a side, not once a verdict, so one found inside a cooldown is said after it.
+- Remarks, from the speaker's side: greeting, check, taking a piece, losing one, mate seen, mate
+  faced, win, loss, draw. One voice a move, in order: a mate found, a piece won, a check. Only a
+  check waits out a few plies after any remark; a mate in two must not wait behind the capture
+  that set it up, and a piece won is counted from the start of its exchange, so the recapture
+  nets nothing on its own.
+- A mate is said once a side, not once a verdict — by the side that has it, or by the bot facing
+  a human's.
 - A hanging piece is remarked on when it is taken, never before: saying so would give it away.
 - The observer's answer is tagged by ply and dropped if the game has moved on, so a remark never
   lands a move late.

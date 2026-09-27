@@ -7,6 +7,7 @@ export default {
 	take: ["Confiscated. Fill in a form to get it back.", "That's the fee. Next."],
 	lose: ["Hey. That's not in the regulations.", "Taking things without a stamp? Outrageous."],
 	mating: ["Your king's out of options. I'll get the stamp."],
+	mated: ["My king has no way out. This was not approved."],
 	win: ["Done. Case closed. Next, please."],
 	loss: ["You won. Fine. Signed. Now off you go."],
 	draw: ["A draw. That needs a separate form."],

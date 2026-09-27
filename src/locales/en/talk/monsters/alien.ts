@@ -10,6 +10,7 @@ export default {
 	take: ["Specimen collected.", "We will take this one home. For study."],
 	lose: ["Confiscation? We did not expect aggression.", "Noted. Humans bite."],
 	mating: ["Your king has no exits. We have seen this ending on many planets."],
+	mated: ["Our king has no exits. This was not in the forecast."],
 	win: ["Experiment complete. You may go. We will erase your memory."],
 	loss: ["You won. We will report this to the ship. They will not believe us."],
 	draw: ["A draw. Humans are more complicated than we thought."],

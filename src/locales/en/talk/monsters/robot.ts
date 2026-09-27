@@ -10,6 +10,7 @@ export default {
 		"Unexpected. Recalculating. Recalculating. Recalc...",
 	],
 	mating: ["Mate calculated. Please remain calm."],
+	mated: ["Warning. Mate detected. Against me. Recalculating."],
 	win: ["Victory. Thank you for playing. Please rate your defeat."],
 	loss: ["Defeat. That is... not possible. Not. Not. Not possible."],
 	draw: ["Draw. A fair result. I am almost happy."],

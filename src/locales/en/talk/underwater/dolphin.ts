@@ -7,6 +7,7 @@ export default {
 	take: ["Saw that trap from a mile away. Thanks!", "Nice try. That one's mine."],
 	lose: ["Oh, clever! I didn't see that one.", "Okay, that was good. I'm impressed."],
 	mating: ["I see where this ends. Your king does too, I think."],
+	mated: ["I see where this ends. For my king, this time."],
 	win: ["I won! That was fun. You nearly had me."],
 	loss: ["You won! You're full of surprises. Again?"],
 	draw: ["A draw! We read each other too well."],

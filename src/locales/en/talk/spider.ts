@@ -7,6 +7,7 @@ export default {
 	take: ["I'll wrap that up for later.", "It came to visit. It's staying."],
 	lose: ["How rude. How exciting.", "Oh, never mind. I have eight of everything."],
 	mating: ["Your king is all wrapped up. Comfy?"],
+	mated: ["My king, caught in someone else's web. How unusual."],
 	win: ["Thank you for staying. Forever."],
 	loss: ["You got away. Nobody gets away. Come back soon."],
 	draw: ["A draw. Such a tangle. Stay a little longer?"],

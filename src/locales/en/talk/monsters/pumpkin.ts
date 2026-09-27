@@ -13,6 +13,7 @@ export default {
 		"Take it, take it. You're growing, you need it.",
 	],
 	mating: ["That's it, dear. Your king's got nowhere to hide."],
+	mated: ["Oh dear. Granny's king has nowhere to go."],
 	win: ["There. Now wash your hands, it's supper time."],
 	loss: ["Oh, you beat granny. Clever thing. Have another slice."],
 	draw: ["A draw. Good, nobody's upset. More tea?"],

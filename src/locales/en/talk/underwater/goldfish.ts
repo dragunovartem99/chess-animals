@@ -13,6 +13,7 @@ export default {
 	],
 	lose: ["Oh! Where did that one go?", "Did I have one of those? I think I had one of those."],
 	mating: ["Your king's stuck! I'd better say it before I forget!"],
+	mated: ["My king's stuck? Oh no. Maybe I'll just forget about it."],
 	win: ["I won? How lovely! How did I do it?"],
 	loss: ["You won? Oh. I'll have forgotten by tomorrow. Well done!"],
 	draw: ["A draw! Or... what just happened?"],

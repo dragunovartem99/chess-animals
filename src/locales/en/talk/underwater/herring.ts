@@ -7,6 +7,7 @@ export default {
 	take: ["Oh, that was just lying there. Thanks!", "Got it! See, I do pay attention sometimes."],
 	lose: ["Wait, was that one mine? When did that happen?", "Oops. I was looking the other way."],
 	mating: ["Oh! I think your king has nowhere to go. Right? Right."],
+	mated: ["Oh no. My king has nowhere to go. Don't tell the school."],
 	win: ["I won? Wait till the school hears about this!"],
 	loss: ["You won. Don't tell the others, okay?"],
 	draw: ["A draw! Nobody lost anything. Well, I lost a few things."],

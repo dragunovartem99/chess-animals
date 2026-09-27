@@ -4,6 +4,7 @@ export default {
 	take: ["Eaten.", "Small. Still good."],
 	lose: ["Hm. Bold.", "You bite. I bite harder."],
 	mating: ["The end. For your king."],
+	mated: ["My king. Cornered. I remember this feeling. Barely."],
 	win: ["Over. As always."],
 	loss: ["You won. The first in a million years."],
 	draw: ["A draw. I will wait. I am good at waiting."],

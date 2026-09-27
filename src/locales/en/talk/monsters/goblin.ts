@@ -10,6 +10,7 @@ export default {
 	take: ["Shiny! Mine, mine.", "It was just lying there. So it's nobody's. So it's mine."],
 	lose: ["Thief! Stop, thief! ...Oh. It's you.", "Hey, I stole that fair and square!"],
 	mating: ["Your king's cornered. Turn out your pockets, it's over."],
+	mated: ["My king's cornered? Hey! Let's talk. I've got a deal for you."],
 	win: ["I won! Everything on the board is mine. And the board."],
 	loss: ["You won. Fine. Just count your pieces before you go."],
 	draw: ["A draw. So we split it. I'll count."],

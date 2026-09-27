@@ -55,27 +55,26 @@ describe("react to a check or a mate", () => {
 		expect(react({ ...MATE, verdict: black })).toEqual([{ color: "black", remark: "mating" }]);
 	});
 
-	it("says a mate found inside a cooldown once the cooldown is over", () => {
-		expect(react({ ...MATE, last: { remark: 3, news: 3 } })).toEqual([]);
-		expect(react({ ...MATE, last: { remark: 1, news: 1 } })).toEqual([
+	it("lets the bot facing a human's mate say so", () => {
+		expect(react({ ...MATE, bots: ["black"] })).toEqual([{ color: "black", remark: "mated" }]);
+	});
+
+	it("says a mate or a piece won through the cooldown, but not a check", () => {
+		const taken = [{ color: "white", remark: "take", piece: "knight" }];
+
+		expect(react({ ...MATE, last: { remark: 4 } })).toEqual([
 			{ color: "white", remark: "mating" },
 		]);
+		expect(react({ ...TAKE, bots: BOTH, last: { remark: 4 } })).toEqual(taken);
+		expect(react({ ...CHECK, last: { remark: 2 } })).toEqual([]);
+		expect(react({ ...CHECK, last: { remark: 1 } })).toHaveLength(1);
 	});
 });
 
 describe("react's timing", () => {
-	it("answers a verdict one ply late, not two, and keeps the cooldown", () => {
+	it("answers a verdict one ply late, not two", () => {
 		expect(react({ ...CHECK, livePly: 6 })).toHaveLength(1);
 		expect(react({ ...CHECK, livePly: 7 })).toEqual([]);
-		expect(react({ ...CHECK, last: { remark: 2 } })).toEqual([]);
-	});
-
-	it("lets a check's cooldown pass news, and news's cooldown hold both", () => {
-		const taken = [{ color: "white", remark: "take", piece: "knight" }];
-
-		expect(react({ ...TAKE, bots: BOTH, last: { remark: 3 } })).toEqual(taken);
-		expect(react({ ...TAKE, bots: BOTH, last: { remark: 3, news: 3 } })).toEqual([]);
-		expect(react({ ...CHECK, last: { remark: 3, news: 3 } })).toEqual([]);
 	});
 });
 
