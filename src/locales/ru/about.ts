@@ -29,7 +29,7 @@ export default {
 		title: "Чужой открытый код",
 		stockfish: {
 			name: "Stockfish.js 19",
-			role: "играет за монстров и подсказывает зверям, когда заговорить.",
+			role: "играет за монстров.",
 			license: "GNU GPL v3",
 		},
 		maia: {
