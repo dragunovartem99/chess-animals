@@ -18,6 +18,9 @@ function fileDigest(url: URL): string {
 	return digest;
 }
 
+// A land animal plays our engine's search; the others ask Maia or Stockfish instead.
+const isLand = (bot: GameSpec["white"]): boolean => !bot.maia && !bot.stockfish;
+
 // A stable JSON string: object keys sorted at every level, so two specs that differ only in
 // property order hash the same.
 function canonical(value: unknown): string {
@@ -55,29 +58,25 @@ export function gameKey(spec: GameSpec): string {
 				: undefined,
 		// The same for Maia's model.
 		maia: spec.white.maia || spec.black.maia ? fileDigest(MAIA_MODEL_URL) : undefined,
+		// And our own engine: only a land animal searches with it. A game between two animals
+		// that ask Maia or Stockfish never calls it, so an engine rebuild must not throw away
+		// the arena's slowest games.
+		engine: isLand(spec.white) || isLand(spec.black) ? fileDigest(ENGINE_URL) : undefined,
 	});
 	const digest = createHash("sha256").update(payload).digest("hex");
 	digests.set(spec, digest);
 	return digest;
 }
 
-// The first bytes of the engine's digest. A game depends on the search as much as on its spec, and
-// the spec does not say which build played it.
-function engineDigest(): string {
-	return createHash("sha256").update(readFileSync(ENGINE_URL)).digest("hex").slice(0, 16);
-}
-
 // A content-addressed store of finished games on disk. A re-run after adding or retuning one bot
-// hits the cache for every game that bot is not in and only replays the rest.
-//
-// Kept per engine build, in a directory named by its digest: a rebuilt engine starts empty
-// rather than reading back games another search played. Even a speed-only build starts over,
-// which costs one cold run and never returns a stale result.
+// hits the cache for every game that bot is not in and only replays the rest. A rebuilt engine
+// replays only the games a land animal is in — its build is in their keys, not in the directory.
+// Even a speed-only build replays them, which costs one run and never returns a stale result.
 export function createGameCache({ dir: parent }: { dir: string }): {
 	get: (spec: GameSpec) => GameReport | undefined;
 	set: (spec: GameSpec, report: GameReport) => void;
 } {
-	const dir = join(parent, engineDigest());
+	const dir = join(parent, "games");
 	mkdirSync(dir, { recursive: true });
 
 	return {

@@ -36,8 +36,9 @@ lives in `shared/rating`, `shared/scheduler` and `shared/tuner` as pure function
 thin Node shell (run with `tsx`) over a `worker_threads` pool. `npm run arena` rates the whole
 roster over the paired opening set, printing the rating table and cross-table and writing
 `arena-results.json`; the same `--seed=` reproduces it exactly, and the result cache means a new
-bot only replays its own games. The cache is kept per `engine.wasm` build, so a rebuilt engine
-replays everything once. It also writes the site's numbers, `src/modules/bots/roster/points.json`,
+bot only replays its own games. A game with a land animal in it is keyed on the `engine.wasm`
+build, so a rebuilt engine replays those once; a game between underwater animals and monsters
+never calls the engine, and survives it. It also writes the site's numbers, `src/modules/bots/roster/points.json`,
 committed: the fitted ratings shifted until the underwater animals sit, on average, at the Elo Maia
 was asked to play them at, so a bot's points read roughly as a person's rating (`toPoints`). `npm run tune -- <botId>` runs SPSA on one bot's weights against
 the rest of the roster as a gauntlet, printing the score each iteration and writing
