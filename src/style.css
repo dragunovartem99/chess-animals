@@ -280,3 +280,34 @@ cg-board square.move-dest:hover {
 	background-size: auto;
 	background-attachment: fixed;
 }
+
+/* chessground places its coordinates by pixel offsets tuned for a large board, which drift off
+   their squares on a phone. Anchored to the squares themselves, they hold at any size. Ranks on
+   the right and files on the left of each square, as on lichess: the theme colours each label for
+   the square under it there, so anywhere else a label lands on its own colour and vanishes. */
+.cg-wrap coords.ranks {
+	top: 0;
+	left: auto;
+	right: 2px;
+	text-align: right;
+}
+
+.cg-wrap coords.files {
+	bottom: 0;
+	left: 0;
+	height: auto;
+	text-align: left;
+}
+
+.cg-wrap coords coord {
+	flex: 1 1 0;
+}
+
+.cg-wrap coords.ranks coord {
+	transform: none;
+	padding-top: 1px;
+}
+
+.cg-wrap coords.files coord {
+	padding-left: 3px;
+}
