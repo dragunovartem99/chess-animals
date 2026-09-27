@@ -6,7 +6,7 @@ import { parseCommand } from "@/shared/engine/uci/parseCommand";
 import { serializeResponse } from "@/shared/engine/uci/serialize";
 import { createUciEngine } from "@/shared/engine/uciEngine";
 import { createMonsterEngine, createStockfish } from "@/shared/monsters";
-import { createMaiaSession, createUnderwaterEngine } from "@/shared/underwater";
+import { createMaiaSession, createUnderwaterEngine, downloadModel } from "@/shared/underwater";
 import { createWasmGoSearch, loadEngine } from "@/shared/wasm";
 import type { WasmEngine } from "@/shared/wasm";
 
@@ -16,13 +16,9 @@ import type { WasmEngine } from "@/shared/wasm";
 const STOCKFISH_URL = `${import.meta.env.BASE_URL}stockfish/stockfish-19-lite-single.js`;
 
 // Vendored in `public/` for the same reason, and fetched by the first underwater animal that plays:
-// nobody else pays for its 23 MB.
+// nobody else pays for its 23 MB, and a returning player reads it back from Cache Storage.
 const MAIA_MODEL_URL = `${import.meta.env.BASE_URL}maia3/maia3_int8.onnx`;
-
-async function fetchModel(): Promise<Uint8Array> {
-	const response = await fetch(MAIA_MODEL_URL);
-	return new Uint8Array(await response.arrayBuffer());
-}
+const fetchModel = () => downloadModel({ url: MAIA_MODEL_URL });
 
 // What any kind of bot is to this file: a command in, responses out, now or a moment later.
 type Engine = { handle: (command: UciCommand) => UciResponse[] | Promise<UciResponse[]> };
