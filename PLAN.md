@@ -14,10 +14,3 @@ types, lint, tests, build.
 ## Outside v1
 
 - ⬜ A Polyglot `.bin` book reader
-
-## Monsters
-
-The sixteen Stockfish players — a MultiPV line picked by temperature, see
-[ARCHITECTURE.md](./ARCHITECTURE.md#monsters) — on `/monsters`. What is left:
-
-- ⬜ More monsters, if a real idea turns up — each needs a `temperature` rung.
