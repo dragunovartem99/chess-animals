@@ -213,7 +213,8 @@ move almost untouched — 99% the same likeliest move, under 1% of the probabili
 `onnxruntime-web` in the browser and under node alike (`onnxruntime-node` segfaults loading it).
 The runtime and the model load on the first underwater move: the worker's `isready` waits for
 them, so the board's loading state covers the download, and the land and monster rosters never
-fetch either. The arena plays them through `withMaia` in front of `createMover`, and the result
+fetch either. The model is then kept in Cache Storage (`downloadModel`), so a later visit skips
+the 23 MB. The arena plays them through `withMaia` in front of `createMover`, and the result
 cache keys a game with one in it on the model's digest.
 
 The pages follow the roster they show: `useTheme` in `shared/ui` lets a view say which world it is
