@@ -1,11 +1,12 @@
-import { existsSync, mkdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import path from "node:path";
 
 import type { Clip } from "@/shared/talk";
 
 import { eleven } from "./eleven";
 import { level } from "./level";
-import { publicFile, rawFile } from "./paths";
+import { publicFile } from "./paths";
 
 export type Job = Clip & { voice: string };
 
@@ -21,26 +22,23 @@ const SETTINGS = { stability: 0.5, similarity_boost: 0.75 };
 // Two requests at once: the account's plan refuses a third in flight with a 429.
 const AT_ONCE = 2;
 
-// Levels a recorded original into the clip the site plays.
-export function publish(clip: string) {
-	mkdirSync(path.dirname(publicFile(clip)), { recursive: true });
-	level({ input: rawFile(clip), output: publicFile(clip) });
-}
-
 async function record(job: Job) {
 	const response = await eleven({
 		route: `/v1/text-to-speech/${job.voice}?output_format=${FORMAT}`,
 		body: { text: job.text, model_id: MODEL, voice_settings: SETTINGS },
 	});
-	mkdirSync(path.dirname(rawFile(job.path)), { recursive: true });
-	writeFileSync(rawFile(job.path), Buffer.from(await response.arrayBuffer()));
-	publish(job.path);
+	const scratch = mkdtempSync(path.join(tmpdir(), "voice-"));
+	const raw = path.join(scratch, "raw.mp3");
+	writeFileSync(raw, Buffer.from(await response.arrayBuffer()));
+	mkdirSync(path.dirname(publicFile(job.path)), { recursive: true });
+	level({ input: raw, output: publicFile(job.path) });
+	rmSync(scratch, { recursive: true });
 	console.log(`${job.path}  ${job.text}`);
 }
 
-// The clips with no original yet: a clip once made is never paid for again, so a run after a
-// changed line (its original deleted) only records that line.
-export const unrecorded = (jobs: Job[]) => jobs.filter((job) => !existsSync(rawFile(job.path)));
+// The clips not on disk yet: a clip once made is never paid for again, so a run after a changed
+// line (its clip deleted) only records that line.
+export const unrecorded = (jobs: Job[]) => jobs.filter((job) => !existsSync(publicFile(job.path)));
 
 export async function speak(jobs: Job[]) {
 	const batches = Array.from({ length: Math.ceil(jobs.length / AT_ONCE) }, (_, index) =>

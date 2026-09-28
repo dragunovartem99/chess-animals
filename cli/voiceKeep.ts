@@ -7,11 +7,11 @@ import { MONSTERS, ROSTER, UNDERWATER } from "@/modules/bots/roster";
 import { CAST, recast } from "./voice/casting";
 import { describe } from "./voice/describe";
 import { confirm, eleven } from "./voice/eleven";
-import { RAW_DIR } from "./voice/paths";
+import { PUBLIC_DIR } from "./voice/paths";
 import { readPreviews } from "./voice/previews";
 
 // `npm run voice:keep -- <id> <n>` — save preview <n> from `voice:design` as the animal's voice,
-// write it into `cast.yaml`, and drop the animal's originals so `npm run voice` records them in
+// write it into `cast.yaml`, and drop the animal's clips so `npm run voice` records them in
 // the new voice. The old voice is deleted only on a yes: all custom slots are taken, so a designed
 // voice usually has to go for a new one to be saved, but a deletion cannot be undone.
 
@@ -65,6 +65,6 @@ const voice = await save().catch(async (error: Error) => {
 });
 recast({ from: old, to: voice });
 for (const locale of locales)
-	rmSync(path.join(RAW_DIR, locale, id), { recursive: true, force: true });
+	rmSync(path.join(PUBLIC_DIR, "voice", locale, id), { recursive: true, force: true });
 console.log(`${id} now speaks with ${voice}`);
 await drop();

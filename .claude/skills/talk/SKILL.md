@@ -24,7 +24,7 @@ description: Write, rewrite or record what the animals say in the talk panel —
 - DO keep one voice per animal in `cli/voice/cast.yaml`, described by `gender`, `age`, `persona` (2–5 words), `emotion` (2–3 adjectives) and `delivery` (1–2 sentences on timbre, pace, delivery). `cli/voice/describe.ts` builds the Voice Design prompt from them; change the fields, never the prompt by hand.
 - DO note a stock or library voice in a comment after its `voice` id.
 - DO design a new voice with `npm run voice:design -- <id>`: three previews of the animal's Russian lines into `~/Claude/chess-animals/voices/<id>-<n>.mp3`; a rerun numbers on. Let the user listen and pick a number.
-- DO keep the pick with `npm run voice:keep -- <id> <n>`: it saves the voice, writes its id into `cast.yaml` and drops the animal's originals. It asks before deleting the old designed voice — pipe `y` only after the user's explicit yes for that voice.
+- DO keep the pick with `npm run voice:keep -- <id> <n>`: it saves the voice, writes its id into `cast.yaml` and drops the animal's clips. It asks before deleting the old designed voice — pipe `y` only after the user's explicit yes for that voice.
 - DO hear a kept voice in both languages (record its clips) before moving on.
 - DO try a Voice Library voice (`/v1/shared-voices`) when a stock one does not fit: it speaks by its id without a slot. Check its rate first.
 - NEVER spend a custom slot without freeing one: all 30 are taken.
@@ -38,7 +38,6 @@ description: Write, rewrite or record what the animals say in the talk panel —
 
 1. Write the English and Russian lines for the animal as a pair.
 2. Run `npx vitest run src/locales src/shared/talk`.
-3. Delete the changed originals under `voice-raw/{en,ru}/<id>/` — only clips with no original are recorded, and the levelled clip in `public/voice/` is rewritten from it.
+3. Delete the changed clips under `public/voice/{en,ru}/<id>/` — only missing clips are recorded.
 4. Run `npm run voice`: it prints the clip and character count and asks. On a big run show the count to the user and wait for a yes before piping `y`.
 5. Give the user a `vlc --play-and-exit` command for the new clips (mpv is not installed).
-6. After changing `cli/voice/level.ts`, run `npm run voice:level` to rebuild `public/voice/` from `voice-raw/` without the API.
