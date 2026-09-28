@@ -12,7 +12,7 @@ donkey:
     character: stubborn, digs in and won't budge, denies what he didn't see
     speaks: he
 dove:
-    voice: tXtmoClvKMDIT6yAj5Ew
+    voice: n4GNpJP6Y2Nd09pDtetA # library Gaby
     gender: female
     age: a young girl
     persona: shy apologetic dove
@@ -21,7 +21,7 @@ dove:
     character: shy, sorry for everything, even for winning
     speaks: she
 lemming:
-    voice: hLxK2USfvX6CYeq5id8J
+    voice: 1kvnzrSTos1KbmLKMLCC # library Elmoe
     gender: male
     age: a tiny cartoon rodent
     persona: reckless daredevil
@@ -30,7 +30,7 @@ lemming:
     character: a reckless daredevil, jumps first and never looks
     speaks: he
 dodo:
-    voice: X9FG2ZBSMn17O2KBZSxg
+    voice: agL69Vji082CshT65Tcy # library Lance Blackwood
     gender: male
     age: elderly
     persona: pompous old aristocrat
@@ -39,7 +39,7 @@ dodo:
     character: sure he has never lost; every blunder was a sacrifice
     speaks: he
 goat:
-    voice: xMg7WUw8SQNRZmHbkAKr
+    voice: LcVcltBiweqv2E4ipKan # library Raging Rex
     gender: male
     age: middle-aged
     persona: goat who chews everything
@@ -57,7 +57,7 @@ parrot:
     character: a mimic who parrots what his old owners said (a granny, a sea captain, the telly), then explains where he heard it
     speaks: he
 sloth:
-    voice: f6Cz3JynC8oTg7XbYVw7
+    voice: V9nqzC5CH3k65H4HrO1D # library Laz
     gender: male
     age: an adult
     persona: barely awake sloth
@@ -66,7 +66,7 @@ sloth:
     character: everything is too much effort
     speaks: he
 elephant:
-    voice: GNq6yBiEuCpwk2fhvSpG
+    voice: RIxlkEgVTlW2XuYWyYjL # library Deadpan Cynic
     gender: male
     age: in his late eighties
     persona: pedantic old professor
@@ -75,7 +75,7 @@ elephant:
     character: a pedantic old professor who remembers every game since 1953
     speaks: he
 camel:
-    voice: gmTKcCgiWflobR8blMdR
+    voice: lCfIptVKzlPoj4vLmTLz # library Drew
     gender: male
     age: a cartoon desert animal
     persona: unimpressed desert cynic
@@ -84,7 +84,7 @@ camel:
     character: unimpressed by anything, sarcastic
     speaks: he
 hare:
-    voice: 4oOtYSwEWy9b6vAJhGtm
+    voice: DsJNFaZXbVnwO9Nycgo3 # library Barnaby Bunny
     gender: male
     age: a cartoon woodland animal
     persona: fast-talking braggart
@@ -93,7 +93,7 @@ hare:
     character: always in a hurry, blames luck when caught
     speaks: he
 bear:
-    voice: QoNaah2cnyD6PDsMnsqs
+    voice: 0pkdtmrxitYBWv6q9NJO # library Potato
     gender: male
     age: an old grandfather
     persona: grumpy grandpa bear
@@ -102,7 +102,7 @@ bear:
     character: grumbles at you, soft underneath
     speaks: he
 lion:
-    voice: HSan4qX3dMBdTdYaWnwk
+    voice: zYcjlYFOd3taleS0gkk3 # library Edward
     gender: male
     age: an ageing king
     persona: spoiled capricious tyrant king
@@ -111,7 +111,7 @@ lion:
     character: an unstable tyrant king, merciful until he isn't
     speaks: he
 tiger:
-    voice: UCUL1R13xSGDNUY2ULRo
+    voice: wcATjh8zBDfepqUbl99V # library Rick
     gender: male
     age: a cartoon jungle cat
     persona: calm cool predator
@@ -120,7 +120,7 @@ tiger:
     character: super chill, laid-back and unbothered, few words; nothing rattles him
     speaks: he
 wolf:
-    voice: 0QjRjbzPMSepAhrWoVSm
+    voice: kyMNCqwIJieCEEPhkDeA # library Gravel & Smoke
     gender: male
     age: a young adult
     persona: nineties street gopnik
@@ -129,7 +129,7 @@ wolf:
     character: speaks for the pack, street menace
     speaks: we
 fox:
-    voice: IgJyigVhCEiWtDubWOqy
+    voice: XdflFrQO8wbGpWMNZHFr # library Zoe
     gender: female
     age: a young adult
     persona: charming sly cheat
@@ -138,7 +138,7 @@ fox:
     character: a charming cheat, "I play fair. Mostly."
     speaks: she
 spider:
-    voice: bW6RZDNm4HBOdIINQLSi
+    voice: tZssYepgGaQmegsMEXjK # library True
     gender: male
     age: an adult
     persona: patient web-spinner

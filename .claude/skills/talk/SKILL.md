@@ -28,7 +28,7 @@ description: Write, rewrite or record what the animals say in the talk panel —
 - DO keep the pick with `npm run voice:keep -- <id> <n>`: it saves the voice, writes its id into `cast.yaml` and drops the animal's clips. It asks before deleting the old designed voice — pipe `y` only after the user's explicit yes for that voice.
 - DO hear a kept voice in both languages (record its clips) before moving on.
 - DO try a Voice Library voice (`/v1/shared-voices`) when a stock one does not fit: it speaks by its id without a slot. Check its rate first.
-- NEVER spend a custom slot without freeing one: all 30 are taken.
+- DO prefer a library voice over designing one: the land animals all speak with library voices, and a custom slot is only worth spending where the library has nothing.
 - DO keep the animals' voices clearly apart in pitch, age and pace from each other.
 - DO name a custom voice `chess-animals · <roster> · <id>` in ElevenLabs.
 - DO keep the Russian accent a Russian-sample voice carries into English under v3: `language_code` does not remove it, and it suits the animals.
