@@ -34,7 +34,7 @@ describe("applyOption", () => {
 		expect(set({ name: "swarm", value: "-12.5" }).weights[SWARM]).toBeCloseTo(-12.5);
 	});
 
-	it("never mutates the config it was given, so a tuner can hold on to the original", () => {
+	it("never mutates the config it was given", () => {
 		set({ name: "swarm", value: "999" });
 
 		expect(config.weights[SWARM]).toBe(-12);
