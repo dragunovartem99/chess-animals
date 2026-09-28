@@ -30,6 +30,9 @@ function audioPlayer(url: string): Player {
 // The remarks read aloud, opt-in on top of the talk. What was said together plays in turn — both
 // greetings, both goodbyes — and a new remark cuts off whatever is still playing rather than wait
 // behind it, since by then the old one is about a move nobody is looking at.
+//
+// The watch is immediate: a game opened from a roster card is greeted while the page mounts,
+// before this panel exists, and a lazy watch never heard that hello.
 export function useVoice({
 	said,
 	locale,
@@ -61,14 +64,18 @@ export function useVoice({
 		next.play().catch(() => playing === next && playFrom(rest));
 	}
 
-	watch(said, (lines) => {
-		const fresh = lines.filter((line) => line.key > heard);
-		heard = Math.max(heard, ...lines.map((line) => line.key));
-		if (!enabled.value || fresh.length === 0) return;
+	watch(
+		said,
+		(lines) => {
+			const fresh = lines.filter((line) => line.key > heard);
+			heard = Math.max(heard, ...lines.map((line) => line.key));
+			if (!enabled.value || fresh.length === 0) return;
 
-		stop();
-		playFrom(fresh);
-	});
+			stop();
+			playFrom(fresh);
+		},
+		{ immediate: true }
+	);
 	watch(enabled, (on) => on || stop());
 
 	return enabled;

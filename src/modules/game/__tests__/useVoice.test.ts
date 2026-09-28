@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { nextTick, ref } from "vue";
 
 import type { Line } from "@/shared/talk";
@@ -32,14 +32,18 @@ function fakePlayers() {
 	return { player, played, paused, finish };
 }
 
-function mount() {
-	const said = ref<Line[]>([]);
+function mount(greeted: Line[] = []) {
+	const said = ref<Line[]>(greeted);
 	const locale = ref("en");
 	const players = fakePlayers();
 	const { result: enabled } = withSetup(() => useVoice({ said, locale, player: players.player }));
 
 	return { said, locale, enabled, ...players };
 }
+
+afterEach(() => {
+	vi.unstubAllGlobals();
+});
 
 describe("useVoice", () => {
 	it("stays silent until switched on", async () => {
@@ -49,6 +53,13 @@ describe("useVoice", () => {
 		await nextTick();
 
 		expect(played).toEqual([]);
+	});
+
+	it("plays a greeting said before it was mounted", () => {
+		vi.stubGlobal("localStorage", { getItem: () => "true", setItem: () => undefined });
+		const { played } = mount([line(1, "wolf")]);
+
+		expect(played).toEqual(["/voice/en/wolf/greet-0.mp3"]);
 	});
 
 	it("plays what was said together in turn, in the page's language", async () => {
