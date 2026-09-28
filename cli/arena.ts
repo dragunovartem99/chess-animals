@@ -91,7 +91,7 @@ if (!labOnly) {
 	);
 	const ratings = Object.assign(measured, ...ladders.map((ladder) => ladder.ratings));
 	for (const id of ladders.flatMap((ladder) => ladder.outliers)) {
-		write(`${id} sits off its roster's curve: its knob no longer does what the curve says`);
+		write(`${id} sits off its roster's line: its knob no longer sits where the ladder says`);
 	}
 	// Only an animal that draws its move plays like people at its `elo`; a greedy one plays its
 	// likeliest move every time and so far above it, and would drag the whole scale down.

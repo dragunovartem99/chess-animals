@@ -118,13 +118,13 @@ the underwater animals that draw their move sit, on average, at the rating Maia 
 them at — a greedy one plays its likeliest move every time, far above that rating. A bot's
 points then read roughly as a person's rating, and the weakest animals fall below zero.
 
-**Smoothed along a ladder** — the sea and the monsters differ only in a strength knob, so each
-is a ladder: no rung is weaker than the one below. Their points come from one curve fitted over
-the rung index, a quadratic weighted by each rating's precision, so an animal's number draws on
-the games of all sixteen and noise can't put a cooler monster below a hotter one. The assumption
-is that the knob is monotone; an animal that sits more than 2.5 standard errors off its curve is
-printed by the arena, since that is a knob no longer doing what the curve says. Land stays as
-measured — each land animal is its own idea, not a rung.
+**Smoothed along a ladder** — the sea and the monsters differ only in a strength knob, each set
+to sit evenly apart, so each roster is a ladder. Their points come from one straight line fitted
+over the rung index, weighted by each rating's precision: an animal's number draws on the games of
+all sixteen, and noise can't put a cooler monster below a hotter one. The line assumes the rungs
+are even, so the arena prints any animal more than 2.5 standard errors off it — a knob no longer
+sitting where the ladder says. Land stays as measured: each land animal is its own idea, not a
+rung.
 
 **Markov champion** — the paper's trophy transition matrix, power-iterated to its stationary
 distribution. Implemented and tested as a second opinion, because the paper shows the two
