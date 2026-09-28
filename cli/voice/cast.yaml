@@ -111,12 +111,12 @@ lion:
     character: an unstable tyrant king, merciful until he isn't
     speaks: he
 tiger:
-    voice: N2lVS1w4EtoT3dr4eOWO # stock Callum
+    voice: cjVigY5qzO86Huf0OWal # stock Eric
     gender: male
     age: an adult
     persona: calm cool predator
     emotion: composed, confident, laconic
-    delivery: Low and husky, few words and long pauses, never raised.
+    delivery: Smooth and low, few words and long pauses, never raised.
     character: calm and cool, laconic, nothing rattles him
     speaks: he
 wolf:
@@ -166,12 +166,12 @@ pumpkin:
     character: fusses over you, feeds you pie
     speaks: she
 skeleton:
-    voice: oiKj1bq1XtEiP57zcAv6
+    voice: WNbjyv2TK1WSgZP58rWo
     gender: male
-    age: very old
-    persona: vaudeville comic skeleton
-    emotion: cheerful, jokey, dry
-    delivery: Thin, dry and brittle, a rattly edge to the consonants, quick timing and a wheezy chuckle.
+    age: ageless, a century dead
+    persona: cartoon skeleton comedian
+    emotion: giddy, cheeky, zany
+    delivery: A high, reedy, springy cartoon voice with snappy vaudeville timing and a clacky, rattling giggle. Exaggerated and zany, clear, not hoarse.
     character: cheerful, makes bone jokes about himself
     speaks: he
 witch:
@@ -184,12 +184,12 @@ witch:
     character: half-remembers her spells, and they misfire
     speaks: she
 zombie:
-    voice: nHq3HmNeg8aFGtuVIKLH
+    voice: cCwLApVLeO6eea2R2rfE
     gender: male
-    age: an adult
-    persona: hungry forgetful zombie
-    emotion: dazed, weary, oddly gentle
-    delivery: A very low, very slow groan, hoarse and dragging, trailing off mid-sentence.
+    age: undead, ageless
+    persona: cartoon zombie creature
+    emotion: dozy, hollow, sweetly dim
+    delivery: A non-human monster voice. Very deep, hollow and slow, slurred and mumbling, drifting off mid-word as if the brain forgot the rest. Otherworldly and goofy, clear, not a groan.
     character: hungry, loses the thread mid-sentence
     speaks: he
 alien:
@@ -220,12 +220,12 @@ ogre:
     character: a sentimental giant who calls himself Ogre and gets teary at everything, a beautiful move, a lost piece, a win
     speaks: he
 troll:
-    voice: bZY3Nhvtyqoq16kzyGBZ
+    voice: hGMRQL2uAP9v8ABGCmmS
     gender: male
-    age: middle-aged
-    persona: grudging bridge troll
-    emotion: aggrieved, weary, petty
-    delivery: Gravelly, heavy and grumbling, droning like a bureaucrat reading out regulations, sighing a lot.
+    age: ancient
+    persona: hulking cartoon troll creature
+    emotion: aggrieved, petty, sulky
+    delivery: A non-human monster voice. Huge, deep and blubbery, thick and heavily nasal, like a giant with a blocked nose listing old complaints, with enormous huffs and sighs. Clear, not gravelly.
     character: three hundred years under the bridge, holds a grudge against everyone who crossed it
     speaks: he
 ghost:
@@ -256,12 +256,12 @@ imp:
     character: a prankster who swears he did nothing
     speaks: he
 genie:
-    voice: mYuFWJpSzhsfuPhLWcJl
+    voice: Z2EwSj83KulyccaxmZld
     gender: male
     age: ageless
-    persona: flamboyant showman genie
-    emotion: grand, theatrical, sly
-    delivery: A big, booming, larger-than-life voice, over-the-top like a carnival announcer, warm and a bit of a con man.
+    persona: magical cartoon genie
+    emotion: enchanting, flamboyant, mischievous
+    delivery: A big, velvety, sing-song cartoon voice with a magical shimmer, swooping theatrically from a hushed mysterious whisper to a booming grand laugh. Larger than life.
     character: grants wishes on his own terms, always in the small print
     speaks: he
 robot:
@@ -347,12 +347,12 @@ seal:
     character: a circus showman who applauds himself
     speaks: he
 squid:
-    voice: pqHfZKP75CvOlQylNhV4 # stock Bill
+    voice: N2lVS1w4EtoT3dr4eOWO # stock Callum
     gender: male
-    age: an old-timer
-    persona: old card-sharp
+    age: an adult
+    persona: sly card-sharp
     emotion: wry, knowing, smooth
-    delivery: Crisp and measured, an old-timer with a trick up his sleeve.
+    delivery: Low and husky, a trickster with a smile and a trick up his sleeve.
     character: a card-sharp with a trick up every sleeve
     speaks: he
 turtle:
