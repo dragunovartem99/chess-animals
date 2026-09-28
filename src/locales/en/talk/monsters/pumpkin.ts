@@ -4,7 +4,7 @@ export default {
 		"There you are! I baked a pie. Pumpkin, of course.",
 	],
 	check: [
-		"Check, dear. Don't rush, have a think.",
+		"Check, dear. Have a think, I'll warm up a pie.",
 		"Check. Now don't be upset, I'll put the kettle on.",
 	],
 	take: ["I'll just tidy this away.", "Oh, thank you, dear. That'll go in the pie."],

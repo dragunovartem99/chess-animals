@@ -1,7 +1,7 @@
 export default {
 	greet: ["Take a deep breath. Let's play well.", "Good. Play your best. I will play mine."],
 	check: [
-		"Check. Take your time. I'm not going anywhere.",
+		"Check. It's not over. Look at the board again.",
 		"Check. You'll find the move. There is one.",
 	],
 	take: ["That was loose. I took it.", "Mm. Thank you."],

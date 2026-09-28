@@ -1,9 +1,9 @@
 export default {
-	greet: ["Hey. No fuss. We just play.", "Sit down. Let's see."],
-	check: ["Check. No offence.", "Check. Your move."],
-	take: ["Mine. Thanks.", "Took it. Carry on."],
-	lose: ["Not bad. Not bad at all.", "Fine. That won't rattle me."],
-	win: ["Done. Quiet and clean."],
-	loss: ["Beaten. Fair and square. Respect."],
+	greet: ["Hey. Make yourself comfortable.", "A game? Sure. Evening's free anyway."],
+	check: ["Check. No offence.", "Check. Don't fuss, it's all fine."],
+	take: ["Mine. Thanks.", "Took it. Eh, small stuff."],
+	lose: ["Not bad. Not bad at all.", "Took one. I don't mind."],
+	win: ["Done. Nice evening, though."],
+	loss: ["Beaten. Nicely done. Respect."],
 	draw: ["A draw. That's cool. Everyone walks away even."],
 };
