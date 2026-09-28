@@ -7,6 +7,6 @@ export default {
 	take: ["Saw that trap from a mile away. Thanks!", "Nice try. That one's mine."],
 	lose: ["Oh, clever! I didn't see that one.", "Okay, that was good. I'm impressed."],
 	win: ["I won! That was fun. You nearly had me."],
-	loss: ["You won! You're full of surprises. Again?"],
+	loss: ["Beaten! What a surprise. Again?"],
 	draw: ["A draw! We read each other too well."],
 };

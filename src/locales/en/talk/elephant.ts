@@ -7,6 +7,6 @@ export default {
 	take: ["A classic mistake, young one.", "I'll take that. You'll remember this lesson."],
 	lose: ["Hm. I shall remember that.", "Not bad. Not good either."],
 	win: ["Well played. By me. Study harder."],
-	loss: ["You won. Good. I'll remember your name."],
+	loss: ["Your game. I last saw that in nineteen sixty-eight."],
 	draw: ["A draw. Perfectly respectable."],
 };

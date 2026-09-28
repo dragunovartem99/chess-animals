@@ -7,6 +7,6 @@ export default {
 	take: ["Mmm... thanks. I'll just... hold that.", "Took it... that was a lot of work."],
 	lose: ["Oh well... too tired to chase it.", "There it goes... slowly."],
 	win: ["I won? Great... Nap time."],
-	loss: ["You won... good. Now I can sleep."],
+	loss: ["Over?.. Good. Now I can sleep."],
 	draw: ["A draw... cozy. Let's lie down."],
 };

@@ -1,6 +1,6 @@
 export default {
 	greet: [
-		"Welcome, welcome! The show's about to start. You're in it.",
+		"The show's about to start! You're in it. Already.",
 		"Oh, you came! Everyone laughed when I said you would. I didn't.",
 	],
 	check: [
@@ -16,6 +16,6 @@ export default {
 		"Oh, it's gone. That's not funny. That's not funny at all.",
 	],
 	win: ["And that's the show! Everybody bow. Not you."],
-	loss: ["You won. Funny. Very funny. I'll remember your face."],
+	loss: ["Ha. Ha. Very funny. I'll remember your face."],
 	draw: ["A draw? Where's the punchline? Terrible show."],
 };

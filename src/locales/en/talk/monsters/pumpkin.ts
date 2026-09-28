@@ -1,6 +1,6 @@
 export default {
 	greet: [
-		"Come in, dear, come in. You look so thin. Let's play a little.",
+		"Oh, look at you, dear. So thin. Let's play a little.",
 		"There you are! I baked a pie. Pumpkin, of course.",
 	],
 	check: [
@@ -12,7 +12,7 @@ export default {
 		"Oh my. My eyes aren't what they were.",
 		"Take it, take it. You're growing, you need it.",
 	],
-	win: ["There. Now wash your hands, it's supper time."],
+	win: ["There. Granny's still got it!"],
 	loss: ["Oh, you beat granny. Clever thing. Have another slice."],
 	draw: ["A draw. Good, nobody's upset. More tea?"],
 };

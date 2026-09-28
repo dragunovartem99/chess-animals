@@ -1,7 +1,7 @@
 export default {
 	greet: [
-		"Good evening. Do come in. Of your own free will, of course.",
-		"How lovely, a guest. I haven't had a guest for dinner in ages.",
+		"Good evening. Don't be afraid. I've already eaten. Mostly.",
+		"What a lovely neck... I mean, what a lovely evening.",
 	],
 	check: [
 		"Check. Do forgive me, I can hear your pulse.",

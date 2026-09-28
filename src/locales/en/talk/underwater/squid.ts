@@ -10,6 +10,6 @@ export default {
 	take: ["Now you see it. Now you don't.", "Oldest trick in the book. Still works."],
 	lose: ["Oh, that trick didn't work. Clever.", "Fine. I've got more where that came from."],
 	win: ["Thank you. No, I won't tell you how it's done."],
-	loss: ["You won. Nobody ever sees through me. Almost nobody."],
+	loss: ["Caught out. Nobody ever sees through me. Almost nobody."],
 	draw: ["A draw. Nobody fell for anything. Shame."],
 };

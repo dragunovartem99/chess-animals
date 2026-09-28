@@ -1,9 +1,12 @@
 export default {
-	greet: ["Ah, what a pleasure. Do sit. Try to amuse me.", "I like you already. So trusting."],
-	check: ["Check. Oh, did I startle you? Forgive me.", "Check. I only want what's best for you."],
-	take: ["I'll look after that for you.", "Thank you. I knew you'd see it my way."],
-	lose: ["Take it. A gift. You'll repay me later.", "Clever. Enjoy it. I insist."],
-	win: ["Everything went exactly as I promised. Well, as I planned."],
-	loss: ["You won. How delightful. I'll remember you."],
-	draw: ["A draw. Let's call it friendship. For now."],
+	greet: [
+		"A subject. Sit. No, not there... There. Good.",
+		"The king is merciful today. Don't test him.",
+	],
+	check: ["Check. Kneel. ...I said KNEEL!", "Check. Hush now... Your king is king no longer."],
+	take: ["Seized for the crown.", "Mine. Everything here is mine. EVERYTHING!"],
+	lose: ["You dared?.. YOU DARED?!", "It's nothing. Nothing... I'll execute someone. Later."],
+	win: ["Order is restored to the kingdom. You may kiss the paw."],
+	loss: ["A rebellion... In my kingdom. Guards! ...There are no guards."],
+	draw: ["A draw. Very well, you may live. For now."],
 };

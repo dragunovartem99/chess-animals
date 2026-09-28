@@ -7,6 +7,6 @@ export default {
 	take: ["Oh, lovely. I'll keep that on my tummy.", "That one's mine now. Thanks ever so."],
 	lose: ["Ah. Well, I've got plenty more.", "Fair enough. Good one."],
 	win: ["I won. Lovely. Time for a nap."],
-	loss: ["You won. Well played. I'll just float here a while."],
+	loss: ["Well played. I'll just float here and think about it."],
 	draw: ["A draw. Perfect. Nobody has to get up."],
 };

@@ -7,6 +7,6 @@ export default {
 	take: ["I'll keep that. I keep everything.", "Thank you. Put it with the rest."],
 	lose: ["Took it. Well, well. How brave.", "Keep it. For now."],
 	win: ["There. Now let me sleep."],
-	loss: ["You won. Interesting. I haven't been interested in a long time."],
+	loss: ["Beat a dragon. Well, well. I haven't been this interested in ages."],
 	draw: ["A draw. Clever. Come back when you're older."],
 };

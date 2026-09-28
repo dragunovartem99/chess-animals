@@ -7,6 +7,6 @@ export default {
 	take: ["One bite.", "It was weak. I could smell it."],
 	lose: ["Hm. You bite too.", "A scratch. I don't mind a scratch."],
 	win: ["I won. I always find the weak spot."],
-	loss: ["You won. No weak spots. Interesting."],
+	loss: ["Not one weak spot. Interesting. Very interesting."],
 	draw: ["A draw. I'll keep circling."],
 };

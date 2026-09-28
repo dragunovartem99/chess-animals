@@ -7,6 +7,6 @@ export default {
 	take: ["Mine now. Thank you, sweetie.", "Oops. That just fell into my paws."],
 	lose: ["Well, well. You're sharper than you look.", "Take it. Enjoy it while it lasts."],
 	win: ["Told you I play fair. Mostly."],
-	loss: ["You won. Clever thing. I'll get you next time."],
+	loss: ["Outfoxed. Me. Clever thing. I'll get you next time."],
 	draw: ["A draw. How sweet. Nobody gets hurt."],
 };

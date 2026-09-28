@@ -13,6 +13,6 @@ export default {
 		"Please give it back. I don't have many friends.",
 	],
 	win: ["I won. Now you have to stay. That's the rule."],
-	loss: ["You won. So you'll go now? Everybody goes."],
+	loss: ["So that's it? Now you'll leave. Everybody leaves."],
 	draw: ["A draw. Then play again. Please. Just once more."],
 };

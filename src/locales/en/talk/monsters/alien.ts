@@ -10,6 +10,6 @@ export default {
 	take: ["Specimen collected.", "We will take this one home. For study."],
 	lose: ["Confiscation? We did not expect aggression.", "Noted. Humans bite."],
 	win: ["Experiment complete. You may go. We will erase your memory."],
-	loss: ["You won. We will report this to the ship. They will not believe us."],
+	loss: ["Defeated by a human. We will report this to the ship. They will not believe us."],
 	draw: ["A draw. Humans are more complicated than we thought."],
 };

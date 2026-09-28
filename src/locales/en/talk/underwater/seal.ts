@@ -7,6 +7,6 @@ export default {
 	take: ["Ta-da! And another one for me!", "Got it! Give me a hand, everybody!"],
 	lose: ["Ooh, nice move. I'd clap, but I'm busy sulking.", "Tough crowd. Tough opponent too."],
 	win: ["Thank you, thank you! I'm here all week!"],
-	loss: ["You won! Take a bow. You've earned it."],
+	loss: ["Your turn in the spotlight! Take a bow. You've earned it."],
 	draw: ["A draw! Everybody take a bow!"],
 };

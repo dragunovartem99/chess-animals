@@ -4,6 +4,6 @@ export default {
 	take: ["Eaten.", "Small. Still good."],
 	lose: ["Hm. Bold.", "You bite. I bite harder."],
 	win: ["Over. As always."],
-	loss: ["You won. The first in a million years."],
+	loss: ["Beaten. First time in a million years."],
 	draw: ["A draw. I will wait. I am good at waiting."],
 };
