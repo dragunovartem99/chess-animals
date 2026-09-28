@@ -3,7 +3,7 @@ import { MONSTERS, ROSTER, UNDERWATER } from "@/modules/bots/roster";
 import { clipsFor } from "@/shared/talk";
 import type { Clip, Remark } from "@/shared/talk";
 
-import { CASTING } from "./voice/casting";
+import { CAST } from "./voice/casting";
 import { speak } from "./voice/speak";
 import type { Job } from "./voice/speak";
 
@@ -26,8 +26,8 @@ function clipsOf(id: string): Clip[] {
 
 const jobs = [...ROSTER, ...UNDERWATER, ...MONSTERS].flatMap((animal) => {
 	const { id } = animal.definition;
-	const voice = CASTING[id];
-	if (!voice) throw new Error(`${id} has lines but no voice in cli/voice/casting.ts`);
+	const voice = CAST[id]?.voice;
+	if (!voice) throw new Error(`${id} has lines but no voice in cli/voice/cast.yaml`);
 
 	return clipsOf(id).map((clip): Job => ({ path: clip.path, text: clip.text, voice }));
 });

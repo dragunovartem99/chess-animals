@@ -5,7 +5,8 @@ description: Write, rewrite or record what the animals say in the talk panel —
 
 ## Lines
 
-- DO give each animal one vivid personality (cocky, shy, lazy, pompous, creepy…) and let every line come from it.
+- DO keep who each animal is in `cli/voice/cast.yaml` — `character`, `sounds`, `speaks`, `voice` — and write every line from its `character`. Change the entry first when retuning an animal.
+- DO give each animal one vivid personality no other animal has: check the whole file for a twin before adding or retuning one.
 - DO react to the event the remark is about — check, a capture, a loss, the result — never a line that fits any game.
 - NEVER mention how the bot plays or what it weighs: no algorithm, no heuristic, no "my king walks", no "own colour".
 - NEVER name the piece in a `take` or `lose` line: the lines are not told which piece it was.
@@ -15,12 +16,12 @@ description: Write, rewrite or record what the animals say in the talk panel —
 ## Russian
 
 - DO write `ё` (ещё, всё, мёд, пришёл) — the lines are read aloud; the `copy` skill's no-ё rule does not apply here.
-- DO make only the speaker's gender show: the Fox and the Dove speak as women, the rest as men, the Wolf as "we".
+- DO make only the speaker's gender show, as its `speaks` in `cast.yaml` says.
 - NEVER assume the player's gender: "Победа твоя", not "Ты выиграл".
 
 ## Voices
 
-- DO keep one voice per animal in `cli/voice/casting.ts`, with its description beside it.
+- DO keep one voice per animal in `cli/voice/cast.yaml`, with what it `sounds` like. All 30 custom slots are taken; a new voice is a stock one or frees a slot.
 - DO design a new voice from a Russian sample with ellipses, and hear it in both languages before keeping it.
 - DO keep the animals' voices clearly apart in pitch, age and pace from each other.
 - DO name a custom voice `chess-animals · <roster> · <id>` in ElevenLabs.
@@ -33,4 +34,4 @@ description: Write, rewrite or record what the animals say in the talk panel —
 1. Write the English and Russian lines for the animal as a pair.
 2. Run `npx vitest run src/locales src/shared/talk`.
 3. Delete the changed clips under `public/voice/{en,ru}/<id>/` — only missing clips are recorded.
-4. Run `npm run voice` and give the user an `mpv` command for the new clips.
+4. Run `npm run voice` and give the user a `vlc --play-and-exit` command for the new clips (mpv is not installed).

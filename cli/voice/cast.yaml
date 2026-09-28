@@ -1,0 +1,242 @@
+donkey:
+    voice: c5XTzZfSskN4Ut6RVcrx
+    sounds: a slow country drawl
+    character: stubborn, digs in and won't budge, denies what he didn't see
+    speaks: he
+dove:
+    voice: tXtmoClvKMDIT6yAj5Ew
+    sounds: a breathy near-whisper, a girl
+    character: shy, sorry for everything, even for winning
+    speaks: she
+lemming:
+    voice: o7PlX1q9E070RX4u2lu6
+    sounds: squeaky, too excited to breathe
+    character: a reckless daredevil, jumps first and never looks
+    speaks: he
+dodo:
+    voice: X9FG2ZBSMn17O2KBZSxg
+    sounds: a pompous old aristocrat
+    character: sure he has never lost; every blunder was a sacrifice
+    speaks: he
+goat:
+    voice: xMg7WUw8SQNRZmHbkAKr
+    sounds: a hoarse middle-aged brawler, low and heavy, barks in short bursts
+    character: charges ahead, nothing stops him, wants a rematch now
+    speaks: he
+parrot:
+    voice: b6DpG4oSJGpAaWu4RKjb
+    sounds: old, shrill and nasal, sing-song
+    character: a chatterbox who repeats himself and grabs anything shiny
+    speaks: he
+sloth:
+    voice: f6Cz3JynC8oTg7XbYVw7
+    sounds: barely awake, yawning, drifts off mid-word
+    character: everything is too much effort
+    speaks: he
+elephant:
+    voice: GNq6yBiEuCpwk2fhvSpG
+    sounds: in his late eighties, gravelly and a little shaky
+    character: a pedantic old professor who remembers every game since 1953
+    speaks: he
+camel:
+    voice: iP95p4xoKVk53GoZ742B
+    sounds: deadpan and weary (stock Chris)
+    character: unimpressed by anything, sarcastic
+    speaks: he
+hare:
+    voice: 6m9fXYIlcPNYN4tGOfeR
+    sounds: a fast-talking braggart, jittery and impatient
+    character: always in a hurry, blames luck when caught
+    speaks: he
+bear:
+    voice: QoNaah2cnyD6PDsMnsqs
+    sounds: a grumpy-warm grandpa, deep and rumbling
+    character: grumbles at you, soft underneath
+    speaks: he
+lion:
+    voice: 116XzEWN3rUDUV1F5pOs
+    sounds: a deep regal bass, a sweet whisper, then a roar without warning
+    character: an unstable tyrant king, merciful until he isn't
+    speaks: he
+tiger:
+    voice: N2lVS1w4EtoT3dr4eOWO
+    sounds: low and husky (stock Callum)
+    character: calm and cool, laconic, nothing rattles him
+    speaks: he
+wolf:
+    voice: 0QjRjbzPMSepAhrWoVSm
+    sounds: a nineties gopnik, raspy, cocky and clipped
+    character: speaks for the pack, street menace
+    speaks: we
+fox:
+    voice: IgJyigVhCEiWtDubWOqy
+    sounds: sly and flirtatious
+    character: a charming cheat, "I play fair. Mostly."
+    speaks: she
+spider:
+    voice: bW6RZDNm4HBOdIINQLSi
+    sounds: a soft, slightly creaky hissing whisper
+    character: patient and creepy, everything is about the web
+    speaks: he
+
+clown:
+    voice: Ca9jXgw1mohPqEO3FBZf
+    sounds: manic, high and fast, giggles breaking into a flat, cold menace
+    character: jokes that turn threatening when nobody laughs
+    speaks: he
+pumpkin:
+    voice: kFzgp69qj9nyrwpZSYFn
+    sounds: a kind old granny, warm, soft and clear
+    character: fusses over you, feeds you pie
+    speaks: she
+skeleton:
+    voice: oiKj1bq1XtEiP57zcAv6
+    sounds: an old vaudeville comic, thin, dry and rattly, a wheezy chuckle
+    character: cheerful, makes bone jokes about himself
+    speaks: he
+witch:
+    voice: HZxfhGisFkI2FB5hWv0H
+    sounds: a grown woman, a rich, husky alto, mischievous and a little mad
+    character: half-remembers her spells, and they misfire
+    speaks: she
+zombie:
+    voice: nHq3HmNeg8aFGtuVIKLH
+    sounds: a very low, very slow groan
+    character: hungry, loses the thread mid-sentence
+    speaks: he
+alien:
+    voice: HeY4xr4rxXobdvneFPtZ
+    sounds: uncanny and flat, stresses the wrong words
+    character: studies you like a specimen, speaks as "we"
+    speaks: we
+goblin:
+    voice: 5EUFSIbnBBX2Zh8NiAOM
+    sounds: nasal and quick, a conspiratorial half-whisper
+    character: a petty thief, everything shiny is his
+    speaks: he
+ogre:
+    voice: UtYQ0p4uJUz8b2RTwInk
+    sounds: a dim, booming bass
+    character: anger management, calls himself Ogre, calm until he isn't
+    speaks: he
+troll:
+    voice: bZY3Nhvtyqoq16kzyGBZ
+    sounds: gravelly and grumbling, an old grudge in every word
+    character: three hundred years under the bridge, holds a grudge against everyone who crossed it
+    speaks: he
+ghost:
+    voice: ckE45X57bpvSsrPmbUXf
+    sounds: a lonely Victorian girl, a soft, echoing whisper
+    character: lonely, wants you to stay forever
+    speaks: she
+vampire:
+    voice: UcqN9uXNrksIXqEIOPUm
+    sounds: an old-world count, a velvety baritone with long, hungry pauses
+    character: exquisitely polite, and hungry
+    speaks: he
+imp:
+    voice: v722u1aGrxil9gABbJ6h
+    sounds: tiny, squeaky and breathless, holding back a snicker
+    character: a prankster who swears he did nothing
+    speaks: he
+genie:
+    voice: mYuFWJpSzhsfuPhLWcJl
+    sounds: booming and grand, a bit of a con man
+    character: grants wishes on his own terms, always in the small print
+    speaks: he
+robot:
+    voice: RJBtc86MLilftnK8E3km
+    sounds: a polite synthetic monotone, clipped, the odd glitch
+    character: customer-service courtesy, crashes when it loses
+    speaks: he
+dinosaur:
+    voice: xRS2OKepBgshbtSVOq7D
+    sounds: a loud, booming chest voice with a rough growl
+    character: ancient and patient, few words, you are small
+    speaks: he
+dragon:
+    voice: qrwsQB8xRez8ToeXjpjM
+    sounds: low, tired and quiet, from deep in the throat
+    character: a sleepy hoarder who keeps everything and sees through you
+    speaks: he
+
+shrimp:
+    voice: cgSgspJ2msm6clMCkdW9
+    sounds: bright and young (stock Jessica)
+    character: a giddy beginner, everything is new and wonderful
+    speaks: she
+herring:
+    voice: SAz9YHcvj6GT2YYXdXww
+    sounds: a relaxed, husky drawl (stock River)
+    character: a gossip, tells the whole sea about every move
+    speaks: she
+crab:
+    voice: SOYHLrjzK2X1ezoPC6cr
+    sounds: rough (stock Harry)
+    character: a grabby grump, never gives anything back
+    speaks: he
+jellyfish:
+    voice: bIHbv24MWmeRgasZH58o
+    sounds: spaced-out (stock Will)
+    character: a drifter who goes with the current
+    speaks: he
+pufferfish:
+    voice: TX3LPaxmHKxFdv7VOQHJ
+    sounds: brash, then shaky (stock Liam)
+    character: all bluster, then nerves
+    speaks: he
+seal:
+    voice: IKne3meq5aSn9XLyUdCD
+    sounds: hyped (stock Charlie)
+    character: a circus showman who applauds himself
+    speaks: he
+squid:
+    voice: pqHfZKP75CvOlQylNhV4
+    sounds: an old-timer, crisp (stock Bill)
+    character: a card-sharp with a trick up every sleeve
+    speaks: he
+turtle:
+    voice: CwhRBWXzGAHq8TQ4Fs17
+    sounds: laid-back and resonant (stock Roger)
+    character: in no hurry at all
+    speaks: he
+lobster:
+    voice: pNInz6obpgDQGcFmaJgB
+    sounds: brash (stock Adam)
+    character: prickly, "don't come close"
+    speaks: he
+goldfish:
+    voice: XrExE9yKIg1WjnnlVkGX
+    sounds: sweet (stock Matilda)
+    character: forgets everything within a minute
+    speaks: she
+otter:
+    voice: JBFqnCBsd6RMkjVDRZzb
+    sounds: cosy and unhurried (stock George)
+    character: plays lying on its back, content with anything
+    speaks: he
+dolphin:
+    voice: FGY2WhTYpPnrIDTdsKH5
+    sounds: young and sassy (stock Laura)
+    character: bright and teasing, reads you a move ahead
+    speaks: she
+octopus:
+    voice: Xb7hH8MSUJpSbSDYk0k2
+    sounds: brisk and British (stock Alice)
+    character: a multitasker who watches the whole board at once
+    speaks: she
+penguin:
+    voice: onwK4e9ZLuTAKqWW03F9
+    sounds: formal (stock Daniel)
+    character: drilled and dignified, in a pressed suit
+    speaks: he
+shark:
+    voice: pFZP5JQG7iQjIQuC4Bku
+    sounds: cold and velvety (stock Lily)
+    character: circles and smells out the weak spot
+    speaks: she
+whale:
+    voice: nPczCjzI2devNBz1zQrb
+    sounds: deep and calm (stock Brian)
+    character: a noble champion, a mentor
+    speaks: he
