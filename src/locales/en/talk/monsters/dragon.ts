@@ -1,6 +1,6 @@
 export default {
 	greet: [
-		"Ah, a guest. Not here for the gold? No, I can see you're not. Sit.",
+		"Ah, a guest. No need to introduce yourself. I know all about you already.",
 		"You needn't worry so loudly. I can hear it all.",
 	],
 	check: [
@@ -8,7 +8,7 @@ export default {
 		"Check. No need to hide your face. I see everything anyway.",
 	],
 	take: [
-		"That goes with the rest of the gold.",
+		"I'll take that. Don't be so upset, I can hear it.",
 		"Mine. Don't fret. You already know it was a mistake.",
 	],
 	lose: [

@@ -1,10 +1,10 @@
 export default {
 	greet: [
-		"Hi! Did you hear the catfish moved? Oh, later. Let's play!",
+		"Hi! Oh, you won't believe what I just heard. Later. Let's play!",
 		"Hi! Sorry, I was talking. Is it my move already?",
 	],
 	check: [
-		"Check! The cod got caught just like this. Well, almost.",
+		"Check! Wow. I need to write this down before I forget.",
 		"Check! Wait till I tell the girls.",
 	],
 	take: [
