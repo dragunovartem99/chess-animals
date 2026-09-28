@@ -19,8 +19,8 @@ const MODEL = "eleven_v3";
 const FORMAT = "mp3_44100_192";
 // v3 takes only 0, 0.5 or 1: 0.5 is its "natural", steady enough without flattening the acting.
 const SETTINGS = { stability: 0.5, similarity_boost: 0.75 };
-// Two requests at once: the account's plan refuses a third in flight with a 429.
-const AT_ONCE = 2;
+// Five requests at once: the concurrency the account's plan allows.
+const AT_ONCE = 5;
 
 async function record(job: Job) {
 	const response = await eleven({
