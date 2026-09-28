@@ -102,12 +102,12 @@ bear:
     character: grumbles at you, soft underneath
     speaks: he
 lion:
-    voice: 116XzEWN3rUDUV1F5pOs
+    voice: HSan4qX3dMBdTdYaWnwk
     gender: male
-    age: mature
-    persona: unstable tyrant king
-    emotion: regal, capricious, volatile
-    delivery: A deep regal bass that drops to a sweet whisper, then roars without warning.
+    age: an ageing king
+    persona: spoiled capricious tyrant king
+    emotion: pompous, petulant, volatile
+    delivery: A theatrical cartoon villain king. A pampered, drawling, slightly nasal voice, sugary and condescending, that snaps without warning into a thunderous, operatic royal bellow. Exaggerated, larger than life.
     character: an unstable tyrant king, merciful until he isn't
     speaks: he
 tiger:
