@@ -9,7 +9,7 @@ export default {
 	],
 	take: ["I'll keep it. It can stay with me. Forever.", "It's mine now. We'll be friends."],
 	lose: [
-		"Taken... Now it's even lonelier here.",
+		"Taken. Now it's even lonelier here.",
 		"Please give it back. I don't have many friends.",
 	],
 	win: ["I won. Now you have to stay. That's the rule."],

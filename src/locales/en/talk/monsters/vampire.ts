@@ -1,7 +1,7 @@
 export default {
 	greet: [
 		"Good evening. Don't be afraid. I've already eaten. Mostly.",
-		"What a lovely neck... I mean, what a lovely evening.",
+		"What a lovely neck. I mean, what a lovely evening.",
 	],
 	check: [
 		"Check. Do forgive me, I can hear your pulse.",

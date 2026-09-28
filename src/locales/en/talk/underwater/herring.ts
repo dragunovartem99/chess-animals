@@ -16,6 +16,6 @@ export default {
 		"Oops. I was chatting and missed it.",
 	],
 	win: ["I won? Wait till the school hears about this!"],
-	loss: ["I lost... Don't tell the others, okay?"],
+	loss: ["I lost. Don't tell the others, okay?"],
 	draw: ["A draw! Dull news. I'll spice it up a little."],
 };

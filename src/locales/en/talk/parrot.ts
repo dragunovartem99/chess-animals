@@ -1,7 +1,7 @@
 export default {
 	greet: [
 		"Hel-lo! Wipe your feet! That's what Granny used to say.",
-		"All hands on deck! ...The captain used to say that. Let's play.",
+		"All hands on deck! The captain used to say that. Let's play.",
 	],
 	check: [
 		"Check! Hands up! That's from the telly.",
@@ -12,7 +12,7 @@ export default {
 		"Gotcha, sunshine! The constable used to say that.",
 	],
 	lose: [
-		"Abandon ship! ...That's for when it's bad.",
+		"Abandon ship! That's for when it's bad.",
 		"Tut-tut. Tut-tut. Granny used to say that to me.",
 	],
 	win: ["Land ho! Land ho! I mean, I won. The captain shouted that."],
