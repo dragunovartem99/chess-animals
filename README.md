@@ -66,8 +66,8 @@ merging requires them to pass; every push to `main` deploys to [chess-animals.co
 ## Where it stands
 
 All 48 are rated together by the arena, in points pinned to Maia's human-like ratings: from the
-Dove (−680) to the Dragon (2490). The land roster tops out at the Tiger (1730), just past where
-the monsters begin. Built: the feature evaluation and a PVS search with quiescence in C, Maia and
+Dove (−450) to the Dragon (2390). The land roster tops out at the Tiger (1800); the sea starts
+about 550 below it and the monsters about 580 below the Whale, so each roster reaches into the next. Built: the feature evaluation and a PVS search with quiescence in C, Maia and
 Stockfish in the browser, `/play` with a move list to step through and copy as PGN and a speech
 panel where the animals talk, voiced in both languages, `/about`, and the dev CLIs
 `npm run arena` and `npm run tune`.
