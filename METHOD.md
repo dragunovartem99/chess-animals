@@ -126,10 +126,6 @@ are even, so the arena prints any animal more than 2.5 standard errors off it �
 sitting where the ladder says. Land stays as measured: each land animal is its own idea, not a
 rung.
 
-**Markov champion** — the paper's trophy transition matrix, power-iterated to its stationary
-distribution. Implemented and tested as a second opinion, because the paper shows the two
-disagree in interesting places (`same_color`); the arena does not print it yet.
-
 ## Three rosters, overlapping evenly
 
 Land is the weakest roster, the sea the middle one, the monsters the strongest — and each reaches
@@ -180,8 +176,7 @@ under threshold or the ordering has been stable for _k_ games.
 
 - **Unit** — every feature against hand-checked FENs, and bit for bit against a frozen corpus; the UCI codec's
   round-trips; `fitBradleyTerry` recovering known ratings from a synthetic matrix and staying
-  stable under deliberately imbalanced pair counts; `markovChampion` on a matrix with a known
-  stationary distribution.
+  stable under deliberately imbalanced pair counts.
 - **Determinism** — the same tournament seed twice gives an identical rating table.
 - **Behavioural sanity** — every animal with a positional idea outscores the Donkey; the Dove
   and the Lemming (the paper's `pacifist` and `generous`) are the ones the Donkey beats, and the Dodo edges it. **Matching the paper's ordering is the strongest signal the
