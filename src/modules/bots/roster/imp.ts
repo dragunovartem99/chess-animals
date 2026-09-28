@@ -6,7 +6,7 @@ export const IMP: Animal = {
 	definition: {
 		id: "imp",
 		search: { depth: 1 },
-		stockfish: { nodes: 5000, lines: 5, temperature: 20 },
+		stockfish: { nodes: 5000, lines: 5, temperature: 16 },
 		weights: {},
 	},
 };

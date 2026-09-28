@@ -17,9 +17,10 @@ import type { Animal } from "./types";
 import { WHALE } from "./whale";
 
 // The third roster: Maia, a model of how people play, at sixteen ratings — the Elo it is asked to
-// play at, not a rating the arena measured. Weakest first. The rungs are tight at the bottom,
-// where a hundred points of Maia's Elo moves its strength the most, and wide at the top, where it
-// barely moves at all; the Whale plays the likeliest move rather than drawing one.
+// play at, not a rating the arena measured. Weakest first, evenly apart in measured strength, not
+// in Elo: each rating is read off the arena's curve (see METHOD.md, "Three rosters"). Drawing a
+// move stops getting stronger near the top of Maia's range, so the top five play the likeliest
+// move instead — their Elo only shades which one that is.
 export const UNDERWATER: Animal[] = [
 	SHRIMP,
 	HERRING,

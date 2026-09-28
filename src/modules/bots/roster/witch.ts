@@ -6,7 +6,7 @@ export const WITCH: Animal = {
 	definition: {
 		id: "witch",
 		search: { depth: 1 },
-		stockfish: { nodes: 5000, lines: 5, temperature: 70 },
+		stockfish: { nodes: 5000, lines: 5, temperature: 118 },
 		weights: {},
 	},
 };

@@ -6,7 +6,7 @@ export const OGRE: Animal = {
 	definition: {
 		id: "ogre",
 		search: { depth: 1 },
-		stockfish: { nodes: 5000, lines: 5, temperature: 40 },
+		stockfish: { nodes: 5000, lines: 5, temperature: 55 },
 		weights: {},
 	},
 };

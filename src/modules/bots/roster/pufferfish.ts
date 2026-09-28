@@ -6,7 +6,7 @@ export const PUFFERFISH: Animal = {
 	definition: {
 		id: "pufferfish",
 		search: { depth: 1 },
-		maia: { elo: 900 },
+		maia: { elo: 1400 },
 		weights: {},
 	},
 };

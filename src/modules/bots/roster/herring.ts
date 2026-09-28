@@ -6,7 +6,7 @@ export const HERRING: Animal = {
 	definition: {
 		id: "herring",
 		search: { depth: 1 },
-		maia: { elo: 600 },
+		maia: { elo: 1025 },
 		weights: {},
 	},
 };

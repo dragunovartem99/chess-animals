@@ -6,7 +6,7 @@ export const SHARK: Animal = {
 	definition: {
 		id: "shark",
 		search: { depth: 1 },
-		maia: { elo: 2200 },
+		maia: { elo: 2300, greedy: true },
 		weights: {},
 	},
 };

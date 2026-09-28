@@ -6,7 +6,7 @@ export const PENGUIN: Animal = {
 	definition: {
 		id: "penguin",
 		search: { depth: 1 },
-		maia: { elo: 2000 },
+		maia: { elo: 2100, greedy: true },
 		weights: {},
 	},
 };

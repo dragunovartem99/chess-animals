@@ -6,7 +6,7 @@ export const SEAL: Animal = {
 	definition: {
 		id: "seal",
 		search: { depth: 1 },
-		maia: { elo: 1000 },
+		maia: { elo: 1525 },
 		weights: {},
 	},
 };

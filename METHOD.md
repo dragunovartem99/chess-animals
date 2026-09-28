@@ -114,12 +114,47 @@ with. Standard errors from the inverse Hessian diagonal give the confidence inte
 scheduler needs.
 
 **Anchored to people** — the fit only fixes differences, so the arena shifts the whole table until
-the underwater animals sit, on average, at the rating Maia was asked to play them at. A bot's
+the underwater animals that draw their move sit, on average, at the rating Maia was asked to play
+them at — a greedy one plays its likeliest move every time, far above that rating. A bot's
 points then read roughly as a person's rating, and the weakest animals fall below zero.
+
+**Smoothed along a ladder** — the sea and the monsters differ only in a strength knob, so each
+is a ladder: no rung is weaker than the one below. Their points come from one curve fitted over
+the rung index, a quadratic weighted by each rating's precision, so an animal's number draws on
+the games of all sixteen and noise can't put a cooler monster below a hotter one. The assumption
+is that the knob is monotone; an animal that sits more than 2.5 standard errors off its curve is
+printed by the arena, since that is a knob no longer doing what the curve says. Land stays as
+measured — each land animal is its own idea, not a rung.
 
 **Markov champion** — the paper's trophy transition matrix, power-iterated to its stationary
 distribution. Implemented and tested as a second opinion, because the paper shows the two
 disagree in interesting places (`same_color`); the arena does not print it yet.
+
+## Three rosters, overlapping evenly
+
+Land is the weakest roster, the sea the middle one, the monsters the strongest — and each reaches
+into the next, so a player who outgrows one finds the next already waiting at their level. The
+shape is fixed by three rules:
+
+- **Fixed ends.** Land's own ladder, bottom to Tiger, and the Dragon on top of everything stay put.
+  A land animal is an idea, not a strength setting, so it is never moved to fit a ladder.
+- **Equal overlaps.** The sea starts about 600 arena points below the Tiger, and the monsters about
+  600 below the Whale. That pins the Shrimp's and the Clown's rating and leaves the rest to spacing.
+- **Even rungs, read off a measured curve.** Inside a roster the animals sit evenly apart — about
+  60 in both — near land's own texture. A knob spaced evenly is not a
+  strength spaced evenly: Maia moves little from 800 to 1200 Elo and a lot either side, and
+  temperature matters in ratios, not steps. So each animal's knob is inverted from the curve the
+  arena measured, never picked on a round grid, which is what once left four sea animals within 60
+  and monsters tied outright.
+
+Each roster runs out of its own knob before its top. Maia drawing its move stops getting stronger
+near 1900, so the top five sea animals play the likeliest move instead; temperature stops at zero,
+so the top three monsters play one line and differ in how far they see — and that too runs out:
+Stockfish past about 10 000 nodes gains nothing the arena can measure.
+
+A smaller overlap would crowd the rungs into the arena's noise; a larger one would drop the
+weakest monsters below the Hare. 600 is the narrowest overlap whose gaps stay clear of a run's
+±40, with one correction pass on any neighbours that land too close.
 
 ## Buying speed instead of games
 

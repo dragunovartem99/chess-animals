@@ -6,7 +6,7 @@ export const SQUID: Animal = {
 	definition: {
 		id: "squid",
 		search: { depth: 1 },
-		maia: { elo: 1100 },
+		maia: { elo: 1675 },
 		weights: {},
 	},
 };
