@@ -3,7 +3,10 @@ export default {
 		"Hi! Quick game, yeah? I've got places to be!",
 		"Starting? Starting? I've already started! Go!",
 	],
-	check: ["Check! Bet you didn't see that! Nobody sees me!", "Check! Quick, quick, your move!"],
+	check: [
+		"Check! Bet you didn't see that! Nobody keeps up with me!",
+		"Check! Quick, quick, your move!",
+	],
 	take: ["Snatched it! Too slow!", "Gone! Blink and you miss it!"],
 	lose: ["Hey! That's not fair, I was busy!", "You caught one? Lucky. Pure luck."],
 	win: ["Won! Fastest win ever! Probably!"],

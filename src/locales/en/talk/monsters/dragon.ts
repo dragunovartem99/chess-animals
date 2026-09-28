@@ -16,6 +16,6 @@ export default {
 		"Take it. I can see how pleased you are.",
 	],
 	win: ["There. I knew how this would end before the first move."],
-	loss: ["A dragon, beaten... I didn't see that coming. First time in a thousand years."],
+	loss: ["A dragon, beaten. I didn't see that coming. First time in a thousand years."],
 	draw: ["A draw. You're surprised? I'm not."],
 };

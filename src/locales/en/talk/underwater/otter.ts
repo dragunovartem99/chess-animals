@@ -1,7 +1,7 @@
 export default {
 	greet: [
 		"Hi. Good day for a game. Then again, they all are.",
-		"Sit down. Whatever happens, it'll be interesting.",
+		"Shall we? Whatever happens, it'll be interesting.",
 	],
 	check: [
 		"Check. On the bright side, now you've got something to think about.",

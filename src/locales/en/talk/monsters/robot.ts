@@ -7,9 +7,9 @@ export default {
 	take: ["Item received. Have a nice day.", "Thank you for your donation."],
 	lose: [
 		"Error. That piece was important. Error.",
-		"Unexpected. Recalculating. Recalculating. Recalc...",
+		"Unexpected. Recalculating. Recalculating. Recalculating.",
 	],
 	win: ["Victory. Thank you for playing. Please rate your defeat."],
-	loss: ["Defeat. That is... not possible. Not. Not. Not possible."],
+	loss: ["Defeat. That is not possible. Not. Not. Not possible."],
 	draw: ["Draw. A fair result. I am almost happy."],
 };
