@@ -5,7 +5,7 @@ export default {
 	],
 	check: ["Check. I can smell it from here.", "Check. Something's weak over there."],
 	take: ["One bite.", "It was weak. I could smell it."],
-	lose: ["Hm. Didn't expect that. I'll circle back.", "A scratch. I don't mind a scratch."],
+	taken: ["Hm. Didn't expect that. I'll circle back.", "A scratch. I don't mind a scratch."],
 	win: ["I won. I always find the weak spot."],
 	loss: ["Not one weak spot. Interesting. Very interesting."],
 	draw: ["A draw. I'll keep circling."],

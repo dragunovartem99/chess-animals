@@ -8,7 +8,7 @@ export default {
 		"Check! Oops. Looks like you need rescuing.",
 	],
 	take: ["Took it! For your own safety.", "Took it. It shouldn't have swum out that far."],
-	lose: [
+	taken: [
 		"Oh! I only looked away for a second.",
 		"Hey! I'm the one doing the rescuing, and you sink me?",
 	],

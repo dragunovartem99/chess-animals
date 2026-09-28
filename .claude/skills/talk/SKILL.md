@@ -9,10 +9,10 @@ description: Write, rewrite or record what the animals say in the talk panel —
 - DO give each animal one vivid personality no other animal has: check the whole file for a twin before adding or retuning one.
 - DO react to the event the remark is about — check, a capture, a loss, the result — never a line that fits any game.
 - NEVER mention how the bot plays or what it weighs: no algorithm, no heuristic, no "my king walks", no "own colour".
-- NEVER name the piece in a `take` or `lose` line: the lines are not told which piece it was.
+- NEVER name the piece in a `take` or `taken` line: the lines are not told which piece it was.
 - DO keep a line to one to three short sentences; the character shows in how it reacts, not in a catchphrase or an animal noise.
 - NEVER write `...`, a drawn-out sound like `р-р-р`, or a word in CAPS: plain sentences and punctuation only; the voice carries the pauses and the shouting.
-- DO keep the count per remark as it is (two greet/check/take/lose, one win/loss/draw) unless asked.
+- DO keep the count per remark as it is (two greet/check/take/taken, one win/loss/draw) unless asked.
 
 ## Russian
 

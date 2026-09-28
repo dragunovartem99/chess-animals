@@ -5,7 +5,7 @@ export default {
 		"Check. You'll find the move. There is one.",
 	],
 	take: ["That was loose. I took it.", "Mm. Thank you."],
-	lose: ["A fine move. I'm glad to see it.", "Well found. The game is still long."],
+	taken: ["A fine move. I'm glad to see it.", "Well found. The game is still long."],
 	win: ["Good game. You'll be stronger for it."],
 	loss: ["Well played. Truly. That is rare, and it was earned."],
 	draw: ["A draw. An honest one. Thank you."],

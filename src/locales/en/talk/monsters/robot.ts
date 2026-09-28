@@ -5,7 +5,7 @@ export default {
 	],
 	check: ["Check. Thank you for your cooperation.", "Check. Check. Check. Sorry. One check."],
 	take: ["Item received. Have a nice day.", "Thank you for your donation."],
-	lose: [
+	taken: [
 		"Error. That piece was important. Error.",
 		"Unexpected. Recalculating. Recalculating. Recalculating.",
 	],

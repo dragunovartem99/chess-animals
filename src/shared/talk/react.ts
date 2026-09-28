@@ -61,7 +61,7 @@ export function react({ ply, facts, bots, last }: Moment): Spoken[] {
 	if (isQuiet({ ply, lastPly: last })) return [];
 
 	const mover = moverOf(ply);
-	if (facts.won) return either({ bots, color: mover, remark: "take", answer: "lose" });
+	if (facts.won) return either({ bots, color: mover, remark: "take", answer: "taken" });
 
 	return facts.check ? say({ bots, color: mover, remark: "check" }) : [];
 }

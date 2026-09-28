@@ -8,7 +8,7 @@ export default {
 		"Check. One grudge repaid. Four hundred to go.",
 	],
 	take: ["Took it. We're even. Almost.", "That's for the goat. Well, for all the goats."],
-	lose: [
+	taken: [
 		"Right. Writing that down. In big letters.",
 		"You shouldn't have. I remember things like that for centuries.",
 	],

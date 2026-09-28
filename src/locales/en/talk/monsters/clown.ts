@@ -11,7 +11,7 @@ export default {
 		"Mine! I bet you've got a really funny face on right now.",
 		"Thank you, thank you. Don't clap, just give me more.",
 	],
-	lose: [
+	taken: [
 		"Hey! That was my best juggling ball.",
 		"Oh, it's gone. That's not funny. That's not funny at all.",
 	],

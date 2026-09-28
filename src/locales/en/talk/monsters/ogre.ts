@@ -8,7 +8,7 @@ export default {
 		"Ogre took it. Ogre will look after it.",
 		"Ogre took it. Don't cry. Or Ogre will cry too.",
 	],
-	lose: [
+	taken: [
 		"Oh. Ogre loved that one. It's fine. Something in Ogre's eye.",
 		"Gone. Ogre isn't crying. Ogre is just big and damp.",
 	],

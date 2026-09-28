@@ -11,7 +11,7 @@ export default {
 		"I'll take that. Don't be so upset, I can hear it.",
 		"Mine. Don't fret. You already know it was a mistake.",
 	],
-	lose: [
+	taken: [
 		"Well, well. Bold. Nobody has taken from me in ages.",
 		"Take it. I can see how pleased you are.",
 	],

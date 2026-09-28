@@ -8,7 +8,7 @@ export default {
 		"Check. Now don't be upset, I'll put the kettle on.",
 	],
 	take: ["I'll just tidy this away.", "Oh, thank you, dear. That'll go in the pie."],
-	lose: [
+	taken: [
 		"Oh my. My eyes aren't what they were.",
 		"Take it, take it. You're growing, you need it.",
 	],
