@@ -11,7 +11,7 @@ export default {
 		"Pieces of eight! Pieces of eight! The captain would approve.",
 		"Gotcha, sunshine! The constable used to say that.",
 	],
-	lose: [
+	taken: [
 		"Abandon ship! That's for when it's bad.",
 		"Tut-tut. Tut-tut. Granny used to say that to me.",
 	],

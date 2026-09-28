@@ -5,7 +5,7 @@ export default {
 	],
 	check: ["Check! And the crowd goes wild!", "Check! Hold your applause. No, don't."],
 	take: ["Ta-da! And another one for me!", "Got it! Give me a hand, everybody!"],
-	lose: [
+	taken: [
 		"Ooh, nice move. I'd clap, but I'm busy sulking.",
 		"Tough crowd tonight. Tough opponent too.",
 	],

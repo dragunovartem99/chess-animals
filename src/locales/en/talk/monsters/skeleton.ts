@@ -11,7 +11,7 @@ export default {
 		"For my collection. I collect odd bits.",
 		"Thanks! Haven't eaten in a century. Not that I've got a stomach.",
 	],
-	lose: [
+	taken: [
 		"Oh, there goes another bit of me.",
 		"Took that one? No hard feelings. I've got no feelings at all.",
 	],

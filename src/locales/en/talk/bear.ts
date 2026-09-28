@@ -5,7 +5,7 @@ export default {
 	],
 	check: ["Check. Now sit still.", "Check. Don't make me get up."],
 	take: ["Mine now. You weren't using it.", "Swiped it. Heavy paw, sorry."],
-	lose: [
+	taken: [
 		"Hey. That's mine. Put it back.",
 		"Making me angry is a bad idea. You're managing, though.",
 	],

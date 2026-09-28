@@ -8,7 +8,7 @@ export default {
 		"Check. Your king's getting cold. Like me.",
 	],
 	take: ["I'll keep it. It can stay with me. Forever.", "It's mine now. We'll be friends."],
-	lose: [
+	taken: [
 		"Taken. Now it's even lonelier here.",
 		"Please give it back. I don't have many friends.",
 	],

@@ -11,7 +11,7 @@ export default {
 		"Got it! Now that's news. I have to tell the others.",
 		"Got it. Shh, that stays between us.",
 	],
-	lose: [
+	taken: [
 		"Oh! The whole sea will hear about this by tomorrow.",
 		"Oops. I was chatting and missed it.",
 	],

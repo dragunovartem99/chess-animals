@@ -14,7 +14,7 @@ const CHECK = { ply: 5, facts: { check: true, won: false }, bots: BOTH };
 describe("react to a capture", () => {
 	it("lets the taker speak, or the loser when the taker is human", () => {
 		expect(react({ ...TAKE, bots: BOTH })).toEqual([{ color: "white", remark: "take" }]);
-		expect(react({ ...TAKE, bots: ["black"] })).toEqual([{ color: "black", remark: "lose" }]);
+		expect(react({ ...TAKE, bots: ["black"] })).toEqual([{ color: "black", remark: "taken" }]);
 	});
 
 	it("says nothing with nobody to say it", () => {

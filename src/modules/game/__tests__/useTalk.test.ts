@@ -20,7 +20,7 @@ describe("useTalk", () => {
 		await switchOn();
 		await play(QUEEN);
 
-		expect(texts()).toEqual(["donkey greet 1", "donkey lose 1"]);
+		expect(texts()).toEqual(["donkey greet 1", "donkey taken 1"]);
 	});
 
 	it("says check when it gives one, and nothing to a quiet move", async () => {

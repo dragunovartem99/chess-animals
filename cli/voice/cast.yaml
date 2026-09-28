@@ -21,12 +21,12 @@ dove:
     character: shy, sorry for everything, even for winning
     speaks: she
 lemming:
-    voice: fBD19tfE58bkETeiwUoC # library Little Dude II
+    voice: hLxK2USfvX6CYeq5id8J
     gender: male
-    age: a small wild critter
+    age: a tiny cartoon rodent
     persona: reckless daredevil
     emotion: wild, thrilled, fearless
-    delivery: A non-human critter voice, very high-pitched and shrill, higher than any man's. A wild daredevil screaming at the top of his lungs with manic glee, fast and breathless, shrieking before thinking, like leaping off a cliff. Unhinged and over the top, but clear, not distorted.
+    delivery: A non-human cartoon rodent voice, chipmunk-like, tiny and squeaky, pitched far above any human, as if sped up. A reckless daredevil squealing with manic glee, fast and breathless, shrieking before thinking. Animated-cartoon critter, not a person, clear, not distorted.
     character: a reckless daredevil, jumps first and never looks
     speaks: he
 dodo:
@@ -111,12 +111,12 @@ lion:
     character: an unstable tyrant king, merciful until he isn't
     speaks: he
 tiger:
-    voice: cjVigY5qzO86Huf0OWal # stock Eric
+    voice: UCUL1R13xSGDNUY2ULRo
     gender: male
-    age: an adult
+    age: a cartoon jungle cat
     persona: calm cool predator
     emotion: relaxed, unbothered, easy
-    delivery: Smooth, low and lazy, unhurried, with a relaxed half-smile; never raised.
+    delivery: A non-human cartoon tiger voice. A low, smooth, velvety purr of a baritone with a soft rasp, lazy and unhurried, a relaxed half-smile in every word; never raised. Cool and full-voiced, clear, not whispery.
     character: super chill, laid-back and unbothered, few words; nothing rattles him
     speaks: he
 wolf:
@@ -356,7 +356,7 @@ squid:
     character: a card-sharp with a trick up every sleeve
     speaks: he
 turtle:
-    voice: hVPlWsDFZUOXQ7NiG3Bm
+    voice: pqHfZKP75CvOlQylNhV4 # stock Bill
     gender: male
     age: a very old cartoon sea turtle
     persona: unhurried turtle
@@ -365,7 +365,7 @@ turtle:
     character: in no hurry at all
     speaks: he
 lobster:
-    voice: de2i8OA32whsemiK6H9H
+    voice: iP95p4xoKVk53GoZ742B # stock Chris
     gender: male
     age: a cartoon sea creature
     persona: paranoid lobster

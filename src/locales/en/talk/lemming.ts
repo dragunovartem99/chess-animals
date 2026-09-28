@@ -8,7 +8,7 @@ export default {
 		"Snatched it mid-air! Didn't even look where I was jumping.",
 		"Mine! Fortune favours the lemming!",
 	],
-	lose: ["There it goes! Wait for me!", "Take it! Take it! Oh well, off it goes!"],
+	taken: ["There it goes! Wait for me!", "Take it! Take it! Oh well, off it goes!"],
 	win: ["I won! Didn't even slow down!"],
 	loss: ["Crashed! But what a flight! Again!"],
 	draw: ["A draw? We both jumped at the same time!"],

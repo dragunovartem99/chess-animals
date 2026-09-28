@@ -8,7 +8,7 @@ export default {
 		"Took it. Not giving it back. Pull all you like, push all you like.",
 		"That's mine. I've decided.",
 	],
-	lose: [
+	taken: [
 		"Took it? So what. I'm standing right where I stood.",
 		"Hey! Fine. I didn't see that. It didn't happen.",
 	],
