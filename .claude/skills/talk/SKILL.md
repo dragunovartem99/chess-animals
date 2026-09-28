@@ -1,11 +1,11 @@
 ---
 name: talk
-description: Write, rewrite or record what the animals say in the talk panel — `src/locales/{en,ru}/talk/<id>.ts` and their clips via `npm run voice` / `cli/voice/`. Use when adding an animal's lines, retuning its personality, fixing a line, or recasting its voice.
+description: Write, rewrite or record what the animals say in the talk panel — `src/locales/{en,ru}/talk/<id>.ts` and their clips via `npm run voice` / `cli/voice/`, and the animals' voices via `voice:design` / `voice:keep`. Use when adding an animal's lines, retuning its personality, fixing a line, or recasting its voice.
 ---
 
 ## Lines
 
-- DO keep who each animal is in `cli/voice/cast.yaml` — `character`, `sounds`, `speaks`, `voice` — and write every line from its `character`. Change the entry first when retuning an animal.
+- DO keep who each animal is in `cli/voice/cast.yaml` — `character`, `speaks`, `voice` and the voice fields — and write every line from its `character`. Change the entry first when retuning an animal.
 - DO give each animal one vivid personality no other animal has: check the whole file for a twin before adding or retuning one.
 - DO react to the event the remark is about — check, a capture, a loss, the result — never a line that fits any game.
 - NEVER mention how the bot plays or what it weighs: no algorithm, no heuristic, no "my king walks", no "own colour".
@@ -21,8 +21,13 @@ description: Write, rewrite or record what the animals say in the talk panel —
 
 ## Voices
 
-- DO keep one voice per animal in `cli/voice/cast.yaml`, with what it `sounds` like. All 30 custom slots are taken; a new voice is a stock one or frees a slot.
-- DO design a new voice from a Russian sample with ellipses, and hear it in both languages before keeping it.
+- DO keep one voice per animal in `cli/voice/cast.yaml`, described by `gender`, `age`, `persona` (2–5 words), `emotion` (2–3 adjectives) and `delivery` (1–2 sentences on timbre, pace, delivery). `cli/voice/describe.ts` builds the Voice Design prompt from them; change the fields, never the prompt by hand.
+- DO note a stock or library voice in a comment after its `voice` id.
+- DO design a new voice with `npm run voice:design -- <id>`: three previews of the animal's Russian lines into `~/Claude/chess-animals/voices/<id>-<n>.mp3`; a rerun numbers on. Let the user listen and pick a number.
+- DO keep the pick with `npm run voice:keep -- <id> <n>`: it saves the voice, writes its id into `cast.yaml` and drops the animal's originals. It asks before deleting the old designed voice — pipe `y` only after the user's explicit yes for that voice.
+- DO hear a kept voice in both languages (record its clips) before moving on.
+- DO try a Voice Library voice (`/v1/shared-voices`) when a stock one does not fit: it speaks by its id without a slot. Check its rate first.
+- NEVER spend a custom slot without freeing one: all 30 are taken.
 - DO keep the animals' voices clearly apart in pitch, age and pace from each other.
 - DO name a custom voice `chess-animals · <roster> · <id>` in ElevenLabs.
 - DO keep the Russian accent a Russian-sample voice carries into English under v3: `language_code` does not remove it, and it suits the animals.
@@ -33,5 +38,7 @@ description: Write, rewrite or record what the animals say in the talk panel —
 
 1. Write the English and Russian lines for the animal as a pair.
 2. Run `npx vitest run src/locales src/shared/talk`.
-3. Delete the changed clips under `public/voice/{en,ru}/<id>/` — only missing clips are recorded.
-4. Run `npm run voice` and give the user a `vlc --play-and-exit` command for the new clips (mpv is not installed).
+3. Delete the changed originals under `voice-raw/{en,ru}/<id>/` — only clips with no original are recorded, and the levelled clip in `public/voice/` is rewritten from it.
+4. Run `npm run voice`: it prints the clip and character count and asks. On a big run show the count to the user and wait for a yes before piping `y`.
+5. Give the user a `vlc --play-and-exit` command for the new clips (mpv is not installed).
+6. After changing `cli/voice/level.ts`, run `npm run voice:level` to rebuild `public/voice/` from `voice-raw/` without the API.

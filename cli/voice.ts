@@ -1,19 +1,17 @@
 import { locales, messages } from "@/locales";
-import { MONSTERS, ROSTER, UNDERWATER } from "@/modules/bots/roster";
+import { ANIMALS } from "@/modules/bots/roster";
 import { clipsFor } from "@/shared/talk";
 import type { Clip, Remark } from "@/shared/talk";
 
 import { CAST } from "./voice/casting";
-import { speak } from "./voice/speak";
+import { confirm } from "./voice/eleven";
+import { speak, unrecorded } from "./voice/speak";
 import type { Job } from "./voice/speak";
 
 // `npm run voice` — record every animal's lines, of all three rosters, with ElevenLabs into
-// `public/voice/`. Billed per character, so it is never part of the build: run it by hand after
-// the lines change, and only the clips that are not on disk yet are recorded. The key comes from
-// `.env.local`.
-
-const key = process.env.ELEVENLABS_API_KEY;
-if (!key) throw new Error("ELEVENLABS_API_KEY is not set: put it in .env.local");
+// `voice-raw/` and level them into `public/voice/`. Billed per character, so it is never part of
+// the build: run it by hand after the lines change, and only the clips with no original yet are
+// recorded, after a yes. The key comes from `.env.local`.
 
 type Lines = Partial<Record<Remark, readonly string[]>>;
 
@@ -24,11 +22,18 @@ function clipsOf(id: string): Clip[] {
 	);
 }
 
-const jobs = [...ROSTER, ...UNDERWATER, ...MONSTERS].flatMap((animal) => {
+const jobs = ANIMALS.flatMap((animal) => {
 	const { id } = animal.definition;
 	const voice = CAST[id]?.voice;
 	if (!voice) throw new Error(`${id} has lines but no voice in cli/voice/cast.yaml`);
 
-	return clipsOf(id).map((clip): Job => ({ path: clip.path, text: clip.text, voice }));
+	return clipsOf(id).map(({ path, text }): Job => ({ path, text, voice }));
 });
-console.log(`${await speak({ jobs, key })} clips recorded`);
+
+const missing = unrecorded(jobs);
+const characters = missing.reduce((sum, job) => sum + job.text.length, 0);
+if (missing.length === 0) console.log("every clip is recorded");
+else if (await confirm(`${missing.length} clips, ${characters} characters. Record them?`)) {
+	await speak(missing);
+	console.log(`${missing.length} clips recorded`);
+}

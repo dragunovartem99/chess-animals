@@ -1,10 +1,11 @@
-import { existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
-import { tmpdir } from "node:os";
+import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 
 import type { Clip } from "@/shared/talk";
 
+import { eleven } from "./eleven";
 import { level } from "./level";
+import { publicFile, rawFile } from "./paths";
 
 export type Job = Clip & { voice: string };
 
@@ -20,44 +21,33 @@ const SETTINGS = { stability: 0.5, similarity_boost: 0.75 };
 // Two requests at once: the account's plan refuses a third in flight with a 429.
 const AT_ONCE = 2;
 
-const publicDir = path.join(import.meta.dirname, "..", "..", "public");
+// Levels a recorded original into the clip the site plays.
+export function publish(clip: string) {
+	mkdirSync(path.dirname(publicFile(clip)), { recursive: true });
+	level({ input: rawFile(clip), output: publicFile(clip) });
+}
 
-async function record({ job, key }: { job: Job; key: string }) {
-	const response = await fetch(
-		`https://api.elevenlabs.io/v1/text-to-speech/${job.voice}?output_format=${FORMAT}`,
-		{
-			method: "POST",
-			headers: { "xi-api-key": key, "content-type": "application/json" },
-			body: JSON.stringify({
-				text: job.text,
-				model_id: MODEL,
-				voice_settings: SETTINGS,
-			}),
-		}
-	);
-	if (!response.ok) throw new Error(`${job.path}: ${response.status} ${await response.text()}`);
-
-	const scratch = mkdtempSync(path.join(tmpdir(), "voice-"));
-	const raw = path.join(scratch, "raw.mp3");
-	writeFileSync(raw, Buffer.from(await response.arrayBuffer()));
-	const file = path.join(publicDir, job.path);
-	mkdirSync(path.dirname(file), { recursive: true });
-	level({ input: raw, output: file });
-	rmSync(scratch, { recursive: true });
+async function record(job: Job) {
+	const response = await eleven({
+		route: `/v1/text-to-speech/${job.voice}?output_format=${FORMAT}`,
+		body: { text: job.text, model_id: MODEL, voice_settings: SETTINGS },
+	});
+	mkdirSync(path.dirname(rawFile(job.path)), { recursive: true });
+	writeFileSync(rawFile(job.path), Buffer.from(await response.arrayBuffer()));
+	publish(job.path);
 	console.log(`${job.path}  ${job.text}`);
 }
 
-// Records every clip not already on disk: a clip once made is never paid for again, so a run
-// after a changed line only records that line. Gives back how many it recorded.
-export async function speak({ jobs, key }: { jobs: Job[]; key: string }): Promise<number> {
-	const missing = jobs.filter((job) => !existsSync(path.join(publicDir, job.path)));
-	const batches = Array.from({ length: Math.ceil(missing.length / AT_ONCE) }, (_, index) =>
-		missing.slice(index * AT_ONCE, (index + 1) * AT_ONCE)
+// The clips with no original yet: a clip once made is never paid for again, so a run after a
+// changed line (its original deleted) only records that line.
+export const unrecorded = (jobs: Job[]) => jobs.filter((job) => !existsSync(rawFile(job.path)));
+
+export async function speak(jobs: Job[]) {
+	const batches = Array.from({ length: Math.ceil(jobs.length / AT_ONCE) }, (_, index) =>
+		jobs.slice(index * AT_ONCE, (index + 1) * AT_ONCE)
 	);
 	await batches.reduce(async (done, batch) => {
 		await done;
-		await Promise.all(batch.map((job) => record({ job, key })));
+		await Promise.all(batch.map((job) => record(job)));
 	}, Promise.resolve());
-
-	return missing.length;
 }

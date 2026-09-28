@@ -240,8 +240,11 @@ move is played, with no engine behind it, so the panel costs no download.
   line twice running, and none more than twice a game.
 - A bot-vs-bot game pauses a seeded while before each move, talk or no talk, so it can be followed.
 
-Every line is recorded with ElevenLabs `eleven_v3` into `public/voice/{en,ru}/<id>/` by
-`npm run voice`, one voice per animal in `cli/voice/casting.ts`; only missing clips are recorded.
+Every line is recorded with ElevenLabs `eleven_v3` by `npm run voice`, one voice per animal in
+`cli/voice/cast.yaml`; only clips with no original yet are recorded. The originals are kept in git
+under `voice-raw/{en,ru}/<id>/` and levelled into `public/voice/`, so `npm run voice:level`
+rebuilds every clip without the API. `voice:design` and `voice:keep` design a new voice from an
+entry's fields and put it in the cast.
 
 ## App shell
 
