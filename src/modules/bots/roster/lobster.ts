@@ -6,7 +6,7 @@ export const LOBSTER: Animal = {
 	definition: {
 		id: "lobster",
 		search: { depth: 1 },
-		maia: { elo: 1300 },
+		maia: { elo: 1950 },
 		weights: {},
 	},
 };

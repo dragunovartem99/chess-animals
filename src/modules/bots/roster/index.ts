@@ -86,12 +86,11 @@ export const ROSTER_BY_ID = new Map(ROSTER.map((animal) => [animal.definition.id
 
 // The second roster, apart from the first on purpose: a monster is Stockfish alone, softened,
 // and `ROSTER` stays the land order and the gauntlet `tune` measures against. The arena rates both
-// together. Weakest first, and the order is the temperature's: every one weighs Stockfish's top
-// five lines on 5000 nodes, and picks a line `t` centipawns behind the best about a third as often
-// at temperature `t`, so the lower it is the rarer and smaller the slips. The Clown, the Pumpkin,
-// the Skeleton and the Witch came last, the hottest four, to bridge the gap from the Tiger to the
-// Zombie: the rungs below 60 already crowd each other. The top two are never careless — one line, so no nodes are spent on the other four — and
-// the Dragon sees ten times as far as the Dinosaur.
+// together. Weakest first, evenly apart in measured strength (see METHOD.md, "Three rosters"). The
+// thirteen weakest weigh Stockfish's top five lines on 5000 nodes and pick a line `t` centipawns
+// behind the best about a third as often at temperature `t`; each `t` is read off the arena's
+// curve, since strength follows its ratio, not its step. The top three are never careless — one
+// line, so no nodes are spent on the other four — and climb by how far they see.
 export const MONSTERS: Animal[] = [
 	CLOWN,
 	PUMPKIN,

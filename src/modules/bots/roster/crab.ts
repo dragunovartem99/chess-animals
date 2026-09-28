@@ -6,7 +6,7 @@ export const CRAB: Animal = {
 	definition: {
 		id: "crab",
 		search: { depth: 1 },
-		maia: { elo: 700 },
+		maia: { elo: 1150 },
 		weights: {},
 	},
 };

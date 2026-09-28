@@ -184,8 +184,9 @@ read. On every move `createMonsterEngine` asks Stockfish for its best `lines` mo
 `nodes` nodes and picks one, a line `d` centipawns behind the best weighted `exp(-d / temperature)`.
 Small slips are common and blunders rare, which reads as a person playing — a uniformly random
 move, the paper's dilution, hangs a queen out of the blue. The pick is drawn from a seeded stream
-of its own, so a game replays from its seed. The sixteen differ in temperature alone, bar
-the Dragon, which also sees ten times as far; the hottest reach down towards the Tiger.
+of its own, so a game replays from its seed. The thirteen weakest differ in temperature alone; the
+top three play one line and differ in how many nodes they search, the Dragon furthest. Where each
+sits is set by [METHOD.md](./METHOD.md#three-rosters-overlapping-evenly).
 
 The engine is the land engine with a `go` that asks Stockfish instead, so the play view cannot
 tell them apart; its answers are promises, because Stockfish is a process. In the browser the
@@ -205,7 +206,8 @@ at a given rating would. An underwater animal is a bot definition with no weight
 `maia: { elo, greedy? }`; each move the board goes in as 64×12 tokens (flipped when Black is to
 move, since Maia only sees White's side), 4352 logits come out, the legal ones are softmaxed, and
 the move is drawn from the seeded stream — or, `greedy`, the likeliest is played. The sixteen
-differ in `elo` alone, bar the Whale, the one greedy animal.
+differ in `elo`; the top five are greedy, since drawing stops getting stronger near the top of
+Maia's range.
 
 The model is vendored at `public/maia3/`, 23 MB, with its AGPL-3.0 licence beside it: upstream's
 fp16 weights stored as int8 by `cli/maia/quantize.py`, which halves the download and leaves the

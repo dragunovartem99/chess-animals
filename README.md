@@ -13,7 +13,7 @@ Three rosters of sixteen, each on its own engine:
   vector describing the position — the random 🐴 Donkey is all zeros, the check-happy 🐐 Goat
   weighs checks over captures.
 - **Underwater animals** are [Maia](https://maiachess.com/), a network trained to play like
-  people, each asked for a different rating — the 🦐 Shrimp at 500 up to the 🐋 Whale at 2500.
+  people, each asked for a different rating — the 🦐 Shrimp at 900 up to the 🐋 Whale at 2500.
 - **Monsters** are Stockfish, softened: each weighs its top lines and sometimes plays a worse one,
   more often the hotter it runs — up to the 🐉 Dragon, which never slips.
 

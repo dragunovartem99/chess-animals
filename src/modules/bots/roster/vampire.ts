@@ -6,7 +6,7 @@ export const VAMPIRE: Animal = {
 	definition: {
 		id: "vampire",
 		search: { depth: 1 },
-		stockfish: { nodes: 5000, lines: 5, temperature: 25 },
+		stockfish: { nodes: 5000, lines: 5, temperature: 24 },
 		weights: {},
 	},
 };

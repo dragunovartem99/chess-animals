@@ -4,22 +4,28 @@ import { assertBotDefinition } from "@/shared/bots";
 
 import { ANIMALS_BY_ID, MONSTERS, ROSTER, UNDERWATER } from "../index";
 
-const elos = UNDERWATER.map((animal) => animal.definition.maia?.elo ?? 0);
+const elos = (greedy: boolean) =>
+	UNDERWATER.filter((animal) => Boolean(animal.definition.maia?.greedy) === greedy).map(
+		(animal) => animal.definition.maia?.elo ?? 0
+	);
 
 describe("the underwater roster", () => {
 	it("has sixteen animals, as every roster does", () => {
 		expect([ROSTER, MONSTERS, UNDERWATER].map((roster) => roster.length)).toEqual([16, 16, 16]);
 	});
 
-	it("climbs Maia's ratings, weakest first, never the same one twice", () => {
-		expect(elos).toEqual(elos.toSorted((a, b) => a - b));
-		expect(new Set(elos).size).toBe(elos.length);
-	});
+	it.each([false, true])(
+		"climbs Maia's ratings, greedy %s, never the same one twice",
+		(greedy) => {
+			expect(elos(greedy)).toEqual(elos(greedy).toSorted((a, b) => a - b));
+			expect(new Set(elos(greedy)).size).toBe(elos(greedy).length);
+		}
+	);
 
-	it("ends with the one animal that never draws its move", () => {
+	it("puts the animals that never draw their move on top, above every one that does", () => {
 		const greedy = UNDERWATER.filter((animal) => animal.definition.maia?.greedy);
 
-		expect(greedy).toEqual([UNDERWATER.at(-1)]);
+		expect(greedy).toEqual(UNDERWATER.slice(-greedy.length));
 	});
 
 	it("shares no id with the other rosters", () => {

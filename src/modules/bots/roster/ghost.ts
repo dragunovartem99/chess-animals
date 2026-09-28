@@ -6,7 +6,7 @@ export const GHOST: Animal = {
 	definition: {
 		id: "ghost",
 		search: { depth: 1 },
-		stockfish: { nodes: 5000, lines: 5, temperature: 30 },
+		stockfish: { nodes: 5000, lines: 5, temperature: 33 },
 		weights: {},
 	},
 };
