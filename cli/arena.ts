@@ -82,8 +82,13 @@ if (!labOnly) {
 			.filter((player) => !player.id.startsWith("lab-"))
 			.map((player) => [player.id, player.rating])
 	);
+	// Only an animal that draws its move plays like people at its `elo`; a greedy one plays its
+	// likeliest move every time and so far above it, and would drag the whole scale down.
 	const anchors = Object.fromEntries(
-		UNDERWATER.map(({ definition }) => [definition.id, definition.maia?.elo ?? 0])
+		UNDERWATER.filter(({ definition }) => !definition.maia?.greedy).map(({ definition }) => [
+			definition.id,
+			definition.maia?.elo ?? 0,
+		])
 	);
 	writeFileSync(POINTS_FILE, `${JSON.stringify(toPoints({ ratings, anchors }), null, "\t")}\n`);
 	write(`wrote ${POINTS_FILE}`);

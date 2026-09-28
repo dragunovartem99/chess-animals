@@ -114,7 +114,8 @@ with. Standard errors from the inverse Hessian diagonal give the confidence inte
 scheduler needs.
 
 **Anchored to people** — the fit only fixes differences, so the arena shifts the whole table until
-the underwater animals sit, on average, at the rating Maia was asked to play them at. A bot's
+the underwater animals that draw their move sit, on average, at the rating Maia was asked to play
+them at — a greedy one plays its likeliest move every time, far above that rating. A bot's
 points then read roughly as a person's rating, and the weakest animals fall below zero.
 
 **Markov champion** — the paper's trophy transition matrix, power-iterated to its stationary
