@@ -4,17 +4,14 @@ import { foldRound } from "./fold";
 import type { PairOutcome } from "./fold";
 import { decisivenessOf, nextPairings, seedPairs } from "./pairing";
 import type { Pair, Standing } from "./pairing";
-import { ratingsSettled, standingOrder } from "./settled";
+import { orderSettled, standingOrder } from "./settled";
 
 export type { PairOutcome } from "./fold";
 
 type Round = { round: number; standings: Standing[]; games: number };
 
-// A sparse first-round graph is enough to connect the fit. A rung wider than `separationZ`
-// combined SEs is confidently ordered; one tighter than `tieZ` is a coin flip not worth chasing;
-// only the band between the two earns more games. Fixed, not knobs — the arena has none.
+// A sparse first-round graph is enough to connect the fit. Fixed, not a knob — the arena has none.
 const SEED_DEGREE = 4;
-const BANDS = { separationZ: 1.5, tieZ: 0.5 };
 
 type RatingRun = {
 	playPair: (a: string, b: string) => Promise<PairOutcome>;
@@ -49,7 +46,7 @@ async function playRound({
 	orderHistory.push(standingOrder(standings));
 	run.onRound?.({ round, standings, games: run.games });
 
-	const settled = ratingsSettled({ standings, ...BANDS, orderHistory, stableRounds });
+	const settled = orderSettled({ orderHistory, stableRounds });
 	if (settled || round + 1 >= run.maxRounds) return { rating, rounds: round + 1 };
 	const decisiveness = decisivenessOf(matchups.values());
 	const next = nextPairings({ standings, playCounts, batchSize, decisiveness });
@@ -58,7 +55,7 @@ async function playRound({
 
 // The arena's outer loop: seed with a sparse comparison graph so the fit is connected, then each
 // round refit and spend the next batch of games on the pairs that can still move the table. Stops
-// once every adjacent rung is separated or the order has held for `stableRounds`.
+// once the order has held for `stableRounds`.
 export async function runAdaptiveRating({
 	ids,
 	playPair,
@@ -66,8 +63,7 @@ export async function runAdaptiveRating({
 	// enough that the stop condition is re-checked before the run overshoots it.
 	batchSize = Math.min(ids.length, Math.max(8, Math.round(ids.length / 2))),
 	maxRounds = 40,
-	// The stable order is what ends every real run — the rung bands never fire first on this
-	// roster — so each extra round here is pure cost. Over seeds 1–3, two cut 23% of the games
+	// Each extra round here is pure cost. Over seeds 1–3, two cut 23% of the games
 	// (and 40% off the worst seed) and moved the ratings no more than a change of seed does.
 	stableRounds = 2,
 	onRound,

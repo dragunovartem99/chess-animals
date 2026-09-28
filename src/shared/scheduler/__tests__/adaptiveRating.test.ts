@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { decisivenessOf, nextPairings, ratingsSettled, standingOrder } from "..";
+import { decisivenessOf, nextPairings, orderSettled } from "..";
 import type { Standing } from "..";
 import type { Matchup } from "../../rating";
 
@@ -47,59 +47,29 @@ describe("decisivenessOf", () => {
 	});
 });
 
-const zed = { separationZ: 1.5, tieZ: 0.5 };
-const tight: Standing[] = [
-	{ id: "a", rating: 1600, stderr: 20 },
-	{ id: "b", rating: 1400, stderr: 20 },
-];
-
-// A rung in the productive band: 100 Elo against ±99 SEs — wide enough to matter, close
-// enough that more games would still move it.
-const blurred: Standing[] = [
-	{ id: "a", rating: 1650, stderr: 99 },
-	{ id: "b", rating: 1550, stderr: 99 },
-];
-
-describe("ratingsSettled", () => {
-	it("is true once every adjacent rung is separated", () => {
-		expect(
-			ratingsSettled({ standings: tight, ...zed, orderHistory: [], stableRounds: 3 })
-		).toBe(true);
-	});
-
-	it("is true once a rung is too close to be worth chasing", () => {
-		const tied: Standing[] = [
-			{ id: "a", rating: 1602, stderr: 99 },
-			{ id: "b", rating: 1600, stderr: 99 },
-		];
-		expect(ratingsSettled({ standings: tied, ...zed, orderHistory: [], stableRounds: 3 })).toBe(
-			true
-		);
-	});
-
+describe("orderSettled", () => {
 	it("is true when the order has held for the required rounds", () => {
-		const order = standingOrder(blurred);
 		expect(
-			ratingsSettled({
-				standings: blurred,
-				...zed,
-				orderHistory: [order, order, order],
-				stableRounds: 3,
+			orderSettled({
+				orderHistory: [
+					["a", "b"],
+					["a", "b"],
+				],
+				stableRounds: 2,
 			})
 		).toBe(true);
 	});
 
-	it("is false while a rung is unresolved and the order still moves", () => {
+	it("is false while the order still moves, or has not run long enough", () => {
 		expect(
-			ratingsSettled({
-				standings: blurred,
-				...zed,
+			orderSettled({
 				orderHistory: [
 					["a", "b"],
 					["b", "a"],
 				],
-				stableRounds: 3,
+				stableRounds: 2,
 			})
 		).toBe(false);
+		expect(orderSettled({ orderHistory: [["a", "b"]], stableRounds: 2 })).toBe(false);
 	});
 });

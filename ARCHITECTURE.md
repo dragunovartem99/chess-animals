@@ -66,7 +66,7 @@ One flat area per folder, each with its own `index.ts`, and deliberately **no ro
 | `ui`           | `useTheme` — the world a view puts the page in                                                                                                                                     |
 | `bots`         | `BotDefinition` (JSON on disk) and `BotConfig` (compiled), the frozen weight bases, the guard, and `compileBot` between them                                                       |
 | `openings`     | the curated paired opening set (JSON) and its validation                                                                                                                           |
-| `rating`       | Bradley–Terry MLE with a white advantage and Rao–Kupper draw term, CIs from the Hessian, and the Markov champion iteration                                                         |
+| `rating`       | Bradley–Terry MLE with a white advantage and Rao–Kupper draw term, CIs from the Hessian, and the ladder line through the sea and the monsters                                      |
 | `scheduler`    | the pure `runGame`, a `worker_threads` pool, the result cache, adaptive pairing, and `runTournament` over all of it                                                                |
 | `test-support` | fixtures and helpers shared by specs — the wasm engine, component mounting, played games, weight vectors, a fake worker                                                            |
 

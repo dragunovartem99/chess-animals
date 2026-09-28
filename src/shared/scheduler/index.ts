@@ -9,7 +9,7 @@ export {
 	seedPairs,
 	type Standing,
 } from "./pairing";
-export { ratingsSettled, standingOrder } from "./settled";
+export { orderSettled, standingOrder } from "./settled";
 export { createGameCache, gameKey } from "./cache";
 export { mixSeed } from "./seed";
 export { runGamesCached } from "./cached";
