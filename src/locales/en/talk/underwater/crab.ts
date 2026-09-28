@@ -1,12 +1,12 @@
 export default {
 	greet: [
-		"Hmph. Let's get on with it. Keep your pieces where I can see them.",
-		"Another challenger. Fine. Let's get it over with.",
+		"A game? Well, in a sense. We'll see.",
+		"I'm not exactly your opponent. Just passing by. Sideways.",
 	],
-	check: ["Check. Don't touch anything.", "Check. Move it."],
-	take: ["Mine. No refunds.", "Grabbed it. Should've watched it."],
-	lose: ["Hey! That was mine!", "Fine. I didn't want it anyway."],
-	win: ["That's it. All mine. As it should be."],
-	loss: ["You won. Hmph. Don't get used to it."],
-	draw: ["A draw. Nobody gets anything. Typical."],
+	check: ["Check. Well, sort of. More yes than no.", "Check. I wasn't really heading your way."],
+	take: ["Took it? Not exactly. Borrowed it.", "Took it? Let's say it relocated to me."],
+	lose: ["Took it? Depends what you call mine.", "I wasn't planning to defend that. Probably."],
+	win: ["I won? Depends how you look at it. But yes."],
+	loss: ["Lost? I'd call it a retreat. Sideways."],
+	draw: ["A draw. See? I never promised anything."],
 };

@@ -1,7 +1,7 @@
 export default {
 	greet: [
 		"Hi! Quick game, yeah? I've got places to be!",
-		"Ready? Ready? I'm ready. I was born ready. Go!",
+		"Starting? Starting? I've already started! Go!",
 	],
 	check: ["Check! Bet you didn't see that! Nobody sees me!", "Check! Quick, quick, your move!"],
 	take: ["Snatched it! Too slow!", "Gone! Blink and you miss it!"],

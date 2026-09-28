@@ -1,6 +1,6 @@
 export default {
 	greet: [
-		"Closer. A little closer. I don't bite. Usually.",
+		"Closer. Just a bit more. It's soft and warm in here.",
 		"No rush. I spent all night on this web.",
 	],
 	check: ["Check. Don't struggle. It only tightens.", "Check. Shh. Hold still."],

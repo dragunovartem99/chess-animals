@@ -1,15 +1,18 @@
 export default {
 	greet: [
-		"Hello. Ogre is nice today. So far.",
-		"Hello, small one. Ogre will not get angry. Ogre promised.",
+		"Ogre is happy. Ogre hasn't played with a friend in so long... Ogre is going to cry.",
+		"Hello, little one. Ogre brought a flower. Ogre squashed it a bit.",
 	],
-	check: ["Check. Ogre is still calm.", "Check! Ogre likes this game now."],
-	take: ["Ogre takes. Ogre is happy.", "Ogre took it. Small. Tasty."],
+	check: ["Check. Sorry. Ogre feels bad too.", "Check... So beautiful. Ogre is moved."],
+	take: [
+		"Ogre took it. Ogre will look after it.",
+		"Ogre took it... Don't cry. Or Ogre will cry too.",
+	],
 	lose: [
-		"They took Ogre's piece. Ogre is... fine. Ogre is FINE!",
-		"No! NO! ...Ogre breathes. Ogre is nice today.",
+		"Oh. Ogre loved that one... It's fine. Something in Ogre's eye.",
+		"Gone... Ogre isn't crying. Ogre is just big and damp.",
 	],
-	win: ["Ogre won! Ogre hardly broke anything."],
-	loss: ["Ogre lost. Ogre is... not angry. Ogre will go outside for a bit."],
-	draw: ["Draw. Ogre does not understand. But Ogre is calm."],
+	win: ["Ogre won... Best day of Ogre's life. Hug Ogre."],
+	loss: ["Ogre lost. But so beautifully... Ogre is going to sob."],
+	draw: ["A draw. So we both did well. Ogre is so happy."],
 };

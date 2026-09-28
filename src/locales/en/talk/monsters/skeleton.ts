@@ -8,7 +8,7 @@ export default {
 		"Check! Old trick. Older than me. Well, almost.",
 	],
 	take: [
-		"I'll keep that. I collect odd bits.",
+		"For my collection. I collect odd bits.",
 		"Thanks! Haven't eaten in a century. Not that I've got a stomach.",
 	],
 	lose: [
@@ -16,6 +16,6 @@ export default {
 		"Took that one? No hard feelings. I've got no feelings at all.",
 	],
 	win: ["I won! Haven't felt this lively in ages."],
-	loss: ["You won. That's alright, I've been through worse. I died once."],
+	loss: ["I lost. That's alright, I've been through worse. I died once."],
 	draw: ["A draw. Dead even. Get it? Dead."],
 };

@@ -1,6 +1,6 @@
 export default {
 	greet: [
-		"A subject. Sit. No, not there... There. Good.",
+		"Sit. No, not there... There. The king is pleased.",
 		"The king is merciful today. Don't test him.",
 	],
 	check: ["Check. Kneel. ...I said KNEEL!", "Check. Hush now... Your king is king no longer."],

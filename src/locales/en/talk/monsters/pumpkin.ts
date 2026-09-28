@@ -14,5 +14,5 @@ export default {
 	],
 	win: ["There. Granny's still got it!"],
 	loss: ["Oh, you beat granny. Clever thing. Have another slice."],
-	draw: ["A draw. Good, nobody's upset. More tea?"],
+	draw: ["A draw. Lovely. More tea?"],
 };

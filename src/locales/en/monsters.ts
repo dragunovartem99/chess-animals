@@ -29,7 +29,7 @@ export default {
 	},
 	ogre: {
 		name: "Ogre",
-		description: "Plays hard, but when it gets angry it stomps and mixes things up.",
+		description: "Plays hard, but when it gets emotional it mixes things up.",
 	},
 	troll: {
 		name: "Troll",

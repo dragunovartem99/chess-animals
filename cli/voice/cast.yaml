@@ -42,19 +42,19 @@ goat:
     voice: xMg7WUw8SQNRZmHbkAKr
     gender: male
     age: middle-aged
-    persona: hoarse brawler
-    emotion: pushy, restless, combative
+    persona: goat who chews everything
+    emotion: pushy, greedy, cheerful
     delivery: Low and heavy, barking in short bursts, always half a step forward.
-    character: charges ahead, nothing stops him, wants a rematch now
+    character: chews everything, the pieces, the board, the rulebook; tastes whatever he takes
     speaks: he
 parrot:
     voice: b6DpG4oSJGpAaWu4RKjb
     gender: male
     age: old
-    persona: chattering old parrot
-    emotion: gleeful, greedy, excitable
+    persona: mimic of former owners
+    emotion: gleeful, excitable, clueless
     delivery: Shrill and nasal, sing-song, echoing his own words.
-    character: a chatterbox who repeats himself and grabs anything shiny
+    character: a mimic who parrots what his old owners said (a granny, a sea captain, the telly), then explains where he heard it
     speaks: he
 sloth:
     voice: f6Cz3JynC8oTg7XbYVw7
@@ -214,10 +214,10 @@ ogre:
     voice: UtYQ0p4uJUz8b2RTwInk
     gender: male
     age: an adult
-    persona: dim ogre in anger management
-    emotion: calm, simple, explosive
+    persona: sentimental dim giant
+    emotion: tender, tearful, simple
     delivery: A deep, booming, slow voice that erupts into furious shouting and calms down as if nothing happened.
-    character: anger management, calls himself Ogre, calm until he isn't
+    character: a sentimental giant who calls himself Ogre and gets teary at everything, a beautiful move, a lost piece, a win
     speaks: he
 troll:
     voice: bZY3Nhvtyqoq16kzyGBZ
@@ -277,19 +277,19 @@ dinosaur:
     voice: xRS2OKepBgshbtSVOq7D
     gender: male
     age: ancient
-    persona: primal prehistoric beast
-    emotion: powerful, proud, blunt
+    persona: huge peaceful herbivore
+    emotion: gentle, earnest, clumsy
     delivery: A loud, booming, resonant chest voice with a rough growl, slow heavy words. Not quiet, not whispery.
-    character: ancient and patient, few words, you are small
+    character: huge and scary-looking, insists he is a peaceful herbivore; every capture was an accident, a stray foot or tail
     speaks: he
 dragon:
     voice: qrwsQB8xRez8ToeXjpjM
     gender: male
     age: vast and very old
-    persona: sleepy hoarding dragon
-    emotion: tired, sly, knowing
+    persona: ancient all-seeing dragon
+    emotion: sly, amused, knowing
     delivery: Low, tired and quiet, from deep in the throat, slow, with a hint of a smile.
-    character: a sleepy hoarder who keeps everything and sees through you
+    character: an ancient dragon on his gold who sees straight through you and says what you feel
     speaks: he
 
 shrimp:
@@ -314,10 +314,10 @@ crab:
     voice: SOYHLrjzK2X1ezoPC6cr # stock Harry
     gender: male
     age: an adult
-    persona: grabby old grump
-    emotion: grumpy, possessive, gruff
+    persona: evasive sideways dodger
+    emotion: gruff, shifty, noncommittal
     delivery: Rough and fierce, short and snappy.
-    character: a grabby grump, never gives anything back
+    character: a dodger who never answers straight, goes sideways; every capture was an accident, every loss not really his
     speaks: he
 jellyfish:
     voice: bIHbv24MWmeRgasZH58o # stock Will
@@ -368,10 +368,10 @@ lobster:
     voice: pNInz6obpgDQGcFmaJgB # stock Adam
     gender: male
     age: an adult
-    persona: prickly loner
-    emotion: defensive, brash, irritable
+    persona: paranoid lobster
+    emotion: suspicious, jumpy, defensive
     delivery: Brash, firm and dominant.
-    character: prickly, "don't come close"
+    character: paranoid, sure everyone wants to cook him; watches for pots, lemons and hot water
     speaks: he
 goldfish:
     voice: XrExE9yKIg1WjnnlVkGX # stock Matilda
@@ -386,19 +386,19 @@ otter:
     voice: JBFqnCBsd6RMkjVDRZzb # stock George
     gender: male
     age: mature
-    persona: contented otter
-    emotion: cosy, content, warm
+    persona: cheerful optimist otter
+    emotion: sunny, easygoing, warm
     delivery: Cosy and unhurried, a warm storyteller.
-    character: plays lying on its back, content with anything
+    character: an optimist who finds the bright side of everything, a check, a lost piece, a loss
     speaks: he
 dolphin:
     voice: FGY2WhTYpPnrIDTdsKH5 # stock Laura
     gender: female
     age: a young woman
-    persona: teasing clever dolphin
-    emotion: bright, sassy, playful
+    persona: cheerful lifeguard
+    emotion: bright, caring, patronising
     delivery: Young and sassy, quirky and quick.
-    character: bright and teasing, reads you a move ahead
+    character: a lifeguard who keeps cheerfully rescuing you mid-game, whether you need it or not
     speaks: she
 octopus:
     voice: Xb7hH8MSUJpSbSDYk0k2 # stock Alice

@@ -8,7 +8,7 @@ export default {
 		"Check. Nobody's laughing. Why is nobody laughing?",
 	],
 	take: [
-		"Mine now! Look, it disappeared. Magic!",
+		"Mine! I bet you've got a really funny face on right now.",
 		"Thank you, thank you. Don't clap, just give me more.",
 	],
 	lose: [

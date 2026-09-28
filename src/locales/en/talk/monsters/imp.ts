@@ -3,7 +3,10 @@ export default {
 		"Hi! Hi! Oh, there's something on your back. Just kidding.",
 		"I'll be good. Really. I won't do anything.",
 	],
-	check: ["Check! Didn't see that coming, did you?", "Check. It wasn't me. It was the knight."],
+	check: [
+		"Check! Didn't see that coming, did you?",
+		"Check. Wasn't me. I was just sitting here.",
+	],
 	take: ["I didn't take it. It just followed me.", "Mine! Don't tell anyone."],
 	lose: ["Hey, no fair! I was going to prank that one.", "Uh-oh. Now I'm in trouble."],
 	win: ["I won! And I hardly cheated at all. Kidding."],

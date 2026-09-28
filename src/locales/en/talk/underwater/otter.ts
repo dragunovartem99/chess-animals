@@ -1,12 +1,15 @@
 export default {
 	greet: [
-		"Hello. Mind if I play lying down? It's more comfortable.",
-		"Lovely day for a game. Let's float along.",
+		"Hi. Good day for a game. Then again, they all are.",
+		"Sit down. Whatever happens, it'll be interesting.",
 	],
-	check: ["Check. Sorry, didn't mean to wake you.", "Check. No rush. Well, a little rush."],
-	take: ["Oh, lovely. I'll keep that on my tummy.", "That one's mine now. Thanks ever so."],
-	lose: ["Ah. Well, I've got plenty more.", "Fair enough. Good one."],
-	win: ["I won. Lovely. Time for a nap."],
-	loss: ["Well played. I'll just float here and think about it."],
-	draw: ["A draw. Perfect. Nobody has to get up."],
+	check: [
+		"Check. On the bright side, now you've got something to think about.",
+		"Check. Don't worry, there's always a way out of check. Well, almost always.",
+	],
+	take: ["Took it. Thank you, that's very kind.", "Took it. Good, more room on the board."],
+	lose: ["Taken. Never mind, I'm travelling lighter now.", "Ouch. Well, I've still got plenty."],
+	win: ["I won. A good day just got better."],
+	loss: ["I lost. But now I know how you play. That's a plus."],
+	draw: ["A draw. So we both come out ahead. That's how I see it."],
 };

@@ -7,7 +7,7 @@ export default {
 		"Check! Protecting your king wasn't in the wishes.",
 		"Check! Nobody wished for it, but you're welcome.",
 	],
-	take: ["One piece, as wished. As I wished.", "Gone! Should've read the fine print."],
+	take: ["Just as wished. As I wished.", "Gone! Should've read the fine print."],
 	lose: ["Hey, I never granted that one!", "Keeping it? Fine. Call it wish number one."],
 	win: ["Done! Wish granted. My wish."],
 	loss: ["Well, one wish came true. Don't waste the other two."],

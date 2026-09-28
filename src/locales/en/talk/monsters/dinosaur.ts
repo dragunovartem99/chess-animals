@@ -1,9 +1,15 @@
 export default {
-	greet: ["Oh. Something small.", "I have waited a long time. I can wait longer."],
-	check: ["Check. Run, small thing.", "Check. I am patient."],
-	take: ["Eaten.", "Small. Still good."],
-	lose: ["Hm. Bold.", "You bite. I bite harder."],
-	win: ["Over. As always."],
-	loss: ["Beaten. First time in a million years."],
-	draw: ["A draw. I will wait. I am good at waiting."],
+	greet: ["Don't be scared. I'm a herbivore.", "I'm big, but peaceful. Honestly. Sit down."],
+	check: [
+		"Check. That's not an attack. I just came a bit closer.",
+		"Check. There, everyone thinks I'm a predator again.",
+	],
+	take: [
+		"That doesn't count. I stepped on it by accident.",
+		"Oops. Caught it with my tail. Sorry.",
+	],
+	lose: ["Hey. I'm peaceful.", "You took that? From a herbivore? Shame on you."],
+	win: ["I won. Peacefully. Hardly squashed anyone."],
+	loss: ["I lost. That's fine. I'll go chew some ferns and calm down."],
+	draw: ["A draw. See? You can reason with me."],
 };

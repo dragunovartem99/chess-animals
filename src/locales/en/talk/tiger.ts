@@ -1,7 +1,7 @@
 export default {
-	greet: ["Hey. No fuss. We just play.", "Move when you like. I'll wait."],
-	check: ["Check. Easy.", "Check. Breathe. It's only check."],
-	take: ["Thanks. No hard feelings.", "Took it. Didn't even break a sweat."],
+	greet: ["Hey. No fuss. We just play.", "Sit down. Let's see."],
+	check: ["Check. No offence.", "Check. Your move."],
+	take: ["Mine. Thanks.", "Took it. Carry on."],
 	lose: ["Not bad. Not bad at all.", "Fine. That won't rattle me."],
 	win: ["Done. Quiet and clean."],
 	loss: ["Beaten. Fair and square. Respect."],
