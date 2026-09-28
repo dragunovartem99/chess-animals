@@ -85,12 +85,12 @@ export const ROSTER: Animal[] = [
 export const ROSTER_BY_ID = new Map(ROSTER.map((animal) => [animal.definition.id, animal]));
 
 // The second roster, apart from the first on purpose: a monster is Stockfish alone, softened,
-// and `ROSTER` stays the land order and the gauntlet `tune` measures against. The arena rates both
-// together. Weakest first, evenly apart in measured strength (see METHOD.md, "Three rosters"). The
-// thirteen weakest weigh Stockfish's top five lines on 5000 nodes and pick a line `t` centipawns
-// behind the best about a third as often at temperature `t`; each `t` is read off the arena's
-// curve, since strength follows its ratio, not its step. The top three are never careless — one
-// line, so no nodes are spent on the other four — and climb by how far they see.
+// and `ROSTER` stays the land order. The arena rates both together. Weakest first, evenly apart
+// in measured strength (see METHOD.md, "Three rosters"). The thirteen weakest weigh Stockfish's
+// top five lines on 5000 nodes and pick a line `t` centipawns behind the best about a third as
+// often at temperature `t`; each `t` is read off the arena's curve, since strength follows its
+// ratio, not its step. The top three are never careless — one line, so no nodes are spent on the
+// other four — and climb by how far they see.
 export const MONSTERS: Animal[] = [
 	CLOWN,
 	PUMPKIN,

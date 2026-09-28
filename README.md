@@ -41,7 +41,6 @@ npm run dev
 | `npm run bench`                     | search cost through wasm, held under a guard by the suite               |
 | `npm run engine:bench`              | the C engine natively: perft, each feature's cost, the search signature |
 | `npm run arena`                     | dev CLI: rate the roster over the paired opening set                    |
-| `npm run tune -- <botId>`           | dev CLI: SPSA-tune one bot's weights against the roster                 |
 | `npm run voice`                     | dev CLI: record the animals' missing voice clips with ElevenLabs        |
 | `npm run og`                        | draw the preview cards (the build does it too)                          |
 | `npm run lint` / `format`           | oxlint + clang-tidy / oxfmt + clang-format (`:check` don't write)       |
@@ -58,7 +57,7 @@ merging requires them to pass; every push to `main` deploys to [chess-animals.co
 | File                                 | Covers                                                                   |
 | ------------------------------------ | ------------------------------------------------------------------------ |
 | [ARCHITECTURE.md](./ARCHITECTURE.md) | how the app is built — layout, modules, the eval, the engine, deployment |
-| [METHOD.md](./METHOD.md)             | what it measures — the paper, the feature vector, rating, tuning         |
+| [METHOD.md](./METHOD.md)             | what it measures — the paper, the feature vector, rating                 |
 | [LAB.md](./LAB.md)                   | what the weight bench measured — findings, singles, the land roster      |
 | [CLAUDE.md](./CLAUDE.md)             | code conventions this repo holds itself to                               |
 | [PLAN.md](./PLAN.md)                 | what lands next                                                          |
@@ -69,8 +68,8 @@ All 48 are rated together by the arena, in points pinned to Maia's human-like ra
 Dove (−450) to the Dragon (2390). The land roster tops out at the Tiger (1800); the sea starts
 about 550 below it and the monsters about 580 below the Whale, so each roster reaches into the next. Built: the feature evaluation and a PVS search with quiescence in C, Maia and
 Stockfish in the browser, `/play` with a move list to step through and copy as PGN and a speech
-panel where the animals talk, voiced in both languages, `/about`, and the dev CLIs
-`npm run arena` and `npm run tune`.
+panel where the animals talk, voiced in both languages, `/about`, and the dev CLI
+`npm run arena`.
 
 Next, per [PLAN.md](./PLAN.md): golden-game fixtures and a tablebase probe interface.
 

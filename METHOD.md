@@ -39,7 +39,7 @@ what makes the roster extensible: **adding a heuristic is one registry entry and
 function**, and adding an animal is a data file.
 
 26 features, declared once in `shared/eval/features.ts`. That single registry drives the engine's
-feature ids, the UCI options, the SPSA parameter space, the JSON schema for bot configs, and the
+feature ids, the UCI options, the JSON schema for bot configs, and the
 locale files.
 
 | Measures | Count | Features                                                                                                                                                                                |
@@ -175,13 +175,6 @@ The three rosters are 48 bots, rated together on every run. Four choices keep th
 On top of that, **adaptive pairing** rather than a full round robin: play the pair whose game
 most reduces rating uncertainty — close ratings, wide intervals — and stop when every interval is
 under threshold or the ordering has been stable for _k_ games.
-
-## Tuning
-
-SPSA over the weights the bot names: draw a Rademacher perturbation δ, play `w+cδ`
-and `w−cδ` over the same gauntlet with the same seeds, then step
-`w ← w + a·(score₊ − score₋)/(2c)·δ` with `a` and `c` decaying. The paired gauntlet is what makes
-a noisy signal usable. Target: a useful run in 1–2 minutes.
 
 ## How we know it works
 

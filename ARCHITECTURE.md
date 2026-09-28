@@ -14,7 +14,7 @@ src/
   locales/      ru/ en/ — UI strings, bot names, feature labels, what the animals say
   workers/      uciEngine.worker.ts
 engine/         the C search and evaluation, built to wasm and natively for tests (`make -C engine`)
-cli/            dev CLIs, run with tsx — the tournament runner and the SPSA tuner (lab.ts stages
+cli/            dev CLIs, run with tsx — the tournament runner (lab.ts stages
                 candidate bots for `arena -- --lab`), the preview cards (og), the voice recorder,
                 the engine's fixture corpus and its generated feature header
 public/         favicon, preview cards, the vendored Stockfish and Maia, the recorded voices
@@ -30,9 +30,9 @@ paper.pdf       Elo World, the design's source
 | `board` | the chessground wrapper, orientation, legal dests, the promotion picker                      |
 | `about` | `/about` — a short prose page: how the bots work, the paper it comes from, credit            |
 
-The tournament runner and the SPSA tuner are **dev CLIs under `cli/`**, not modules — they need
-every core and have no place in the shipped app. The rating, scheduler and tuner math they drive
-lives in `shared/rating`, `shared/scheduler` and `shared/tuner` as pure functions; the CLI is a
+The tournament runner is a **dev CLI under `cli/`**, not a module — it needs every core and has
+no place in the shipped app. The rating and scheduler math it drives lives in `shared/rating` and
+`shared/scheduler` as pure functions; the CLI is a
 thin Node shell (run with `tsx`) over a `worker_threads` pool. `npm run arena` rates the whole
 roster over the paired opening set, printing the rating table and cross-table and writing
 `arena-results.json`; the same `--seed=` reproduces it exactly, and the result cache means a new
@@ -40,9 +40,7 @@ bot only replays its own games. A game with a land animal in it is keyed on the 
 build, so a rebuilt engine replays those once; a game between underwater animals and monsters
 never calls the engine, and survives it. It also writes the site's numbers, `src/modules/bots/roster/points.json`,
 committed: the fitted ratings shifted until the underwater animals sit, on average, at the Elo Maia
-was asked to play them at, so a bot's points read roughly as a person's rating (`toPoints`). `npm run tune -- <botId>` runs SPSA on one bot's weights against
-the rest of the roster as a gauntlet, printing the score each iteration and writing
-`<botId>-tuned.json` if the run improved it.
+was asked to play them at, so a bot's points read roughly as a person's rating (`toPoints`).
 
 Every `modules/<name>` is self-contained: `components/`, `composables/`, `utils/`, and an
 `index.ts` exporting only the public surface. Internals are never imported from outside the
@@ -70,7 +68,6 @@ One flat area per folder, each with its own `index.ts`, and deliberately **no ro
 | `openings`     | the curated paired opening set (JSON) and its validation                                                                                                                           |
 | `rating`       | Bradley–Terry MLE with a white advantage and Rao–Kupper draw term, CIs from the Hessian, and the Markov champion iteration                                                         |
 | `scheduler`    | the pure `runGame`, a `worker_threads` pool, the result cache, adaptive pairing, and `runTournament` over all of it                                                                |
-| `tuner`        | SPSA — the decaying gain sequences, the Rademacher perturbation, the ascent loop, and the bot-weights ↔ parameter-vector mapping                                                   |
 | `test-support` | fixtures and helpers shared by specs — the wasm engine, component mounting, played games, weight vectors, a fake worker                                                            |
 
 `shared/bots` sits below both `eval` and `engine` in the dependency order rather than beside the
@@ -116,8 +113,7 @@ feature is safe and reordering one is not.
 
 ## The engine
 
-The browser's `uciEngine` worker and the arena's game workers — so the
-tuner's games too — all load the one module. It is called coarsely, never per node:
+The browser's `uciEngine` worker and the arena's game workers all load the one module. It is called coarsely, never per node:
 `search({ fen, moves, weights, options, rngState })` returns the move, its score, the node count
 and the advanced random state; C replays the move history into its own Zobrist stack, so it sees
 every repetition the game has been through. UCI parsing, transports and workers stay TS and stay
@@ -173,8 +169,8 @@ and is a pure function of commands to responses, which is why the worker is almo
 a bot and a pipe and delegates everything else. Its first message is the bot definition; every
 message after it is a UCI line.
 
-Each weight is exposed as a `setoption`, so a tuner can retune a live engine without respawning
-the worker.
+Each weight is exposed as a `setoption`, so a live engine can be retuned without respawning the
+worker.
 
 ### Monsters
 
