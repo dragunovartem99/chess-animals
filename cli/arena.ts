@@ -3,7 +3,7 @@ import { availableParallelism } from "node:os";
 
 import { MONSTERS, ROSTER, UNDERWATER } from "@/modules/bots/roster";
 import { openings } from "@/shared/openings";
-import { toPoints } from "@/shared/rating";
+import { smoothLadder, toPoints } from "@/shared/rating";
 import { createGameCache, createGamePool, runGamesCached, runTournament } from "@/shared/scheduler";
 
 import { LAB } from "./lab";
@@ -77,11 +77,22 @@ write("\nwrote arena-results.json");
 // The site's numbers, from a run that rated the whole roster: a lab-only field has no anchors, and
 // a lab candidate is not an animal a player can meet.
 if (!labOnly) {
-	const ratings = Object.fromEntries(
+	const measured = Object.fromEntries(
 		result.rating.players
 			.filter((player) => !player.id.startsWith("lab-"))
 			.map((player) => [player.id, player.rating])
 	);
+	// Land stays as measured — each land animal is its own idea, not a rung on a knob.
+	const ladders = [UNDERWATER, MONSTERS].map((ladder) =>
+		smoothLadder({
+			players: result.rating.players,
+			ladder: ladder.map(({ definition }) => definition.id),
+		})
+	);
+	const ratings = Object.assign(measured, ...ladders.map((ladder) => ladder.ratings));
+	for (const id of ladders.flatMap((ladder) => ladder.outliers)) {
+		write(`${id} sits off its roster's curve: its knob no longer does what the curve says`);
+	}
 	// Only an animal that draws its move plays like people at its `elo`; a greedy one plays its
 	// likeliest move every time and so far above it, and would drag the whole scale down.
 	const anchors = Object.fromEntries(
