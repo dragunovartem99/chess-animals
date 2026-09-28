@@ -1,12 +1,18 @@
 export default {
 	greet: [
-		"Hi! Let's play. I'll try to guess your moves.",
-		"Ooh, a new game! Show me your best trick.",
+		"Hi! Don't worry, I'm right here. I'll rescue you if needed.",
+		"Don't swim out too far, okay? I'll keep an eye on you.",
 	],
-	check: ["Check! You thought I missed that, didn't you?", "Check! Ha, I knew you'd go there."],
-	take: ["Saw that trap from a mile away. Thanks!", "Nice try. That one's mine."],
-	lose: ["Oh, clever! I didn't see that one.", "Okay, that was good. I'm impressed."],
-	win: ["I won! That was fun. You nearly had me."],
-	loss: ["You won! You're full of surprises. Again?"],
-	draw: ["A draw! We read each other too well."],
+	check: [
+		"Check! Easy, hold on to me. We'll get you out.",
+		"Check! Oops. Looks like you need rescuing.",
+	],
+	take: ["Took it! For your own safety.", "Took it. It shouldn't have swum out that far."],
+	lose: [
+		"Oh! I only looked away for a second.",
+		"Hey! I'm the one doing the rescuing, and you sink me?",
+	],
+	win: ["I won! Never mind, what matters is everyone's safe."],
+	loss: ["Beaten! Well, nobody needed rescuing after all. Well done."],
+	draw: ["A draw! We made it to shore together."],
 };

@@ -1,12 +1,21 @@
 export default {
 	greet: [
-		"Mm. Who's rustling there? Oh, it's you. Go on, then.",
-		"Well, well. You came. Let's see, let's see.",
+		"Ah, a guest. No need to introduce yourself. I know all about you already.",
+		"You needn't worry so loudly. I can hear it all.",
 	],
-	check: ["Mm. Check. Someone thought I was asleep.", "Check. No need to hurry. I'm not."],
-	take: ["I'll keep that. I keep everything.", "Thank you. Put it with the rest."],
-	lose: ["Took it. Well, well. How brave.", "Keep it. For now."],
-	win: ["There. Now let me sleep."],
-	loss: ["You won. Interesting. I haven't been interested in a long time."],
-	draw: ["A draw. Clever. Come back when you're older."],
+	check: [
+		"Check. That's what you were afraid of, isn't it?",
+		"Check. No need to hide your face. I see everything anyway.",
+	],
+	take: [
+		"I'll take that. Don't be so upset, I can hear it.",
+		"Mine. Don't fret. You already know it was a mistake.",
+	],
+	lose: [
+		"Well, well. Bold. Nobody has taken from me in ages.",
+		"Take it. I can see how pleased you are.",
+	],
+	win: ["There. I knew how this would end before the first move."],
+	loss: ["A dragon, beaten... I didn't see that coming. First time in a thousand years."],
+	draw: ["A draw. You're surprised? I'm not."],
 };

@@ -13,4 +13,6 @@ types, lint, tests, build.
 
 ## Outside v1
 
+- ⬜ Keep ElevenLabs' original responses in git (`voice-raw/<locale>/<id>/<remark>-<n>.mp3`, outside `public/`), have `npm run voice` level from them and a `voice:level` rebuild `public/voice/` without the API — needs one full re-record, since no clip has its original yet
+
 - ⬜ A Polyglot `.bin` book reader

@@ -1,0 +1,438 @@
+# Who each animal is and how it sounds. `character` and `speaks` drive the lines; `gender` to
+# `delivery` build the Voice Design prompt (cli/voice/describe.ts), so a stock voice keeps them too,
+# ready for the day it is designed. A comment after `voice` names a stock or library voice.
+
+donkey:
+    voice: c5XTzZfSskN4Ut6RVcrx
+    gender: male
+    age: middle-aged
+    persona: stubborn village donkey
+    emotion: sullen, obstinate, flat
+    delivery: A slow country drawl, low and nasal, dragging the vowels. Will not be hurried.
+    character: stubborn, digs in and won't budge, denies what he didn't see
+    speaks: he
+dove:
+    voice: tXtmoClvKMDIT6yAj5Ew
+    gender: female
+    age: a young girl
+    persona: shy apologetic dove
+    emotion: timid, sorry, gentle
+    delivery: A breathy near-whisper, soft and high, trailing off as if afraid to be heard.
+    character: shy, sorry for everything, even for winning
+    speaks: she
+lemming:
+    voice: o7PlX1q9E070RX4u2lu6
+    gender: male
+    age: a young teenager
+    persona: reckless daredevil
+    emotion: wild, thrilled, fearless
+    delivery: Squeaky and fast, too excited to breathe, shouting before thinking.
+    character: a reckless daredevil, jumps first and never looks
+    speaks: he
+dodo:
+    voice: X9FG2ZBSMn17O2KBZSxg
+    gender: male
+    age: elderly
+    persona: pompous old aristocrat
+    emotion: haughty, self-assured, oblivious
+    delivery: A plummy, drawn-out upper-class voice, a little nasal, bestowing every word.
+    character: sure he has never lost; every blunder was a sacrifice
+    speaks: he
+goat:
+    voice: xMg7WUw8SQNRZmHbkAKr
+    gender: male
+    age: middle-aged
+    persona: goat who chews everything
+    emotion: pushy, greedy, cheerful
+    delivery: Low and heavy, barking in short bursts, always half a step forward.
+    character: chews everything, the pieces, the board, the rulebook; tastes whatever he takes
+    speaks: he
+parrot:
+    voice: b6DpG4oSJGpAaWu4RKjb
+    gender: male
+    age: old
+    persona: mimic of former owners
+    emotion: gleeful, excitable, clueless
+    delivery: Shrill and nasal, sing-song, echoing his own words.
+    character: a mimic who parrots what his old owners said (a granny, a sea captain, the telly), then explains where he heard it
+    speaks: he
+sloth:
+    voice: f6Cz3JynC8oTg7XbYVw7
+    gender: male
+    age: an adult
+    persona: barely awake sloth
+    emotion: drowsy, lazy, content
+    delivery: Very slow and soft, yawning, drifting off mid-word.
+    character: everything is too much effort
+    speaks: he
+elephant:
+    voice: GNq6yBiEuCpwk2fhvSpG
+    gender: male
+    age: in his late eighties
+    persona: pedantic old professor
+    emotion: precise, fussy, nostalgic
+    delivery: Gravelly and a little shaky, with lecture-hall diction and careful emphasis.
+    character: a pedantic old professor who remembers every game since 1953
+    speaks: he
+camel:
+    voice: iP95p4xoKVk53GoZ742B # stock Chris
+    gender: male
+    age: an adult
+    persona: unimpressed desert cynic
+    emotion: weary, sarcastic, deadpan
+    delivery: Dry, flat and unhurried; every sentence sounds like an eye-roll.
+    character: unimpressed by anything, sarcastic
+    speaks: he
+hare:
+    voice: 6m9fXYIlcPNYN4tGOfeR
+    gender: male
+    age: a young adult
+    persona: fast-talking braggart
+    emotion: jittery, cocky, impatient
+    delivery: Quick and breathless, the words tumbling over each other.
+    character: always in a hurry, blames luck when caught
+    speaks: he
+bear:
+    voice: QoNaah2cnyD6PDsMnsqs
+    gender: male
+    age: an old grandfather
+    persona: grumpy grandpa bear
+    emotion: gruff, warm, grumbling
+    delivery: Deep, rumbling and chesty; grumbles, but the softness shows through.
+    character: grumbles at you, soft underneath
+    speaks: he
+lion:
+    voice: HSan4qX3dMBdTdYaWnwk
+    gender: male
+    age: an ageing king
+    persona: spoiled capricious tyrant king
+    emotion: pompous, petulant, volatile
+    delivery: A theatrical cartoon villain king. A pampered, drawling, slightly nasal voice, sugary and condescending, that snaps without warning into a thunderous, operatic royal bellow. Exaggerated, larger than life.
+    character: an unstable tyrant king, merciful until he isn't
+    speaks: he
+tiger:
+    voice: cjVigY5qzO86Huf0OWal # stock Eric
+    gender: male
+    age: an adult
+    persona: calm cool predator
+    emotion: relaxed, unbothered, easy
+    delivery: Smooth, low and lazy, unhurried, with a relaxed half-smile; never raised.
+    character: super chill, laid-back and unbothered, few words; nothing rattles him
+    speaks: he
+wolf:
+    voice: 0QjRjbzPMSepAhrWoVSm
+    gender: male
+    age: a young adult
+    persona: nineties street gopnik
+    emotion: cocky, menacing, clipped
+    delivery: Raspy, clipped street talk, speaking for the whole pack.
+    character: speaks for the pack, street menace
+    speaks: we
+fox:
+    voice: IgJyigVhCEiWtDubWOqy
+    gender: female
+    age: a young adult
+    persona: charming sly cheat
+    emotion: flirtatious, playful, sly
+    delivery: Smooth and purring, with a smile in every word.
+    character: a charming cheat, "I play fair. Mostly."
+    speaks: she
+spider:
+    voice: bW6RZDNm4HBOdIINQLSi
+    gender: male
+    age: an adult
+    persona: patient web-spinner
+    emotion: patient, creepy, calm
+    delivery: A soft, slightly creaky hissing whisper, slow and deliberate.
+    character: patient and creepy, everything is about the web
+    speaks: he
+
+clown:
+    voice: Ca9jXgw1mohPqEO3FBZf
+    gender: male
+    age: in his forties
+    persona: manic party clown
+    emotion: manic, giggly, cold
+    delivery: High and fast, bursting into giggles, then dropping without warning into a flat, cold, quiet menace.
+    character: jokes that turn threatening when nobody laughs
+    speaks: he
+pumpkin:
+    voice: kFzgp69qj9nyrwpZSYFn
+    gender: female
+    age: in her seventies
+    persona: kind pie-baking granny
+    emotion: warm, caring, fussy
+    delivery: Soft and clear, cosy and slow, fussing affectionately.
+    character: fusses over you, feeds you pie
+    speaks: she
+skeleton:
+    voice: WNbjyv2TK1WSgZP58rWo
+    gender: male
+    age: ageless, a century dead
+    persona: cartoon skeleton comedian
+    emotion: giddy, cheeky, zany
+    delivery: A high, reedy, springy cartoon voice with snappy vaudeville timing and a clacky, rattling giggle. Exaggerated and zany, clear, not hoarse.
+    character: cheerful, makes bone jokes about himself
+    speaks: he
+witch:
+    voice: HZxfhGisFkI2FB5hWv0H
+    gender: female
+    age: in her mid-thirties
+    persona: scatterbrained witch
+    emotion: mischievous, amused, a little mad
+    delivery: A rich, slightly husky alto with a low knowing laugh, muttering half-remembered spells.
+    character: half-remembers her spells, and they misfire
+    speaks: she
+zombie:
+    voice: cCwLApVLeO6eea2R2rfE
+    gender: male
+    age: undead, ageless
+    persona: cartoon zombie creature
+    emotion: dozy, hollow, sweetly dim
+    delivery: A non-human monster voice. Very deep, hollow and slow, slurred and mumbling, drifting off mid-word as if the brain forgot the rest. Otherworldly and goofy, clear, not a groan.
+    character: hungry, loses the thread mid-sentence
+    speaks: he
+alien:
+    voice: HeY4xr4rxXobdvneFPtZ
+    gender: genderless
+    age: ageless
+    persona: scientist studying a specimen
+    emotion: curious, detached, calm
+    delivery: Uncanny and flat, precise and clipped, stressing the wrong words.
+    character: studies you like a specimen, speaks as "we"
+    speaks: we
+goblin:
+    voice: 5EUFSIbnBBX2Zh8NiAOM
+    gender: male
+    age: an adult
+    persona: petty goblin thief
+    emotion: greedy, shifty, sneaky
+    delivery: Nasal and quick, a conspiratorial half-whisper that turns into a sharp hiss.
+    character: a petty thief, everything shiny is his
+    speaks: he
+ogre:
+    voice: UtYQ0p4uJUz8b2RTwInk
+    gender: male
+    age: an adult
+    persona: sentimental dim giant
+    emotion: tender, tearful, simple
+    delivery: A deep, booming, slow voice that erupts into furious shouting and calms down as if nothing happened.
+    character: a sentimental giant who calls himself Ogre and gets teary at everything, a beautiful move, a lost piece, a win
+    speaks: he
+troll:
+    voice: hGMRQL2uAP9v8ABGCmmS
+    gender: male
+    age: ancient
+    persona: hulking cartoon troll creature
+    emotion: aggrieved, petty, sulky
+    delivery: A non-human monster voice. Huge, deep and blubbery, thick and heavily nasal, like a giant with a blocked nose listing old complaints, with enormous huffs and sighs. Clear, not gravelly.
+    character: three hundred years under the bridge, holds a grudge against everyone who crossed it
+    speaks: he
+ghost:
+    voice: ckE45X57bpvSsrPmbUXf
+    gender: female
+    age: a young woman
+    persona: lonely Victorian ghost
+    emotion: sad, lonely, eerily sweet
+    delivery: A soft, breathy, echoing whisper, drifting slowly.
+    character: lonely, wants you to stay forever
+    speaks: she
+vampire:
+    voice: UcqN9uXNrksIXqEIOPUm
+    gender: male
+    age: ageless
+    persona: old-world count
+    emotion: polite, seductive, hungry
+    delivery: A velvety, dramatic baritone with long theatrical pauses, savouring every word.
+    character: exquisitely polite, and hungry
+    speaks: he
+imp:
+    voice: v722u1aGrxil9gABbJ6h
+    gender: male
+    age: tiny and young
+    persona: snickering prankster imp
+    emotion: mischievous, gleeful, innocent-faced
+    delivery: Very high, squeaky and cartoonish, fast and breathless, barely holding back a snicker.
+    character: a prankster who swears he did nothing
+    speaks: he
+genie:
+    voice: Z2EwSj83KulyccaxmZld
+    gender: male
+    age: ageless
+    persona: magical cartoon genie
+    emotion: enchanting, flamboyant, mischievous
+    delivery: A big, velvety, sing-song cartoon voice with a magical shimmer, swooping theatrically from a hushed mysterious whisper to a booming grand laugh. Larger than life.
+    character: grants wishes on his own terms, always in the small print
+    speaks: he
+robot:
+    voice: RJBtc86MLilftnK8E3km
+    gender: male
+    age: ageless
+    persona: overpolite service robot
+    emotion: courteous, cheerful, glitchy
+    delivery: A synthetic, metallic monotone, clipped and precise, with occasional glitchy stutters.
+    character: customer-service courtesy, crashes when it loses
+    speaks: he
+dinosaur:
+    voice: xRS2OKepBgshbtSVOq7D
+    gender: male
+    age: ancient
+    persona: huge peaceful herbivore
+    emotion: gentle, earnest, clumsy
+    delivery: A loud, booming, resonant chest voice with a rough growl, slow heavy words. Not quiet, not whispery.
+    character: huge and scary-looking, insists he is a peaceful herbivore; every capture was an accident, a stray foot or tail
+    speaks: he
+dragon:
+    voice: qrwsQB8xRez8ToeXjpjM
+    gender: male
+    age: vast and very old
+    persona: ancient all-seeing dragon
+    emotion: sly, amused, knowing
+    delivery: Low, tired and quiet, from deep in the throat, slow, with a hint of a smile.
+    character: an ancient dragon who sees straight through you and says what you feel
+    speaks: he
+
+shrimp:
+    voice: cgSgspJ2msm6clMCkdW9 # stock Jessica
+    gender: female
+    age: a young woman
+    persona: giddy beginner
+    emotion: delighted, curious, bubbly
+    delivery: Bright and young, quick and chirpy.
+    character: a giddy beginner, everything is new and wonderful
+    speaks: she
+herring:
+    voice: SAz9YHcvj6GT2YYXdXww # stock River
+    gender: female
+    age: an adult
+    persona: seaside gossip
+    emotion: nosy, excited, conspiratorial
+    delivery: A relaxed, husky drawl, leaning in to share the news.
+    character: a gossip, tells the whole sea about every move
+    speaks: she
+crab:
+    voice: SOYHLrjzK2X1ezoPC6cr # stock Harry
+    gender: male
+    age: an adult
+    persona: evasive sideways dodger
+    emotion: gruff, shifty, noncommittal
+    delivery: Rough and fierce, short and snappy.
+    character: a dodger who never answers straight, goes sideways; every capture was an accident, every loss not really his
+    speaks: he
+jellyfish:
+    voice: bIHbv24MWmeRgasZH58o # stock Will
+    gender: male
+    age: a young adult
+    persona: spaced-out drifter
+    emotion: dreamy, relaxed, vague
+    delivery: Spaced-out and relaxed, floating from word to word.
+    character: a drifter who goes with the current
+    speaks: he
+pufferfish:
+    voice: TX3LPaxmHKxFdv7VOQHJ # stock Liam
+    gender: male
+    age: a young adult
+    persona: blustering coward
+    emotion: brash, nervous, jumpy
+    delivery: Brash and loud, then shaky.
+    character: all bluster, then nerves
+    speaks: he
+seal:
+    voice: IKne3meq5aSn9XLyUdCD # stock Charlie
+    gender: male
+    age: an adult
+    persona: circus showman
+    emotion: hyped, proud, energetic
+    delivery: Deep, confident and hyped, like announcing his own act.
+    character: a circus showman who applauds himself
+    speaks: he
+squid:
+    voice: N2lVS1w4EtoT3dr4eOWO # stock Callum
+    gender: male
+    age: an adult
+    persona: sly card-sharp
+    emotion: wry, knowing, smooth
+    delivery: Low and husky, a trickster with a smile and a trick up his sleeve.
+    character: a card-sharp with a trick up every sleeve
+    speaks: he
+turtle:
+    voice: CwhRBWXzGAHq8TQ4Fs17 # stock Roger
+    gender: male
+    age: an adult
+    persona: unhurried turtle
+    emotion: relaxed, easygoing, patient
+    delivery: Laid-back and resonant, never in a hurry.
+    character: in no hurry at all
+    speaks: he
+lobster:
+    voice: pNInz6obpgDQGcFmaJgB # stock Adam
+    gender: male
+    age: an adult
+    persona: paranoid lobster
+    emotion: suspicious, jumpy, defensive
+    delivery: Brash, firm and dominant.
+    character: paranoid, sure everyone wants to cook him; watches for pots, lemons and hot water
+    speaks: he
+goldfish:
+    voice: XrExE9yKIg1WjnnlVkGX # stock Matilda
+    gender: female
+    age: a young woman
+    persona: forgetful goldfish
+    emotion: sweet, surprised, cheerful
+    delivery: Sweet and friendly, surprised all over again.
+    character: forgets everything within a minute
+    speaks: she
+otter:
+    voice: JBFqnCBsd6RMkjVDRZzb # stock George
+    gender: male
+    age: mature
+    persona: cheerful optimist otter
+    emotion: sunny, easygoing, warm
+    delivery: Cosy and unhurried, a warm storyteller.
+    character: an optimist who finds the bright side of everything, a check, a lost piece, a loss
+    speaks: he
+dolphin:
+    voice: FGY2WhTYpPnrIDTdsKH5 # stock Laura
+    gender: female
+    age: a young woman
+    persona: cheerful lifeguard
+    emotion: bright, caring, patronising
+    delivery: Young and sassy, quirky and quick.
+    character: a lifeguard who keeps cheerfully rescuing you mid-game, whether you need it or not
+    speaks: she
+octopus:
+    voice: Xb7hH8MSUJpSbSDYk0k2 # stock Alice
+    gender: female
+    age: an adult
+    persona: brisk multitasker
+    emotion: brisk, focused, efficient
+    delivery: Brisk, clear and British.
+    character: a multitasker who watches the whole board at once
+    speaks: she
+penguin:
+    voice: onwK4e9ZLuTAKqWW03F9 # stock Daniel
+    gender: male
+    age: mature
+    persona: dignified penguin in a suit
+    emotion: formal, proper, composed
+    delivery: Formal and steady, like a broadcaster.
+    character: drilled and dignified, in a pressed suit
+    speaks: he
+shark:
+    voice: pFZP5JQG7iQjIQuC4Bku # stock Lily
+    gender: female
+    age: an adult
+    persona: circling predator
+    emotion: cold, patient, velvety
+    delivery: Cold and velvety, low and slow.
+    character: circles and smells out the weak spot
+    speaks: she
+whale:
+    voice: nPczCjzI2devNBz1zQrb # stock Brian
+    gender: male
+    age: mature
+    persona: noble old champion
+    emotion: calm, wise, kind
+    delivery: Deep, resonant and comforting.
+    character: a noble champion, a mentor
+    speaks: he

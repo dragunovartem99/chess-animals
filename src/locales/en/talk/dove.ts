@@ -4,6 +4,6 @@ export default {
 	take: ["I'm so sorry. I had to take it.", "I took that. Are you okay?"],
 	lose: ["Oh. That was mine. No, it's fine. Really.", "You can have it. I didn't need it. Much."],
 	win: ["I won? Oh. Sorry. Good game, though."],
-	loss: ["You won. Well done. I knew you would."],
-	draw: ["A draw. Good. Nobody's sad."],
+	loss: ["Well done. Really, well done. I knew you would."],
+	draw: ["A draw. Oh, good. Nobody has to say sorry."],
 };

@@ -1,12 +1,18 @@
 export default {
 	greet: [
-		"Ugh, another one. Fine, let's get it over with.",
-		"Name, purpose of visit? Kidding. Let's play.",
+		"Three hundred years under the bridge. Everyone who walked over it is on my list.",
+		"Let's play. Just so you know: I never forgive. Ever.",
 	],
-	check: ["Check. The paperwork's on its way.", "Check. I don't make the rules. Well, I do."],
-	take: ["Confiscated. Fill in a form to get it back.", "That's the fee. Next."],
-	lose: ["Hey. That's not in the regulations.", "Taking things without a stamp? Outrageous."],
-	win: ["Done. Case closed. Next, please."],
-	loss: ["You won. Fine. Signed. Now off you go."],
-	draw: ["A draw. That needs a separate form."],
+	check: [
+		"Check. That's for the bridge. And for last Tuesday.",
+		"Check. One grudge repaid. Four hundred to go.",
+	],
+	take: ["Took it. We're even. Almost.", "That's for the goat. Well, for all the goats."],
+	lose: [
+		"Right. Writing that down. In big letters.",
+		"You shouldn't have. I remember things like that for centuries.",
+	],
+	win: ["There. One grudge fewer. I'll sleep well tonight."],
+	loss: ["I lost. That's it. You're on my list now. At the top."],
+	draw: ["A draw. The grudge stays open."],
 };

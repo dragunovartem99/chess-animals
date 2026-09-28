@@ -42,6 +42,7 @@ npm run dev
 | `npm run engine:bench`              | the C engine natively: perft, each feature's cost, the search signature |
 | `npm run arena`                     | dev CLI: rate the roster over the paired opening set                    |
 | `npm run voice`                     | dev CLI: record the animals' missing voice clips with ElevenLabs        |
+| `npm run voice:design` / `keep`     | dev CLI: design three voice previews for an animal / keep one           |
 | `npm run og`                        | draw the preview cards (the build does it too)                          |
 | `npm run lint` / `format`           | oxlint + clang-tidy / oxfmt + clang-format (`:check` don't write)       |
 | `npm run types:check`               | `vue-tsc` type-check                                                    |

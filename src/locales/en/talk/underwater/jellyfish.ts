@@ -7,6 +7,6 @@ export default {
 	take: ["Oh, I took that? Okay, sure.", "Huh. It just kind of floated my way."],
 	lose: ["Oh... that's gone now. That's okay.", "Easy come, easy go, you know?"],
 	win: ["I won? Wow. Didn't see that coming."],
-	loss: ["You won. Nice. Good vibes all round."],
+	loss: ["I lost? That's okay. It's just the current."],
 	draw: ["A draw. Everybody just floats on. Nice."],
 };

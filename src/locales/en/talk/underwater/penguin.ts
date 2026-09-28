@@ -7,6 +7,6 @@ export default {
 	take: ["Thank you. Most kind.", "I'll take that. Clean and tidy."],
 	lose: ["Hm. That wasn't in my notes.", "A setback. I'll keep my posture."],
 	win: ["Thank you for the match. All that training paid off."],
-	loss: ["You won. Congratulations. Back to training, then."],
+	loss: ["A defeat. Congratulations to you. Training tomorrow at five."],
 	draw: ["A draw. A dignified result."],
 };

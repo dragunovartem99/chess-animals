@@ -9,10 +9,10 @@ export default {
 	],
 	take: ["I'll keep it. It can stay with me. Forever.", "It's mine now. We'll be friends."],
 	lose: [
-		"It's gone... Now it's even lonelier here.",
+		"Taken... Now it's even lonelier here.",
 		"Please give it back. I don't have many friends.",
 	],
 	win: ["I won. Now you have to stay. That's the rule."],
-	loss: ["You won. So you'll go now? Everybody goes."],
+	loss: ["So that's it? Now you'll leave. Everybody leaves."],
 	draw: ["A draw. Then play again. Please. Just once more."],
 };

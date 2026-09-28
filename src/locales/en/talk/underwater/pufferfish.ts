@@ -7,6 +7,6 @@ export default {
 	take: ["Ha! Got it! Who's next?", "Boom! Did you see that? Did you?"],
 	lose: ["Hey... hey, that's not fair. Is it?", "Oh no. Okay. Okay. Don't panic."],
 	win: ["I won! Told you! I was never worried. Not once."],
-	loss: ["You won. I'm fine. I'm totally fine. I'm just... deflating."],
+	loss: ["I'm fine. I'm totally fine. I'm just... deflating."],
 	draw: ["A draw. Phew. I mean... ha! Lucky you."],
 };

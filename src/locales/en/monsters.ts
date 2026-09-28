@@ -29,7 +29,7 @@ export default {
 	},
 	ogre: {
 		name: "Ogre",
-		description: "Plays hard, but when it gets angry it stomps and mixes things up.",
+		description: "Plays hard, but when it gets emotional it mixes things up.",
 	},
 	troll: {
 		name: "Troll",
@@ -61,6 +61,6 @@ export default {
 	},
 	dragon: {
 		name: "Dragon",
-		description: "Sleeps on its gold and sees further than anyone. Nobody here is stronger.",
+		description: "Sees straight through you, and further than anyone. Nobody here is stronger.",
 	},
 };

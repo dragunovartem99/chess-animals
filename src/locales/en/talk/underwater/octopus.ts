@@ -10,6 +10,6 @@ export default {
 	take: ["Thank you. I had an arm free.", "Nobody was watching that one. I watch everything."],
 	lose: ["Oh. I was busy elsewhere. Seven elsewheres.", "Hm. Noted. It won't happen twice."],
 	win: ["Done. And I finished three other things meanwhile."],
-	loss: ["You won. Well done. I'll need all eight arms next time."],
+	loss: ["Beaten. Well done. Next time I'm using all eight arms."],
 	draw: ["A draw. Fine. I have other things to get to."],
 };

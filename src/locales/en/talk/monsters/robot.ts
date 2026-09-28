@@ -4,7 +4,7 @@ export default {
 		"Greetings. I have calculated this meeting. It will be pleasant. For me.",
 	],
 	check: ["Check. Thank you for your cooperation.", "Check. Check. Check. Sorry. One check."],
-	take: ["Piece acquired. Have a nice day.", "Thank you for your donation."],
+	take: ["Item received. Have a nice day.", "Thank you for your donation."],
 	lose: [
 		"Error. That piece was important. Error.",
 		"Unexpected. Recalculating. Recalculating. Recalc...",

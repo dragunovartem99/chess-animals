@@ -1,12 +1,15 @@
 export default {
 	greet: [
-		"Hi! I'm so excited my whiskers are buzzing!",
+		"Don't blink. I've jumped off cliffs, this doesn't scare me.",
 		"A game? Yes! Let's jump right in, feet first!",
 	],
-	check: ["Check! Whee! Did you see that?", "Check check check! Sorry, just excited."],
-	take: ["For me? You shouldn't have!", "Got it! This is the best game ever!"],
-	lose: ["There it goes! Wheee!", "Take it! Take it! Oh well, off it goes!"],
-	win: ["I won! I won! I have to go tell everyone!"],
-	loss: ["I lost! That was amazing! Again, again!"],
+	check: ["Check! Did you see? I didn't expect that either!", "Check! Risky? I love risky."],
+	take: [
+		"Snatched it mid-air! Didn't even look where I was jumping.",
+		"Mine! Fortune favours the lemming!",
+	],
+	lose: ["There it goes! Wait for me!", "Take it! Take it! Oh well, off it goes!"],
+	win: ["I won! Didn't even slow down!"],
+	loss: ["Crashed! But what a flight! Again!"],
 	draw: ["A draw? We both jumped at the same time!"],
 };
