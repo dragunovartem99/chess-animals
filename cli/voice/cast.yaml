@@ -3,12 +3,12 @@
 # ready for the day it is designed. A comment after `voice` names a stock or library voice.
 
 donkey:
-    voice: c5XTzZfSskN4Ut6RVcrx
+    voice: oubi7HGxNVjXMnWLgwBT # library Cletus
     gender: male
-    age: middle-aged
-    persona: stubborn village donkey
+    age: a cartoon farm animal
+    persona: stubborn redneck donkey
     emotion: sullen, obstinate, flat
-    delivery: A slow country drawl, low and nasal, dragging the vowels. Will not be hurried.
+    delivery: A non-human cartoon donkey voice. A slow, sullen hillbilly drawl, heavily nasal and twangy, like a stubborn backwoods farmhand, dragging the vowels. Will not be hurried. Exaggerated and goofy, clear, not muffled.
     character: stubborn, digs in and won't budge, denies what he didn't see
     speaks: he
 dove:
@@ -21,12 +21,12 @@ dove:
     character: shy, sorry for everything, even for winning
     speaks: she
 lemming:
-    voice: o7PlX1q9E070RX4u2lu6
+    voice: fBD19tfE58bkETeiwUoC # library Little Dude II
     gender: male
-    age: a young teenager
+    age: a small wild critter
     persona: reckless daredevil
     emotion: wild, thrilled, fearless
-    delivery: Squeaky and fast, too excited to breathe, shouting before thinking.
+    delivery: A non-human critter voice, very high-pitched and shrill, higher than any man's. A wild daredevil screaming at the top of his lungs with manic glee, fast and breathless, shrieking before thinking, like leaping off a cliff. Unhinged and over the top, but clear, not distorted.
     character: a reckless daredevil, jumps first and never looks
     speaks: he
 dodo:
@@ -48,7 +48,7 @@ goat:
     character: chews everything, the pieces, the board, the rulebook; tastes whatever he takes
     speaks: he
 parrot:
-    voice: b6DpG4oSJGpAaWu4RKjb
+    voice: XsmrVB66q3D4TaXVaWNF # library Marshal
     gender: male
     age: old
     persona: mimic of former owners
@@ -75,21 +75,21 @@ elephant:
     character: a pedantic old professor who remembers every game since 1953
     speaks: he
 camel:
-    voice: iP95p4xoKVk53GoZ742B # stock Chris
+    voice: gmTKcCgiWflobR8blMdR
     gender: male
-    age: an adult
+    age: a cartoon desert animal
     persona: unimpressed desert cynic
     emotion: weary, sarcastic, deadpan
-    delivery: Dry, flat and unhurried; every sentence sounds like an eye-roll.
+    delivery: A non-human cartoon camel voice. A dry, dusty, slightly raspy baritone, deadpan and unimpressed, with long weary sighs; every sentence sounds like an eye-roll. Unhurried but wide awake, clear, not nasal.
     character: unimpressed by anything, sarcastic
     speaks: he
 hare:
-    voice: 6m9fXYIlcPNYN4tGOfeR
+    voice: 4oOtYSwEWy9b6vAJhGtm
     gender: male
-    age: a young adult
+    age: a cartoon woodland animal
     persona: fast-talking braggart
     emotion: jittery, cocky, impatient
-    delivery: Quick and breathless, the words tumbling over each other.
+    delivery: A non-human cartoon hare voice. A mid-range, smug, cocky fast-talker with a grin in every word, snappy and slick, never squeaky. Exaggerated and zippy, bright and clear.
     character: always in a hurry, blames luck when caught
     speaks: he
 bear:
@@ -220,21 +220,21 @@ ogre:
     character: a sentimental giant who calls himself Ogre and gets teary at everything, a beautiful move, a lost piece, a win
     speaks: he
 troll:
-    voice: hGMRQL2uAP9v8ABGCmmS
+    voice: QZK6WEdosh1r5h90Y4x4
     gender: male
     age: ancient
     persona: hulking cartoon troll creature
     emotion: aggrieved, petty, sulky
-    delivery: A non-human monster voice. Huge, deep and blubbery, thick and heavily nasal, like a giant with a blocked nose listing old complaints, with enormous huffs and sighs. Clear, not gravelly.
+    delivery: A non-human monster voice. Huge, deep and slow, a hulking old creature grumbling through a long list of complaints, with heavy huffs and weary sighs. Warm and clear, not gravelly, not nasal.
     character: three hundred years under the bridge, holds a grudge against everyone who crossed it
     speaks: he
 ghost:
-    voice: ckE45X57bpvSsrPmbUXf
+    voice: ZiJmNaPV1hriVgGsWUXB
     gender: female
     age: a young woman
     persona: lonely Victorian ghost
     emotion: sad, lonely, eerily sweet
-    delivery: A soft, breathy, echoing whisper, drifting slowly.
+    delivery: A soft, breathy, airy whisper, sweet and close, drifting slowly.
     character: lonely, wants you to stay forever
     speaks: she
 vampire:
@@ -277,18 +277,18 @@ dinosaur:
     voice: xRS2OKepBgshbtSVOq7D
     gender: male
     age: ancient
-    persona: huge peaceful herbivore
+    persona: huge peaceful vegetarian
     emotion: gentle, earnest, clumsy
     delivery: A loud, booming, resonant chest voice with a rough growl, slow heavy words. Not quiet, not whispery.
-    character: huge and scary-looking, insists he is a peaceful herbivore; every capture was an accident, a stray foot or tail
+    character: huge and scary-looking, insists he is a peaceful vegetarian; every capture was an accident, a stray foot or tail
     speaks: he
 dragon:
-    voice: qrwsQB8xRez8ToeXjpjM
+    voice: pYICvMWA390AdbxWIVyA
     gender: male
     age: vast and very old
     persona: ancient all-seeing dragon
     emotion: sly, amused, knowing
-    delivery: Low, tired and quiet, from deep in the throat, slow, with a hint of a smile.
+    delivery: A deep, rich, resonant bass, slow and unhurried, from deep in the chest, with a knowing smile. Calm and full-voiced, not whispery.
     character: an ancient dragon who sees straight through you and says what you feel
     speaks: he
 
@@ -356,21 +356,21 @@ squid:
     character: a card-sharp with a trick up every sleeve
     speaks: he
 turtle:
-    voice: CwhRBWXzGAHq8TQ4Fs17 # stock Roger
+    voice: hVPlWsDFZUOXQ7NiG3Bm
     gender: male
-    age: an adult
+    age: a very old cartoon sea turtle
     persona: unhurried turtle
     emotion: relaxed, easygoing, patient
-    delivery: Laid-back and resonant, never in a hurry.
+    delivery: A non-human cartoon turtle voice. An old, creaky, good-natured voice, very slow and deliberate, savouring every word with long calm pauses, perfectly content. Wide awake, not drowsy, clear.
     character: in no hurry at all
     speaks: he
 lobster:
-    voice: pNInz6obpgDQGcFmaJgB # stock Adam
+    voice: de2i8OA32whsemiK6H9H
     gender: male
-    age: an adult
+    age: a cartoon sea creature
     persona: paranoid lobster
     emotion: suspicious, jumpy, defensive
-    delivery: Brash, firm and dominant.
+    delivery: A non-human cartoon lobster voice. A twitchy, suspicious voice, quick nervous mutters that jump into alarmed yelps, always glancing over his shoulder. Clear, not shrill.
     character: paranoid, sure everyone wants to cook him; watches for pots, lemons and hot water
     speaks: he
 goldfish:
