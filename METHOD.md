@@ -169,8 +169,8 @@ The three rosters are 48 bots, rated together on every run. Four choices keep th
    rows.
 
 On top of that, **adaptive pairing** rather than a full round robin: play the pair whose game
-most reduces rating uncertainty — close ratings, wide intervals — and stop when every interval is
-under threshold or the ordering has been stable for _k_ games.
+most reduces rating uncertainty — close ratings, wide intervals — and stop once the ordering has
+held for two refits in a row.
 
 ## How we know it works
 
