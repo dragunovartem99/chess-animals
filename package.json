@@ -18,7 +18,7 @@
 	"type": "module",
 	"scripts": {
 		"arena": "tsx cli/arena.ts",
-		"bench": "vitest bench --run",
+		"bench": "vitest bench --run --reporter=verbose",
 		"build": "make -sC engine wasm && tsx cli/og.ts && vue-tsc -b --noEmit && vite build",
 		"dev": "make -sC engine wasm && vite",
 		"engine:bench": "make -sC engine bench",
@@ -55,7 +55,7 @@
 		"@resvg/resvg-js": "^2.6.2",
 		"@types/node": "^26.1.1",
 		"@vitejs/plugin-vue": "^6.0.1",
-		"@vitest/coverage-v8": "^4.1.10",
+		"@vitest/coverage-v8": "^5.0.0",
 		"@vue/tsconfig": "^0.9.1",
 		"binaryen": "^132.0.0",
 		"husky": "^9.1.7",
@@ -64,7 +64,7 @@
 		"tsx": "^4.23.13",
 		"typescript": "~6.0.3",
 		"vite": "^8.0.0",
-		"vitest": "^4.1.10",
+		"vitest": "^5.0.0",
 		"vue-tsc": "^3.3.7",
 		"yaml": "^2.9.1"
 	},
