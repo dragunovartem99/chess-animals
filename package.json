@@ -59,7 +59,7 @@
 		"@vue/tsconfig": "^0.9.1",
 		"binaryen": "^132.0.0",
 		"husky": "^9.1.7",
-		"satori": "^0.33.4",
+		"satori": "^0.35.0",
 		"sharp": "^0.35.4",
 		"tsx": "^4.23.13",
 		"typescript": "~6.0.3",
