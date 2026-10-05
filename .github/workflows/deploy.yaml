@@ -7,11 +7,11 @@ on:
 
 jobs:
     pipes:
-        uses: dragunovartem99/pipes/.github/workflows/deploy-vps.yaml@v2.0.0
+        uses: dragunovartem99/pipes/.github/workflows/deploy-vps.yaml@v3.0.0
         with:
             strategy: release
             setup: node
-            before: sh scripts/install-llvm.sh
+            install: sh scripts/install-llvm.sh
             build: npm run build
             upload: dist/ Caddyfile deploy.sh
             url: https://chess-animals.com
