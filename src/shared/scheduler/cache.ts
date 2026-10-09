@@ -72,10 +72,8 @@ export function gameKey(spec: GameSpec): string {
 	return digest;
 }
 
-// A content-addressed store of finished games on disk. A re-run after adding or retuning one bot
-// hits the cache for every game that bot is not in and only replays the rest. A rebuilt engine
-// replays only the games a land animal is in — its build is in their keys, not in the directory.
-// Even a speed-only build replays them, which costs one run and never returns a stale result.
+// Retuning one bot replays only its games. A land animal's key holds the engine build, so a rebuild
+// replays those — one slow run, never a stale result.
 export function createGameCache({ dir: parent }: { dir: string }): {
 	get: (spec: GameSpec) => GameReport | undefined;
 	set: (spec: GameSpec, report: GameReport) => void;

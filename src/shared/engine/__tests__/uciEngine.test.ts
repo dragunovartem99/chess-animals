@@ -66,6 +66,16 @@ describe("the engine over UCI", () => {
 	});
 });
 
+async function playFixed() {
+	const engine = connect();
+	await engine.init();
+	engine.setOption({ name: "Seed", value: "fixed" });
+	await engine.newGame();
+	engine.setPosition({});
+
+	return (await engine.go({ depth: 1 })).move;
+}
+
 describe("the engine over UCI, at the edges", () => {
 	it("names castling the way every other engine does", async () => {
 		// No feature says "castle"; instead the one legal move that frees the rook most is O-O,
@@ -81,17 +91,7 @@ describe("the engine over UCI, at the edges", () => {
 	});
 
 	it("replays exactly after ucinewgame, from the seed it was given", async () => {
-		const play = async () => {
-			const engine = connect();
-			await engine.init();
-			engine.setOption({ name: "Seed", value: "fixed" });
-			await engine.newGame();
-			engine.setPosition({});
-
-			return (await engine.go({ depth: 1 })).move;
-		};
-
-		expect(await play()).toBe(await play());
+		expect(await playFixed()).toBe(await playFixed());
 	});
 
 	it("returns a null move rather than hanging when the game is over", async () => {

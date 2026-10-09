@@ -1,9 +1,7 @@
 import { INITIAL_FEN } from "chessops/fen";
 
-// A spread of shapes the search actually meets across a game — a crowded opening, a sharp
-// middlegame with tactics to prune, a quiet manoeuvring position, and a sparse endgame where
-// branching is low but depth runs long. Shared by the benchmark and the budget test so the two
-// can never drift into measuring different work.
+// Opening, tactical middlegame, quiet middlegame, sparse endgame. Shared by the benchmark and the
+// budget test so the two measure the same work.
 export const SEARCH_POSITIONS = [
 	INITIAL_FEN,
 	"r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",

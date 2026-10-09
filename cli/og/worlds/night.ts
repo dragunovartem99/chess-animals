@@ -1,10 +1,8 @@
 import type { World } from "../palette";
 import { OG_HEIGHT, OG_WIDTH } from "../tree";
 
-// The forest's picture book after dark, in the monsters' colours: a violet night sky, a moon
-// where the sun was, the hills gone to shadow, and gravestones leaning in from the edges where
-// the pines stood. Only the sky is dark — the stickers' paper stays light, so they read on it
-// the way they read on the grass.
+// The forest after dark, in the monsters' colours. Only the sky goes dark: the stickers' paper
+// stays light so they read as they do on grass.
 const STONE = `
 	<g id="stone">
 		<path d="M-60 40 V-90 A60 60 0 0 1 60 -90 V40 Z"/>

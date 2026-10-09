@@ -53,11 +53,7 @@ describe("Donkey", () => {
 	});
 });
 
-// The Dove and the Lemming are the paper's `pacifist` and `generous`: they decline every capture
-// or force every capture, and the arena rates both well below the Donkey (Dove 89, Lemming 466,
-// Donkey 620). They are the exception to "every animal beats uniform random" — they are the two
-// that don't, and the test holds them to that. The Dodo (`suicide_king`) is not an exception: a
-// king in the open is real pressure and it beats the Donkey like the rest.
+// The paper's `pacifist` and `generous`: the two animals that lose to uniform random.
 const BELOW_DONKEY = ["dove", "lemming"];
 
 // Over the opening set rather than one start position: uniform random is a different problem from

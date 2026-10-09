@@ -5,13 +5,8 @@ import type { NormalMove, Role, Square } from "chessops/types";
 // Every role a pawn may become, in chessops's order.
 const PROMOTION_ROLES: Role[] = ["queen", "knight", "rook", "bishop"];
 
-// The moves one piece makes, promotions expanded into one move per role. `promotionRank` is the
-// only rank this piece could promote on, or `-1` when it is not a pawn — so the inner loop is a
-// comparison rather than a board lookup per destination.
-//
-// The walk over `dests` is the bit loop that a `SquareSet`'s `for..of` wraps in a generator,
-// spelled out over the two halves of the board. The order it yields is the one the engine's move
-// generator is held to through `moves.txt`, so it is not free to change.
+// `promotionRank` is `-1` for non-pawns, so the inner loop compares instead of reading the board.
+// The walk's order is pinned by the engine's `moves.txt`: don't change it.
 function expand({
 	from,
 	dests,

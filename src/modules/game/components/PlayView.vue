@@ -43,10 +43,8 @@ const orientation = computed(() => humanColors.value[0] ?? "white");
 
 const history = useHistory({ fens: game.fens, turns: game.turns });
 
-// A browser plays no sound on a page nobody has clicked yet, so a game opened by a reload or a
-// pasted link waits for "Play" — the click that lets the animals be heard. One reached by a click
-// anywhere on the site starts at once, and so does every restart. Where the API is missing the
-// game never waits.
+// Browsers play no sound before the page is clicked, so a game opened by a reload or a pasted link
+// waits for "Play". Without `userActivation` it never waits.
 const started = ref(navigator.userActivation?.hasBeenActive ?? true);
 
 // A finished game is a view, not a position to move from: `game.play` already rejects the move,
@@ -80,16 +78,8 @@ function playHumanMove({ from, to, promotion }: { from: Key; to: Key; promotion?
 // Bumped by `restart`, so a new game from an unchanged board still counts as a new turn.
 const generation = ref(0);
 
-// Everything that means "somebody new is on move". Watching the FEN alone was not enough, and
-// the two ways it fell short were both real:
-//
-//   - `players` is a ref holding an object, and the picker mutates a property of it. The ref's
-//     identity never changes, so a watcher on it never fired — choosing a bot for White did
-//     nothing at all until a human move happened to change the FEN.
-//   - Restarting from the opening position leaves the FEN exactly as it was, so a bot playing
-//     White would sit there after "New game".
-//
-// The ply is in the key too: the same position can legitimately come round twice.
+// The FEN alone misses two cases: the picker mutates `players` in place, and "New game" restores
+// the same FEN. The ply is in too, since a position can repeat.
 const turn = computed(() =>
 	[
 		generation.value,

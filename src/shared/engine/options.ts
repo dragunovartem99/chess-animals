@@ -3,10 +3,8 @@ import { FEATURES_BY_KEY } from "../eval";
 import type { WeightVector } from "../eval";
 import type { UciResponse } from "./uci/types";
 
-// Engine options are advertised the usual way. Weights are not: there are sixty-odd of them, and
-// listing them in answer to `uci` would drown the useful ones. They are still settable by their
-// feature key — `setoption name swarm value -180` — and the registry is the list of what may be
-// named.
+// Weights aren't advertised in `uci` — sixty-odd would drown the rest — but are settable by feature
+// key: `setoption name swarm value -180`.
 export function describeOptions(config: BotConfig): UciResponse[] {
 	return [
 		{ type: "option", name: "Depth", optionType: "spin", default: String(config.search.depth) },

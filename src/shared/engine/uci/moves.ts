@@ -4,10 +4,8 @@ import { isNormal } from "chessops/types";
 import type { NormalMove } from "chessops/types";
 import { kingCastlesTo, makeUci, parseUci } from "chessops/util";
 
-// chessops names a castling move by the square the *rook* stands on — Chess960 style, `e1h1`.
-// Standard UCI names the square the king lands on, `e1g1`, and that is what Stockfish and every
-// other engine will send and expect. The two only ever differ for castling, but they differ for
-// every castling move, so the conversion cannot be skipped.
+// chessops names castling by the rook's square (`e1h1`); standard UCI, and so Stockfish, by the
+// king's landing square (`e1g1`).
 
 export function toUci({ position, move }: { position: Chess; move: NormalMove }): string {
 	const side = castlingSide(position, move);

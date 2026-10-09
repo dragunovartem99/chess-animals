@@ -1,10 +1,7 @@
 import type { Animal } from "./types";
 
-// The paper's `random_move`, and the reference point the whole rating scale hangs from: it can
-// play any sequence of moves, so it spans the gamut from the worst possible player to the best.
-//
-// It needs no special case in the engine. On no base and with no weights, every move scores
-// zero, and the argmax tie-break picks uniformly among all of them.
+// The paper's `random_move`, the scale's reference point. No special case: with no weights every
+// move scores zero and the tie-break picks uniformly.
 export const DONKEY: Animal = {
 	emoji: "🐴",
 	tint: "#8c7c6d",

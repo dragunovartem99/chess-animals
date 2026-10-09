@@ -1,11 +1,7 @@
 import type { MaiaSession } from "./maia";
 
-// Maia over `onnxruntime-web`, in the browser and under node alike — `onnxruntime-node` segfaults
-// loading this model, and one runtime for the arena and the page means the arena rates what the
-// page plays.
-//
-// The runtime and the model both load on the first move, not when the session is made: a game
-// with no underwater animal in it, or a thread that never meets one, never pays the ~23 MB.
+// `onnxruntime-web` under node too: `onnxruntime-node` segfaults on this model, and one runtime
+// means the arena rates what the page plays. Loads on the first move, not at creation.
 export function createMaiaSession({ load }: { load: () => Promise<Uint8Array> }): MaiaSession {
 	let opened: ReturnType<typeof open> | undefined;
 	const start = () => (opened ??= open(load));
@@ -30,11 +26,8 @@ export function createMaiaSession({ load }: { load: () => Promise<Uint8Array> })
 	};
 }
 
-// How the session is built, part of what decides Maia's move — so the arena's result cache keys
-// on it beside the model. The int8 weights are stored as `DequantizeLinear` + `Cast` to fp16, and
-// onnxruntime keeps quantization nodes out of constant folding by default, for its int8 fusions.
-// Here that left the weights dequantized on every move: ~160 ms a move against ~110 with it off.
-// Folded once at load, the moves sit exactly as close to upstream's as before.
+// Part of the arena's cache key, since it decides Maia's move. Folding the int8 `DequantizeLinear`
+// nodes once at load takes a move from ~160 ms to ~110, the moves unchanged.
 export const MAIA_SESSION_OPTIONS = { extra: { session: { disable_quant_qdq: "1" } } };
 
 // The wasm-only build: the default one carries WebGPU too, twice the download for a backend this

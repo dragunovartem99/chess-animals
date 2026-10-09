@@ -24,10 +24,8 @@ const startpos = (): Replayed => ({
 	moves: [],
 });
 
-// One underwater animal behind UCI, the monster engine's shape with Maia in Stockfish's place:
-// everything but `go` is the land engine's, and the pick is drawn from a stream of its own so a
-// game replays from its seed. `isready` waits for the model, which is what the board's loading
-// state waits on — the first answer costs the download.
+// The monster engine's shape with Maia for Stockfish. `isready` waits for the model, which is what
+// the board's loading state waits on.
 export function createUnderwaterEngine({ config, name, session, goSearch }: UnderwaterEngineState) {
 	const land = createUciEngine({ config, name, goSearch });
 	let seed: number | string = config.id;

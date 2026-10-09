@@ -82,19 +82,19 @@ describe("the monster engine", () => {
 	});
 });
 
+async function play(seed: string) {
+	const { engine } = connect({ move: LINES });
+	await engine.handle({ type: "setoption", name: "Temperature", value: "30" });
+	await engine.handle({ type: "setoption", name: "Seed", value: seed });
+	// One after another: each pick advances the stream the next is drawn from.
+	return Array.from({ length: 200 }).reduce<Promise<(string | undefined)[]>>(
+		async (moves) => [...(await moves), await played(engine)],
+		Promise.resolve([])
+	);
+}
+
 describe("the monster engine's picks", () => {
 	it("takes its temperature from `setoption`, and replays its picks from its seed", async () => {
-		const play = async (seed: string) => {
-			const { engine } = connect({ move: LINES });
-			await engine.handle({ type: "setoption", name: "Temperature", value: "30" });
-			await engine.handle({ type: "setoption", name: "Seed", value: seed });
-			// One after another: each pick advances the stream the next is drawn from.
-			return Array.from({ length: 200 }).reduce<Promise<(string | undefined)[]>>(
-				async (moves) => [...(await moves), await played(engine)],
-				Promise.resolve([])
-			);
-		};
-
 		const first = await play("one");
 
 		expect(first.filter((move) => move === "d2d4").length).toBeGreaterThan(50);

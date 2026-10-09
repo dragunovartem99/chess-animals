@@ -15,10 +15,8 @@ export type GamePool = {
 	close: () => Promise<void>;
 };
 
-// A fixed set of long-lived workers behind one shared queue. Unlike `runGames`, which spawns and
-// tears down a pool per call, this keeps exactly `concurrency` threads alive across many `run`
-// calls — so a caller that fires dozens of `run`s at once (the arena plays every pair of a round
-// concurrently) still never exceeds `concurrency` workers or repays the tsx-startup cost per batch.
+// Long-lived workers behind one queue: unlike `runGames`, concurrent `run` calls never exceed
+// `concurrency` threads or pay the tsx startup again.
 export function createGamePool({
 	concurrency = availableParallelism(),
 }: { concurrency?: number } = {}): GamePool {

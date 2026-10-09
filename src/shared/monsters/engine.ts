@@ -53,14 +53,8 @@ async function pickMove({
 	return move ? [{ type: "bestmove", move: toUci({ position, move }) }] : NULL_MOVE;
 }
 
-// One monster: Stockfish, softened. Each move it asks Stockfish for its best few lines and
-// picks one, the worse a line the less likely — see `StockfishOptions`.
-//
-// It speaks UCI like the land engine and is one, mostly: everything but `go` and its own options
-// is the land engine's, and the pick is drawn from a stream of its own so a game replays from its
-// seed. An answer is a promise, because Stockfish is a process to ask, not a function to call.
-// Stockfish starts on the first command that needs it, not when the animal is made: a roster view
-// that never plays one never pays for it.
+// Stockfish, softened (see `StockfishOptions`). Everything but `go` and its options is the land
+// engine's; Stockfish starts on the first command that needs it.
 export function createMonsterEngine({ config, name, stockfish, goSearch }: MonsterEngineState) {
 	const land = createUciEngine({ config, name, goSearch });
 	let current = config;

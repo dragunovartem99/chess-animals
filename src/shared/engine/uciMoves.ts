@@ -12,14 +12,8 @@ import type { GoLimits, UciResponse } from "./uci/types";
 // UCI, castling as the king taking its rook, and only those the position accepted.
 export type Replayed = { position: Chess; fen: string; moves: string[] };
 
-// Rebuilds the position a `position` command describes, and the history behind it. A move the
-// position rejects means the caller and the engine no longer agree about the game; stopping there
-// leaves the engine on the last position both sides did agree on, rather than on a board neither
-// of them meant.
-//
-// The history is collected here rather than asked for separately because this is the only place
-// that has it: `position startpos moves …` is how a UCI caller tells an engine what has already
-// been played, and without it the engine would repeat a line it has already repeated twice.
+// Stops at the first move the position rejects, leaving the last board both sides agreed on. The
+// history is collected here: `position … moves` is the only place a UCI caller gives it.
 export function replay({ fen = INITIAL_FEN, moves }: { fen?: string; moves: string[] }): Replayed {
 	let position = positionFromFen(fen);
 	const played: string[] = [];
@@ -35,12 +29,8 @@ export function replay({ fen = INITIAL_FEN, moves }: { fen?: string; moves: stri
 	return { position, fen, moves: played };
 }
 
-// What one `go` searches: the bot's own settings, with the limits on this particular `go`
-// overriding them. UCI puts the per-move budget on the command and the standing configuration in
-// `setoption`, and a caller that names neither gets what the bot was built with.
-//
-// `movetime` is parsed and deliberately not honoured: the search has no clock, and silently
-// treating a millisecond budget as anything else would be worse than ignoring it.
+// Per-`go` limits override the bot's settings. `movetime` is parsed but ignored: the search has no
+// clock.
 function withLimits({
 	search,
 	limits,

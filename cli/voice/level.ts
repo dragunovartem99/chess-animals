@@ -1,13 +1,7 @@
 import { ffmpeg } from "./ffmpeg";
 
-// Every clip is brought to one loudness, since designed voices come out as much as 9 dB apart and
-// a whisper after a shout would have the listener reach for the volume. `loudnorm` alone cannot
-// do it: its linear mode stops at the peak ceiling, and a clip of quiet talk ending in a squawk
-// stayed 8 dB short, while its one-pass mode pumps on a clip of a second or two. So a compressor
-// evens the performance out, the gain to the target is measured on that and applied exactly, and
-// a limiter takes the few peaks the gain pushes over. The gain lifts breaths along with the words,
-// so an expander first turns down whatever sits under speech, by 10 dB at most, and the
-// compressor is kept mild.
+// Designed voices differ by up to 9 dB, and `loudnorm` alone can't level them: linear mode stops at
+// the peak ceiling, one-pass pumps. So: expander, mild compressor, exact gain, limiter.
 const SQUEEZE = [
 	"agate=threshold=0.02:ratio=2:range=0.3:attack=10:release=150",
 	"acompressor=threshold=0.08:ratio=3:attack=3:release=60",

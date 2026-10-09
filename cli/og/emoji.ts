@@ -1,10 +1,8 @@
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 
-// Google's Noto emoji SVGs — the same family the site loads as a web font (Noto Color Emoji in
-// index.html). satori can't rasterise a colour-emoji *font*, so the animal glyphs come in as
-// images instead, cached under ./emoji as `<lower-hex codepoint>.svg`. A glyph the roster adds
-// later is fetched from Noto on the next build and committed alongside the rest.
+// satori can't rasterise a colour-emoji font, so Noto's SVGs come in as images, cached in ./emoji
+// and committed. A glyph the roster adds is fetched on the next build.
 const EMOJI_DIR = path.join(import.meta.dirname, "emoji");
 const NOTO_RAW = "https://raw.githubusercontent.com/googlefonts/noto-emoji/main/2D/svg";
 

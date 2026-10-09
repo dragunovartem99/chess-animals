@@ -27,12 +27,8 @@ function audioPlayer(url: string): Player {
 	};
 }
 
-// The remarks read aloud, opt-in on top of the talk. What was said together plays in turn — both
-// greetings, both goodbyes — and a new remark cuts off whatever is still playing rather than wait
-// behind it, since by then the old one is about a move nobody is looking at.
-//
-// The watch is immediate: a game opened from a roster card is greeted while the page mounts,
-// before this panel exists, and a lazy watch never heard that hello.
+// A new remark cuts off the one still playing: by then that is about a stale move. The watch is
+// immediate, since a game opened from a roster card is greeted before this panel mounts.
 export function useVoice({
 	said,
 	locale,

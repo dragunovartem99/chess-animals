@@ -10,11 +10,8 @@ export const MATE = 100_000;
 
 const INFO = /\bmultipv (\d+) score (cp|mate) (-?\d+)\b.*?\bpv (\S+(?: \S+)*)/u;
 
-// The candidates a search ended on, best first. Stockfish prints its lines again, `multipv 1`
-// first, every time it finishes a depth, so the last batch wins — keeping each index's last word
-// instead mixes depths, and a move that climbed a rank shows up twice. A search stopped on its
-// node budget reports the lines it had not reached yet as bounds, on the last depth's score; they
-// are kept, because dropping them would leave an animal told to weigh five moves weighing three.
+// Stockfish reprints every line at each depth, so the last batch wins — merging by index mixes
+// depths. A node-capped search's bound lines are kept, or a five-line animal weighs three.
 export function parseLines(output: readonly string[]): Line[] {
 	let batch: Line[] = [];
 

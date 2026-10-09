@@ -3,10 +3,8 @@ import { globSync, readFileSync } from "node:fs";
 
 import type { HtmlTagDescriptor, Plugin } from "vite";
 
-// The full Noto Color Emoji is ~750 KB across three subsets, and the roster's portraits are the
-// page's largest paint — so LCP waited on the font swap. Google Fonts' `text=` cuts it to the
-// glyphs asked for (~25 KB). The list is scanned from source rather than taken from the roster
-// so the logo and UI icons ride along, and a new animal can't ship as a system-font fallback.
+// Google Fonts' `text=` cuts Noto Color Emoji from ~750 KB to ~25 KB, and the portraits are the
+// LCP. Scanned from source, not the roster, so UI icons ride along.
 
 // ZWJ and VS16 are not pictographic themselves but must be requested: 🐦‍⬛ is built from a
 // ZWJ, and 🕷️ / 🕊️ need the variation selector to pick their emoji presentation.
@@ -60,10 +58,8 @@ const devFont = (): Plugin => ({
 	],
 });
 
-// The build self-hosts the subset. Linked from Google it cost a render-blocking stylesheet on a
-// third origin, then a font behind it, and Google serves that font with a one-day cache. Emitted
-// as a hashed asset it rides the site's immutable cache, and the face is inlined so the preload
-// can start the download with the HTML.
+// Self-hosted: Google's link cost a blocking stylesheet on a third origin and a one-day cache. A
+// hashed asset rides the immutable cache, and the inlined face lets the preload start early.
 const buildFont = (): Plugin => {
 	let href = "";
 

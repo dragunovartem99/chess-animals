@@ -2,12 +2,8 @@ import type { SearchOptions } from "../engine";
 import type { WeightVector } from "../eval";
 import type { BaseName } from "./bases";
 
-// What makes a bot a monster: Stockfish alone, softened. Each move Stockfish weighs its best
-// `lines` candidates on `nodes` nodes, and the animal picks one at random, a candidate `d`
-// centipawns worse than the best weighted `exp(-d / temperature)`. A slip that costs little is
-// common and a blunder rare, which is how people err — a uniformly random move hangs a queen out
-// of the blue. `nodes` is how far it sees, `lines` how many moves it considers, `temperature` how
-// carelessly it chooses among them; zero plays the best line every time.
+// Stockfish weighs its best `lines` on `nodes` nodes; a line `d` cp worse is picked with weight
+// `exp(-d / temperature)` — slips common, blunders rare, like people. Zero plays the best.
 export type StockfishOptions = { nodes: number; lines: number; temperature: number };
 
 // What makes a bot an underwater animal: Maia, a model of how people play at a rating. It plays
@@ -15,12 +11,8 @@ export type StockfishOptions = { nodes: number; lines: number; temperature: numb
 // most, which is Maia at its strongest.
 export type MaiaOptions = { elo: number; greedy?: boolean };
 
-// What a bot is on disk and on the wire: plain JSON-shaped data, so a tuned bot can be exported,
-// pasted into a file, sent to a worker, or hashed into a cache key without any of them needing to
-// know what a feature vector is.
-//
-// Weights are keyed by feature name rather than positional, so appending a feature to the
-// registry cannot silently reinterpret every bot ever saved.
+// Plain JSON, so a bot can be exported, posted to a worker or hashed into a cache key. Weights are
+// keyed by feature name, so appending a feature never reinterprets a saved bot.
 export type BotDefinition = {
 	id: string;
 	// Unread by a monster or an underwater animal, neither of which searches itself.

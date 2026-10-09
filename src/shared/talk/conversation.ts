@@ -60,11 +60,8 @@ type Hearing = Players &
 		bots: readonly Color[];
 	};
 
-// Everything a game's talk remembers, with no framework and no Stockfish in it: the seeded
-// stream, when the last remark was made, the last few remarks, how often each
-// line has come up this game, and which line each bot said last for each remark — the last kept
-// across games, so a bot does not open two games with the same hello. By position in the list
-// rather than by text, since a clip is found by its position.
+// Each bot's last line per remark is kept across games, so a bot never opens two games with the
+// same hello. Lines are tracked by index, since a clip is found by its index.
 export function createConversation({ linesFor, seed }: { linesFor: LinesFor; seed: () => string }) {
 	let rng: Rng = createRng(seed());
 	let last: number | undefined;

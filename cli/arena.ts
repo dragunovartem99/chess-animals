@@ -9,19 +9,8 @@ import { createGameCache, createGamePool, runGamesCached, runTournament } from "
 import { LAB } from "./lab";
 import { renderCrossTable, renderRatingTable } from "./render";
 
-// `npm run arena` — rate the whole roster, land, monsters and underwater, against itself, print the rating and cross tables, and
-// write the full result to `arena-results.json`. A dev tool: it leans on every core but one and
-// runs for a few minutes cold, near-instant off the `.cache/arena` result cache (adding or
-// retuning one bot only replays that bot).
-//
-// `npm run arena -- --lab` also rates the candidate bots staged in `cli/lab.ts` — how a new idea
-// gets a number against the roster before it becomes an animal. `--lab-only` rates the
-// candidates against each other with the roster left out.
-//
-// No other flags: the run is tuned for speed by default. It plays a rotating window of the
-// opening set per pair-visit, seeds off a sparse comparison graph, and stops as soon as the
-// standing order is safe rather than pinning every rating. Deterministic all the same — same
-// roster in, same games, same JSON out.
+// `npm run arena` rates all three rosters into `arena-results.json`; `--lab` / `--lab-only` add
+// `cli/lab.ts`. No speed flags: fast by default, deterministic, cached in `.cache/arena`.
 const labOnly = process.argv.includes("--lab-only");
 const withLab = labOnly || process.argv.includes("--lab");
 

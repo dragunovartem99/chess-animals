@@ -7,10 +7,8 @@ import type { Stockfish } from "./stockfish";
 
 export type Mover = (request: GoRequest & { stockfish?: StockfishOptions }) => Promise<GoResult>;
 
-// `goSearch` for a game that may have a monster in it — the arena's, where a game is a loop
-// over moves and not a conversation. A bot without `stockfish` is searched as ever; one with it
-// asks Stockfish for its lines and picks one from the game's own stream, so the game replays from
-// its seed.
+// `goSearch` for the arena: a bot with `stockfish` picks from Stockfish's lines on the game's own
+// stream, so the game still replays from its seed.
 export function createMover({
 	goSearch,
 	stockfish,

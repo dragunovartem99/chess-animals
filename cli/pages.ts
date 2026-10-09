@@ -2,11 +2,8 @@ import type { Plugin } from "vite";
 
 import en from "../src/locales/en";
 
-// The shareable pages, one preview card each. The site is a single-page app, and a link
-// preview's crawler runs no script, so it only ever sees the shell's `<meta>` — a card per page
-// takes a shell per page. Each is `index.html` with the tags swapped, emitted beside it, and the
-// Caddyfile serves it for its route under any locale; the app it boots is the same one.
-// English only: the crawler's locale is unknown, and the card is drawn in English anyway.
+// Link crawlers run no script, so each shareable page gets its own `index.html` copy with swapped
+// `<meta>`, served by Caddy. English only: the crawler's locale is unknown.
 export type Page = { slug: string; image: string; title: string; description: string };
 
 const ORIGIN = "https://chess-animals.com";

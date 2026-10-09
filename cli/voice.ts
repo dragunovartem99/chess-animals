@@ -8,10 +8,8 @@ import { confirm } from "./voice/eleven";
 import { speak, unrecorded } from "./voice/speak";
 import type { Job } from "./voice/speak";
 
-// `npm run voice` — record every animal's lines, of all three rosters, with ElevenLabs into
-// `public/voice/`. Billed per character, so it is never part of the build: run it by hand after
-// the lines change, and only the clips not on disk yet are recorded, after a yes. The key comes
-// from `.env.local`.
+// `npm run voice` records missing clips with ElevenLabs into `public/voice/`. Billed per character,
+// so never part of the build: run by hand after the lines change.
 
 type Lines = Partial<Record<Remark, readonly string[]>>;
 
