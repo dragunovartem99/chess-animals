@@ -23,15 +23,15 @@ const WEIGHTS = onlyWeights({
 const WARMUP_PASSES = 3;
 const MEASURED_PASSES = 20;
 
-function millisecondsPerPass(): number {
-	// With a shuffle, because that is the path the roster takes: a shuffled root is searched out
-	// of generated order, so timing it without one times nothing real.
-	const pass = () => {
-		for (const fen of SEARCH_POSITIONS) {
-			engine.search({ fen, weights: WEIGHTS, options: { depth: 3 }, rngState: seedState(1) });
-		}
-	};
+// With a shuffle, because that is the path the roster takes: a shuffled root is searched out
+// of generated order, so timing it without one times nothing real.
+function pass() {
+	for (const fen of SEARCH_POSITIONS) {
+		engine.search({ fen, weights: WEIGHTS, options: { depth: 3 }, rngState: seedState(1) });
+	}
+}
 
+function millisecondsPerPass(): number {
 	for (let index = 0; index < WARMUP_PASSES; index += 1) pass();
 
 	const started = performance.now();

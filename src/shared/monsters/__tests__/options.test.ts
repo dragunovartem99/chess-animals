@@ -10,6 +10,9 @@ const shark = compileBot({
 	weights: {},
 });
 
+const set = (name: string, value: string) =>
+	applyMonsterOption({ config: shark, name, value })?.stockfish;
+
 describe("monster options", () => {
 	it("advertises the node budget, the lines and the temperature", () => {
 		expect(describeMonsterOptions(shark)).toMatchObject([
@@ -27,9 +30,6 @@ describe("monster options", () => {
 	});
 
 	it("lets the lines and the temperature reach their ends", () => {
-		const set = (name: string, value: string) =>
-			applyMonsterOption({ config: shark, name, value })?.stockfish;
-
 		expect(set("Temperature", "0")?.temperature).toBe(0);
 		expect(set("Lines", "1")?.lines).toBe(1);
 		expect(set("Lines", "500")?.lines).toBe(500);

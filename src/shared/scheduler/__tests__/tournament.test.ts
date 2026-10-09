@@ -40,6 +40,8 @@ function fakeRun(specs: GameSpec[]): Promise<GameReport[]> {
 	);
 }
 
+const runSeven = () => runTournament({ bots: BOTS, openings: OPENINGS, seed: 7, run: fakeRun });
+
 describe("runTournament", () => {
 	it("produces a cross-table whose order matches the ratings", async () => {
 		const result = await runTournament({
@@ -62,8 +64,7 @@ describe("runTournament", () => {
 	});
 
 	it("is a pure function of the seed", async () => {
-		const run = () => runTournament({ bots: BOTS, openings: OPENINGS, seed: 7, run: fakeRun });
-		expect(await run()).toEqual(await run());
+		expect(await runSeven()).toEqual(await runSeven());
 	});
 
 	it("gives a different tournament for a different seed", async () => {
