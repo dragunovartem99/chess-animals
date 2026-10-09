@@ -1,5 +1,5 @@
-import type { Config } from "chessground/config";
-import type { Key } from "chessground/types";
+import type { Config } from "@lichess-org/chessground/config";
+import type { Key } from "@lichess-org/chessground/types";
 import { chessgroundDests } from "chessops/compat";
 import { computed } from "vue";
 import type { Ref } from "vue";

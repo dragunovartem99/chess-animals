@@ -1,6 +1,6 @@
-import { Chessground } from "chessground";
-import type { Api } from "chessground/api";
-import type { Config } from "chessground/config";
+import { Chessground } from "@lichess-org/chessground";
+import type { Api } from "@lichess-org/chessground/api";
+import type { Config } from "@lichess-org/chessground/config";
 import { onBeforeUnmount, onMounted, ref, watch } from "vue";
 import type { Ref } from "vue";
 

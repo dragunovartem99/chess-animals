@@ -1,4 +1,4 @@
-import type { Key } from "chessground/types";
+import type { Key } from "@lichess-org/chessground/types";
 import { INITIAL_FEN } from "chessops/fen";
 import { describe, expect, it } from "vitest";
 import { ref } from "vue";
