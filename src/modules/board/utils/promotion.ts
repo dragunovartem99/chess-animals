@@ -1,4 +1,4 @@
-import type { Key } from "chessground/types";
+import type { Key } from "@lichess-org/chessground/types";
 import { parseSquare } from "chessops/util";
 
 import { positionFromFen } from "@/shared/chess";

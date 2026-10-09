@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Key } from "chessground/types";
+import type { Key } from "@lichess-org/chessground/types";
 import type { Role } from "chessops/types";
 import { computed, ref, toRef } from "vue";
 

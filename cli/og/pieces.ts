@@ -1,11 +1,11 @@
 import { readFileSync } from "node:fs";
 import { createRequire } from "node:module";
 
-// The cburnett stylesheet the app already ships (`import "chessground/assets/chessground.cburnett.css"`
+// The cburnett stylesheet the app already ships (`import "@lichess-org/chessground/assets/chessground.cburnett.css"`
 // in src/main.ts) embeds every piece as a base64 SVG data URI. The OG card draws its pieces from
 // exactly that source, so the preview and the board never drift apart and no piece art is vendored.
 const CSS_PATH = createRequire(import.meta.url).resolve(
-	"chessground/assets/chessground.cburnett.css"
+	"@lichess-org/chessground/assets/chessground.cburnett.css"
 );
 
 export type PieceKey = `${"white" | "black"}-${string}`;

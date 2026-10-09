@@ -39,7 +39,7 @@
 		"voice:keep": "tsx --env-file=.env.local cli/voiceKeep.ts"
 	},
 	"dependencies": {
-		"chessground": "^9.2.1",
+		"@lichess-org/chessground": "^10.4.2",
 		"chessops": "^0.15.1",
 		"onnxruntime-web": "^1.30.0",
 		"vue": "^3.5.39",

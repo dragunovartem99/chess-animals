@@ -1,4 +1,4 @@
-import type { Key } from "chessground/types";
+import type { Key } from "@lichess-org/chessground/types";
 import { computed, ref } from "vue";
 import type { Ref } from "vue";
 
