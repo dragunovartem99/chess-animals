@@ -16,11 +16,8 @@ function playerIds(matchups: readonly Matchup[]): string[] {
 	return ids;
 }
 
-// Bradley–Terry maximum likelihood with a white-advantage term, a Rao–Kupper draw parameter and
-// a weak Gaussian prior on the strengths. Order-independent and stable under imbalanced pair
-// counts — the two properties the paper's Elo runs lacked — and the prior keeps an undefeated
-// player finite instead of diverging. Standard errors come from the inverse Fisher information
-// (the negative Hessian at the optimum).
+// Bradley–Terry MLE with a white-advantage term, Rao–Kupper draws and a weak Gaussian prior that
+// keeps an unbeaten player finite. Standard errors from the inverse Fisher information.
 export function fitBradleyTerry({
 	matchups,
 	options = {},

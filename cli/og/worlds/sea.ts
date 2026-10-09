@@ -1,10 +1,8 @@
 import type { World } from "../palette";
 import { OG_HEIGHT, OG_WIDTH } from "../tree";
 
-// The forest's picture book, sunk: the same flat, few-shape drawing, with the sky turned into
-// water that darkens with depth, the sun into light breaking through the surface, the hills into
-// sand and the pines into kelp swaying in from the edges. The blues are the site's own sea theme
-// (the teal button, the steel-blue squares), lifted a few steps so the stickers still read.
+// The forest sunk: sky to water, sun to surface light, hills to sand, pines to kelp. The blues are
+// the site's sea theme, lifted a few steps so the stickers read.
 const KELP = `
 	<g id="kelp">
 		<path d="M0 40 C 34 -20 -34 -80 0 -140 C 34 -200 -34 -260 0 -320" fill="none"

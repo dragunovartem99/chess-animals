@@ -3,10 +3,8 @@ import { fileURLToPath } from "node:url";
 
 import { FEATURES } from "@/shared/eval";
 
-// The C engine's feature ids, generated from the registry so the two can never disagree about a
-// slot. A feature is still one entry in `features.ts`, and this is how the C side learns of it.
-// Not `features.h`: glibc owns that name, and `-Iinclude` would shadow its header with this one.
-// `npm run engine:features` rewrites the header, and a spec fails while the committed one is stale.
+// The C feature ids, generated from the registry so the two can't disagree. Not `features.h`: glibc
+// owns that name, and `-Iinclude` would shadow it.
 export const HEADER_PATH = fileURLToPath(
 	new URL("../engine/include/feature_ids.h", import.meta.url)
 );

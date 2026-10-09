@@ -4,12 +4,8 @@ import type { Chip } from "./tree";
 
 const clamp = (n: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, n));
 
-// The row has to hold whatever the roster grows to, so nothing here is a fixed size: each
-// animal gets an equal slice of ~1120px and the disc, emoji and label are sized off that slice.
-// Past ~13 animals the slice is too narrow for a readable name, so the labels drop out.
-//
-// `discCap` is lower when the stickers stack in two rows: a full-width disc twice over plus its
-// label runs past the 630px frame, so the two-row caller pins it smaller.
+// Sized off an equal slice of ~1120px so the row fits any roster; labels drop past ~13. Two-row
+// callers pin `discCap` lower, or two discs plus a label overflow the 630px frame.
 export function layout(count: number, discCap = 118) {
 	const slot = Math.min(154, Math.floor(1120 / count));
 	const disc = clamp(slot - 8, 44, discCap);
@@ -82,12 +78,7 @@ function bubble({
 	);
 }
 
-// One animal is a sticker: emoji in a cream disc ringed in its tint, a hard offset shadow, and
-// a slight tilt that alternates down the row, so they read as pinned on by hand.
-//
-// The roster is split across two rows so each disc keeps a readable size and its label as the
-// field grows; both rows are sized off the fuller one (the top) so the discs match. The top row
-// takes the extra sticker when the count is odd.
+// Two rows, both sized off the fuller top one so the discs match; the top takes the odd sticker.
 export function bubbleRow({ chips, palette }: { chips: Chip[]; palette: Palette }) {
 	const half = Math.ceil(chips.length / 2);
 	const rows = [chips.slice(0, half), chips.slice(half)];

@@ -1,12 +1,8 @@
 import type { World } from "../palette";
 import { OG_HEIGHT, OG_WIDTH } from "../tree";
 
-// A flat, few-shape forest — muted sky wash, a small warm sun, layered forest-floor hills, and
-// pines leaning in from the edges. Deliberately childish: no gradients on the greenery, just
-// opaque blobs and one pine shape reused at different sizes, the way a picture book prints it.
-// The palette is the app's: the greens are tints of the meadow's yellow-green hue (hsl(88 29%)
-// in style.css), the browns are the board's dark square (hsl(27 36%)) and the walnut trunk of
-// the header — not tropical brights.
+// Picture-book flat: opaque blobs, one reused pine, no gradients. Greens are tints of the meadow
+// hue (hsl(88 29%)), browns the board's dark square (hsl(27 36%)).
 const PINE = `
 	<g id="pine">
 		<rect x="-13" y="-70" width="26" height="86" fill="#5a4028"/>

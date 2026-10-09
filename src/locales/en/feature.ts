@@ -1,7 +1,5 @@
-// Keyed by `Feature.i18nKey` — every entry in the eval registry has a label here and in ru.
-// Each label names the quantity the slider measures, from our own side's point of view; the sign
-// of the weight is what says whether the bot wants more of it or less. Keep them short — they
-// caption a slider.
+// Each label names the quantity from our side; the weight's sign says more or less. Keep them short
+// — they caption a slider.
 export default {
 	materialPawn: "Pawn value",
 	materialKnight: "Knight value",

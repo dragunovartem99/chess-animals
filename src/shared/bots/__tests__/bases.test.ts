@@ -3,10 +3,8 @@ import { describe, expect, it } from "vitest";
 import { BASES, weightsOn } from "../bases";
 
 describe("the bases", () => {
-	// Pinned, not derived. A base is the starting point bots on disk were written against, so a
-	// change to one of these numbers is a change to every bot that names it — including tuned
-	// weights, golden games and cached tournament results. Changing this test is the deliberate
-	// act that says so; the safe move is almost always to add a new base instead.
+	// Changing a base changes every bot, golden game and cached result on it. Editing this test is
+	// that deliberate act; usually add a new base instead.
 	it("are exactly the numbers committed here", () => {
 		expect(BASES).toEqual({
 			zero: {},

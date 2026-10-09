@@ -23,18 +23,8 @@ export function defineFeatures(definitions: readonly FeatureDefinition[]): Featu
 	});
 }
 
-// The vocabulary every bot is described in. Entries are appended as their extraction lands; the
-// order is the vector layout, so entries are never reordered or removed.
-//
-// **Every weight is in centipawns**, and a pawn is 100. That is the whole convention, and it is
-// what makes a weight readable: `mobility: 4` says a square of activity is worth four hundredths
-// of a pawn, and `swarm: 900` says walking the army a king-move closer is worth a queen. A bot
-// that wants a feature to dominate says so with a big number, not by shrinking everything else —
-// the roster used to price a pawn at 20 so that `huddle` could outweigh it, which made every
-// animal's numbers unreadable and comparable to nothing.
-//
-// `givesMate` is the only exception: it is a preference in [-1, 1], because what it prices is not
-// worth a number of pawns. See `terminal.ts`.
+// Append only: the order is the vector layout. Every weight is in centipawns (a pawn is 100),
+// except `givesMate`, a preference in [-1, 1] — see `terminal.ts`.
 export const FEATURES = defineFeatures([
 	// Piece values are features rather than constants, so a bot can be given its own — one that
 	// thinks a rook is worth two knights is one number away.
@@ -44,24 +34,12 @@ export const FEATURES = defineFeatures([
 	{ key: "materialRook" },
 	{ key: "materialQueen" },
 
-	// Danger around the king rather than on it: what attacks the squares he stands among, ours
-	// minus theirs — so a negative weight buys safety and a positive one is `suicide_king`. It was
-	// `kingAttackers`, which read as "attackers on our king" and left the sign to be explained
-	// every time; the quantity never changed, only the name that carries its direction.
-	//
-	// A `kingRingDefenders` count sat here too and the lab rated it −46 against bare
-	// material — defenders that are just pieces standing near the king, with no read on whether
-	// they defend anything, told the evaluation to keep its army home and lose. A `kingOpenFile`
-	// count of the pawnless files beside him went the other way: two sweeps rated it +17 and +19,
-	// inside the noise, and nothing weighted it — `kingDanger` already reads the open line as
-	// the piece now aiming down it.
+	// What attacks the squares around the king, ours minus theirs: a negative weight buys safety, a
+	// positive one is `suicide_king`.
 	{ key: "kingDanger" },
 
-	// The Elo World strategies. Each is a weight here rather than a separate player class, so a
-	// bot can be one part swarm, one part material, and rated on the same scale as the rest.
-	//
-	// All three distances are negated on the way out of the extractor, so more is nearer and a
-	// positive weight means the behaviour the key names. See `engine/src/eval/proximity.c`.
+	// The Elo World strategies as weights, so a bot can mix them. Distances are negated, so a
+	// positive weight means what the key names (`engine/src/eval/proximity.c`).
 	{ key: "swarm" },
 	{ key: "huddle" },
 	{ key: "kingProximity" },
@@ -82,16 +60,8 @@ export const FEATURES = defineFeatures([
 	// lab's strongest pair.
 	{ key: "offeredMaterial" },
 
-	// Properties of the move that produced the position. They are what let `cccp` and `pacifist`
-	// be weights rather than special-cased players. See `engine/src/eval/move.c` for the sign
-	// convention: a positive weight always means "the mover wants this".
-	// `givesMate` is a **preference in [-1, 1]**, not a score: +1 chases mate, -1 flees it, 0
-	// cannot see it. It is the only weight that is not centipawns, because the thing it prices is
-	// not worth a number of pawns — see `terminal.ts`.
-	//
-	// A `givesStalemate` preference sat beside it on the same scale, for the paper's complaint that
-	// `min_oppt_moves` cannot tell mate from stalemate. No animal ever wanted to, and the lab put it
-	// at +19 — inside the noise — so it went.
+	// Properties of the move that made the position; a positive weight means the mover wants it
+	// (`move.c`). `givesMate` is a preference in [-1, 1]: +1 chases mate, -1 flees it, 0 is blind.
 	{ key: "givesMate" },
 	{ key: "givesCheck" },
 	{ key: "captureValue" },
@@ -102,14 +72,8 @@ export const FEATURES = defineFeatures([
 
 	{ key: "mobility" },
 
-	// A strategic stand-in for a piece-square table, role-agnostic on purpose: how far the minor
-	// and major pieces stand from the rim. It replaced twelve per-role weights (a centralization
-	// and an advancement for each of the six roles) that no animal used, and the lab then rated it
-	// a top-three feature on its own — a knight wanting the centre and a rook wanting the seventh
-	// are the same instinct, and one number says it. The paired `advancement` term for pawns went
-	// with the rest of pawn structure: every such weight the registry carried — passed, the lumped
-	// weakness, forwardness — measured at or below bare material in the lab, so they are gone
-	// rather than kept as dead weights.
+	// Distance of minor and major pieces from the rim, role-agnostic on purpose: a knight wanting
+	// the centre and a rook the seventh are one instinct.
 	{ key: "centralization" },
 
 	// Our knights and bishops off the back rank minus theirs — a plain count of developed minors.
@@ -117,23 +81,16 @@ export const FEATURES = defineFeatures([
 	// once both sides' minors are out or traded.
 	{ key: "development" },
 
-	// Our minors still on their home square while our queen is already out (and not traded), minus
-	// theirs — the queen-before-the-pieces mistake, as a positive count a negative weight punishes.
-	// No phase gate either: it falls to 0 on its own once the minors develop or the queen comes
-	// home.
+	// Our minors still home while our queen is out, minus theirs. No phase gate: it falls to 0 once
+	// the minors develop or the queen comes home.
 	{ key: "earlyQueen" },
 
-	// Our king's distance from the rim minus theirs, scaled by the square of how little material is
-	// left — the endgame's "activate the king", held back until the ending really comes. Unlike the
-	// whole-board `kingProximity` it is a real side-to-move difference, so it needs no even depth.
-	// Opt-in, like `swarm`: it is phase-shaped inside its extractor (`engine/src/eval/endgame.c`), which
-	// is the one kind of phase-awareness the single weight vector allows.
+	// King distance from the rim, ours minus theirs, scaled by the square of missing material —
+	// inert until the ending (`endgame.c`). A true side difference, so any depth works.
 	{ key: "kingActivity" },
 
-	// Our passed pawns weighted by how far they have run, minus theirs, scaled by how little
-	// material is left — "push the passers". It is the removed pawn-structure `passed` coming back
-	// in one narrower shape: silent in the middlegame, where the lab found the old term at or below
-	// bare material, and live only once the pieces are off. Opt-in, and on probation like it.
+	// Passed pawns weighted by advance, ours minus theirs, scaled by missing material — silent in
+	// the middlegame, where the old `passed` term measured no better than material.
 	{ key: "passedPawnPush" },
 
 	// An `attackEnemyPawns` term — enemy pawns we attack minus ours they attack, faded in the same

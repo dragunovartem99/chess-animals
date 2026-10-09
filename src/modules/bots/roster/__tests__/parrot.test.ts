@@ -56,10 +56,8 @@ describe("the Parrot", () => {
 		expect(answers({ white: WHITE, depth: PARROT.search.depth, seed })).toEqual(MIRRORED);
 	});
 
-	// The one thing its definition is not free to change. A symmetry reads the same from either
-	// seat, so negamax flips its sign every ply: at an odd depth the Parrot chases the least
-	// mirrored board it can reach and answers 1.e4 with 1...a5. The comment in `parrot.ts` says
-	// so; this is what holds the file to it.
+	// Symmetric features flip sign every ply under negamax: at an odd depth the Parrot chases the
+	// least mirrored board and answers 1.e4 with 1...a5.
 	it("would chase the opposite at an odd depth, which is why its depth is even", () => {
 		expect(PARROT.search.depth % 2).toBe(0);
 		expect(answers({ white: ["e2e4"], depth: 1 })).not.toEqual(["e7e5"]);

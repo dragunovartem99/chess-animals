@@ -1,13 +1,5 @@
-// The starting points a bot can be written on top of.
-//
-// Without these, every animal repeated the same seven lines to say "and it knows what a rook is
-// worth", and the one line that was actually the animal got lost among them. The Fox is
-// greed with two instincts; that is what its file should say, and now it does.
-//
-// A base is **frozen literal numbers**, never derived from anything else: if a base tracked some
-// other number, retuning it would silently rewrite every bot ever written on it, every golden
-// game and every cached tournament result. To change what a base means, add a new
-// base — `bases.test.ts` pins each of these to the numbers committed here.
+// Frozen literal numbers, never derived: retuning a base would rewrite every bot, golden game and
+// cached result on it. Add a new base instead — `bases.test.ts` pins these.
 export const BASES = {
 	// Nothing at all. The paper's `random_move`, and what a bot gets if it names no base: a
 	// definition that says nothing means nothing, which is what makes a bot file readable.

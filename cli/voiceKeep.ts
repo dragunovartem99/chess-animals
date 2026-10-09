@@ -10,10 +10,8 @@ import { confirm, eleven } from "./voice/eleven";
 import { PUBLIC_DIR } from "./voice/paths";
 import { readPreviews } from "./voice/previews";
 
-// `npm run voice:keep -- <id> <n>` — save preview <n> from `voice:design` as the animal's voice,
-// write it into `cast.yaml`, and drop the animal's clips so `npm run voice` records them in
-// the new voice. The old voice is deleted only on a yes: all custom slots are taken, so a designed
-// voice usually has to go for a new one to be saved, but a deletion cannot be undone.
+// `npm run voice:keep -- <id> <n>` saves preview <n> as the animal's voice and drops its clips. The
+// old voice is deleted only on a yes, since every custom slot is taken.
 
 const [id, n] = process.argv.slice(2);
 const found = readPreviews(id).find((candidate) => candidate.n === Number(n));

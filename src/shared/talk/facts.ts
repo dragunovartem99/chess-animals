@@ -110,15 +110,8 @@ function outlook(run: readonly Ply[]): number {
 	return net - recapture({ position: afterMove(last), square: last.move.to });
 }
 
-// The facts of `ply`.
-//
-// A capture wins a piece when the exchange it is part of stands to net `MATERIAL` for its side
-// even after the best recapture: a queen taken by a knight is said on the spot, not once the pawn
-// takes the knight back. Counted on the one square, from the captures the game played there and a
-// static exchange over what is left, so an even trade stays quiet and a capture elsewhere is never
-// folded into it. Read from
-// the moves played, never from a line an engine expects, and never before the piece is taken,
-// which would give a hanging piece away.
+// A capture wins a piece when its exchange on that square nets `MATERIAL` after the best recapture,
+// so it is said on the spot. Read from moves played only, never from an engine's line.
 export function moveFacts({ fens, moves, ply }: Played & { ply: number }): Facts {
 	const now = plyOf({ fens, moves, ply });
 	if (!now) return { check: false, won: false };

@@ -4,12 +4,8 @@ import { makeUci } from "chessops/util";
 import { afterMove, fenFromPosition, legalMoves } from "@/shared/chess";
 import { createRng } from "@/shared/engine";
 
-// The C board and move generator are checked against chessops on `moves.txt`. Each line is a
-// position; one legal move in it; the position after; every legal move in `legalMoves` order;
-// and perft(2) — the leaves two plies down, which catches a wrong move list one ply deeper than
-// the list itself shows. Seeded random games rather than arena ones — a random mover castles,
-// promotes to all four roles and captures en passant within a few hundred games, which a
-// sensible bot rarely bothers to.
+// Seeded random games, not arena ones: a random mover soon castles, promotes to every role and
+// takes en passant, which sensible bots rarely do. perft(2) catches errors a ply deeper.
 const GAMES = 500;
 const MAX_PLIES = 120;
 // One ply in SAMPLE is kept at random, so the start position does not repeat once per game.

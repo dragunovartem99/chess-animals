@@ -1,9 +1,7 @@
 import measured from "./points.json";
 
-// Every animal's rating in points, as `npm run arena` last measured it and pinned to people through
-// the underwater animals (see `toPoints`), the sea and the monsters read off their ladder's line
-// (see `smoothLadder`). Written by the arena, never by hand: re-run it after adding or retuning an
-// animal. An animal the last run never met has no number, and shows none.
+// Written by `npm run arena`, never by hand — re-run it after adding or retuning an animal. An
+// animal the last run never met shows no number.
 const POINTS: Readonly<Record<string, number>> = measured;
 
 // As the site prints it: the number, with a true minus sign below zero — a hyphen next to a star

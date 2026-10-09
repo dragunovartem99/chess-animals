@@ -5,11 +5,8 @@ import { engine } from "../../test-support/wasm";
 import { onlyWeights } from "../../test-support/weights";
 import { SEARCH_POSITIONS } from "../__benchmarks__/positions";
 
-// The search runs once per move of every game of every tournament. This is a regression guard,
-// not the target: `npm run bench` and `npm run engine:bench` print the real numbers. A pass is
-// ~1.2 ms at depth 3; the budget carries wide headroom because the suite's other files run in
-// parallel and contend for the same cores while this measures wall time. Coverage does not touch
-// it — v8 instruments the JS, and the time is spent in wasm.
+// A regression guard, not the target — `npm run bench` prints the real numbers. A pass is ~1.2 ms;
+// the headroom absorbs the suite's other files contending for the same cores.
 const BUDGET_MILLISECONDS = 20;
 
 const WEIGHTS = onlyWeights({

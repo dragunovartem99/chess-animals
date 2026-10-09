@@ -50,13 +50,8 @@ function either({ answer, ...spoken }: Spoken & { answer: Remark; bots: readonly
 	return said.length > 0 ? said : say({ ...spoken, color: other(spoken.color), remark: answer });
 }
 
-// What a bot says about the move that made `ply`, if anything: a piece won, else a check. One voice
-// at most, so a move is one remark and not a dialogue.
-//
-// Nothing is said inside the cooldown, which also keeps the later captures of an exchange already
-// remarked on from saying it again. A piece won is said by the side that took it, when it is
-// taken, never when it is left hanging, which would give it away. No mate is announced: the one who has it would be
-// told by the bot, and a bot's own needs a Stockfish loaded just to say so.
+// One remark per move at most — a piece won, else a check — and none inside the cooldown. A hanging
+// piece or a mate is never announced: it would hand the player the answer.
 export function react({ ply, facts, bots, last }: Moment): Spoken[] {
 	if (isQuiet({ ply, lastPly: last })) return [];
 

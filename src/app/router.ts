@@ -43,10 +43,8 @@ const routes: RouteRecordRaw[] = [
 			},
 		],
 	},
-	// Anything without a known locale prefix — `/`, `/play`, a stale link — is re-entered under
-	// the reader's own locale rather than 404ing, so every url carries a locale. A path that
-	// still matches nothing once prefixed falls back to that locale's root, which is what keeps
-	// a typo like `/xx/play` from redirecting onto itself forever.
+	// Unprefixed paths re-enter under the reader's locale. One still unmatched falls back to that
+	// locale's root, so `/xx/play` can't redirect onto itself forever.
 	{
 		path: "/:pathMatch(.*)*",
 		redirect: (to) => {

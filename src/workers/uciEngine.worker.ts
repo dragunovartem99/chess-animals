@@ -23,10 +23,8 @@ const fetchModel = () => downloadModel({ url: MAIA_MODEL_URL });
 // What any kind of bot is to this file: a command in, responses out, now or a moment later.
 type Engine = { handle: (command: UciCommand) => UciResponse[] | Promise<UciResponse[]> };
 
-// The worker is deliberately almost empty: it owns a bot and a pipe, and everything it does with
-// them is in `createUciEngine`, where it can be tested without spawning anything.
-//
-// The first message must be the bot definition; every message after it is a UCI line.
+// Thin on purpose: the logic is in `createUciEngine`, testable without a worker. The first message
+// is the bot definition, every one after a UCI line.
 let engine: Promise<Engine> | undefined;
 
 // Loading starts with the worker, not with the first `go`, so the fetch overlaps the handshake.

@@ -2,11 +2,8 @@ import type { Palette } from "./palette";
 import { img } from "./parts";
 import type { PieceUris } from "./tree";
 
-// Chess pieces strewn around the edges like toys tipped out of a box — one of each of the six,
-// tilted, mismatched sizes, a soft shadow under each, all kept clear of the middle band where
-// the words go and of the sun in the top-right. The white cburnett set only: its heavy black
-// outline reads as a cartoon toy against any of the backdrops, where the black pieces flattened into
-// dark blobs.
+// Kept clear of the middle band and the sun. White cburnett only: its heavy outline reads as a toy
+// on any backdrop, where the black set went to blobs.
 const FLOATING = [
 	{ key: "white-knight", left: 34, top: 50, size: 146, rot: -14 },
 	{ key: "white-bishop", left: 250, top: 12, size: 74, rot: -10 },

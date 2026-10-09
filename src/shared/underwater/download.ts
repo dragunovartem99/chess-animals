@@ -1,10 +1,5 @@
-// The model's bytes, from the browser's Cache Storage when an earlier visit already fetched them.
-// The HTTP cache alone keeps 23 MB for as long as the host's `max-age` says, often minutes; this
-// keeps it until the browser needs the space back. Keyed by URL, so a new model must ship under a
-// new file name — as the int8 one did — or players keep the old one.
-//
-// Best effort throughout: no Cache Storage (an insecure origin), a quota error or a failed write
-// only means the next visit downloads again, never that a game cannot start.
+// Cache Storage keeps the 23 MB model until the browser needs the space; the HTTP cache may drop it
+// in minutes. Keyed by URL, so a new model needs a new file name. A failure only re-downloads.
 export async function downloadModel({
 	url,
 	storage = globalThis.caches,

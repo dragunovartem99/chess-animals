@@ -17,11 +17,8 @@ export function allPairs(ids: readonly string[]): Pair[] {
 	return pairs;
 }
 
-// The seeding round's comparison graph: a ring (stride 1) so every bot has neighbours and the
-// graph is connected, plus chords at wider strides until each bot has `degree` opponents. 20 bots
-// at degree 4 is 40 pairs, not the 190 of a full round robin — enough for a first fit, and the
-// adaptive rounds spend their games wherever that fit leaves ratings close. Falls back to every
-// pair once the ring would double back on itself (small rosters).
+// A ring plus chords at wider strides until each bot has `degree` opponents: connected, and 40
+// pairs instead of 190 for 20 bots. Every pair once the ring would double back.
 export function seedPairs({ ids, degree }: { ids: readonly string[]; degree: number }): Pair[] {
 	const n = ids.length;
 	if (n < 2) return [];
@@ -64,10 +61,8 @@ export function decisivenessOf(matchups: Iterable<Matchup>): Map<string, number>
 	);
 }
 
-// A game's worth is how much it can move the ratings: high when both bots are still uncertain
-// (large standard errors) and the result is a coin flip (ratings close), low once a pair has been
-// played many times. Picking the top `batchSize` by this each round is what lets the arena skip
-// most of a round robin — a settled pair is never played again.
+// A game is worth more the more uncertain both ratings are and the closer they sit, so a settled
+// pair is never replayed.
 export function nextPairings({
 	standings,
 	playCounts,

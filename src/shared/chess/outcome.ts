@@ -18,10 +18,8 @@ function countRepetitions({ key, keys }: { key: string; keys: readonly string[] 
 	return seen;
 }
 
-// Whether the game is over, and why. `keys` holds the repetition key of every position that came
-// *before* the one on the board; the current position is counted on top of them. chessops decides
-// mate and material on its own, but repetition and the ply cap need the history only the caller
-// has.
+// `keys` holds the repetition keys of the positions *before* the current one, which is counted on
+// top. Repetition and the ply cap need history chessops doesn't have.
 export function gameStatus({
 	position,
 	keys = [],

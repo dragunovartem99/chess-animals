@@ -10,11 +10,8 @@ import { publicFile } from "./paths";
 
 export type Job = Clip & { voice: string };
 
-// v3 over multilingual v2: it acts the line rather than reading it, and pauses at a full stop or
-// an ellipsis by itself, where v2 ran "Oh. Hello. Sorry." together in one breath and needed a
-// `<break>` tag between sentences — a tag v3 does not take. One voice still carries both
-// languages. Fetched at the best mp3 the plan gives, since `level` re-encodes it and a thin source
-// only gets thinner.
+// v3 acts the line and pauses at punctuation on its own, where v2 needed `<break>` tags. The best
+// mp3 the plan gives, since `level` re-encodes it.
 const MODEL = "eleven_v3";
 const FORMAT = "mp3_44100_192";
 // v3 takes only 0, 0.5 or 1: 0.5 is its "natural", steady enough without flattening the acting.

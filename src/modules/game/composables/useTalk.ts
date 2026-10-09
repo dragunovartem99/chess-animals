@@ -24,11 +24,8 @@ const randomSeed = () => crypto.randomUUID();
 const talkers = ({ players, linesFor }: { players: Record<Color, string>; linesFor: LinesFor }) =>
 	COLORS.filter((color) => linesFor({ id: players[color], remark: "greet" }).length > 0);
 
-// The talk around one game on `/play`, opt-in. The lines come in through `linesFor` in the
-// language of the moment, which keeps the locale out of here and a test free of vue-i18n.
-//
-// A new game, or the panel opening, starts with hello; every move after is read off the board as
-// it is played, and the one that ends the game gets a goodbye instead.
+// Lines come through `linesFor` in the current language, keeping the locale — and vue-i18n — out of
+// here and out of the tests.
 export function useTalk(options: Options) {
 	const { players, linesFor } = options;
 	const { turns, fens, status } = options.game;

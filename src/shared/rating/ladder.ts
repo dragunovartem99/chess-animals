@@ -1,14 +1,7 @@
 import type { PlayerRating } from "./types";
 
-// A roster whose animals differ only in a strength knob — Maia's Elo, Stockfish's temperature —
-// is a ladder: the knobs were read off the arena's curve to sit evenly apart in strength. So its
-// ratings are fitted as one straight line over the rung index, weighted by each rating's
-// precision, instead of taken one by one: every animal's number then draws on the games of all
-// sixteen, and noise can no longer put a cooler monster below a hotter one.
-//
-// The line assumes the rungs really are even, so it must never hide one that is not: an animal
-// further off the line than `OUTLIER_Z` of its own standard errors is reported — a knob that no
-// longer sits where the ladder says.
+// A ladder's rungs sit evenly apart in strength, so it is fitted as one weighted line over the rung
+// index and noise can't swap neighbours. A rung off the line by `OUTLIER_Z` is reported.
 const OUTLIER_Z = 2.5;
 
 export function smoothLadder({

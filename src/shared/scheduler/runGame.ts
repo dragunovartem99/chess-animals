@@ -72,13 +72,8 @@ async function play({
 	return play({ table, position: next, ply: ply + 1, rngState: found.rngState });
 }
 
-// One game, start to finish, as a pure function of its spec — same seed, same opening, same
-// result, every time and on any thread. The scheduler's worker is a thin wrapper around this; the
-// arena's reproducibility rests on it.
-//
-// `goSearch` is the search both bots play with — the wasm engine's in the arena, handed in rather
-// than loaded here because loading it is async and a game is not. Both bots draw on one tie-break
-// stream, which crosses each search as its state and comes back advanced.
+// A pure function of its spec — same seed, same game, on any thread; the arena's reproducibility
+// rests on it. Both bots share one tie-break stream, threaded through each search.
 export async function runGame({
 	spec,
 	goSearch,
