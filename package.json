@@ -35,6 +35,7 @@
 		"test:coverage": "make -sC engine wasm coverage && COVERAGE=1 vitest run --coverage",
 		"types:check": "vue-tsc -b --noEmit",
 		"voice": "tsx --env-file=.env.local cli/voice.ts",
+		"voice:check": "tsx --env-file=.env.local cli/voiceCheck.ts",
 		"voice:design": "tsx --env-file=.env.local cli/voiceDesign.ts",
 		"voice:keep": "tsx --env-file=.env.local cli/voiceKeep.ts"
 	},
