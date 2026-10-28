@@ -12,8 +12,8 @@ export type PlayedTurn = { ply: number; san: string; uci: string };
 
 // One game, owned by the view. The board draws it and the engines are asked about it, but only
 // this holds it — so there is exactly one place a move can be applied, and the repetition history
-// cannot drift out of step with the position it describes.
-export function useGame({ plyLimit = 300 }: { plyLimit?: number } = {}) {
+// cannot drift out of step with the position it describes. No ply cap: that is an arena rule.
+export function useGame() {
 	const position = shallowRef<Chess>(positionFromFen(INITIAL_FEN));
 	const keys = ref<string[]>([]);
 	const turns = ref<PlayedTurn[]>([]);
@@ -24,7 +24,7 @@ export function useGame({ plyLimit = 300 }: { plyLimit?: number } = {}) {
 	const fen = computed(() => fenFromPosition(position.value));
 	const ply = computed(() => turns.value.length);
 	const status = computed<GameStatus>(() =>
-		gameStatus({ position: position.value, keys: keys.value, plyLimit, ply: ply.value })
+		gameStatus({ position: position.value, keys: keys.value })
 	);
 
 	function play(move: NormalMove): void {

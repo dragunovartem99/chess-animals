@@ -56,13 +56,12 @@ describe("useGame, ending and resetting", () => {
 	});
 
 	it("refuses to play on once the game is over", () => {
-		const game = useGame({ plyLimit: 2 });
-		move({ game, uci: "e2e4" });
-		move({ game, uci: "e7e5" });
+		const game = useGame();
+		for (const uci of ["f2f3", "e7e5", "g2g4", "d8h4"]) move({ game, uci });
 
 		expect(game.status.value.over).toBe(true);
 		move({ game, uci: "g1f3" });
-		expect(game.ply.value).toBe(2);
+		expect(game.ply.value).toBe(4);
 	});
 
 	it("clears the history on reset, not just the board", () => {
