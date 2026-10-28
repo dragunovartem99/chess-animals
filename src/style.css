@@ -4,7 +4,7 @@
 	box-sizing: border-box;
 }
 
-/* Figurines for the move list, so ♘f3 is one move in either locale. Noto Sans draws no chess piece
+/* Figurines for the move list, so ♘f3 is one move in either locale. Inter draws no chess piece
    and the system fallbacks draw them thin and small; this is lichess's face cut to the five
    pieces notation names (see assets/fonts/README.md), and the unicode-range keeps it off every
    other character. At 3 KB Vite inlines it into the stylesheet, so a move never waits on it. */
@@ -17,7 +17,7 @@
 }
 
 :root {
-	font-family: "Chess Figurines", "Noto Sans Variable", system-ui, sans-serif;
+	font-family: "Chess Figurines", "Inter Variable", system-ui, sans-serif;
 	line-height: 1.4;
 
 	/* Amber is the one accent — it marks state (the page you are on, the move just played) and
@@ -114,7 +114,7 @@ h3 {
 
 select,
 option {
-	font-family: "Noto Sans Variable", "Noto Color Emoji", system-ui, sans-serif;
+	font-family: "Inter Variable", "Noto Color Emoji", system-ui, sans-serif;
 }
 
 .container {
