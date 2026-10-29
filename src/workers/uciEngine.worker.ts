@@ -17,7 +17,7 @@ const STOCKFISH_URL = `${import.meta.env.BASE_URL}stockfish/stockfish-19-lite-si
 
 // Vendored in `public/` for the same reason, and fetched by the first underwater animal that plays:
 // nobody else pays for its 23 MB, and a returning player reads it back from Cache Storage.
-const MAIA_MODEL_URL = `${import.meta.env.BASE_URL}maia3/maia3_int8.onnx`;
+const MAIA_MODEL_URL = `${import.meta.env.BASE_URL}maia3/maia3_int8_f32.onnx`;
 const fetchModel = () => downloadModel({ url: MAIA_MODEL_URL });
 
 // What any kind of bot is to this file: a command in, responses out, now or a moment later.
