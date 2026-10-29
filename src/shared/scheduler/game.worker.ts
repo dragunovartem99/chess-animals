@@ -31,7 +31,10 @@ const goSearch = wasm.createWasmGoSearch(await wasm.loadEngine());
 const stockfish = monsters.createStockfish({ transport: host.createProcessTransport() });
 
 // One Maia per worker, on the same terms: the model is read on the first underwater move.
-const maia = underwater.createMaiaSession({ load: model.readMaiaModel });
+const maia = underwater.createMaiaSession({
+	load: model.readMaiaModel,
+	runtime: model.nodeRuntime,
+});
 
 // Thin by design: the pool owns the thread and the queue, this owns only the pipe. Every game is
 // independent, so one message in, one report out, no state between them.
