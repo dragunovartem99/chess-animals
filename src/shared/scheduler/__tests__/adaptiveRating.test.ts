@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { decisivenessOf, nextPairings, orderSettled } from "..";
+import { decisivenessOf, nextPairings, orderSettled, pairKey } from "..";
 import type { Standing } from "..";
 import type { Matchup } from "../../rating";
 
@@ -12,7 +12,11 @@ describe("nextPairings", () => {
 	];
 
 	it("prefers the uncertain, evenly-matched pair", () => {
-		const [top] = nextPairings({ standings, playCounts: new Map(), batchSize: 1 });
+		const [top] = nextPairings({
+			standings,
+			playCounts: new Map(),
+			batchSize: 1,
+		});
 		expect(new Set([top.a, top.b])).toEqual(new Set(["x", "y"]));
 	});
 
@@ -33,6 +37,17 @@ describe("nextPairings", () => {
 			decisiveness: new Map([["x::y", 0.96]]),
 		});
 		expect(pairs.map((p) => [p.a, p.b].toSorted().join())).not.toContain("x,y");
+	});
+
+	it("never picks a pair `playable` refuses", () => {
+		const refused = new Set(["x::y"]);
+		const pairs = nextPairings({
+			standings,
+			playCounts: new Map(),
+			batchSize: 9,
+			playable: (a, b) => !refused.has(pairKey(a, b)),
+		});
+		expect(pairs.map((p) => [p.a, p.b].toSorted().join()).toSorted()).toEqual(["x,z", "y,z"]);
 	});
 });
 

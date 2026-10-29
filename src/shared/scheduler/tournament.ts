@@ -4,6 +4,7 @@ import { runAdaptiveRating } from "./adaptiveRating";
 import type { PairOutcome } from "./adaptiveRating";
 import { crossTable } from "./crossTable";
 import type { CrossTable } from "./crossTable";
+import { field } from "./field";
 import { pairKey } from "./pairing";
 import { runGames } from "./pool";
 import { standingOrder } from "./settled";
@@ -81,7 +82,7 @@ export async function runTournament({
 	};
 
 	const { rating, rounds, games, matchups } = await runAdaptiveRating({
-		ids: bots.map((bot) => bot.id),
+		...field(bots),
 		playPair: pairPlayer({ context, run, onProgress }),
 		onRound: onRound && ((r) => onRound({ round: r.round, games: r.games })),
 	});

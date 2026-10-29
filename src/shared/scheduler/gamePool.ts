@@ -1,6 +1,7 @@
 import { availableParallelism } from "node:os";
 import { Worker } from "node:worker_threads";
 
+import { takeCostliest } from "./cost";
 import { WORKER_EXEC_ARGV, WORKER_URL } from "./pool";
 import type { GameReport, GameSpec } from "./types";
 
@@ -32,7 +33,7 @@ export function createGamePool({
 			const worker = idle.pop()!;
 			// Bound to a plain call so it reads as a pipe write, not a `window.postMessage`.
 			const post = worker.postMessage.bind(worker);
-			const job = queue.shift()!;
+			const job = takeCostliest(queue)!;
 			const onError = (error: unknown) => {
 				worker.off("message", onMessage);
 				job.reject(error);
