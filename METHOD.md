@@ -172,13 +172,15 @@ On top of that, **adaptive pairing** rather than a full round robin: play the pa
 most reduces rating uncertainty — close ratings, wide intervals — and stop once the ordering has
 held for two refits in a row.
 
-**Where the time goes, and what did not help.** A Maia move costs ~110 ms, a Stockfish move ~7,
-a land move ~1: a full run is ~40 minutes only when the sea's games replay, and near-instant off
-the cache otherwise. Measured and dropped:
+**Where the time goes, and what did not help.** A Maia move costs ~50 ms under `onnxruntime-node`
+(~110 in the browser's wasm), a Stockfish move ~7, a land move ~1: a full run is ~20 minutes only
+when the sea's games replay, and near-instant off the cache otherwise. Measured and dropped:
 
-- **`onnxruntime-node`** — ~1.6× faster single-threaded, but it segfaults on the option that
-  folds the int8 weights, and without it its logits differ from the browser's, so the arena
-  would rate a different Maia than the page plays. Not worth a second runtime.
+- **Batching Maia** across games — a run is compute-bound, not memory-bound: 16 positions in one
+  call cost the same per position as one, so interleaving games in a worker would buy nothing.
+- **Quantizing the activations** too (`quantize_dynamic`, `MatMulInteger`) — 1.4× in wasm, but
+  the move distribution moved 4× further than the int8 weights alone did, and onnxruntime-node
+  ran the per-channel graph into noise.
 - **Longest games first** in the pool — workers already sit ~75% busy, and starting every Maia
   game at once makes them fight over memory bandwidth: slower overall.
 - **Judging the stop on the smoothed order** — overlapping rosters keep swapping across roster

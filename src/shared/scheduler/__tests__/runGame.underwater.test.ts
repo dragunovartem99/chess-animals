@@ -3,14 +3,14 @@ import { describe, expect, it } from "vitest";
 import { openings } from "../../openings";
 import { goSearch } from "../../test-support/wasm";
 import { createMaiaSession } from "../../underwater";
-import { readMaiaModel } from "../../underwater/model";
+import { nodeRuntime, readMaiaModel } from "../../underwater/model";
 import { runGame } from "../runGame";
 import type { GameSpec } from "../types";
 
-// The real model, loaded once for the file. A Maia move is ~140 ms on one thread — several times
-// that with the rest of the suite on every core — so the games here are cut short, the point being
-// the path and not the result, and the file gets a timeout that loading the model fits in.
-const maia = createMaiaSession({ load: readMaiaModel });
+// The real model on the arena's runtime, loaded once for the file. A Maia move is ~50 ms on one
+// thread, several times that with the suite on every core, so the games are cut short — the point
+// is the path, not the result — and the file gets a timeout that loading the model fits in.
+const maia = createMaiaSession({ load: readMaiaModel, runtime: nodeRuntime });
 
 const [opening] = openings;
 const SHRIMP = { id: "shrimp", search: { depth: 1 }, maia: { elo: 600 }, weights: {} };

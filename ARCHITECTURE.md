@@ -207,8 +207,11 @@ Maia's range.
 
 The model is vendored at `public/maia3/`, 23 MB, with its AGPL-3.0 licence beside it: upstream's
 fp16 weights stored as int8 by `cli/maia/quantize.py`, which halves the download and leaves the
-move almost untouched — 99% the same likeliest move, under 1% of the probability shifted. It is run by
-`onnxruntime-web` in the browser and under node alike (`onnxruntime-node` segfaults loading it).
+move almost untouched — 99% the same likeliest move, under 1% of the probability shifted — and
+the rest of the graph in fp32, since no CPU runtime has fp16 kernels. It is run by
+`onnxruntime-web` in the browser and by `onnxruntime-node` in the arena, 2× faster on a thread
+with bit-for-bit the same logits; `cli/maia/bench.ts` measures a candidate model or runtime
+against the one in `public/` on both counts.
 The runtime and the model load on the first underwater move: the worker's `isready` waits for
 them, so the board's loading state covers the download, and the land and monster rosters never
 fetch either. The model is then kept in Cache Storage (`downloadModel`), so a later visit skips
