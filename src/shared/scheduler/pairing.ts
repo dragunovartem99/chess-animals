@@ -19,11 +19,21 @@ export function allPairs(ids: readonly string[]): Pair[] {
 
 // A ring plus chords at wider strides until each bot has `degree` opponents: connected, and 40
 // pairs instead of 190 for 20 bots. Every pair once the ring would double back.
-export function seedPairs({ ids, degree }: { ids: readonly string[]; degree: number }): Pair[] {
+export function seedPairs({
+	ids,
+	degree,
+	playable = () => true,
+}: {
+	ids: readonly string[];
+	degree: number;
+	// A pair this refuses is skipped, not replaced — keep such bots spread along `ids`, or a run
+	// of them hangs off the graph by nothing.
+	playable?: (a: string, b: string) => boolean;
+}): Pair[] {
 	const n = ids.length;
 	if (n < 2) return [];
 	const maxStride = Math.floor(n / 2);
-	if (degree >= n - 1) return allPairs(ids);
+	if (degree >= n - 1) return allPairs(ids).filter(({ a, b }) => playable(a, b));
 
 	const seen = new Set<string>();
 	const pairs: Pair[] = [];
@@ -32,7 +42,7 @@ export function seedPairs({ ids, degree }: { ids: readonly string[]; degree: num
 			const a = ids[i];
 			const b = ids[(i + stride) % n];
 			const key = pairKey(a, b);
-			if (a !== b && !seen.has(key)) {
+			if (a !== b && !seen.has(key) && playable(a, b)) {
 				seen.add(key);
 				pairs.push({ a, b });
 			}
@@ -68,10 +78,12 @@ export function nextPairings({
 	playCounts,
 	batchSize,
 	decisiveness,
+	playable = () => true,
 }: {
 	standings: readonly Standing[];
 	playCounts: ReadonlyMap<string, number>;
 	batchSize: number;
+	playable?: (a: string, b: string) => boolean;
 	// pairKey → the fraction of games played so far that the stronger side won. A pair one bot has
 	// won ≥95% of can never change the order, so it is dropped from contention outright rather than
 	// merely down-weighted — otherwise a still-uncertain blowout pair keeps getting picked.
@@ -81,7 +93,7 @@ export function nextPairings({
 
 	const scored = allPairs(standings.map((standing) => standing.id)).flatMap((pair) => {
 		const key = pairKey(pair.a, pair.b);
-		if ((decisiveness?.get(key) ?? 0) >= 0.95) return [];
+		if (!playable(pair.a, pair.b) || (decisiveness?.get(key) ?? 0) >= 0.95) return [];
 		const a = by.get(pair.a)!;
 		const b = by.get(pair.b)!;
 		const p = sigmoid((a.rating - b.rating) / (400 / Math.LN10));

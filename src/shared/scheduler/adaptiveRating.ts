@@ -18,6 +18,7 @@ type RatingRun = {
 	batchSize: number;
 	maxRounds: number;
 	stableRounds: number;
+	playable: (a: string, b: string) => boolean;
 	onRound?: (round: Round) => void;
 	matchups: Map<string, Matchup>;
 	playCounts: Map<string, number>;
@@ -37,7 +38,7 @@ async function playRound({
 	round: number;
 	pairs: Pair[];
 }): Promise<{ rating: RatingResult; rounds: number }> {
-	const { matchups, playCounts, orderHistory, stableRounds, batchSize } = run;
+	const { matchups, playCounts, orderHistory, stableRounds, batchSize, playable } = run;
 	const outcomes = await Promise.all(pairs.map(({ a, b }) => run.playPair(a, b)));
 	run.games += foldRound({ matchups, playCounts, pairs, outcomes });
 
@@ -49,7 +50,7 @@ async function playRound({
 	const settled = orderSettled({ orderHistory, stableRounds });
 	if (settled || round + 1 >= run.maxRounds) return { rating, rounds: round + 1 };
 	const decisiveness = decisivenessOf(matchups.values());
-	const next = nextPairings({ standings, playCounts, batchSize, decisiveness });
+	const next = nextPairings({ standings, playCounts, batchSize, decisiveness, playable });
 	return playRound({ run, round: round + 1, pairs: next });
 }
 
@@ -66,6 +67,7 @@ export async function runAdaptiveRating({
 	// Each extra round here is pure cost. Over seeds 1–3, two cut 23% of the games
 	// (and 40% off the worst seed) and moved the ratings no more than a change of seed does.
 	stableRounds = 2,
+	playable = () => true,
 	onRound,
 }: {
 	ids: readonly string[];
@@ -73,6 +75,7 @@ export async function runAdaptiveRating({
 	batchSize?: number;
 	maxRounds?: number;
 	stableRounds?: number;
+	playable?: (a: string, b: string) => boolean;
 	onRound?: (round: Round) => void;
 }): Promise<{ rating: RatingResult; rounds: number; games: number; matchups: Matchup[] }> {
 	if (ids.length < 2) throw new Error("need at least two bots to rate");
@@ -82,13 +85,14 @@ export async function runAdaptiveRating({
 		batchSize,
 		maxRounds,
 		stableRounds,
+		playable,
 		onRound,
 		matchups: new Map(),
 		playCounts: new Map(),
 		orderHistory: [],
 		games: 0,
 	};
-	const pairs = seedPairs({ ids, degree: SEED_DEGREE });
+	const pairs = seedPairs({ ids, degree: SEED_DEGREE, playable });
 	const { rating, rounds } = await playRound({ run, round: 0, pairs });
 	return { rating, rounds, games: run.games, matchups: [...run.matchups.values()] };
 }
