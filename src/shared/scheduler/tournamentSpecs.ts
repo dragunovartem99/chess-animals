@@ -1,6 +1,7 @@
 import type { BotDefinition } from "../bots";
 import type { PairOutcome } from "./adaptiveRating";
 import { DEFAULT_ADJUDICATION } from "./adjudicate";
+import { botCost } from "./cost";
 import { pairKey } from "./pairing";
 import { mixSeed } from "./seed";
 import type { GameReport, GameSpec } from "./types";
@@ -18,17 +19,10 @@ export type SpecContext = {
 	openingsPerVisit: number;
 };
 
-// Roughly what one game between these two costs, relative to a depth-1/2 game: a depth-3 search
-// is ~10× and quiescence on top ~10× again, and a Maia move — a transformer run on one thread — is
-// dearer still. Used to shrink the opening window for the pairs that dominate wall time.
+// The dearest side sets a pair's cost; `visitWindow` shrinks the opening window by it, so the
+// pairs that dominate wall time play a fraction of the set per visit and are revisited more.
 function pairWeight(a: string, b: string, context: SpecContext): number {
-	const cost = (id: string): number => {
-		const { search, maia } = context.definition.get(id)!;
-		if (maia) return 4;
-		const { depth = 1, quiescence } = search;
-		return depth >= 3 ? (quiescence ? 4 : 2) : 1;
-	};
-	return Math.max(cost(a), cost(b));
+	return Math.max(botCost(context.definition.get(a)!), botCost(context.definition.get(b)!));
 }
 
 // A seeded per-pair offset, so pairs sample different lines, advancing one window per revisit. An

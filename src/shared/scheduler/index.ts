@@ -12,6 +12,7 @@ export {
 export { orderSettled, standingOrder } from "./settled";
 export { createGameCache, gameKey } from "./cache";
 export { mixSeed } from "./seed";
+export { botCost, gameCost, takeCostliest } from "./cost";
 export { runGamesCached } from "./cached";
 export { type CrossRow, crossTable, type CrossTable } from "./crossTable";
 export { type GamePool, createGamePool } from "./gamePool";
