@@ -1,4 +1,4 @@
-# CLAUDE.md
+# AGENTS.md
 
 Conventions this repo holds itself to. How the app is built is in
 [ARCHITECTURE.md](./ARCHITECTURE.md), what it measures in [METHOD.md](./METHOD.md), and what lands

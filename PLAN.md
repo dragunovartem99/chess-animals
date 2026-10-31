@@ -1,7 +1,7 @@
 # PLAN.md
 
 What lands next. Why the project is shaped this way is in [METHOD.md](./METHOD.md), how it is
-built in [ARCHITECTURE.md](./ARCHITECTURE.md), the conventions in [CLAUDE.md](./CLAUDE.md).
+built in [ARCHITECTURE.md](./ARCHITECTURE.md), the conventions in [AGENTS.md](./AGENTS.md).
 
 One commit at a time, each does one thing, and **every commit leaves the repo green** — format,
 types, lint, tests, build.

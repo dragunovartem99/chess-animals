@@ -1,7 +1,7 @@
 # METHOD.md
 
 What this project measures and why the numbers mean anything. How the app is built lives in
-[ARCHITECTURE.md](./ARCHITECTURE.md), the code conventions in [CLAUDE.md](./CLAUDE.md), and the
+[ARCHITECTURE.md](./ARCHITECTURE.md), the code conventions in [AGENTS.md](./AGENTS.md), and the
 order the work lands in [PLAN.md](./PLAN.md).
 
 ## The problem

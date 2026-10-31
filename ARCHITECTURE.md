@@ -2,7 +2,7 @@
 
 How the app is built. Why the numbers mean anything — the paper, the feature vector, the rating
 fit — is in [METHOD.md](./METHOD.md); the conventions the code holds itself to are in
-[CLAUDE.md](./CLAUDE.md); what is next is in [PLAN.md](./PLAN.md).
+[AGENTS.md](./AGENTS.md); what is next is in [PLAN.md](./PLAN.md).
 
 ## Layout
 
