@@ -60,7 +60,7 @@ merging requires them to pass; every push to `main` deploys to [chess-animals.co
 | [ARCHITECTURE.md](./ARCHITECTURE.md) | how the app is built — layout, modules, the eval, the engine, deployment |
 | [METHOD.md](./METHOD.md)             | what it measures — the paper, the feature vector, rating                 |
 | [LAB.md](./LAB.md)                   | what the weight bench measured — findings, singles, the land roster      |
-| [CLAUDE.md](./CLAUDE.md)             | code conventions this repo holds itself to                               |
+| [AGENTS.md](./AGENTS.md)             | code conventions this repo holds itself to                               |
 | [PLAN.md](./PLAN.md)                 | what lands next                                                          |
 
 ## Where it stands
